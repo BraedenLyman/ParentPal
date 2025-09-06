@@ -17,4 +17,5 @@ jobs:
       - name: Push to mirror repo
         run: |
           git remote add mirror https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/Steve-at-Mohawk-College/capstone-project-BraedenLyman.git
-          git push --force --mirror mirror
+          git push --force --mirror main
+
