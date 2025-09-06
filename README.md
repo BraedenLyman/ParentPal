@@ -3,4 +3,4 @@
 
 Capstone Scope PDF: [View PDF](docs/CapstoneScopeMain-1.pdf)
 
-![Page 1] (docs\pdf_images\CapstoneScopeMain-1-images-0.jpg)
+![Page 1](docs\pdf_images\CapstoneScopeMain-1-images-0.jpg)
