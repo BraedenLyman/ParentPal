@@ -1,16 +1,11 @@
 import { title } from "@/components/primitives";
-import DefaultLayout from "@/layouts/default";
+import { Navbar } from "@/components/navbar";
 
 export default function DocsPage() {
   return (
-    <DefaultLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <div className="inline-block max-w-lg text-center justify-center">
-          <h1 className={title()}>Aboutt</h1>
-            <div className="flex gap-4 items-center">
-        </div>
-        </div>
-      </section>
-    </DefaultLayout>
+    <div className="relative flex flex-col h-screen">
+      <Navbar />
+      <h1 className={title()}>About</h1>      
+    </div>
   );
 }
