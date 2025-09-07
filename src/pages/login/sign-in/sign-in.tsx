@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/navbar";
 import {Button, Image, Input, Link} from "@heroui/react";
+import { Link as RouterLink } from "react-router-dom";
 import "./sign-in.css";
 
 export default function SignIn() {
@@ -10,7 +11,7 @@ export default function SignIn() {
             <Image  
                 className="logo"
                 alt="Parent Pal Logo"
-                src="public/images/ParentPal.png"
+                src="/images/ParentPal.png"
                 width={300}
             />
         </div>
@@ -48,7 +49,7 @@ export default function SignIn() {
                 Log In
             </Button>
             
-            <p className="text-center mb-5">Are you new here? <Link >Create account</Link></p>
+            <p className="text-center mb-5">Are you new here? <Link as={RouterLink} to="/sign-up">Create account</Link></p>
         </div>
     </div>
   );
