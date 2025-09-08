@@ -5,16 +5,19 @@ import "./sign-up.css";
 
 export default function SignUp() {
   return (
-    <div className="flex flex-col">
+    <div className="mainDiv">
         <Navbar/>
-        <div className="flex justify-center">
+        <div className="imgContainer">
             <Image  
-                className="logo"
                 alt="Parent Pal Logo"
                 src="/images/ParentPal.png"
                 width={300}
+                classNames={{
+                    wrapper: "logo"
+                }}
             />
         </div>
+        
         <h1 className="heading">
             Track your baby’s Development
         </h1>

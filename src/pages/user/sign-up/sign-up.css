@@ -1,0 +1,55 @@
+.mainDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+.imgContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 40px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.signUpInfo {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 12px;
+}
+
+@media (min-width: 768px) {
+  .signUpInfo {
+    margin-left: 400px;
+    margin-right: 400px;
+    font-size: 15px;
+  }
+}
+
+.signUpText {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.getStartedWrapper {
+  display: flex;
+  justify-content: center; 
+  width: 100%; 
+  margin-top: 20px;
+}
+
+.getStartedButton {
+  width: 100%;
+  max-width: 400px; 
+}

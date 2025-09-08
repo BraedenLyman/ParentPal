@@ -5,14 +5,16 @@ import "./sign-in.css";
 
 export default function SignIn() {
   return (
-    <div className="flex flex-col">
+    <div className="mainDiv">
         <Navbar/>
-        <div className="flex justify-center">
+        <div className="imgContainer">
             <Image  
-                className="logo"
                 alt="Parent Pal Logo"
                 src="/images/ParentPal.png"
                 width={300}
+                classNames={{
+                    wrapper: "logo"
+                }}
             />
         </div>
         <h1 className="heading">
@@ -42,14 +44,15 @@ export default function SignIn() {
            {/** Forgot Password + Incorrect Password */}
             <div className={`passwordProbs ${false ? "hasError" : ""}`}>
                 {/* <p id="incorrectPassword">Incorrect Password</p> */}
-                <p><Link>Forgot Password?</Link></p>
+                <p><Link as={RouterLink} to="/forgot-password">Forgot Password?</Link></p>
             </div>
 
-            <Button color="primary">
-                Log In
-            </Button>
-            
-            <p className="text-center mb-5">Are you new here? <Link as={RouterLink} to="/sign-up">Create account</Link></p>
+            <div className="logInButtonWrapper">
+                <Button color="primary" className="logInButton">
+                    Log In
+                </Button>
+            </div>
+            <p className="newUser">Are you new here? <Link as={RouterLink} to="/sign-up">Create account</Link></p>
         </div>
     </div>
   );
