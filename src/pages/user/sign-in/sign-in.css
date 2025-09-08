@@ -23,27 +23,28 @@ h1.heading {
   margin-bottom: 20px;
 }
 
-.formWrapper {
+.formContainer {
   display: flex;
   flex-direction: column;
   margin-left: 40px;
   margin-right: 40px;
+  gap: 10px;
 }
 
 @media (min-width: 768px) {
   h1.heading {
     font-size: 40px !important;
   }
-  .formWrapper {
+  .formContainer {
     margin-left: 400px;
     margin-right: 400px;
+    gap: 10px;
   }
 }
 
 .passwordProbs {
   display: flex;
   justify-content: flex-end;
-  margin-top: 5px;
   margin-bottom: 40px;
 }
 
@@ -55,7 +56,7 @@ h1.heading {
     color: red;
 }
 
-.logInButtonWrapper {
+.logInButtonContainer {
   display: flex;
   justify-content: center;
   width: 100%; 

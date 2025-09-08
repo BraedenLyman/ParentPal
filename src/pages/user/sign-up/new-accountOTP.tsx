@@ -2,9 +2,9 @@ import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import {InputOtp} from "@heroui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import "./passwordOTP.css";
+import "./new-accountOTP.css";
 
-export default function PasswordOTP() {
+export default function NewAccountOTP() {
     const navigate = useNavigate();
     const location = useLocation();
     const {userInput} = location.state || {userInput: ""};
@@ -16,7 +16,7 @@ export default function PasswordOTP() {
                 <ArrowLeftIcon className="arrowIcon" />
             </button>
 
-            <div className="passOTPInfo">
+            <div className="newAccountOTPInfo">
                 <h1 className="heading">Enter the 4-digit code</h1>
                 <p className="text">Your passcode has been sent to your email address:</p>
                 <p className="userInputText">{userInput}</p>

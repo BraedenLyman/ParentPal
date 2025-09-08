@@ -1,8 +1,8 @@
-import "./forgot-password.css";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import {Button, Input} from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import "./forgot-password.css";
 
 export default function ForgotPassword() {
     const navigate = useNavigate();

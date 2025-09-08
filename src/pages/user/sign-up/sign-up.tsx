@@ -4,39 +4,40 @@ import { Link as RouterLink } from "react-router-dom";
 import "./sign-up.css";
 
 export default function SignUp() {
-  return (
-    <div className="mainDiv">
-        <Navbar/>
-        <div className="imgContainer">
-            <Image  
-                alt="Parent Pal Logo"
-                src="/images/ParentPal.png"
-                width={300}
-                classNames={{
-                    wrapper: "logo"
-                }}
-            />
-        </div>
-        
-        <h1 className="heading">
-            Track your baby’s Development
-        </h1>
-        
-        <div className="signUpInfo">
-            <p className="signUpText">
-                Your essential companion for managing and tracking your baby’s  development! With features like a Growth Tracker, Sleep Analytics,  and a Health Journal, ParentPal ensures you have all the tools you need  to support your little one’s growth and well-being.
-            </p>
-            <p className="signUpText">
-                Let’s embark on this exciting journey together!
-            </p>
+
+    return (
+        <div className="mainDiv">
+            <Navbar/>
+            <div className="imgContainer">
+                <Image  
+                    alt="Parent Pal Logo"
+                    src="/images/ParentPal.png"
+                    width={300}
+                    classNames={{
+                        wrapper: "logo"
+                    }}
+                />
+            </div>
             
-            {/* Router Link wrapping the button */}
-            <RouterLink to="/create-account" className="getStartedWrapper">
-                <Button color="primary" className="getStartedButton">
-                    Get Started
-                </Button>
-            </RouterLink>
+            <h1 className="heading">
+                Track your baby’s Development
+            </h1>
+            
+            <div className="signUpInfo">
+                <p className="signUpText">
+                    Your essential companion for managing and tracking your baby’s  development! With features like a Growth Tracker, Sleep Analytics,  and a Health Journal, ParentPal ensures you have all the tools you need  to support your little one’s growth and well-being.
+                </p>
+                <p className="signUpText">
+                    Let’s embark on this exciting journey together!
+                </p>
+                
+                {/* Router Link wrapping the button */}
+                <RouterLink to="/create-account" className="getStartedContainer">
+                    <Button color="primary" className="getStartedButton">
+                        Get Started
+                    </Button>
+                </RouterLink>
+            </div>
         </div>
-    </div>
-  );
+    );
 }
