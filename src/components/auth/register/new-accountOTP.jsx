@@ -3,7 +3,7 @@ import {InputOtp} from "@heroui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
-import "./new-accountOTP.css";
+import "./register-styles.css";
 
 export default function NewAccountOTP() {
     const navigate = useNavigate();

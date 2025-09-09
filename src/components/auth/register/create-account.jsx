@@ -5,7 +5,7 @@ import {Button, Image, Input, Link} from "@heroui/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseAuth";
-import "./create-account.css";
+import "./register-styles.css";
 
 
 export default function CreateAccount() {
@@ -36,7 +36,7 @@ export default function CreateAccount() {
 
         try {
             await createUserWithEmailAndPassword(auth, email, password);
-            navigate("/sign-in", {state: {email}})
+            navigate("/account-type", {state: {email}})
         } catch (error) {
             console.error("Firebase error:", error);
             setErrors([error.message]);
@@ -124,7 +124,7 @@ export default function CreateAccount() {
                 >
                     Create an account
                 </Button>
-                <p className="newUser">Already have an account? <Link as={RouterLink} to="/sign-in">Log in</Link></p>
+                <p className="newUser">Already have an account? <Link as={RouterLink} to="/account-type">Log in</Link></p>
             </div>
         </div>
     );

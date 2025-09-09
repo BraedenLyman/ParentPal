@@ -1,7 +1,7 @@
 import { Navbar } from "../../../components/navbar";
 import {Button, Image} from "@heroui/react";
 import { Link as RouterLink } from "react-router-dom";
-import "./sign-up.css";
+import "./register-styles.css";
 
 export default function SignUp() {
 
