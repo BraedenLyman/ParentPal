@@ -4,7 +4,7 @@ import {
   NavbarItem,
   NavbarMenuToggle,
 } from "@heroui/navbar";
-import { ThemeSwitch } from "@/components/theme-switch";
+import { ThemeSwitch } from "../components/theme-switch";
 
 export const Navbar = () => {
   return (

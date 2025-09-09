@@ -1,7 +1,8 @@
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import {InputOtp} from "@heroui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getAuth } from "firebase/auth";
 import "./new-accountOTP.css";
 
 export default function NewAccountOTP() {

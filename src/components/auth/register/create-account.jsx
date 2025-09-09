@@ -1,26 +1,49 @@
-import { useState } from "react";
-import { Navbar } from "@/components/navbar";
-import {Button, Image, Input} from "@heroui/react";
-import {useNavigate } from "react-router-dom";
-import "./create-account.css";
+import { useEffect, useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Navbar } from "../../../components/navbar";
+import {Button, Image, Input, Link} from "@heroui/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../firebase/firebaseAuth";
+import "./create-account.css";
+
 
 export default function CreateAccount() {
     const navigate = useNavigate();
-    const [userInput, setUserInput] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const errors: string[] = [];
+    const [errors, setErrors] = useState([]);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [isCreating, setIsCreating] = useState(false);
 
-    if (password.length < 8) {
-        errors.push("Password must be at least 8 characters long.");
-    }
-    if ((password.match(/[A-Z]/g) || []).length < 1) {
-        errors.push("Password must include at least 1 upper case letter");
-    }
-    if ((password.match(/[^a-z0-9]/gi) || []).length < 1) {
-        errors.push("Password must include at least 1 symbol.");
-    }
+    useEffect(() => {
+        const newErrors = [];
+        if (password.length < 8) {
+            newErrors.push("Password must be at least 8 characters long.");
+        }
+        if ((password.match(/[A-Z]/g) || []).length < 1) {
+            newErrors.push("Password must include at least 1 upper case letter");
+        }
+        if ((password.match(/[^a-z0-9]/gi) || []).length < 1) {
+            newErrors.push("Password must include at least 1 symbol.");
+        }
+        setErrors(newErrors);
+    }, [password]);
+
+    const handleCreateAccount = async () => {
+        if (errors.length > 0) return;
+        setIsCreating(true);
+
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            navigate("/sign-in", {state: {email}})
+        } catch (error) {
+            console.error("Firebase error:", error);
+            setErrors([error.message]);
+        } finally {
+            setIsCreating(false);
+        }
+    };
 
     return (
         <div className="mainDiv">
@@ -36,9 +59,7 @@ export default function CreateAccount() {
                 />
             </div>
             
-            <h1 className="heading">
-                Create an account
-            </h1>
+            <h1 className="heading">Create an account</h1>
             
             <div className="createAccountInfo">
                 {/** Input Name */}
@@ -57,19 +78,21 @@ export default function CreateAccount() {
                     type="email" 
                     variant="bordered"
                     isRequired
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
 
                 {/** Input Password */}
                 <Input 
-                    errorMessage={() => (
-                        <ul>
-                            {errors.map((error, i) => (
-                                <li key={i}>{error}</li>
-                            ))}
-                        </ul>
-                    )}
+                    errorMessage={
+                        errors.length > 0 ? (
+                            <ul>
+                                {errors.map((error, i) => (
+                                    <li key={i}>{error}</li>
+                                ))}
+                            </ul>
+                        ): null 
+                    }
                     isInvalid={errors.length > 0}
                     label="Password"
                     placeholder="Enter your password"
@@ -95,11 +118,13 @@ export default function CreateAccount() {
                 <Button 
                     color="primary" 
                     className="createAccountButton"
-                    onClick={() => navigate("/new-accountOTP", {state: {userInput}})}
+                    isDisabled={isCreating || errors.length > 0}
+                    isLoading={isCreating}
+                    onClick={handleCreateAccount}
                 >
-                        Create an account
+                    Create an account
                 </Button>
-        
+                <p className="newUser">Already have an account? <Link as={RouterLink} to="/sign-in">Log in</Link></p>
             </div>
         </div>
     );

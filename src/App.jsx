@@ -1,12 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import IndexPage from "@/pages/index";
-import AboutPage from "@/pages/about";
-import SignIn from "./pages/user/sign-in/sign-in";
-import SignUp from "./pages/user/sign-up/sign-up";
+import IndexPage from "./pages/index";
+import SignIn from "./components/auth/sign-in/sign-in";
+import SignUp from "./components/auth/register/sign-up";
 import ForgotPassword from "./pages/user/forgot-password/forgot-password";
 import PasswordOTP from "./pages/user/forgot-password/passwordOTP";
-import CreateAccount from "./pages/user/sign-up/create-account";
-import NewAccountOTP from "./pages/user/sign-up/new-accountOTP";
+import CreateAccount from "./components/auth/register/create-account";
+import NewAccountOTP from "./components/auth/register/new-accountOTP";
 
 function App() {
   return (
@@ -18,7 +17,6 @@ function App() {
       <Route element={<ForgotPassword />} path="/forgot-password" />
       <Route element={<PasswordOTP />} path="/recover-passwordOTP" />
       <Route element={<IndexPage />} path="/" />
-      <Route element={<AboutPage />} path="/about" />
     </Routes>
   );
 }
