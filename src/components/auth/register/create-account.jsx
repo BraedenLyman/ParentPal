@@ -61,7 +61,7 @@ export default function CreateAccount() {
             
             <h1 className="heading">Create an account</h1>
             
-            <div className="createAccountInfo">
+            <div className="inputContainer">
                 {/** Input Name */}
                 <Input 
                     label="Full Name" 

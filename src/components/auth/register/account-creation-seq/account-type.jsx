@@ -12,9 +12,9 @@ export default function AccountType() {
   
     const handleNext = () => {
     if (selected === "parent") {
-      navigate("/parent-phase-2");
+      navigate("/parent-info");
     } else if (selected === "babysitter") {
-      navigate("/babysitter-phase-2");
+      navigate("/babysitter-info");
     }
   };
     return (
