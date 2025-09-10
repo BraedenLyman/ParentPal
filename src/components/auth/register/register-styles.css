@@ -44,11 +44,6 @@ h1.heading {
     font-size: 12px;
 }
 
-.createAccountButton {
-  width: 100%;
-  max-width: 400px; 
-}
-
 .hiddenPasswordIcon {
     height: 20px;
     width: 20px;
@@ -66,16 +61,11 @@ h1.heading {
     margin-bottom: 30px;
 }
 
-.getStartedContainer {
+.buttonContainer {
     display: flex;
     justify-content: center; 
     width: 100%; 
     margin-top: 20px;
-}
-
-.getStartedButton {
-    width: 100%;
-    max-width: 400px; 
 }
 
 .arrowIcon {
@@ -88,7 +78,6 @@ h1.heading {
     padding: 0 !important;
     min-width: unset !important;
     cursor: pointer;
-    border: 2px solid green;
 }
 
 .newAccountOTPInfo {
@@ -115,7 +104,7 @@ h1.heading {
     margin-right: 40px;
 }
 
-.recoverPassButton {
+.button {
     width: 100%;
     max-width: 400px;
 }
@@ -138,4 +127,65 @@ h1.heading {
         margin-left: 400px;
         margin-right: 400px;
     }
+}
+
+.progressBar {
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+}
+
+.card {
+    transition: opacity 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    width: 500px;
+    border: 2px solid rgb(180, 180, 180);
+}
+
+.cardBody {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.card.selected {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+.card.faded {
+  opacity: 0.4; /* Make unselected cards faded */
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.circleIcon {
+    display: flex;
+    background-color: plum;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    font-size: 30px;
+    padding: 20px;
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+}
+
+.heading4 {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: small;
+}
+
+.textP {
+    color: var(--default-500);
 }

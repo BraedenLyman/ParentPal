@@ -91,7 +91,7 @@ export default function SignIn() {
                 </div>
 
                 <div className="logInButtonContainer">
-                    <Button color="primary" className="logInButton" type="submit" isLoading={isSigningIn} isDisabled={isSigningIn}>
+                    <Button color="primary" className="button" type="submit" isLoading={isSigningIn} isDisabled={isSigningIn}>
                         Log In
                     </Button>
                 </div>

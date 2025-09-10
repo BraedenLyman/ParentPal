@@ -117,7 +117,7 @@ export default function CreateAccount() {
                 
                 <Button 
                     color="primary" 
-                    className="createAccountButton"
+                    className="button"
                     isDisabled={isCreating || errors.length > 0}
                     isLoading={isCreating}
                     onClick={handleCreateAccount}

@@ -2,12 +2,21 @@ import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../register-styles.css";
-import { Avatar, Button, Card, CardBody, CardHeader, Image, Progress } from "@heroui/react";
+import { Link as RouterLink } from "react-router-dom";
+import { Button, Card, CardBody, Progress } from "@heroui/react";
 
 export default function AccountType() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [selected, setSelected] = useState(null);
   
+    const handleNext = () => {
+    if (selected === "parent") {
+      navigate("/parent-phase-2");
+    } else if (selected === "babysitter") {
+      navigate("/babysitter-phase-2");
+    }
+  };
     return (
         <div className="mainDiv">
             
@@ -15,40 +24,60 @@ export default function AccountType() {
                 <ArrowLeftIcon />
             </div>
 
-            <Progress aria-label="Loading..." className="max-w-md" value={25} />
-            <h1>What brings you to our app?!</h1>
+            <Progress aria-label="Loading..." className="progressBar" value={25} />
+            <h1 className="heading">What brings you to our app?</h1>
 
-            <Card className="py-4" isPressable>
-                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                    <Avatar
-                        isBordered
-                        radius="full"
-                        size="md"
-                        src="https://heroui.com/avatars/avatar-1.png"
-                    />
-                </CardHeader>
-                <CardBody className="overflow-visible py-2">
-                    <h4 className="text-tiny uppercase font-bold">I am a Parent</h4>
-                    <p className="text-default-500">I am here to keep track and manage my baby's growth and development</p>
-                    
-                </CardBody>
-            </Card>
-             <Card className="py-4" isPressable>
-                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                    <Avatar
-                        isBordered
-                        radius="full"
-                        size="md"
-                        src="https://heroui.com/avatars/avatar-1.png"
-                    />
-                </CardHeader>
-                <CardBody className="overflow-visible py-2">
-                    <h4 className="text-tiny uppercase font-bold">I am a Babysitter</h4>
-                    <p className="text-default-500">I am here to babysit and stay on track for the baby's schedule and development</p>
-                    
+            {/** Parent Card */}
+            <Card 
+                className={`card ${selected === "babysitter" ? "faded" : ""} ${
+                    selected === "parent" ? "selected" : ""
+                }`} 
+                isPressable
+                onPress={() => setSelected("parent")}
+            >
+                <CardBody>
+                    <div className="cardBody">
+                        <div className="circleIcon">
+                            P
+                        </div>
+                        <div className="accountSelectionInfo">
+                            <h4 className="heading4">I am a Parent</h4>
+                            <p className="textP">I am here to keep track and manage my baby's growth and development</p>
+                        </div>
+                    </div>
                 </CardBody>
             </Card>
 
+            {/** Babysitter Card */}
+             <Card 
+                className={`card ${selected === "parent" ? "faded" : ""} ${
+                    selected === "babysitter" ? "selected" : ""
+                }`} 
+                isPressable
+                onPress={() => setSelected("babysitter")}
+            >
+                <CardBody>
+                    <div className="cardBody">
+                        <div className="circleIcon">
+                            B
+                        </div>
+                        <div className="accountSelectionInfo">
+                            <h4 className="heading4">I am a Babysitter</h4>
+                            <p className="textP">I am here to babysit and stay on track for the baby's schedule and development</p>
+                        </div>
+                    </div>
+                </CardBody>
+            </Card>
+            <div className="buttonContainer">
+                <Button
+                    color="primary"
+                    className="button"
+                    onPress={handleNext}
+                    isDisabled={!selected}
+                >
+                    Next
+                </Button>
+            </div>
         </div>
     );
 }

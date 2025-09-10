@@ -32,8 +32,8 @@ export default function SignUp() {
                 </p>
                 
                 {/* Router Link wrapping the button */}
-                <RouterLink to="/create-account" className="getStartedContainer">
-                    <Button color="primary" className="getStartedButton">
+                <RouterLink to="/create-account" className="buttonContainer">
+                    <Button color="primary" className="button">
                         Get Started
                     </Button>
                 </RouterLink>
