@@ -124,7 +124,7 @@ export default function CreateAccount() {
                 >
                     Create an account
                 </Button>
-                <p className="newUser">Already have an account? <Link as={RouterLink} to="/account-type">Log in</Link></p>
+                <p className="newUser">Already have an account? <Link as={RouterLink} to="/sign-in">Log in</Link></p>
             </div>
         </div>
     );

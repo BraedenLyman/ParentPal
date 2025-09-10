@@ -35,6 +35,20 @@ h1.heading {
     gap: 10px;
 }
 
+.signUpInfo {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 12px;
+}
+
+.createAccountButton {
+  width: 100%;
+  max-width: 400px; 
+}
+
 .hiddenPasswordIcon {
     height: 20px;
     width: 20px;
@@ -45,59 +59,6 @@ h1.heading {
     height: 20px;
     width: 20px;
     color: #6b7280;
-}
-
-@media (min-width: 768px) {
-    .createAccountInfo {
-        margin-left: 400px;
-        margin-right: 400px;
-        font-size: 15px;
-        gap: 10px;
-  }
-}
-
-.createAccountButton {
-  width: 100%;
-  max-width: 400px; 
-}
-
-.mainDiv {
-    display: flex;
-    flex-direction: column;
-}
-
-.imgContainer {
-    display: flex;
-    justify-content: center;
-}
-
-.logo {
-    margin-top: 50px;
-    margin-bottom: 30px;
-}
-
-.heading {
-    text-align: center;
-    margin-bottom: 40px;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-.signUpInfo {
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
-    font-size: 12px;
-}
-
-@media (min-width: 768px) {
-    .signUpInfo {
-      margin-left: 400px;
-      margin-right: 400px;
-      font-size: 15px;
-    }
 }
 
 .signUpText {
@@ -117,16 +78,17 @@ h1.heading {
     max-width: 400px; 
 }
 
-.mainDiv {
-    display: flex;
-    flex-direction: column;
-}
-
 .arrowIcon {
-    height: 45px;
-    width: 45px;
-    margin-top: 20px;
-    margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;   
+    height: 50px !important;
+    width: 50px !important;
+    margin-bottom: 20px;
+    padding: 0 !important;
+    min-width: unset !important;
+    cursor: pointer;
+    border: 2px solid green;
 }
 
 .newAccountOTPInfo {
@@ -134,12 +96,6 @@ h1.heading {
     flex-direction: column;
     justify-content: center;
     margin-bottom: 40px;
-}
-
-.heading {
-    text-align: center;
-    font-size: 30px;
-    margin-bottom: 2px;
 }
 
 .text {
@@ -165,8 +121,21 @@ h1.heading {
 }
 
 @media (min-width: 768px) {
-  .inputRecoverContainer {
-    margin-left: 400px;
-    margin-right: 400px;
-  }
+    .createAccountInfo {
+        margin-left: 400px;
+        margin-right: 400px;
+        font-size: 15px;
+        gap: 10px;
+    }
+    
+    .signUpInfo {
+        margin-left: 400px;
+        margin-right: 400px;
+        font-size: 15px;
+    }
+
+    .inputRecoverContainer {
+        margin-left: 400px;
+        margin-right: 400px;
+    }
 }

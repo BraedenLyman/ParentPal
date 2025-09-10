@@ -2,7 +2,7 @@ import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../register-styles.css";
-import { Avatar, Card, CardBody, CardHeader, Image, Progress } from "@heroui/react";
+import { Avatar, Button, Card, CardBody, CardHeader, Image, Progress } from "@heroui/react";
 
 export default function AccountType() {
     const navigate = useNavigate();
@@ -10,9 +10,11 @@ export default function AccountType() {
   
     return (
         <div className="mainDiv">
-            <button onClick={() => navigate(-1)}>
-                <ArrowLeftIcon className="arrowIcon" />
-            </button>
+            
+            <div className="arrowIcon" onClick={() => navigate(-1)}>
+                <ArrowLeftIcon />
+            </div>
+
             <Progress aria-label="Loading..." className="max-w-md" value={25} />
             <h1>What brings you to our app?!</h1>
 
