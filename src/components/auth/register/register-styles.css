@@ -140,6 +140,18 @@ h1.heading {
     margin-bottom: 50px;
 }
 
+.checkmarkContainer {
+    display: flex !important;
+    justify-content: center !important;
+    margin: 24px 0 !important;
+}
+
+.checkmarkIcon {
+    width: 200px;  
+    height: 200px;
+    color: #22c55e !important;
+}
+
 .card {
     transition: opacity 0.3s ease, transform 0.2s ease;
     cursor: pointer;
@@ -211,4 +223,5 @@ h1.heading {
 .avatarSize {
     width: 100px;
     height: 100px;
+    font-size: 40px;
 }

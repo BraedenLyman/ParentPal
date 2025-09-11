@@ -10,6 +10,8 @@ import "./register-styles.css";
 
 export default function CreateAccount() {
     const navigate = useNavigate();
+    const [fName, setFName] = useState("");
+    const [lName, setLName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState([]);
@@ -36,7 +38,7 @@ export default function CreateAccount() {
 
         try {
             await createUserWithEmailAndPassword(auth, email, password);
-            navigate("/account-type", {state: {email}})
+            navigate("/account-type", {state: {email, fName, lName}})
         } catch (error) {
             console.error("Firebase error:", error);
             setErrors([error.message]);
@@ -62,13 +64,26 @@ export default function CreateAccount() {
             <h1 className="heading">Create an account</h1>
             
             <div className="inputContainer">
-                {/** Input Name */}
+                {/** Input First Name */}
                 <Input 
-                    label="Full Name" 
-                    placeholder="Enter your full name" 
+                    label="First Name" 
+                    placeholder="Enter your first name" 
                     type="text" 
                     variant="bordered"
                     isRequired
+                    value={fName}
+                    onChange={(e) => setFName(e.target.value)}
+                />
+                
+                {/** Input Last Name */}
+                <Input 
+                    label="Last Name" 
+                    placeholder="Enter your last name" 
+                    type="text" 
+                    variant="bordered"
+                    isRequired
+                    value={lName}
+                    onChange={(e) => setLName(e.target.value)}
                 />
 
                 {/** Input Email */}

@@ -9,6 +9,7 @@ export default function AccountType() {
     const navigate = useNavigate();
     const location = useLocation();
     const [selected, setSelected] = useState(null);
+    const {email, fName, lName} = location.state || {};
   
     const accountTypes = [
         {
@@ -30,7 +31,9 @@ export default function AccountType() {
     const handleNext = () => {
         const selectedType = accountTypes.find((type) => type.key === selected);
         if (selectedType) {
-            navigate(selectedType.route);
+            navigate(selectedType.route, {
+                state: {email, fName, lName}
+            });
         }
     };
 

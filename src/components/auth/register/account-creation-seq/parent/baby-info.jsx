@@ -2,7 +2,7 @@ import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../../register-styles.css";
-import { Button, Input, Progress, Select, SelectItem } from "@heroui/react";
+import { Button, Input, Progress, Select, SelectItem, Avatar } from "@heroui/react";
 
 export const genders = [
   {key: "Male", label: "Male"},
@@ -14,10 +14,14 @@ export default function BabyInfo() {
     const navigate = useNavigate();
     const location = useLocation();
     const [selected, setSelected] = useState(null);
-    const { category } = location.state || {};
+    const [selectedGender, setSelectedGender] = useState("");
+    const { category, fName: initialFName, lName: initialLName } = location.state || {};
+    const [fName, setFName] = useState(initialFName || "");
+    const [lName, setLName] = useState(initialLName || "");
+
   
     const handleNext = () => {
-        navigate("/account-complete", { state: { category } });
+        navigate("/account-complete", { state: { category, fName, lName } });
     };
 
     return (
@@ -31,13 +35,31 @@ export default function BabyInfo() {
             <h1 className="heading">Tell us more about your {category || "baby"}</h1>
 
             <div className="inputContainer">
-                {/** Categories' Name */}
+                <Avatar
+                    name={`${fName?.charAt(0) ?? ""}${lName?.charAt(0) ?? ""}`}
+                    showFallback
+                    className="avatarSize"
+                />
+                <p>{fName} {lName}</p>
+
                 <Input 
-                    label={(category + "'s" || "Baby's") + " name"} 
-                    placeholder={"Enter your " + (category || "Baby's") + "'s full name" }
+                    label={(category + "'s" || "Baby's") + " first name"} 
+                    placeholder={"Enter your " + (category || "Baby's") + "'s first name" }
                     type="text" 
                     variant="bordered"
                     isRequired
+                    value={fName}
+                    onChange={(e) => setFName(e.target.value)}
+                />
+
+                <Input 
+                    label={(category + "'s" || "Baby's") + " last name"} 
+                    placeholder={"Enter your " + (category || "Baby's") + "'s last name" }
+                    type="text" 
+                    variant="bordered"
+                    isRequired
+                    value={lName}
+                    onChange={(e) => setLName(e.target.value)}
                 />
 
                 <Input 
@@ -48,13 +70,26 @@ export default function BabyInfo() {
                 />
 
                 <Select
+                    selectedKeys={[selectedGender]}
+                    onSelectionChange={(keys) => setSelectedGender(Array.from(keys)[0])}
                     items={genders}
-                    label={(category || "Baby's") + "'s Gender"}
-                    placeholder={"Select your " + (category || "Baby's") + "'s gender"}
+                    label="Gender"
+                    placeholder="Select your gender"
                     variant="bordered"
+                    isRequired
                 >
-                    {(genders) => <SelectItem>{genders.label}</SelectItem>}
+                    {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                 </Select>
+                
+                {selectedGender === "Other" && (
+                    <Input
+                    label="Other Gender"
+                    placeholder="Enter your gender"
+                    type="text"
+                    variant="bordered"
+                    isRequired
+                    />
+                )}
             </div>
 
             <div className="buttonContainer">
