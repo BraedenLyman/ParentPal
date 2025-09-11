@@ -203,3 +203,8 @@ h1.heading {
 .inputContainer input[type="text"] {
   margin-top: 5px;
 }
+
+.avatarSize {
+    width: 100px;
+    height: 100px;
+}
