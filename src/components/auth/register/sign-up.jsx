@@ -1,9 +1,14 @@
 import { Navbar } from "../../../components/navbar";
 import {Button, Image} from "@heroui/react";
-import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./register-styles.css";
 
 export default function SignUp() {
+    const navigate = useNavigate();
+
+    const handleNext = () => {
+      navigate("/create-account")
+    }
 
     return (
         <div className="mainDiv">
@@ -24,19 +29,23 @@ export default function SignUp() {
             </h1>
             
             <div className="signUpInfo">
-                <p className="signUpText">
+                <p className="pText">
                     Your essential companion for managing and tracking your baby’s  development! With features like a Growth Tracker, Sleep Analytics,  and a Health Journal, ParentPal ensures you have all the tools you need  to support your little one’s growth and well-being.
                 </p>
-                <p className="signUpText">
+                <p className="pText">
                     Let’s embark on this exciting journey together!
                 </p>
                 
                 {/* Router Link wrapping the button */}
-                <RouterLink to="/create-account" className="buttonContainer">
-                    <Button color="primary" className="button">
+                <div className="buttonContainer">
+                    <Button 
+                        color="primary" 
+                        className="button"
+                        onClick={handleNext}
+                    >
                         Get Started
                     </Button>
-                </RouterLink>
+                </div>
             </div>
         </div>
     );

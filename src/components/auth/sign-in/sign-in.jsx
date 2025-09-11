@@ -64,7 +64,7 @@ export default function SignIn() {
                 {/** Password Input */}
                 <Input 
                     label="Password" 
-                    placeholder="Min 8 characters" 
+                    placeholder="Enter your password" 
                     type={isPasswordVisible ? "text" : "password"}
                     variant="bordered"
                     isRequired
@@ -95,7 +95,7 @@ export default function SignIn() {
                         Log In
                     </Button>
                 </div>
-                <p className="newUser">Are you new here? <Link as={RouterLink} to="/sign-up">Create account</Link></p>
+                <p className="newUser">Are you new here? <Link as={RouterLink} to="/create-account">Create account</Link></p>
             </form>
         </div>
     );

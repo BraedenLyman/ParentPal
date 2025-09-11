@@ -15,14 +15,18 @@ export const genders = [
 export default function ParentInfo() {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const handleNext = () => {
+      navigate("/add-baby")
+    }
     
     return (
       <div className="mainDiv">
-        <div className="arrowIcon" onClick={() => navigate(-1)}>
+        <div className="arrowIcon" onClick={() => navigate("/account-type")}>
             <ArrowLeftIcon />
         </div>
 
-        <Progress aria-label="Loading..." className="progressBar" value={50} />
+        <Progress aria-label="Loading..." className="progressBar" value={40} />
         <h1 className="heading">Tell us more about yourself</h1>
 
         <div className="inputContainer">
@@ -46,6 +50,7 @@ export default function ParentInfo() {
             <Button
                 color="primary"
                 className="button"
+                onClick={handleNext}
             >
                 Next
             </Button>

@@ -10,7 +10,7 @@ export default function ForgotPassword() {
 
     return (
         <div className="mainDiv">
-            <button onClick={() => navigate(-1)}>
+            <button onClick={() => navigate("/sign-in")}>
                 <ArrowLeftIcon className="arrowIcon" />
             </button>
 

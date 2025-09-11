@@ -10,64 +10,60 @@ export default function AccountType() {
     const location = useLocation();
     const [selected, setSelected] = useState(null);
   
+    const accountTypes = [
+        {
+            key: "parent",
+            icon: "P",
+            title: "I am a Parent",
+            description: "I am here to keep track and manage my baby's growth and development",
+            route: "/parent-info",
+        },
+        {
+            key: "babysitter",
+            icon: "B",
+            title: "I am a Babysitter",
+            description: "I am here to babysit and stay on track for the baby's schedule and development",
+            route: "/babysitter-info",
+        },
+    ];    
+
     const handleNext = () => {
-    if (selected === "parent") {
-      navigate("/parent-info");
-    } else if (selected === "babysitter") {
-      navigate("/babysitter-info");
-    }
-  };
+        const selectedType = accountTypes.find((type) => type.key === selected);
+        if (selectedType) {
+            navigate(selectedType.route);
+        }
+    };
+
     return (
         <div className="mainDiv">
             
-            <div className="arrowIcon" onClick={() => navigate(-1)}>
-                <ArrowLeftIcon />
-            </div>
+            {/** Placeholder div so progress bar can be at same height */}
+            <div className="arrowIcon"></div>
 
-            <Progress aria-label="Loading..." className="progressBar" value={25} />
+            <Progress aria-label="Loading..." className="progressBar" value={20} />
             <h1 className="heading">What brings you to our app?</h1>
 
-            {/** Parent Card */}
-            <Card 
-                className={`card ${selected === "babysitter" ? "faded" : ""} ${
-                    selected === "parent" ? "selected" : ""
-                }`} 
-                isPressable
-                onPress={() => setSelected("parent")}
-            >
+            {accountTypes.map((type) => (
+                <Card
+                    key={type.key}
+                    className={`card 
+                        ${selected && selected !== type.key ? "faded" : ""} 
+                        ${selected === type.key ? "selected" : ""}`}
+                    isPressable
+                    onPress={() => setSelected(type.key)}
+                >
                 <CardBody>
                     <div className="cardBody">
-                        <div className="circleIcon">
-                            P
-                        </div>
+                        <div className="circleIcon">{type.icon}</div>
                         <div className="accountSelectionInfo">
-                            <h4 className="heading4">I am a Parent</h4>
-                            <p className="textP">I am here to keep track and manage my baby's growth and development</p>
+                            <h4 className="heading4">{type.title}</h4>
+                            <p className="textP">{type.description}</p>
                         </div>
                     </div>
                 </CardBody>
-            </Card>
+                </Card>
+            ))}
 
-            {/** Babysitter Card */}
-             <Card 
-                className={`card ${selected === "parent" ? "faded" : ""} ${
-                    selected === "babysitter" ? "selected" : ""
-                }`} 
-                isPressable
-                onPress={() => setSelected("babysitter")}
-            >
-                <CardBody>
-                    <div className="cardBody">
-                        <div className="circleIcon">
-                            B
-                        </div>
-                        <div className="accountSelectionInfo">
-                            <h4 className="heading4">I am a Babysitter</h4>
-                            <p className="textP">I am here to babysit and stay on track for the baby's schedule and development</p>
-                        </div>
-                    </div>
-                </CardBody>
-            </Card>
             <div className="buttonContainer">
                 <Button
                     color="primary"
