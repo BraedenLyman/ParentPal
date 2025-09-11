@@ -16,7 +16,9 @@ import Dashboard from "./components/dashboard/dashboard";
 function App() {
   return (
     <Routes>
+      {/** Sign In/Sign Up  */}
       <Route element={<SignIn />} path="/sign-in" />
+
       <Route element={<SignUp />} path="/sign-up" />
       <Route element={<CreateAccount />} path="/create-account" />
       <Route element={<AccountType />} path="/account-type" />
@@ -24,11 +26,14 @@ function App() {
       <Route element={<AddBaby />} path="/add-baby" />
       <Route element={<BabyInfo />} path="/baby-info" />
       <Route element={<AccountComplete />} path="/account-complete" />
-      <Route element={<Dashboard />} path="/dashboard" />
+      
       <Route element={<NewAccountOTP />} path="/new-accountOTP" />
       <Route element={<ForgotPassword />} path="/forgot-password" />
       <Route element={<PasswordOTP />} path="/recover-passwordOTP" />
+
+      {/** Dashboard and Main Pages  */}
       <Route element={<IndexPage />} path="/" />
+      <Route element={<Dashboard />} path="/dashboard" />
     </Routes>
   );
 }
