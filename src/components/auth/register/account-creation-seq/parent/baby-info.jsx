@@ -13,12 +13,12 @@ export const genders = [
 export default function BabyInfo() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { category, fName: initialFName, lName: initialLName } = location.state || {};
+  const { email, accountType, category, selectedGender, fName, lName, gender, dob, bFName: initialFName, bLName: initialLName } = location.state || {};
   
-  const [fName, setFName] = useState(initialFName || "");
-  const [lName, setLName] = useState(initialLName || "");
-  const [dob, setDob] = useState("");
-  const [selectedGender, setSelectedGender] = useState("");
+  const [bFName, setBFName] = useState(initialFName || "");
+  const [bLName, setBLName] = useState(initialLName || "");
+  const [bDob, setBDob] = useState("");
+  const [selectedBGender, setSelectedBGender] = useState("");
   const [otherGender, setOtherGender] = useState("");
 
   const isValidDate = (dateStr) => {
@@ -29,20 +29,27 @@ export default function BabyInfo() {
   };
 
   const isButtonDisabled =
-    !fName.trim() ||
-    !lName.trim() ||
-    !isValidDate(dob) ||
-    !selectedGender ||
-    (selectedGender === "Other" && otherGender.trim() === "");
+    !bFName.trim() ||
+    !bLName.trim() ||
+    !isValidDate(bDob) ||
+    !selectedBGender ||
+    (selectedBGender === "Other" && otherGender.trim() === "");
 
   const handleNext = () => {
     navigate("/account-complete", {
       state: {
+        email, 
+        accountType,
         category,
+        bFName,
+        bLName,
         fName,
         lName,
-        gender: selectedGender === "Other" ? otherGender : selectedGender,
+        gender,
         dob,
+        selectedGender,
+        bGender: selectedBGender === "Other" ? otherGender : selectedBGender,
+        bDob,
       },
     });
   };
@@ -58,11 +65,11 @@ export default function BabyInfo() {
 
       <div className="inputContainer">
         <Avatar
-          name={`${fName?.charAt(0) ?? ""}${lName?.charAt(0) ?? ""}`}
+          name={`${bFName?.charAt(0) ?? ""}${bLName?.charAt(0) ?? ""}`}
           showFallback
           className="avatarSize"
         />
-        <p>{fName} {lName}</p>
+        <p>{bFName} {bLName}</p>
 
         <Input
           label={(category + "'s" || "Baby's") + " first name"}
@@ -70,8 +77,8 @@ export default function BabyInfo() {
           type="text"
           variant="bordered"
           isRequired
-          value={fName}
-          onChange={(e) => setFName(e.target.value)}
+          value={bFName}
+          onChange={(e) => setBFName(e.target.value)}
         />
 
         <Input
@@ -80,8 +87,8 @@ export default function BabyInfo() {
           type="text"
           variant="bordered"
           isRequired
-          value={lName}
-          onChange={(e) => setLName(e.target.value)}
+          value={bLName}
+          onChange={(e) => setBLName(e.target.value)}
         />
 
         <Input
@@ -89,15 +96,15 @@ export default function BabyInfo() {
           type="date"
           variant="bordered"
           isRequired
-          value={dob}
-          onChange={(e) => setDob(e.target.value)}
+          value={bDob}
+          onChange={(e) => setBDob(e.target.value)}
         />
 
         <Select
-          selectedKeys={[selectedGender]}
+          selectedKeys={[selectedBGender]}
           onSelectionChange={(keys) => {
-            setSelectedGender(Array.from(keys)[0]);
-            setOtherGender(""); // Reset if user switches gender
+            setSelectedBGender(Array.from(keys)[0]);
+            setOtherGender("");
           }}
           items={genders}
           label="Gender"
@@ -108,7 +115,7 @@ export default function BabyInfo() {
           {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
         </Select>
 
-        {selectedGender === "Other" && (
+        {selectedBGender === "Other" && (
           <Input
             label="Other Gender"
             placeholder="Enter your gender"

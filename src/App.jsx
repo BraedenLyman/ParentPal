@@ -10,8 +10,10 @@ import AccountType from "./components/auth/register/account-creation-seq/account
 import ParentInfo from "./components/auth/register/account-creation-seq/parent/parent-info";
 import AddBaby from "./components/auth/register/account-creation-seq/parent/add-baby";
 import BabyInfo from "./components/auth/register/account-creation-seq/parent/baby-info";
-import AccountComplete from "./components/auth/register/account-creation-seq/parent/account-complete";
-import Dashboard from "./components/dashboard/dashboard";
+import AccountComplete from "./components/auth/register/account-creation-seq/account-complete";
+import ParentDashboard from "./components/dashboard/parent-dashboard";
+import BabysitterDashboard from "./components/dashboard/babysitter-dashboard";
+import BabysitterInfo from "./components/auth/register/account-creation-seq/babystter/babysitter-info";
 
 function App() {
   return (
@@ -22,10 +24,13 @@ function App() {
       <Route element={<SignUp />} path="/sign-up" />
       <Route element={<CreateAccount />} path="/create-account" />
       <Route element={<AccountType />} path="/account-type" />
+
       <Route element={<ParentInfo />} path="/parent-info" />
       <Route element={<AddBaby />} path="/add-baby" />
       <Route element={<BabyInfo />} path="/baby-info" />
       <Route element={<AccountComplete />} path="/account-complete" />
+
+      <Route element={<BabysitterInfo />} path="/babysitter-info" />
       
       <Route element={<NewAccountOTP />} path="/new-accountOTP" />
       <Route element={<ForgotPassword />} path="/forgot-password" />
@@ -33,7 +38,8 @@ function App() {
 
       {/** Dashboard and Main Pages  */}
       <Route element={<IndexPage />} path="/" />
-      <Route element={<Dashboard />} path="/dashboard" />
+      <Route element={<ParentDashboard />} path="/parent-dashboard" />
+      <Route element={<BabysitterDashboard />} path="/babysitter-dashboard" />
     </Routes>
   );
 }

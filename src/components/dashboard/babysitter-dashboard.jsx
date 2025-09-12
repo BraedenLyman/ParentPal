@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
-export default function Dashboard() {
+export default function BabysitterDashboard() {
     const navigate = useNavigate();
 
     return (
         <div className="mainDiv">
-            <h1>Dashboard</h1>
+            <h1>Babysitter Dashboard</h1>
         </div>
     );
 }

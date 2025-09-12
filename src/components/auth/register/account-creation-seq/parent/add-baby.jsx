@@ -8,8 +8,9 @@ export default function AddBaby() {
     const navigate = useNavigate();
     const location = useLocation();
     const [selected, setSelected] = useState(null);
-    const [fName, setFName] = useState("");
-    const [lName, setLName] = useState("");
+    //const [fName, setFName] = useState("");
+    //const [lName, setLName] = useState("");
+    const { email, fName, lName, accountType, dob, selectedGender } = location.state || {};
 
     const categories = [
         { name: "Baby", description: "0–12 months old." },
@@ -19,7 +20,7 @@ export default function AddBaby() {
     ];
   
     const handleNext = () => {
-        navigate("/baby-info", { state: { category: selected, fName, lName } })
+        navigate("/baby-info", { state: { email, fName, lName, accountType, dob, selectedGender, category: selected } })
     };
 
     return (

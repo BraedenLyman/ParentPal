@@ -2,7 +2,6 @@ import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../register-styles.css";
-import { Link as RouterLink } from "react-router-dom";
 import { Button, Card, CardBody, Progress } from "@heroui/react";
 
 export default function AccountType() {
@@ -32,7 +31,7 @@ export default function AccountType() {
         const selectedType = accountTypes.find((type) => type.key === selected);
         if (selectedType) {
             navigate(selectedType.route, {
-                state: {email, fName, lName}
+                state: {email, fName, lName, accountType: selectedType.key,}
             });
         }
     };

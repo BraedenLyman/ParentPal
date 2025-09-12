@@ -1,17 +1,28 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import "../../register-styles.css";
+import "../register-styles.css";
 import { Button, Progress } from "@heroui/react";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 
 export default function AccountComplete() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { category } = location.state || {};
+    const state = location.state || {}
 
-  
+    console.log("AccountComplete received state:", state);
+
+    const {
+        accountType,
+    } = state;
+
     const handleNext = () => {
-        navigate("/dashboard")
+    if (accountType === "babysitter") {
+        navigate("/babysitter-dashboard");
+    } else if (accountType === "parent") {
+        navigate("/parent-dashboard");
+    } else {
+        console.log("Error")
+    }
     };
 
     return (
@@ -26,7 +37,12 @@ export default function AccountComplete() {
             </div>
 
             <h1 className="heading">Profile has been successfully completed!</h1>
-            <p className="pText">Now you can go to the app and start tracking your {(category || "Baby's") + "'s"} development</p>
+
+            <div className="debug-info">
+                <h2>Debug Info</h2>
+                <pre>{JSON.stringify(state, null, 2)}</pre>
+            </div>
+
             <div className="buttonContainer">
                 <Button
                     color="primary"

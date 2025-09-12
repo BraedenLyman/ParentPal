@@ -10,13 +10,14 @@ export const genders = [
   { key: "Other", label: "Other" },
 ];
 
-export default function ParentInfo() {
+export default function BabysitterInfo() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { email, fName, lName, accountType } = location.state || {};
+
   const [selectedGender, setSelectedGender] = useState("");
   const [otherGender, setOtherGender] = useState("");
   const [dob, setDob] = useState("");
-  const { email, fName, lName, accountType } = location.state || {};
 
   const isValidDate = (dateStr) => {
     if (!dateStr) return false;
@@ -26,7 +27,7 @@ export default function ParentInfo() {
   };
 
   const handleNext = () => {
-    navigate("/add-baby", {
+    navigate("/account-complete", {
       state: { email, fName, lName, selectedGender: selectedGender === "Other" ? otherGender : selectedGender, dob, accountType },
     });
   };
