@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Navbar } from "../../../components/navbar";
 import {Button, Image, Input, Link} from "@heroui/react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import "./sign-in.css";
+import "./sign-in-styles.css";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseAuth";
@@ -34,7 +33,6 @@ export default function SignIn() {
 
     return (
         <div className="mainDiv">
-            <Navbar/>
             <div className="imgContainer">
                 <Image  
                     alt="Parent Pal Logo"

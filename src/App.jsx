@@ -3,7 +3,6 @@ import IndexPage from "./pages/index";
 import SignIn from "./components/auth/sign-in/sign-in";
 import SignUp from "./components/auth/register/sign-up";
 import ForgotPassword from "./components/auth/sign-in/forgot-password/forgot-password";
-import PasswordOTP from "./components/auth/sign-in/forgot-password/passwordOTP";
 import CreateAccount from "./components/auth/register/create-account";
 import NewAccountOTP from "./components/auth/register/new-accountOTP";
 import AccountType from "./components/auth/register/account-creation-seq/account-type";
@@ -14,6 +13,7 @@ import AccountComplete from "./components/auth/register/account-creation-seq/acc
 import ParentDashboard from "./components/dashboard/parent-dashboard";
 import BabysitterDashboard from "./components/dashboard/babysitter-dashboard";
 import BabysitterInfo from "./components/auth/register/account-creation-seq/babystter/babysitter-info";
+import ResetPassword from "./components/auth/sign-in/forgot-password/reset-password";
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
       
       <Route element={<NewAccountOTP />} path="/new-accountOTP" />
       <Route element={<ForgotPassword />} path="/forgot-password" />
-      <Route element={<PasswordOTP />} path="/recover-passwordOTP" />
+      <Route element={<ResetPassword />} path="/reset-password" />
 
       {/** Dashboard and Main Pages  */}
       <Route element={<IndexPage />} path="/" />
