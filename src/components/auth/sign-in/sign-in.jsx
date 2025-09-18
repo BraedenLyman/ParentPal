@@ -16,20 +16,50 @@ export default function SignIn() {
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
-        e.preventDefault();
-        setIsSigningIn(true);
-        setLoginError("");
+  e.preventDefault();
+  setIsSigningIn(true);
+  setLoginError("");
 
-        try {
-        await signInWithEmailAndPassword(auth, email, password);
-        navigate("/dashboard");  
-        } catch (error) {
-        setLoginError("Invalid email or password");
-        console.error("Login error:", error);
-        } finally {
-        setIsSigningIn(false);
-        }
-    };
+  try {
+    // Step 1: Sign in with Firebase
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // Step 2: Get Firebase ID token
+    const idToken = await user.getIdToken();
+
+    // Step 3: Send token to backend to verify and fetch MySQL data
+    const response = await fetch("http://localhost:3000/api/signin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // if you plan to use cookies/sessions later
+      body: JSON.stringify({ idToken })
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      throw new Error(errData.error || "Sign-in failed");
+    }
+
+    const { user: accountData } = await response.json();
+
+    // Optionally: store user info in context or localStorage
+    console.log("Signed in user:", accountData);
+    if (accountData.account_type === "parent") {
+      navigate("/parent-dashboard"); 
+    } 
+    if (accountData.account_type === "babysitter") {
+      navigate("/babysitter-dashboard");
+    }
+
+  } catch (error) {
+    console.error("Login error:", error);
+    setLoginError(error.message || "Invalid email or password");
+  } finally {
+    setIsSigningIn(false);
+  }
+};
+
 
     return (
         <div className="mainDiv">

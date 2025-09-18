@@ -96,7 +96,7 @@ export default function CreateAccount() {
       };
     }
 
-    await axios.post("http://localhost:5000/api/accounts", {
+    await axios.post("http://localhost:3000/api/accounts", {
       firebaseUid,
       ...payload,
     });

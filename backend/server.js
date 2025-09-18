@@ -57,7 +57,35 @@ app.post("/api/accounts", async (req, res) => {
   }
 });
 
+app.post("/api/signin", async (req, res) => {
+  const { idToken } = req.body;
+  if (!idToken) return res.status(400).json({ error: "Missing ID token" });
+
+  try {
+    // Verify the token with Firebase Admin
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const firebaseUid = decodedToken.uid;
+
+    // Look up the user in MySQL
+    const [rows] = await pool.query(
+      "SELECT * FROM account WHERE firebase_uid = ?",
+      [firebaseUid]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "User exists in Firebase but not in database" });
+    }
+
+    // Return account data
+    res.json({ user: rows[0] });
+  } catch (err) {
+    console.error("Signin error:", err);
+    res.status(500).json({ error: "Failed to sign in" });
+  }
+});
 
 
-const PORT = process.env.PORT || 5000;
+
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
