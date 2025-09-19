@@ -21,14 +21,9 @@ export default function SignIn() {
   setLoginError("");
 
   try {
-    // Step 1: Sign in with Firebase
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-
-    // Step 2: Get Firebase ID token
     const idToken = await user.getIdToken();
-
-    // Step 3: Send token to backend to verify and fetch MySQL data
     const response = await fetch("http://localhost:3000/api/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -42,8 +37,7 @@ export default function SignIn() {
     }
 
     const { user: accountData } = await response.json();
-
-    // Optionally: store user info in context or localStorage
+    
     console.log("Signed in user:", accountData);
     if (accountData.account_type === "parent") {
       navigate("/parent-dashboard"); 
