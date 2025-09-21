@@ -8,7 +8,7 @@ export default function ParentDashboard() {
     const navigate = useNavigate();
 
     return (
-        <div className="mainDiv">
+        <div className="mainDashboard">
             <div className="header">
                 <div className="headerContainer">
                     <Avatar className="avatar"/>
@@ -26,8 +26,9 @@ export default function ParentDashboard() {
 
                     <div className="cardContainer">
                         <Card 
+                            isPressable 
+                            shadow="sm"
                             className="cardInfo"
-                            onClick={() => handleCardClick("Jack")}
                         >
                             <div className="cardContent">
                                 <Avatar
@@ -41,7 +42,11 @@ export default function ParentDashboard() {
                                 </div>
                             </div>
                         </Card>
-                        <Card className="cardInfo">
+                        <Card 
+                            isPressable 
+                            shadow="sm"
+                            className="cardInfo"
+                        >
                             <div className="cardContent">
                                 <Avatar
                                     name="J" 
@@ -62,19 +67,29 @@ export default function ParentDashboard() {
                 <h1 className="userTitleName">Jack's Development</h1>
             </div>
 
-            <div className="logReports">
+            <Card className="reportSections">
                 <h1 className="sectionTitle">Logs</h1>
                 <p className="sectionDescription">
                     Click on the card below to view/add logs
                 </p>
                 <div className="sections">
-                    <Card className="cardReports">
-                        <div >
+                    <Card 
+                        isPressable 
+                        shadow="sm"
+                        className="cardReports growthCard"
+                        onClick={() => navigate("/growth-tracker")}
+                    >
+                        <div>
                             <h1>Growth Tracker</h1>
                         </div>
                     </Card>
 
-                    <Card className="cardReports">
+                    <Card 
+                        isPressable 
+                        shadow="sm"
+                        className="cardReports sleepCard"
+                        onClick={() => navigate("/sleep-analytics")}
+                    >
                         <div >
                             <h1>Sleep Analytics</h1>
                         </div>
@@ -82,13 +97,23 @@ export default function ParentDashboard() {
                 </div>
 
                 <div className="sections">
-                    <Card className="cardReports">
+                    <Card 
+                        isPressable 
+                        shadow="sm"
+                        className="cardReports healthCard"
+                        onClick={() => navigate("/health-journal")}
+                    >
                         <div >
                             <h1>Health Journal</h1>
                         </div>
                     </Card>
 
-                    <Card className="cardReports">
+                    <Card 
+                        isPressable 
+                        shadow="sm"
+                        className="cardReports feedingCard"
+                        onClick={() => navigate("/feeding-notes")}
+                    >
                         <div >
                             <h1>Feeding Notes</h1>
                         </div>
@@ -96,13 +121,56 @@ export default function ParentDashboard() {
                 </div>
 
                 <div className="sections">
-                    <Card className="cardReports">
+                    <Card 
+                        isPressable 
+                        shadow="sm"
+                        className="cardReports observationCard"
+                        onClick={() => navigate("/observation-notes")}
+                    >
                         <div >
                             <h1>Observation Notes</h1>
                         </div>
                     </Card>
                 </div>
-            </div>
+            </Card>
+
+            <Card className="reportSections">
+                <h1 className="sectionTitle">Assigned Tasks</h1>
+                <p className="sectionDescription">
+                    Click on the card below to view/add tasks to a babysitter
+                </p>
+                <div className="sections">
+                    <Card 
+                        isPressable 
+                        shadow="sm"
+                        className="cardReports assignedCard"
+                        onClick={() => navigate("/assigned-tasks")}
+                    >
+                        <div >
+                            <h1>Assigned Tasks</h1>
+                        </div>
+                    </Card>
+                </div>
+            </Card>
+
+            <Card className="reportSections">
+                <h1 className="sectionTitle">Photo Gallery</h1>
+                <p className="sectionDescription">
+                    Click on the card below to view/add photos to the gallery
+                </p>
+                <div className="sections">
+                    <Card 
+                        isPressable 
+                        shadow="sm"
+                        className="cardReports photoGalleryCard"
+                        onClick={() => navigate("/photo-gallery")}
+                    >
+                        <div >
+                            <h1>Photo Gallery</h1>
+                        </div>
+                    </Card>
+                </div>
+            </Card>
         </div>
     );
 }

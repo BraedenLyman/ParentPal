@@ -14,6 +14,11 @@ import ParentDashboard from "./components/dashboard/parent-dashboard";
 import BabysitterDashboard from "./components/dashboard/babysitter-dashboard";
 import BabysitterInfo from "./components/auth/register/account-creation-seq/babystter/babysitter-info";
 import ResetPassword from "./components/auth/sign-in/forgot-password/reset-password";
+import GrowthTracker from "./components/parent-pages/growth/growth-tracker";
+import SleepAnalytics from "./components/parent-pages/sleep/sleep-analytics";
+import HealthJournal from "./components/parent-pages/health/health-journal";
+import FeedingNotes from "./components/parent-pages/notes/feeding/feeding-notes";
+import ObservationNotes from "./components/parent-pages/notes/observation/observation-notes";
 
 function App() {
   return (
@@ -40,6 +45,15 @@ function App() {
       <Route element={<IndexPage />} path="/" />
       <Route element={<ParentDashboard />} path="/parent-dashboard" />
       <Route element={<BabysitterDashboard />} path="/babysitter-dashboard" />
+      
+      {/** Parent Pages */}
+      <Route element={<GrowthTracker />} path="/growth-tracker" />
+      <Route element={<SleepAnalytics />} path="/sleep-analytics" />
+      <Route element={<HealthJournal />} path="/health-journal" />
+      <Route element={<FeedingNotes />} path="/feeding-notes" />
+      <Route element={<ObservationNotes />} path="/observation-notes" />
+
+
     </Routes>
   );
 }
