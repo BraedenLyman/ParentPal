@@ -2,12 +2,14 @@ import { useNavigate } from "react-router-dom";
 import "./dashboard-styles.css"
 import { Avatar, Card, CardBody, Image } from "@heroui/react";
 import { FiBell } from "react-icons/fi";
+import { Navbar } from "../nav-bar/navbar";
 
 
 export default function ParentDashboard() {
     const navigate = useNavigate();
 
     return (
+        <>
         <div className="mainDashboard">
             <div className="header">
                 <div className="headerContainer">
@@ -21,7 +23,7 @@ export default function ParentDashboard() {
                     <FiBell className="notification"/>
                 </div>
                 <div className="userInfo">
-                    <h2 className="username">Hi, Braeden,</h2>
+                    <h2 className="username">Hi, Parent,</h2>
                     <h1 className="welcomeMessage">Welcome Back!</h1>
 
                     <div className="cardContainer">
@@ -172,5 +174,7 @@ export default function ParentDashboard() {
                 </div>
             </Card>
         </div>
+        <Navbar />
+        </>
     );
 }

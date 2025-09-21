@@ -1,5 +1,16 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+}
+
 .mainDashboard {
     background-color: #A3CCDA;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
 .header {

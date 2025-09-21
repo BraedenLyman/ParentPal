@@ -1,4 +1,4 @@
-import { Navbar } from "../../../components/navbar";
+import { Navbar } from "../../nav-bar/navbar";
 import {Button, Image} from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import "./register-styles.css";

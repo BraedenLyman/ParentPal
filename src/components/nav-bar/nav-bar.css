@@ -1,0 +1,23 @@
+.navBarContainer {
+  position: fixed; 
+  bottom: 0;   
+  left: 0;
+  right: 0;
+  z-index: 1000; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #BDE3C3; 
+  border-top: 1px solid #ccc;
+  height: 60px; 
+}
+
+.navSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 33%;
+  height: 100%;
+  cursor: pointer;
+}
