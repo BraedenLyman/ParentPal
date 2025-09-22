@@ -16,13 +16,7 @@ export default function AccountComplete() {
     } = state;
 
     const handleNext = () => {
-    if (accountType === "babysitter") {
-        navigate("/babysitter-dashboard");
-    } else if (accountType === "parent") {
-        navigate("/parent-dashboard");
-    } else {
-        console.log("Error")
-    }
+        navigate("/sign-in");
     };
 
     return (
@@ -49,7 +43,7 @@ export default function AccountComplete() {
                     className="button"
                     onPress={handleNext}
                 >
-                    Go to Dashboard
+                    Go to Sign In
                 </Button>
             </div>
         </div>

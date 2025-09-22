@@ -12,13 +12,11 @@ export default function SignIn() {
     const [loginError, setLoginError] = useState("");
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isSigningIn, setIsSigningIn] = useState(false);
-
     const navigate = useNavigate();
-
     const handleLogin = async (e) => {
-  e.preventDefault();
-  setIsSigningIn(true);
-  setLoginError("");
+    e.preventDefault();
+    setIsSigningIn(true);
+    setLoginError("");
 
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -27,7 +25,7 @@ export default function SignIn() {
     const response = await fetch("http://localhost:3000/api/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "include", // if you plan to use cookies/sessions later
+      credentials: "include",
       body: JSON.stringify({ idToken })
     });
 
@@ -36,11 +34,11 @@ export default function SignIn() {
       throw new Error(errData.error || "Sign-in failed");
     }
 
-    const { user: accountData } = await response.json();
+    const { user: accountData, babyData } = await response.json();
     
     console.log("Signed in user:", accountData);
     if (accountData.account_type === "parent") {
-      navigate("/parent-dashboard"); 
+      navigate("/parent-dashboard", {state: {babyData}}); 
     } 
     if (accountData.account_type === "babysitter") {
       navigate("/babysitter-dashboard");
@@ -53,7 +51,6 @@ export default function SignIn() {
     setIsSigningIn(false);
   }
 };
-
 
     return (
         <div className="mainDiv">

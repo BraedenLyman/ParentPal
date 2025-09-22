@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./dashboard-styles.css"
 import { Avatar, Card, CardBody, Image } from "@heroui/react";
 import { FiBell } from "react-icons/fi";
@@ -7,6 +7,8 @@ import Navbar from "../nav-bar/navbar";
 
 export default function ParentDashboard() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const babyData = location.state?.babyData || []; 
 
     return (
         <>
@@ -27,40 +29,30 @@ export default function ParentDashboard() {
                     <h1 className="welcomeMessage">Welcome Back!</h1>
 
                     <div className="cardContainer">
-                        <Card 
-                            isPressable 
-                            shadow="sm"
-                            className="cardInfo"
-                        >
-                            <div className="cardContent">
-                                <Avatar
-                                    name="J" 
-                                    size="sm" 
-                                    className="avatar"
-                                />
-                                <div className="babyInfo">
-                                    <h3 className="baby">Jack</h3>
-                                    <p className="babyDate">2025/02/23</p>
-                                </div>
-                            </div>
-                        </Card>
-                        <Card 
-                            isPressable 
-                            shadow="sm"
-                            className="cardInfo"
-                        >
-                            <div className="cardContent">
-                                <Avatar
-                                    name="J" 
-                                    size="sm" 
-                                    className="avatar"
-                                />
-                                <div className="babyInfo">
-                                    <h3 className="baby">Jack</h3>
-                                    <p className="babyDate">2025/02/23</p>
-                                </div>
-                            </div>
-                        </Card>
+                        {babyData.length > 0 ? (
+                            babyData.map((baby, index) => (
+                                <Card 
+                                    isPressable 
+                                    shadow="sm"
+                                    className="cardInfo"
+                                    key={baby.baby_id || index}
+                                >
+                                    <div className="cardContent">
+                                        <Avatar
+                                            name={baby.first_name ? baby.first_name.charAt(0) : "N/A"} 
+                                            size="sm" 
+                                            className="avatar"
+                                        />
+                                        <div className="babyInfo">
+                                            <h3 className="baby">{baby.first_name}</h3>
+                                            <p className="babyDate">{baby.birth_date ? new Date(baby.birth_date).toLocaleDateString() : "N/A"}</p>
+                                        </div>
+                                    </div>
+                                </Card>
+                            ))
+                        ) : (
+                            <p>No baby information found.</p>
+                        )}
                     </div>
                 </div>
             </div>

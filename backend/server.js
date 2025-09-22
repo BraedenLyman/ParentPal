@@ -62,11 +62,8 @@ app.post("/api/signin", async (req, res) => {
   if (!idToken) return res.status(400).json({ error: "Missing ID token" });
 
   try {
-    // Verify the token with Firebase Admin
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     const firebaseUid = decodedToken.uid;
-
-    // Look up the user in MySQL
     const [rows] = await pool.query(
       "SELECT * FROM account WHERE firebase_uid = ?",
       [firebaseUid]
@@ -76,16 +73,29 @@ app.post("/api/signin", async (req, res) => {
       return res.status(404).json({ error: "User exists in Firebase but not in database" });
     }
 
-    // Return account data
-    res.json({ user: rows[0] });
+    const accountData = rows[0];
+    let babyData = null;
+
+    if (accountData.account_type === "parent") {
+      const [babyRows] = await pool.query(
+        "SELECT baby_id, first_name, last_name, birth_date FROM baby WHERE parent_id = ?",
+        [accountData.account_id]
+      );
+      
+    if (babyRows.length > 0) {
+      babyData = babyRows;
+        console.log("Backend found baby data:", babyData);
+    } else {
+      console.log("Backend: No baby data found for parent_id:", accountData.account_id);
+    }
+  }
+    console.log("Backend sending response:", { user: accountData, babyData });
+    res.json({ user: accountData, babyData });
   } catch (err) {
     console.error("Signin error:", err);
     res.status(500).json({ error: "Failed to sign in" });
   }
 });
-
-
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
