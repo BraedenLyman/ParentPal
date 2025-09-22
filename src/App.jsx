@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./components/protected-route";
 import IndexPage from "./pages/index";
 import SignIn from "./components/auth/sign-in/sign-in";
 import SignUp from "./components/auth/register/sign-up";
@@ -23,37 +24,80 @@ import ObservationNotes from "./components/parent-pages/notes/observation/observ
 function App() {
   return (
     <Routes>
-      {/** Sign In/Sign Up  */}
+      {/** Public Routes  */}
       <Route element={<SignIn />} path="/sign-in" />
-
       <Route element={<SignUp />} path="/sign-up" />
       <Route element={<CreateAccount />} path="/create-account" />
-      <Route element={<AccountType />} path="/account-type" />
-
-      <Route element={<ParentInfo />} path="/parent-info" />
-      <Route element={<AddBaby />} path="/add-baby" />
-      <Route element={<BabyInfo />} path="/baby-info" />
-      <Route element={<AccountComplete />} path="/account-complete" />
-
-      <Route element={<BabysitterInfo />} path="/babysitter-info" />
-      
-      <Route element={<NewAccountOTP />} path="/new-accountOTP" />
       <Route element={<ForgotPassword />} path="/forgot-password" />
       <Route element={<ResetPassword />} path="/reset-password" />
 
-      {/** Dashboard and Main Pages  */}
-      <Route element={<IndexPage />} path="/" />
-      <Route element={<ParentDashboard />} path="/parent-dashboard" />
-      <Route element={<BabysitterDashboard />} path="/babysitter-dashboard" />
-      
-      {/** Parent Pages */}
-      <Route element={<GrowthTracker />} path="/growth-tracker" />
-      <Route element={<SleepAnalytics />} path="/sleep-analytics" />
-      <Route element={<HealthJournal />} path="/health-journal" />
-      <Route element={<FeedingNotes />} path="/feeding-notes" />
-      <Route element={<ObservationNotes />} path="/observation-notes" />
+      {/** Protected Routes  */}
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <IndexPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/parent-dashboard"
+        element={
+          <ProtectedRoute>
+            <ParentDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/babysitter-dashboard"
+        element={
+          <ProtectedRoute>
+            <BabysitterDashboard />
+          </ProtectedRoute>
+        }
+      />
 
-
+      {/** Parent pages */}
+      <Route
+        path="/growth-tracker"
+        element={
+          <ProtectedRoute>
+            <GrowthTracker />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/sleep-analytics"
+        element={
+          <ProtectedRoute>
+            <SleepAnalytics />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/health-journal"
+        element={
+          <ProtectedRoute>
+            <HealthJournal />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/feeding-notes"
+        element={
+          <ProtectedRoute>
+            <FeedingNotes />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/observation-notes"
+        element={
+          <ProtectedRoute>
+            <ObservationNotes />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
