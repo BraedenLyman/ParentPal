@@ -1,4 +1,3 @@
-import { Navbar } from "../../nav-bar/navbar";
 import {Button, Image} from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import "./register-styles.css";
@@ -12,7 +11,7 @@ export default function SignUp() {
 
     return (
         <div className="mainDiv">
-            <Navbar/>
+           
             <div className="imgContainer">
                 <Image  
                     alt="Parent Pal Logo"

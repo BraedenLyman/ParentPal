@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "./dashboard-styles.css"
 import { Avatar, Card, CardBody, Image } from "@heroui/react";
 import { FiBell } from "react-icons/fi";
-import { Navbar } from "../nav-bar/navbar";
+import Navbar from "../nav-bar/navbar";
 
 
 export default function ParentDashboard() {

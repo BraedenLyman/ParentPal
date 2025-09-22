@@ -1,0 +1,44 @@
+.mainDiv {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 80px;
+}
+
+.mainAvatar {
+    width: 100px;
+    height: 100px;
+}
+
+.addButton {
+    position: fixed;   
+    bottom: 70px; 
+    right: 10px;  
+    width: 80px;
+    height: 40px;
+    z-index: 1000; 
+}
+
+.modal {
+    
+    bottom: 130px;
+    width: 70%;
+    height: 50%;
+    background-color: whitesmoke;
+}
+
+.modalHeader {
+    justify-content: center;
+    align-items: center;
+}
+
+.modalBody {
+    justify-content: center;
+    align-items: center;
+}
+
+.modalFooter {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}

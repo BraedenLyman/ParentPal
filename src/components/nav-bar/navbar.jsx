@@ -4,7 +4,7 @@ import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import "./nav-bar.css";
 import { useNavigate } from "react-router-dom";
 
-export const Navbar = () => {
+export default function Navbar() {
   const navigate = useNavigate();
 
   return (
