@@ -57,7 +57,7 @@ export default function ParentDashboard() {
           <div className="headerContainer">
             <Avatar 
                 className="avatar" 
-                name={userData?.first_name?.charAt(0) || ""}
+                name={userData?.first_name?.charAt(0)?.toUpperCase() || ""}
             />
             <Image
               alt="Parent Pal Logo"
@@ -85,8 +85,8 @@ export default function ParentDashboard() {
                   >
                     <div className="cardContent">
                       <Avatar
-                        name={baby.first_name?.charAt(0) || ""}
-                        size="sm"
+                        name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
+                        size="lg"
                         className="avatar"
                       />
                       <div className="babyInfo">
@@ -110,7 +110,7 @@ export default function ParentDashboard() {
         <div className="userTitle">
           <Avatar 
             className="mainAvatar" 
-            name={babyData[0].first_name?.charAt(0) || "N/A"}
+            name={babyData[0].first_name?.charAt(0)?.toUpperCase() || "N/A"}
           />
           <h1 className="userTitleName">
             {babyData.length > 0 ? babyData[0].first_name : "Baby"}'s Development
@@ -128,7 +128,7 @@ export default function ParentDashboard() {
               isPressable
               shadow="sm"
               className="cardReports growthCard"
-              onClick={() => navigate("/growth-tracker")}
+              onClick={() => navigate("/growth-tracker", {state: {baby: babyData[0], user: userData}})}
             >
               <div>
                 <h1>Growth Tracker</h1>

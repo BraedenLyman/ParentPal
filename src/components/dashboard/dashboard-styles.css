@@ -32,6 +32,9 @@ html, body {
 .avatar {
     width: 35px;
     height: 35px;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
 .logo {
@@ -101,6 +104,7 @@ html, body {
 .mainAvatar {
     width: 100px;
     height: 100px;
+    font-size: 50px;
 }
 
 .userTitleName {
