@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, Card, Image } from "@heroui/react";
@@ -17,34 +18,30 @@ export default function ParentDashboard() {
       const currentUser = auth.currentUser;
 
       if (!currentUser) {
-        navigate("/sign-in");
+        navigate("/sign-in")
         return;
       }
 
       try {
         const idToken = await currentUser.getIdToken();
-        const response = await fetch("http://localhost:3000/api/signin", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ idToken }),
-        });
+        const response = await axios.post(
+          "http://localhost:3000/api/sign-in",
+          { idToken },
+          { withCredentials: true }
+        );
 
-        if (!response.ok) throw new Error("Failed to fetch dashboard data");
-
-        const { user, babyData } = await response.json();
+        const { user, babyData } = response.data;
         setUserData(user);
         setBabyData(babyData || []);
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        console.error("Error fetching dashboard data: ", error);
         navigate("/sign-in");
       } finally {
         setLoading(false);
       }
-    };
-
+    }
     fetchDashboardData();
-  }, [navigate]);
+  }, [navigate])
 
   if (loading) {
     return <p>Loading dashboard...</p>;

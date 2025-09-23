@@ -1,25 +1,23 @@
+import axios from "axios";
 import PageHeader from "../../page-components/page-header/page-header";
 import PageMiddleNav from "../../page-components/page-middle-nav/page-middle-nav";
 import Navbar from "../../nav-bar/navbar";
 import "./growth.css";
-import { Avatar, Button, Card, Input, InputOtp, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/react";
+import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/react";
 import { Modal } from "@heroui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
 
 
 export default function GrowthTracker() {
     const location = useLocation();
+    const [growth, setGrowth] = useState([]);
     const { baby, user } = location.state || {}; 
     const [isOpen, setIsOpen] = useState(false);
     const [height, setHeight] = useState("");
     const [weight, setWeight] = useState("");
     const [date, setDate] = useState("");
-
-    function addInfo() {
-        
-    }
 
     return (
         <div className="mainDiv">
@@ -79,7 +77,6 @@ export default function GrowthTracker() {
                             value={height}
                             onChange={(e) => setHeight(e.target.value)}
                         />
-                        <p>{height}</p>
 
                         <Input 
                             variant="bordered"
@@ -89,7 +86,6 @@ export default function GrowthTracker() {
                             value={weight}
                             onChange={(e) => setWeight(e.target.value)}
                         />
-                        <p>{weight}</p>
 
                         <Input
                             variant="bordered"
@@ -99,14 +95,14 @@ export default function GrowthTracker() {
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
                         />
-                        <p>{date}</p>
+                      
                     </ModalBody>
                     <ModalFooter className="modalFooter">
                         <Button onPress={() => setIsOpen(false)}>
                             Cancel
                         </Button>
 
-                        <Button onClick={addInfo}>
+                        <Button >
                             Add
                         </Button>
                     </ModalFooter>

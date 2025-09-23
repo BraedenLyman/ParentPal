@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import {Button, Image, Input, Link} from "@heroui/react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
@@ -13,44 +14,40 @@ export default function SignIn() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isSigningIn, setIsSigningIn] = useState(false);
     const navigate = useNavigate();
-    const handleLogin = async (e) => {
-    e.preventDefault();
-    setIsSigningIn(true);
-    setLoginError("");
-
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    const idToken = await user.getIdToken();
-    const response = await fetch("http://localhost:3000/api/signin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ idToken })
-    });
-
-    if (!response.ok) {
-      const errData = await response.json();
-      throw new Error(errData.error || "Sign-in failed");
-    }
-
-    const { user: accountData, babyData } = await response.json();
     
-    console.log("Signed in user:", accountData);
-    if (accountData.account_type === "parent") {
-      navigate("/parent-dashboard", {state: {babyData}}); 
-    } 
-    if (accountData.account_type === "babysitter") {
-      navigate("/babysitter-dashboard");
-    }
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setIsSigningIn(true);
+        setLoginError("");
 
-  } catch (error) {
-    console.error("Login error:", error);
-    setLoginError(error.message || "Invalid email or password");
-  } finally {
-    setIsSigningIn(false);
-  }
-};
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            const idToken = await user.getIdToken();
+        
+            const response = await axios.post(
+                "http://localhost:3000/api/sign-in",
+                { idToken },
+                { withCredentials: true }
+            );
+
+            const { user: accountData, babyData } = response.data;
+            
+            console.log("Signed in user:", accountData);
+            if (accountData.account_type === "parent") {
+            navigate("/parent-dashboard", {state: {babyData}}); 
+            } 
+            if (accountData.account_type === "babysitter") {
+            navigate("/babysitter-dashboard");
+            }
+
+        } catch (error) {
+            console.error("Login error:", error);
+            setLoginError(error.message || "Invalid email or password");
+        } finally {
+            setIsSigningIn(false);
+        }
+    };
 
     return (
         <div className="mainDiv">
