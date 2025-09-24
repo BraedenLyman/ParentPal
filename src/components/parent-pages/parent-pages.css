@@ -136,14 +136,14 @@ html, body {
 .cardEntry {
     justify-content: center;
     align-items: center;
-    width: 250px;
+    width: 300px;
     padding: 10px;
 }
 
 .cardEntryContent {
     display: flex;
     flex-direction: column;
-    width: 150px;
+    width: 200px;
 }
 
 .scrollContainer {

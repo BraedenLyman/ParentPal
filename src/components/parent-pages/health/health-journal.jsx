@@ -1,29 +1,17 @@
 import axios from "axios";
 import PageMiddleNav from "../../page-components/page-middle-nav/page-middle-nav";
 import Navbar from "../../nav-bar/navbar";
-import {
-  Avatar,
-  Button,
-  Card,
-  Input,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Tabs,
-  Tab,
-  RadioGroup,
-  Radio
-} from "@heroui/react";
+import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, Tabs, Tab, RadioGroup, Radio, Select, SelectItem } from "@heroui/react";
 import { TimeInput, Modal } from "@heroui/react";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { FiBell } from "react-icons/fi";
 import "../parent-pages.css";
+import { auth } from "../../../firebase/firebaseAuth";
+import { Scrollbars } from "react-custom-scrollbars-2";
 
 export default function HealthJournal() {
-    const location = useLocation();
-    const { baby, user } = location.state || {};
+    const [babyId, setBabyId ] = useState(null);
+
     const [activeTab, setActiveTab] = useState("meds");
     const [isMedsOpen, setIsMedsOpen] = useState(false);
     const [isAllergiesOpen, setIsAllergiesOpen] = useState(false);
@@ -34,15 +22,183 @@ export default function HealthJournal() {
     const [medDate, setMedDate] = useState("");
     const [medDose, setMedDose] = useState("");
     const [medSympDescription, setMedSympDescription] = useState("");
-
+    const [medsRecords, setMedsRecords] = useState([]);
+    
     const [allergy, setAllergy] = useState("");
     const [severity, setSeverity] = useState("");
     const [allergyNotes, setAllergyNotes] = useState("");
-    const [epiYes, setEpiYes] = useState("");
-    const [epiNo, setEpiNo] = useState("");
+    const [epiPen, setEpiPen] = useState(""); 
+    const [allergiesRecords, setAllergiesRecords] = useState([])
 
     const [vaccineName, setVaccineName] = useState("");
     const [vaccineDate, setVaccineDate] = useState("");
+    const [vaccinationsRecords, setVaccinationsRecords] = useState([]);
+
+    useEffect(() => {
+        const fetchBaby = async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            try {
+                const { data } = await axios.get("http://localhost:3000/api/babies", {
+                    params: { firebase_uid: user.uid },
+                    withCredentials: true,
+                });
+                setBabyId(data.baby_id);
+            } catch (err) {
+                console.error("Failed to fetch baby: ", err);
+            }
+        };
+
+        fetchBaby();
+    }, []);
+
+    useEffect(() => {
+        if (!babyId) return;
+
+        const fetchMedsRecords = async () => {
+            try {
+                const { data } = await axios.get(`http://localhost:3000/api/meds`, {
+                    params: { baby_id: babyId },
+                    withCredentials: true,
+                });
+                setMedsRecords(data);
+            } catch (err) {
+                console.error("Failed to fetch meds records: ", err)
+            }
+        };
+
+        fetchMedsRecords();
+    }, [babyId]);
+    
+    const handleAddMeds = async () => {
+        if (!medName || !medsTimeTaken || !medDate || !medDose || !medSympDescription) {
+            alert("Please fill out all fields.");
+            return;
+        }
+
+        const formattedTime = `${String(medsTimeTaken.hour).padStart(2, "0")}:${String(medsTimeTaken.minute).padStart(2, "0")}`;
+
+        try {
+            const { data: newRecord } = await axios.post(
+                "http://localhost:3000/api/meds",
+                {
+                    baby_id: babyId,
+                    medication_name: medName,
+                    time_taken: formattedTime,
+                    date: medDate,
+                    dosage: medDose,
+                    symptoms: medSympDescription,
+                },
+                { withCredentials: true }
+            );
+
+            setMedsRecords((prev) => [...prev, newRecord]);
+
+            setMedName("");
+            setMedsTimeTaken("");
+            setMedDate("");
+            setMedDose("");
+            setMedSympDescription("");
+            setIsMedsOpen(false);
+        } catch (err) {
+            console.error("Failed to add meds record: ", err);
+        }
+    };
+
+    useEffect(() => {
+        if (!babyId) return;
+
+        const fetchAllergiesRecords = async () => {
+            try {
+                const { data } = await axios.get(`http://localhost:3000/api/allergies`, {
+                    params: { baby_id: babyId },
+                    withCredentials: true,
+                });
+                setAllergiesRecords(data);
+            } catch (err) {
+                console.error("Failed to fetch allergies records: ", err)
+            }
+        };
+
+        fetchAllergiesRecords();
+    }, [babyId]);
+
+    const handleAddAllergies = async () => {
+        if (!allergy || !severity || !epiPen || !allergyNotes) {
+            alert("Please fill out all fields.");
+            return;
+        }
+
+        try {
+            const { data: newRecord } = await axios.post(
+                "http://localhost:3000/api/allergies",
+                {
+                    baby_id: babyId,
+                    allergy_name: allergy,
+                    severity: severity,
+                    epi_pen: epiPen,
+                    notes: allergyNotes,
+                },
+                { withCredentials: true }
+            );
+
+            setAllergiesRecords((prev) => [...prev, newRecord]);
+
+            setAllergy("");
+            setSeverity("");
+            setEpiPen("");
+            setAllergyNotes("");
+            setIsAllergiesOpen(false);
+        } catch (err) {
+            console.error("Failed to add allergy record: ", err);
+        }
+    };
+
+    useEffect(() => {
+        if (!babyId) return;
+
+        const fetchVaccinationsRecords = async () => {
+            try {
+                const { data } = await axios.get(`http://localhost:3000/api/vaccinations`, {
+                    params: { baby_id: babyId },
+                    withCredentials: true,
+                });
+                setVaccinationsRecords(data);
+            } catch (err) {
+                console.error("Failed to fetch vaccinations records: ", err)
+            }
+        };
+
+        fetchVaccinationsRecords();
+    }, [babyId]);
+
+    const handleAddVaccinations = async () => {
+        if (!vaccineName || !vaccineDate) {
+            alert("Please fill out all fields.");
+            return;
+        }
+
+        try {
+            const { data: newRecord } = await axios.post(
+                "http://localhost:3000/api/vaccinations",
+                {
+                    baby_id: babyId,
+                    vaccination_name: vaccineName,
+                    date_of_vaccine: vaccineDate,
+                },
+                { withCredentials: true }
+            );
+
+            setVaccinationsRecords((prev) => [...prev, newRecord]);
+
+            setVaccineName("");
+            setVaccineDate("");
+            setIsVaccinationsOpen(false);
+        } catch (err) {
+            console.error("Failed to add vaccinations record: ", err);
+        }
+    };
 
     return (
         <div className="mainDiv">
@@ -51,34 +207,30 @@ export default function HealthJournal() {
                 <div className="headerContainer">
                     <Avatar
                     className="avatar"
-                    name={user?.first_name?.charAt(0)?.toUpperCase() || ""}
+                    name={"P"}
                     />
                     <Avatar
                     className="mainAvatar"
-                    name={baby?.first_name?.charAt(0)?.toUpperCase() || ""}
+                    name={"B"}
                     />
                     <FiBell className="notification" />
                 </div>
 
                 <div className="userInfo">
-                    <h1 className="babysName">{baby?.first_name || "Baby"}'s Health</h1>
+                    <h1 className="babysName">Baby's Health</h1>
                     <div className="cardContainer">
-                        {[baby].map((b, index) => (
-                            <Card key={index} isPressable shadow="sm" className="cardInfo">
-                                <div className="cardContent">
-                                    <Avatar
-                                        name={b?.first_name?.charAt(0)?.toUpperCase() || ""}
-                                        className="avatar"
-                                    />
-                                    <div className="babyInfo">
-                                    <h3 className="baby">{b?.first_name || "Baby"}</h3>
-                                    <p className="babyDate">
-                                        {b?.birth_date ? new Date(b.birth_date).toLocaleDateString() : "N/A"}
-                                    </p>
-                                    </div>
+                        <Card isPressable shadow="sm" className="cardInfo">
+                            <div className="cardContent">
+                                <Avatar
+                                    name={"B"}
+                                    className="avatar"
+                                />
+                                <div className="babyInfo">
+                                    <h3 className="baby">Baby</h3>
+                                    <p className="babyDate">2002-02-02</p>
                                 </div>
-                            </Card>
-                        ))}
+                            </div>
+                        </Card>
                     </div>
                 </div>
             </div>
@@ -95,18 +247,71 @@ export default function HealthJournal() {
                     <Button className="addButton" onPress={() => setIsMedsOpen(true)}>
                         Add
                     </Button>
+                    <Scrollbars className="scrollContainer" >
+                        <div className="scrollContent">
+                            {medsRecords.length === 0 ? (
+                                <h1>No med records yet</h1>
+                            ) : (
+                                medsRecords.map((record) => (
+                                    <Card className="cardEntry" key={record.meds_id}>
+                                        <div className="cardEntryContent">
+                                            <h2>Medication Name: {record.medication_name}</h2>
+                                            <h2>Time taken at: {record.time_taken}</h2>
+                                            <h2>Dosage: {record.dosage}</h2>
+                                            <h2>Symptoms/Description: {record.symptoms}</h2>
+                                            <h2>Date: {record.date.slice(0, 10)}</h2>
+                                        </div>
+                                    </Card>
+                                ))
+                            )}
+                        </div>
+                    </Scrollbars>
                 </Tab>
 
                 <Tab key="allergies" title="Allergies">
                     <Button className="addButton" onPress={() => setIsAllergiesOpen(true)}>
                         Add
                     </Button>
+                    <Scrollbars className="scrollContainer" >
+                        <div className="scrollContent">
+                            {allergiesRecords.length === 0 ? (
+                                <h1>No allergy records yet</h1>
+                            ) : (
+                                allergiesRecords.map((record) => (
+                                    <Card className="cardEntry" key={record.allergy_id}>
+                                        <div className="cardEntryContent">
+                                            <h2>Allergy: {record.allergy_name}</h2>
+                                            <h2>Severity: {record.severity}</h2>
+                                            <h2>Epi Pen: {record.epi_pen}</h2>
+                                            <h2>Notes: {record.notes}</h2>
+                                        </div>
+                                    </Card>
+                                ))
+                            )}
+                        </div>
+                    </Scrollbars>
                 </Tab>
 
                 <Tab key="vaccinations" title="Vaccinations">
                     <Button className="addButton" onPress={() => setIsVaccinationsOpen(true)}>
                         Add
                     </Button>
+                    <Scrollbars className="scrollContainer" >
+                        <div className="scrollContent">
+                            {vaccinationsRecords.length === 0 ? (
+                                <h1>No vaccinations records yet</h1>
+                            ) : (
+                                vaccinationsRecords.map((record) => (
+                                    <Card className="cardEntry" key={record.vaccine_id}>
+                                        <div className="cardEntryContent">
+                                            <h2>Vaccine: {record.vaccination_name}</h2>
+                                            <h2>Date of Vaccine: {record.date_of_vaccine.slice(0, 10)}</h2>
+                                        </div>
+                                    </Card>
+                                ))
+                            )}
+                        </div>
+                    </Scrollbars>
                 </Tab>
             </Tabs>
 
@@ -127,7 +332,7 @@ export default function HealthJournal() {
                             variant="bordered"
                             label="Time take at"
                             value={medsTimeTaken}
-                            onChange={(e) => setMedsTimeTaken(e.target.value)}
+                            onChange={(newTime) => setMedsTimeTaken(newTime)}
                         />
                         <Input
                             variant="bordered"
@@ -156,7 +361,7 @@ export default function HealthJournal() {
                     </ModalBody>
                 <ModalFooter>
                     <Button onPress={() => setIsMedsOpen(false)}>Cancel</Button>
-                    <Button >
+                    <Button onPress={handleAddMeds}>
                         Add
                     </Button>
                 </ModalFooter>
@@ -174,14 +379,28 @@ export default function HealthJournal() {
                                 value={allergy}
                                 onChange={(e) => setAllergy(e.target.value)}
                             />
-                            <RadioGroup label="EpiPen">
-                                <Radio value="yes">
-                                    Yes
-                                </Radio>
-                                <Radio value="no">
-                                    No
-                                </Radio>
+
+                            <Select
+                                variant="bordered"
+                                label="Severity"
+                                placeholder="Select severity"
+                                selectedKeys={severity ? [severity] : []}
+                                onSelectionChange={(keys) => setSeverity([...keys][0])}
+                            >
+                                <SelectItem key="low">Low</SelectItem>
+                                <SelectItem key="medium">Medium</SelectItem>
+                                <SelectItem key="high">High</SelectItem>
+                            </Select>
+
+                            <RadioGroup
+                                label="EpiPen"
+                                value={epiPen}
+                                onValueChange={(val) => setEpiPen(val)}
+                            >
+                                <Radio value="yes">Yes</Radio>
+                                <Radio value="no">No</Radio>
                             </RadioGroup>
+
                             <Input
                                 variant="bordered"
                                 label="Notes"
@@ -192,7 +411,7 @@ export default function HealthJournal() {
                         </ModalBody>
                     <ModalFooter>
                         <Button onPress={() => setIsAllergiesOpen(false)}>Cancel</Button>
-                        <Button>
+                        <Button onPress={handleAddAllergies}>
                             Add
                         </Button>
                     </ModalFooter>
@@ -200,42 +419,35 @@ export default function HealthJournal() {
             </Modal>
 
             <Modal
-            isOpen={isVaccinationsOpen}
-            onOpenChange={setIsVaccinationsOpen}
-            className="modal"
+                isOpen={isVaccinationsOpen}
+                onOpenChange={setIsVaccinationsOpen}
+                className="modal"
             >
-            <ModalContent>
-                <ModalHeader>Add Vaccination</ModalHeader>
-                <ModalBody>
-                <Input
-                    variant="bordered"
-                    label="Vaccine Name"
-                    placeholder="Vaccination they have"
-                    value={vaccineName}
-                    onChange={(e) => setVaccineName(e.target.value)}
-                />
-                <Input
-                    variant="bordered"
-                    type="date"
-                    label="Date Given"
-                    value={vaccineDate}
-                    onChange={(e) => setVaccineDate(e.target.value)}
-                />
-                </ModalBody>
-                <ModalFooter>
-                <Button onPress={() => setIsVaccinationsOpen(false)}>Cancel</Button>
-                <Button
-                    onPress={() => {
-                    console.log("Vaccine Added:", { vaccineName, vaccineDate });
-                    setVaccineName("");
-                    setVaccineDate("");
-                    setIsVaccinationsOpen(false);
-                    }}
-                >
-                    Add
-                </Button>
-                </ModalFooter>
-            </ModalContent>
+                <ModalContent>
+                    <ModalHeader>Add Vaccination</ModalHeader>
+                        <ModalBody>
+                            <Input
+                                variant="bordered"
+                                label="Vaccine Name"
+                                placeholder="Vaccination they have"
+                                value={vaccineName}
+                                onChange={(e) => setVaccineName(e.target.value)}
+                            />
+                            <Input
+                                variant="bordered"
+                                type="date"
+                                label="Date of Vaccine"
+                                value={vaccineDate}
+                                onChange={(e) => setVaccineDate(e.target.value)}
+                            />
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button onPress={() => setIsVaccinationsOpen(false)}>Cancel</Button>
+                            <Button onPress={handleAddVaccinations}>
+                                Add
+                            </Button>
+                        </ModalFooter>
+                </ModalContent>
             </Modal>
         </div>
     );
