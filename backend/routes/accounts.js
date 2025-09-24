@@ -31,8 +31,8 @@ router.post('/', async (req, res) => {
 
     res.status(201).json({ accountId: parentId });
   } catch (err) {
-    console.error('Failed to create account in DB:', err);
-    res.status(500).json({ error: 'Failed to create account in DB' });
+      console.error('Failed to create account in DB:', err);
+      res.status(500).json({ error: 'Failed to create account in DB' });
   }
 });
 

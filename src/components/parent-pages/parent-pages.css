@@ -128,3 +128,18 @@ html, body {
     align-items: center;
     margin-top: 5px;
 }
+
+.cardEntryContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 20px;
+}
+
+.cardEntry {
+    width: 60%;
+    padding: 10px;
+    padding-left: 20px;
+}

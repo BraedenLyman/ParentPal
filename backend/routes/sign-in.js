@@ -40,8 +40,8 @@ router.post('/', async (req, res) => {
 
     res.json({ user: accountData, babyData });
   } catch (err) {
-    console.error('Signin error:', err);
-    res.status(500).json({ error: 'Failed to sign in' });
+      console.error('Signin error:', err);
+      res.status(500).json({ error: 'Failed to sign in' });
   }
 });
 
