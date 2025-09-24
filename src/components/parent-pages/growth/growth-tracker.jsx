@@ -1,13 +1,12 @@
 import axios from "axios";
-import PageHeader from "../../page-components/page-header/page-header";
 import PageMiddleNav from "../../page-components/page-middle-nav/page-middle-nav";
 import Navbar from "../../nav-bar/navbar";
-import "./growth.css";
 import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@heroui/react";
 import { Modal } from "@heroui/react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
+import "../parent-pages.css";
 
 
 export default function GrowthTracker() {
