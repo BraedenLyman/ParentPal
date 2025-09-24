@@ -22,7 +22,7 @@ html, body {
 
 .header {
     width: 100%;
-    height: 100%;
+    height: auto;
     background-color: #BDE3C3;
     padding-top: 10px;
     padding-left: 10px;
@@ -99,10 +99,9 @@ html, body {
 }
 
 .modal {
-    
-    bottom: 130px;
-    width: 70%;
-    height: 70%;
+    width: 80%;
+    height: auto;
+    bottom: 120px;
     background-color: whitesmoke;
 }
 
@@ -130,16 +129,34 @@ html, body {
 }
 
 .cardEntryContainer{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    gap: 20px;
+   width: 100%;
+   height: 420px;
 }
 
 .cardEntry {
-    width: 60%;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
     padding: 10px;
-    padding-left: 20px;
+}
+
+.cardEntryContent {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+}
+
+.scrollContainer {
+  width: 100%;
+  height: 420px !important;
+}
+
+.scrollContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }

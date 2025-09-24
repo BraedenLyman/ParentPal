@@ -6,6 +6,8 @@ import { Modal } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { FiBell } from "react-icons/fi";
 import "../parent-pages.css";
+import { auth } from "../../../firebase/firebaseAuth";
+import { Scrollbars } from "react-custom-scrollbars-2";
 
 
 export default function GrowthTracker() {
@@ -13,11 +15,31 @@ export default function GrowthTracker() {
     const [height, setHeight] = useState("");
     const [weight, setWeight] = useState("");
     const [date, setDate] = useState("");
+    const [babyId, setBabyId ] = useState(null);
     const [growthRecords, setGrowthRecords] = useState([]);
 
-    const babyId = 2;
+    useEffect(() => {
+        const fetchBaby = async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            try {
+                const { data } = await axios.get("http://localhost:3000/api/babies", {
+                    params: { firebase_uid: user.uid },
+                    withCredentials: true,
+                });
+                setBabyId(data.baby_id);
+            } catch (err) {
+                console.error("Failed to fetch baby: ", err);
+            }
+        };
+
+        fetchBaby();
+    }, []);
 
     useEffect(() => {
+        if (!babyId) return;
+
         const fetchGrowthRecords = async () => {
             try {
                 const { data } = await axios.get(`http://localhost:3000/api/growth`, {
@@ -64,59 +86,66 @@ export default function GrowthTracker() {
 
     return (
         <div className="mainDiv">
-           <div className="header">
-            <div className="headerContainer">
-                <Avatar 
-                    className="avatar"
-                    name={"P"}
-                />
-                <Avatar 
-                    className="mainAvatar"
-                    name={"B"}
-                />
-                <FiBell className="notification"/>
-            </div>
-            <div className="userInfo">
-                <h1 className="babysName">Baby's Growth</h1>
+            <div className="header">
+                <div className="headerContainer">
+                    <Avatar 
+                        className="avatar"
+                        name={"P"}
+                    />
+                    <Avatar 
+                        className="mainAvatar"
+                        name={"B"}
+                    />
+                    <FiBell className="notification"/>
+                </div>
+                <div className="userInfo">
+                    <h1 className="babysName">Baby's Growth</h1>
 
-                <div className="cardContainer">
-                    <Card isPressable shadow="sm" className="cardInfo">
-                        <div className="cardContent">
-                            <Avatar
-                                name={"B"} 
-                                className="avatar"
-                            />
-                            <div className="babyInfo">
-                                <h3 className="baby">Baby</h3>
-                                <p className="babyDate">2002-02-02</p>
+                    <div className="cardContainer">
+                        <Card isPressable shadow="sm" className="cardInfo">
+                            <div className="cardContent">
+                                <Avatar
+                                    name={"B"} 
+                                    className="avatar"
+                                />
+                                <div className="babyInfo">
+                                    <h3 className="baby">Baby</h3>
+                                    <p className="babyDate">2002-02-02</p>
+                                </div>
                             </div>
-                        </div>
-                    </Card>
-                   
+                        </Card>
+                    
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <PageMiddleNav />
+            <div className="pageMiddleNav">
+                <PageMiddleNav />
+            </div>
 
-        <div className="cardEntryContainer">
-            {growthRecords.length === 0 ? (
-                <h1>No growth records yet</h1>
-            ) : (
-                growthRecords.map((record) => (
-                    <Card className="cardEntry" key={record.growth_id}>
-                        <h2>Height: {record.height}</h2>
-                        <h2>Weight: {record.weight}</h2>
-                        <h2>Date: {record.date.slice(0, 10)}</h2>
-                    </Card>
-                ))
-            )}
-        </div>
-
-        <Navbar />
-        <Button className="addButton" onPress={() => setIsOpen(true)}>
-            Add
-        </Button >
+            
+            <Scrollbars className="scrollContainer" >
+                <div className="scrollContent">
+                    {growthRecords.length === 0 ? (
+                        <h1>No growth records yet</h1>
+                    ) : (
+                        growthRecords.map((record) => (
+                            <Card className="cardEntry" key={record.growth_id}>
+                                <div className="cardEntryContent">
+                                    <h2>Height: {record.height}</h2>
+                                    <h2>Weight: {record.weight}</h2>
+                                    <h2>Date: {record.date.slice(0, 10)}</h2>
+                                </div>
+                            </Card>
+                        ))
+                    )}
+                </div>
+            </Scrollbars>
+          
+            <Navbar />
+            <Button className="addButton" onPress={() => setIsOpen(true)}>
+                Add
+            </Button >
 
             <Modal isOpen={isOpen} onOpenChange={setIsOpen} className="modal">
                 <ModalContent >
