@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import GrowthTracker from "../GrowthTracker";
+import GrowthTracker from "../components/parent-pages/growth/growth-tracker";
 import axios from "axios";
 
 jest.mock("axios");
