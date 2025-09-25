@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     const { baby_id, time_fed, date, fed_from, type_of_food, amount, notes } = req.body;
 
-    if (!baby_id || !time_fed, date || !fed_from || !type_of_food || !amount || !notes) {
+    if (!baby_id || !time_fed || !date || !fed_from || !type_of_food || !amount || !notes) {
         return res.status(400).json({ error: 'baby_id, time_fed, date, fed_from, type_of_food, amount and notes are required' });
     }
 
