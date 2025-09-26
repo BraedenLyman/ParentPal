@@ -8,7 +8,10 @@
     "build": "tsc && vite build",
     "lint": "eslint --fix",
     "preview": "vite preview",
-    "test": "jest --passWithNoTests"
+    "test": "cypress run",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:test": "start-server-and-test dev http://localhost:5173 cy:run"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -60,6 +63,7 @@
     "@typescript-eslint/parser": "8.31.1",
     "@vitejs/plugin-react": "4.7.0",
     "babel-jest": "^30.1.2",
+    "cypress": "^15.3.0",
     "eslint": "^9.35.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "2.31.0",
@@ -75,6 +79,7 @@
     "jest-environment-jsdom": "^30.1.2",
     "postcss": "8.5.6",
     "prettier": "3.5.3",
+    "start-server-and-test": "^2.1.2",
     "typescript": "5.6.3",
     "vite": "^6.3.5",
     "vite-tsconfig-paths": "5.1.4"

@@ -1,0 +1,73 @@
+{
+  "baby": {
+    "baby_id": 1,
+    "name": "Test Baby",
+    "birthdate": "2024-01-01"
+  },
+  "growthRecords": [
+    {
+      "growth_id": 1,
+      "height": 50,
+      "weight": 3.2,
+      "date": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "growth_id": 2,
+      "height": 52,
+      "weight": 3.5,
+      "date": "2025-01-15T00:00:00.000Z"
+    }
+  ],
+  "medicationRecords": [
+    {
+      "meds_id": 1,
+      "medication_name": "Tylenol",
+      "time_taken": "14:30",
+      "dosage": "5ml",
+      "symptoms": "Fever",
+      "date": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "allergyRecords": [
+    {
+      "allergy_id": 1,
+      "allergy_name": "Peanuts",
+      "severity": "high",
+      "epi_pen": "yes",
+      "notes": "Severe reaction"
+    }
+  ],
+  "vaccinationRecords": [
+    {
+      "vaccine_id": 1,
+      "vaccination_name": "MMR",
+      "date_of_vaccine": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "sleepRecords": [
+    {
+      "sleep_id": 1,
+      "sleep_duration": "8",
+      "time_fell_asleep": "22:00",
+      "date": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "observationRecords": [
+    {
+      "observation_id": 1,
+      "priority_level": "high",
+      "notes": "Baby seems fussy today"
+    }
+  ],
+  "feedingRecords": [
+    {
+      "feeding_id": 1,
+      "time_fed": "12:30",
+      "date": "2025-01-01T00:00:00.000Z",
+      "fed_from": "bottle",
+      "type_of_food": "milk",
+      "amount": "120ml",
+      "notes": "Baby was very hungry"
+    }
+  ]
+}
