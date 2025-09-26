@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "./dashboard-styles.css"
 import { Avatar, Card, Image } from "@heroui/react";
 import { FiBell } from "react-icons/fi";
+import Navbar from "../nav-bar/navbar";
 
 
 export default function BabysitterDashboard() {
@@ -25,23 +26,6 @@ export default function BabysitterDashboard() {
                     <h1 className="welcomeMessage">Welcome Back!</h1>
 
                     <div className="cardContainer">
-                        <Card 
-                            isPressable 
-                            shadow="sm"
-                            className="cardInfo"
-                        >
-                            <div className="cardContent">
-                                <Avatar
-                                    name="J" 
-                                    size="sm" 
-                                    className="avatar"
-                                />
-                                <div className="babyInfo">
-                                    <h3 className="baby">Jack</h3>
-                                    <p className="babyDate">2025/02/23</p>
-                                </div>
-                            </div>
-                        </Card>
                         <Card 
                             isPressable 
                             shadow="sm"
@@ -157,6 +141,7 @@ export default function BabysitterDashboard() {
                     </Card>
                 </div>
             </Card>
+            <Navbar />
         </div>
     );
 }

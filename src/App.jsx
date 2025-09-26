@@ -27,6 +27,7 @@ function App() {
       {/** Public Routes  */}
       <Route element={<SignIn />} path="/sign-in" />
       <Route element={<SignUp />} path="/sign-up" />
+      <Route element={<AccountComplete />} path="/account-complete"/>
       <Route element={<CreateAccount />} path="/create-account" />
       <Route element={<ForgotPassword />} path="/forgot-password" />
       <Route element={<ResetPassword />} path="/reset-password" />

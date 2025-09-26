@@ -64,8 +64,10 @@ h1.heading {
 .buttonContainer {
     display: flex;
     justify-content: center; 
-    width: 100%; 
-    margin-top: 20px;
+    width: 80%; 
+    margin-top: 20px; 
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .arrowIcon {
