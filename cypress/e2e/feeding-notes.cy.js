@@ -25,7 +25,6 @@ describe('Feeding Notes', () => {
     ])
 
     cy.visit('/feeding-notes')
-
     cy.contains('Time Fed: 12:30').should('be.visible')
     cy.contains('Date: 2025-01-01').should('be.visible')
     cy.contains('Fed From: bottle').should('be.visible')
