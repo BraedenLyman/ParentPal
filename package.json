@@ -7,11 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint --fix",
-    "preview": "vite preview",
-    "test": "cypress run",
-    "cy:open": "cypress open",
-    "cy:run": "cypress run",
-    "cy:test": "start-server-and-test dev http://localhost:5173 cy:run"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -75,8 +71,6 @@
     "eslint-plugin-unused-imports": "4.1.4",
     "globals": "16.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^30.1.3",
-    "jest-environment-jsdom": "^30.1.2",
     "postcss": "8.5.6",
     "prettier": "3.5.3",
     "start-server-and-test": "^2.1.2",
