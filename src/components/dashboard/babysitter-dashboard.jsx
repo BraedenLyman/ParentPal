@@ -4,7 +4,6 @@ import { Avatar, Card, Image } from "@heroui/react";
 import { FiBell } from "react-icons/fi";
 import Navbar from "../nav-bar/navbar";
 
-
 export default function BabysitterDashboard() {
     const navigate = useNavigate();
 
