@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { HeroUIProvider } from '@heroui/react';
 import HealthJournal from '../../../components/parent-pages/health/health-journal';
 
-// Mock external dependencies
 jest.mock('axios');
 const mockAxios = require('axios');
 
@@ -14,7 +13,6 @@ jest.mock('../../../firebase/firebaseAuth', () => ({
   },
 }));
 
-// Mock child components
 jest.mock('../../../components/page-components/page-middle-nav/page-middle-nav', () => {
   return function PageMiddleNav() {
     return <div data-testid="page-middle-nav">Page Middle Nav</div>;
@@ -35,7 +33,6 @@ jest.mock('react-custom-scrollbars-2', () => ({
   ),
 }));
 
-// Test wrapper
 const TestWrapper = ({ children }) => (
   <BrowserRouter>
     <HeroUIProvider>
@@ -47,7 +44,6 @@ const TestWrapper = ({ children }) => (
 describe('HealthJournal Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Mock successful API responses
     mockAxios.get.mockImplementation((url) => {
       if (url.includes('/api/babies')) {
         return Promise.resolve({ data: { baby_id: 'baby-123' } });
@@ -142,14 +138,11 @@ describe('HealthJournal Component', () => {
       </TestWrapper>
     );
 
-    // Initially on Meds tab
     expect(screen.getByText('No med records yet')).toBeInTheDocument();
 
-    // Switch to Allergies tab
     fireEvent.click(screen.getByText('Allergies'));
     expect(screen.getByText('No allergy records yet')).toBeInTheDocument();
 
-    // Switch to Vaccinations tab
     fireEvent.click(screen.getByText('Vaccinations'));
     expect(screen.getByText('No vaccinations records yet')).toBeInTheDocument();
   });
@@ -177,7 +170,6 @@ describe('HealthJournal Component', () => {
       </TestWrapper>
     );
 
-    // Switch to Allergies tab
     fireEvent.click(screen.getByText('Allergies'));
 
     const addButton = screen.getByText('Add');
@@ -195,7 +187,6 @@ describe('HealthJournal Component', () => {
       </TestWrapper>
     );
 
-    // Switch to Vaccinations tab
     fireEvent.click(screen.getByText('Vaccinations'));
 
     const addButton = screen.getByText('Add');
@@ -214,15 +205,13 @@ describe('HealthJournal Component', () => {
       </TestWrapper>
     );
 
-    // Wait for component to load
     await waitFor(() => {
       expect(screen.getByText('Add')).toBeInTheDocument();
     });
 
-    // Open modal and try to submit without filling fields
     fireEvent.click(screen.getByText('Add'));
 
-    const modalAddButton = screen.getAllByText('Add')[1]; // Second Add button is in modal
+    const modalAddButton = screen.getAllByText('Add')[1];
     fireEvent.click(modalAddButton);
 
     expect(window.alert).toHaveBeenCalledWith('Please fill out all fields.');
@@ -237,7 +226,6 @@ describe('HealthJournal Component', () => {
       </TestWrapper>
     );
 
-    // Switch to Allergies tab and open modal
     fireEvent.click(screen.getByText('Allergies'));
     fireEvent.click(screen.getByText('Add'));
 
@@ -256,7 +244,6 @@ describe('HealthJournal Component', () => {
       </TestWrapper>
     );
 
-    // Switch to Vaccinations tab and open modal
     fireEvent.click(screen.getByText('Vaccinations'));
     fireEvent.click(screen.getByText('Add'));
 
@@ -273,10 +260,8 @@ describe('HealthJournal Component', () => {
       </TestWrapper>
     );
 
-    // Open medication modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Fill out form
     const medNameInput = screen.getByPlaceholderText('Enter medication name');
     const dosageInput = screen.getByPlaceholderText('Amount of meds taken');
     const symptomsInput = screen.getByPlaceholderText('Describe how they are feeling');
@@ -300,11 +285,9 @@ describe('HealthJournal Component', () => {
       </TestWrapper>
     );
 
-    // Switch to Allergies tab and open modal
     fireEvent.click(screen.getByText('Allergies'));
     fireEvent.click(screen.getByText('Add'));
 
-    // Fill out form
     const allergyInput = screen.getByPlaceholderText('What are they allergic to');
     const notesInput = screen.getByPlaceholderText('Add any other important info');
 
@@ -322,20 +305,17 @@ describe('HealthJournal Component', () => {
       </TestWrapper>
     );
 
-    // Test medication modal
     fireEvent.click(screen.getByText('Add'));
     expect(screen.getByText('Add Medication')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Cancel'));
     expect(screen.queryByText('Add Medication')).not.toBeInTheDocument();
 
-    // Test allergy modal
     fireEvent.click(screen.getByText('Allergies'));
     fireEvent.click(screen.getByText('Add'));
     expect(screen.getByText('Add Allergy')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Cancel'));
     expect(screen.queryByText('Add Allergy')).not.toBeInTheDocument();
 
-    // Test vaccination modal
     fireEvent.click(screen.getByText('Vaccinations'));
     fireEvent.click(screen.getByText('Add'));
     expect(screen.getByText('Add Vaccination')).toBeInTheDocument();
@@ -421,7 +401,6 @@ describe('HealthJournal Component', () => {
       </TestWrapper>
     );
 
-    // Test static elements
     expect(screen.getByText('Baby')).toBeInTheDocument();
     expect(screen.getByText('2002-02-02')).toBeInTheDocument();
     expect(screen.getByTestId('scrollbars')).toBeInTheDocument();

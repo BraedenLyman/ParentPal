@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { HeroUIProvider } from '@heroui/react';
 import ObservationNotes from '../../../components/parent-pages/notes/observation/observation-notes';
 
-// Mock external dependencies
 jest.mock('axios');
 const mockAxios = require('axios');
 
@@ -14,7 +13,6 @@ jest.mock('../../../firebase/firebaseAuth', () => ({
   },
 }));
 
-// Mock child components
 jest.mock('../../../components/page-components/page-middle-nav/page-middle-nav', () => {
   return function PageMiddleNav() {
     return <div data-testid="page-middle-nav">Page Middle Nav</div>;
@@ -35,7 +33,6 @@ jest.mock('react-custom-scrollbars-2', () => ({
   ),
 }));
 
-// Test wrapper
 const TestWrapper = ({ children }) => (
   <BrowserRouter>
     <HeroUIProvider>
@@ -47,7 +44,6 @@ const TestWrapper = ({ children }) => (
 describe('ObservationNotes Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Mock successful API responses
     mockAxios.get.mockImplementation((url) => {
       if (url.includes('/api/babies')) {
         return Promise.resolve({ data: { baby_id: 'baby-123' } });
@@ -150,10 +146,8 @@ describe('ObservationNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Fill out form
     const notesInput = screen.getByPlaceholderText('Describe what you notice');
 
     fireEvent.change(notesInput, { target: { value: 'Baby is sleeping peacefully' } });
@@ -170,15 +164,13 @@ describe('ObservationNotes Component', () => {
       </TestWrapper>
     );
 
-    // Wait for component to load
     await waitFor(() => {
       expect(screen.getByText('Add')).toBeInTheDocument();
     });
 
-    // Open modal and try to submit without filling fields
     fireEvent.click(screen.getByText('Add'));
 
-    const modalAddButton = screen.getAllByText('Add')[1]; // Second Add button is in modal
+    const modalAddButton = screen.getAllByText('Add')[1];
     fireEvent.click(modalAddButton);
 
     expect(window.alert).toHaveBeenCalledWith('Please fill out all fields.');
@@ -193,10 +185,8 @@ describe('ObservationNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Fill only notes field, leave priority level empty
     const notesInput = screen.getByPlaceholderText('Describe what you notice');
     fireEvent.change(notesInput, { target: { value: 'Some observation notes' } });
 
@@ -215,7 +205,6 @@ describe('ObservationNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal and leave notes empty
     fireEvent.click(screen.getByText('Add'));
 
     const modalAddButton = screen.getAllByText('Add')[1];
@@ -231,14 +220,11 @@ describe('ObservationNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
     expect(screen.getByText('Add Observation')).toBeInTheDocument();
 
-    // Cancel
     fireEvent.click(screen.getByText('Cancel'));
 
-    // Modal should be closed (header not visible)
     expect(screen.queryByText('Add Observation')).not.toBeInTheDocument();
   });
 
@@ -249,10 +235,8 @@ describe('ObservationNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Check that the select component for priority level exists
     expect(screen.getAllByLabelText('Priority Level')[0]).toBeInTheDocument();
   });
 
@@ -320,7 +304,6 @@ describe('ObservationNotes Component', () => {
       </TestWrapper>
     );
 
-    // Test static elements
     expect(screen.getByText('Baby')).toBeInTheDocument();
     expect(screen.getByText('2002-02-02')).toBeInTheDocument();
     expect(screen.getByTestId('scrollbars')).toBeInTheDocument();
@@ -341,19 +324,16 @@ describe('ObservationNotes Component', () => {
       </TestWrapper>
     );
 
-    // Wait for initial load
     await waitFor(() => {
       expect(screen.getByText('Add')).toBeInTheDocument();
     });
 
-    // Open modal and fill required fields
     fireEvent.click(screen.getByText('Add'));
 
     fireEvent.change(screen.getByPlaceholderText('Describe what you notice'), {
       target: { value: 'Baby is developing well' }
     });
 
-    // Verify form fields are populated
     expect(screen.getByPlaceholderText('Describe what you notice').value).toBe('Baby is developing well');
   });
 
@@ -364,21 +344,18 @@ describe('ObservationNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Check that only priority level and notes are required
     expect(screen.getAllByLabelText('Priority Level')[0]).toBeInTheDocument();
     expect(screen.getByLabelText('Notes')).toBeInTheDocument();
 
-    // Verify we have the minimal required form structure
     const inputs = screen.getAllByRole('textbox');
-    expect(inputs).toHaveLength(1); // Only notes input
+    expect(inputs).toHaveLength(1);
 
     const selects = screen.getAllByRole('button').filter(button =>
       button.getAttribute('aria-expanded') !== null
     );
-    expect(selects.length).toBeGreaterThan(0); // Priority level select
+    expect(selects.length).toBeGreaterThan(0); 
   });
 
   test('displays correct priority level validation', () => {
@@ -388,10 +365,8 @@ describe('ObservationNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Priority level should be a select component
     expect(screen.getAllByLabelText('Priority Level')[0]).toBeInTheDocument();
   });
 
@@ -402,7 +377,6 @@ describe('ObservationNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
     
     expect(screen.getByPlaceholderText('Describe what you notice')).toBeInTheDocument();
@@ -439,11 +413,8 @@ describe('ObservationNotes Component', () => {
     );
 
     await waitFor(() => {
-      // Check both priority levels are displayed
       expect(screen.getByText('Priority Level: high')).toBeInTheDocument();
       expect(screen.getByText('Priority Level: low')).toBeInTheDocument();
-
-      // Check corresponding notes are displayed
       expect(screen.getByText('Notes: Urgent observation note')).toBeInTheDocument();
       expect(screen.getByText('Notes: Regular observation note')).toBeInTheDocument();
     });

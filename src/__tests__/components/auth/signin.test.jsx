@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { HeroUIProvider } from '@heroui/react';
 import SignIn from '../../../components/auth/sign-in/sign-in';
 
-// Mock external dependencies
 jest.mock('axios');
 jest.mock('firebase/auth', () => ({
   signInWithEmailAndPassword: jest.fn(),
@@ -19,7 +18,6 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-// Test wrapper
 const TestWrapper = ({ children }) => (
   <BrowserRouter>
     <HeroUIProvider>

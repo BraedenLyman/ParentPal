@@ -20,6 +20,11 @@ import SleepAnalytics from "./components/parent-pages/sleep/sleep-analytics";
 import HealthJournal from "./components/parent-pages/health/health-journal";
 import FeedingNotes from "./components/parent-pages/notes/feeding/feeding-notes";
 import ObservationNotes from "./components/parent-pages/notes/observation/observation-notes";
+import Settings from "./components/parent-pages/settings/settings";
+import PersonalInformation from "./components/parent-pages/settings/personal-information";
+import SharedAccounts from "./components/parent-pages/settings/shared-accounts";
+import Notifications from "./components/parent-pages/settings/notifications";
+import DataExport from "./components/parent-pages/settings/data-export";
 
 function App() {
   return (
@@ -96,6 +101,46 @@ function App() {
         element={
           <ProtectedRoute>
             <ObservationNotes />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings/personal-information"
+        element={
+          <ProtectedRoute>
+            <PersonalInformation />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings/shared-accounts"
+        element={
+          <ProtectedRoute>
+            <SharedAccounts />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings/notifications"
+        element={
+          <ProtectedRoute>
+            <Notifications />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings/data-export"
+        element={
+          <ProtectedRoute>
+            <DataExport />
           </ProtectedRoute>
         }
       />

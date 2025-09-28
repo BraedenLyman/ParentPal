@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { HeroUIProvider } from '@heroui/react';
 import FeedingNotes from '../../../components/parent-pages/notes/feeding/feeding-notes';
 
-// Mock external dependencies
 jest.mock('axios');
 const mockAxios = require('axios');
 
@@ -14,7 +13,6 @@ jest.mock('../../../firebase/firebaseAuth', () => ({
   },
 }));
 
-// Mock child components
 jest.mock('../../../components/page-components/page-middle-nav/page-middle-nav', () => {
   return function PageMiddleNav() {
     return <div data-testid="page-middle-nav">Page Middle Nav</div>;
@@ -35,7 +33,6 @@ jest.mock('react-custom-scrollbars-2', () => ({
   ),
 }));
 
-// Test wrapper
 const TestWrapper = ({ children }) => (
   <BrowserRouter>
     <HeroUIProvider>
@@ -47,7 +44,6 @@ const TestWrapper = ({ children }) => (
 describe('FeedingNotes Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Mock successful API responses
     mockAxios.get.mockImplementation((url) => {
       if (url.includes('/api/babies')) {
         return Promise.resolve({ data: { baby_id: 'baby-123' } });
@@ -159,10 +155,8 @@ describe('FeedingNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Fill out form
     const dateInput = screen.getByLabelText('Date');
     const amountInput = screen.getByPlaceholderText('Amount of food they were fed');
     const notesInput = screen.getByPlaceholderText('Add any other important information');
@@ -185,15 +179,13 @@ describe('FeedingNotes Component', () => {
       </TestWrapper>
     );
 
-    // Wait for component to load
     await waitFor(() => {
       expect(screen.getByText('Add')).toBeInTheDocument();
     });
 
-    // Open modal and try to submit without filling fields
     fireEvent.click(screen.getByText('Add'));
 
-    const modalAddButton = screen.getAllByText('Add')[1]; // Second Add button is in modal
+    const modalAddButton = screen.getAllByText('Add')[1];
     fireEvent.click(modalAddButton);
 
     expect(window.alert).toHaveBeenCalledWith('Please fill out all fields.');
@@ -206,14 +198,11 @@ describe('FeedingNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
     expect(screen.getByText('Add Feeding')).toBeInTheDocument();
 
-    // Cancel
     fireEvent.click(screen.getByText('Cancel'));
 
-    // Modal should be closed (header not visible)
     expect(screen.queryByText('Add Feeding')).not.toBeInTheDocument();
   });
 
@@ -224,10 +213,8 @@ describe('FeedingNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Check that the select component for feeding source exists
     expect(screen.getByText('Select where the baby was fed from')).toBeInTheDocument();
   });
 
@@ -238,10 +225,8 @@ describe('FeedingNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Check that the select component for food type exists
     expect(screen.getByText('Select what type of food they had')).toBeInTheDocument();
   });
 
@@ -309,7 +294,6 @@ describe('FeedingNotes Component', () => {
       </TestWrapper>
     );
 
-    // Test static elements
     expect(screen.getByText('Baby')).toBeInTheDocument();
     expect(screen.getByText('2002-02-02')).toBeInTheDocument();
     expect(screen.getByTestId('scrollbars')).toBeInTheDocument();
@@ -334,12 +318,10 @@ describe('FeedingNotes Component', () => {
       </TestWrapper>
     );
 
-    // Wait for initial load
     await waitFor(() => {
       expect(screen.getByText('Add')).toBeInTheDocument();
     });
 
-    // Open modal and fill required fields
     fireEvent.click(screen.getByText('Add'));
 
     fireEvent.change(screen.getByLabelText('Date'), {
@@ -352,7 +334,6 @@ describe('FeedingNotes Component', () => {
       target: { value: 'Great feeding' }
     });
 
-    // Verify form fields are populated
     expect(screen.getByLabelText('Date').value).toBe('2024-03-15');
     expect(screen.getByPlaceholderText('Amount of food they were fed').value).toBe('180ml');
     expect(screen.getByPlaceholderText('Add any other important information').value).toBe('Great feeding');
@@ -365,10 +346,8 @@ describe('FeedingNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Check that all required form elements are present
     expect(screen.getAllByLabelText('Feeding TIme')[0]).toBeInTheDocument();
     expect(screen.getByLabelText('Date')).toBeInTheDocument();
     expect(screen.getAllByLabelText('Fed From')[0]).toBeInTheDocument();
@@ -384,10 +363,8 @@ describe('FeedingNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Check TimeInput is present (note the typo in component: "Feeding TIme")
     expect(screen.getAllByLabelText('Feeding TIme')[0]).toBeInTheDocument();
   });
 
@@ -398,13 +375,9 @@ describe('FeedingNotes Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Check feeding source placeholder
     expect(screen.getByText('Select where the baby was fed from')).toBeInTheDocument();
-
-    // Check food type placeholder
     expect(screen.getByText('Select what type of food they had')).toBeInTheDocument();
   });
 });

@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { HeroUIProvider } from '@heroui/react';
 import GrowthTracker from '../../../components/parent-pages/growth/growth-tracker';
 
-// Mock external dependencies
 jest.mock('axios');
 const mockAxios = require('axios');
 
@@ -14,7 +13,6 @@ jest.mock('../../../firebase/firebaseAuth', () => ({
   },
 }));
 
-// Mock child components to avoid complex dependencies
 jest.mock('../../../components/page-components/page-middle-nav/page-middle-nav', () => {
   return function PageMiddleNav() {
     return <div data-testid="page-middle-nav">Page Middle Nav</div>;
@@ -35,7 +33,6 @@ jest.mock('react-custom-scrollbars-2', () => ({
   ),
 }));
 
-// Test wrapper
 const TestWrapper = ({ children }) => (
   <BrowserRouter>
     <HeroUIProvider>
@@ -48,7 +45,6 @@ describe('GrowthTracker Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // Mock successful API responses
     mockAxios.get.mockImplementation((url) => {
       if (url.includes('/api/babies')) {
         return Promise.resolve({ data: { baby_id: 'baby-123' } });
@@ -191,7 +187,6 @@ describe('GrowthTracker Component', () => {
       </TestWrapper>
     );
 
-    // Test static elements that don't require complex interactions
     expect(screen.getByText('Baby')).toBeInTheDocument();
     expect(screen.getByText('2002-02-02')).toBeInTheDocument();
     expect(screen.getByText('Add')).toBeInTheDocument();
@@ -204,7 +199,6 @@ describe('GrowthTracker Component', () => {
       </TestWrapper>
     );
 
-    // Test that key structural elements exist
     expect(screen.getByTestId('scrollbars')).toBeInTheDocument();
     expect(screen.getByTestId('navbar')).toBeInTheDocument();
     expect(screen.getByTestId('page-middle-nav')).toBeInTheDocument();

@@ -13,6 +13,7 @@ const vaccinationsRouter = require("./routes/vaccinations");
 const sickDayRouter = require("./routes/sickday");
 const feedingRouter = require("./routes/feeding");
 const observationRouter = require("./routes/observation");
+const userRouter = require("./routes/user");
 
 const app = express();
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
@@ -30,6 +31,7 @@ app.use("/api/vaccinations", vaccinationsRouter);
 app.use("/api/sickday", sickDayRouter);
 app.use("/api/feeding", feedingRouter);
 app.use("/api/observation", observationRouter);
+app.use("/api/user", userRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

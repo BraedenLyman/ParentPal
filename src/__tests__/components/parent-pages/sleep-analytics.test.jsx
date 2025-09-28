@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { HeroUIProvider } from '@heroui/react';
 import SleepAnalytics from '../../../components/parent-pages/sleep/sleep-analytics';
 
-// Mock external dependencies
 jest.mock('axios');
 const mockAxios = require('axios');
 
@@ -14,7 +13,6 @@ jest.mock('../../../firebase/firebaseAuth', () => ({
   },
 }));
 
-// Mock child components
 jest.mock('../../../components/page-components/page-middle-nav/page-middle-nav', () => {
   return function PageMiddleNav() {
     return <div data-testid="page-middle-nav">Page Middle Nav</div>;
@@ -35,7 +33,6 @@ jest.mock('react-custom-scrollbars-2', () => ({
   ),
 }));
 
-// Test wrapper
 const TestWrapper = ({ children }) => (
   <BrowserRouter>
     <HeroUIProvider>
@@ -47,7 +44,6 @@ const TestWrapper = ({ children }) => (
 describe('SleepAnalytics Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Mock successful API responses
     mockAxios.get.mockImplementation((url) => {
       if (url.includes('/api/babies')) {
         return Promise.resolve({ data: { baby_id: 'baby-123' } });
@@ -148,10 +144,8 @@ describe('SleepAnalytics Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
 
-    // Fill out form
     const hoursInput = screen.getByPlaceholderText('Hours slept');
     const dateInput = screen.getByLabelText('Date');
 
@@ -171,15 +165,13 @@ describe('SleepAnalytics Component', () => {
       </TestWrapper>
     );
 
-    // Wait for component to load
     await waitFor(() => {
       expect(screen.getByText('Add')).toBeInTheDocument();
     });
 
-    // Open modal and try to submit without filling fields
     fireEvent.click(screen.getByText('Add'));
 
-    const modalAddButton = screen.getAllByText('Add')[1]; // Second Add button is in modal
+    const modalAddButton = screen.getAllByText('Add')[1]; 
     fireEvent.click(modalAddButton);
 
     expect(window.alert).toHaveBeenCalledWith('Please fill out all fields.');
@@ -192,14 +184,11 @@ describe('SleepAnalytics Component', () => {
       </TestWrapper>
     );
 
-    // Open modal
     fireEvent.click(screen.getByText('Add'));
     expect(screen.getByText('Add Sleep')).toBeInTheDocument();
 
-    // Cancel
     fireEvent.click(screen.getByText('Cancel'));
 
-    // Modal should be closed (header not visible)
     expect(screen.queryByText('Add Sleep')).not.toBeInTheDocument();
   });
 
@@ -267,7 +256,6 @@ describe('SleepAnalytics Component', () => {
       </TestWrapper>
     );
 
-    // Test static elements
     expect(screen.getByText('Baby')).toBeInTheDocument();
     expect(screen.getByText('2002-02-02')).toBeInTheDocument();
     expect(screen.getByTestId('scrollbars')).toBeInTheDocument();
@@ -289,12 +277,10 @@ describe('SleepAnalytics Component', () => {
       </TestWrapper>
     );
 
-    // Wait for initial load
     await waitFor(() => {
       expect(screen.getByText('Add')).toBeInTheDocument();
     });
 
-    // Open modal and fill form with valid data
     fireEvent.click(screen.getByText('Add'));
 
     fireEvent.change(screen.getByPlaceholderText('Hours slept'), {
@@ -304,15 +290,9 @@ describe('SleepAnalytics Component', () => {
       target: { value: '2024-03-15' }
     });
 
-    // Note: TimeInput is complex to test, so we'll test the API call expectation
-    // when all required fields are provided
     const modalAddButton = screen.getAllByText('Add')[1];
-
-    // Mock time value for the test
     const component = screen.getByText('Add Sleep').closest('[role="dialog"]');
 
-    // Since TimeInput is complex, we'll simulate the submission would work
-    // if time was provided (this tests the validation logic)
     expect(screen.getByPlaceholderText('Hours slept').value).toBe('7');
     expect(screen.getByLabelText('Date').value).toBe('2024-03-15');
   });
