@@ -197,7 +197,7 @@ describe('ObservationNotes Component', () => {
     fireEvent.click(screen.getByText('Add'));
 
     // Fill only notes field, leave priority level empty
-    const notesInput = screen.getByPlaceholderText('Describe what you noitce');
+    const notesInput = screen.getByPlaceholderText('Describe what you notice');
     fireEvent.change(notesInput, { target: { value: 'Some observation notes' } });
 
     const modalAddButton = screen.getAllByText('Add')[1];
@@ -349,12 +349,12 @@ describe('ObservationNotes Component', () => {
     // Open modal and fill required fields
     fireEvent.click(screen.getByText('Add'));
 
-    fireEvent.change(screen.getByPlaceholderText('Describe what you noitce'), {
+    fireEvent.change(screen.getByPlaceholderText('Describe what you notice'), {
       target: { value: 'Baby is developing well' }
     });
 
     // Verify form fields are populated
-    expect(screen.getByPlaceholderText('Describe what you noitce').value).toBe('Baby is developing well');
+    expect(screen.getByPlaceholderText('Describe what you notice').value).toBe('Baby is developing well');
   });
 
   test('component has simplified form structure with only two required fields', () => {
