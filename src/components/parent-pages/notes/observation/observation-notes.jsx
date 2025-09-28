@@ -1,3 +1,4 @@
+import React from "react";
 import axios from "axios";
 import PageMiddleNav from "../../../page-components/page-middle-nav/page-middle-nav";
 import Navbar from "../../../nav-bar/navbar";
@@ -166,7 +167,7 @@ export default function ObservationNoes() {
                         <Input
                             variant="bordered"
                             label="Notes"
-                            placeholder="Describe what you noitce"
+                            placeholder="Describe what you notice"
                             value={obsNotes}
                             onChange={(e) => setObsNotes(e.target.value)}
                         />

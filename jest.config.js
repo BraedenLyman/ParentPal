@@ -24,6 +24,12 @@ export default {
     '!src/vite-env.d.ts',
     '!src/__tests__/**'
   ],
+  transformIgnorePatterns: [
+    'node_modules/(?!(framer-motion|@heroui|@react-stately|@react-aria)/)'
+  ],
+  testEnvironmentOptions: {
+    customExportConditions: ['']
+  },
   // Coverage thresholds
   // coverageThreshold: {
   //   global: {
