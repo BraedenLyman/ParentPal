@@ -21,7 +21,12 @@ jobs:
         cache: 'npm'
 
     - name: Install frontend dependencies
-      run: npm ci
+      run: |
+        if [ -f package-lock.json ]; then
+          npm ci
+        else
+          npm install
+        fi
 
     - name: Run frontend tests
       run: npm test -- --coverage --watchAll=false
@@ -44,13 +49,15 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: backend/package-lock.json
 
     - name: Install backend dependencies
       run: |
         cd backend
-        npm ci
+        if [ -f package-lock.json ]; then
+          npm ci
+        else
+          npm install
+        fi
 
     - name: Run backend tests
       run: |
@@ -75,10 +82,14 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
 
     - name: Install dependencies
-      run: npm ci
+      run: |
+        if [ -f package-lock.json ]; then
+          npm ci
+        else
+          npm install
+        fi
 
     - name: Run linter
       run: npm run lint
