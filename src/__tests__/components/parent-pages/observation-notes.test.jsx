@@ -140,7 +140,7 @@ describe('ObservationNotes Component', () => {
     fireEvent.click(addButton);
 
     expect(screen.getByText('Add Observation')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Describe what you noitce')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Describe what you notice')).toBeInTheDocument();
   });
 
   test('allows input in modal form fields', () => {
@@ -154,7 +154,7 @@ describe('ObservationNotes Component', () => {
     fireEvent.click(screen.getByText('Add'));
 
     // Fill out form
-    const notesInput = screen.getByPlaceholderText('Describe what you noitce');
+    const notesInput = screen.getByPlaceholderText('Describe what you notice');
 
     fireEvent.change(notesInput, { target: { value: 'Baby is sleeping peacefully' } });
 
