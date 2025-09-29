@@ -198,10 +198,30 @@
 .baby-card {
   min-height: 120px;
   transition: transform 0.2s ease;
+  position: relative;
 }
 
 .baby-card:hover {
   transform: translateY(-2px);
+}
+
+.delete-baby-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  min-width: 28px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.delete-baby-button:hover {
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .baby-card-content {

@@ -68,4 +68,55 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.delete('/:baby_id', async (req, res) => {
+    const { baby_id } = req.params;
+
+    if (!baby_id) {
+        return res.status(400).json({ error: 'Baby ID is required' });
+    }
+
+    try {
+        const [babyRows] = await pool.query(
+            'SELECT * FROM baby WHERE baby_id = ?',
+            [baby_id]
+        );
+
+        if (babyRows.length === 0) {
+            return res.status(404).json({ error: 'Baby not found' });
+        }
+
+        await pool.query('DELETE FROM growth WHERE baby_id = ?', [baby_id]);
+        await pool.query('DELETE FROM sleep WHERE baby_id = ?', [baby_id]);
+        await pool.query('DELETE FROM medications WHERE baby_id = ?', [baby_id]);
+        await pool.query('DELETE FROM allergies WHERE baby_id = ?', [baby_id]);
+        await pool.query('DELETE FROM vaccinations WHERE baby_id = ?', [baby_id]);
+        await pool.query('DELETE FROM feeding WHERE baby_id = ?', [baby_id]);
+        await pool.query('DELETE FROM observation WHERE baby_id = ?', [baby_id]);
+        await pool.query('DELETE FROM sick_day WHERE baby_id = ?', [baby_id]);
+
+        const [result] = await pool.query(
+            'DELETE FROM baby WHERE baby_id = ?',
+            [baby_id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Baby not found' });
+        }
+
+        res.json({
+            message: 'Baby and all associated records deleted successfully',
+            deleted_baby_id: baby_id
+        });
+    } catch (err) {
+        console.error('Error deleting baby:', err);
+        console.error('Error details:', {
+            message: err.message,
+            code: err.code,
+            sqlState: err.sqlState,
+            sqlMessage: err.sqlMessage
+        });
+        res.status(500).json({ error: 'Failed to delete baby', details: err.message });
+    }
+});
+
 module.exports = router;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Avatar, Image, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Select, SelectItem } from "@heroui/react";
-import { ArrowLeftIcon, PlusIcon, EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, PlusIcon, EyeIcon, EyeSlashIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { FiBell } from "react-icons/fi";
 import { auth } from "../../../firebase/firebaseAuth";
 import { updatePassword } from "firebase/auth";
@@ -14,6 +14,8 @@ export default function PersonalInformation() {
     const [userData, setUserData] = useState(null);
     const [babyData, setBabyData] = useState([]);
     const [isAddBabyModalOpen, setIsAddBabyModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [babyToDelete, setBabyToDelete] = useState(null);
     const [newBaby, setNewBaby] = useState({
         firstName: "",
         lastName: "",
@@ -160,6 +162,33 @@ export default function PersonalInformation() {
         }
     };
 
+    const handleDeleteBaby = (baby) => {
+        setBabyToDelete(baby);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDeleteBaby = async () => {
+        if (!babyToDelete) return;
+
+        try {
+            await axios.delete(`http://localhost:3000/api/babies/${babyToDelete.baby_id}`, {
+                withCredentials: true
+            });
+
+            setBabyData(prev => prev.filter(baby => baby.baby_id !== babyToDelete.baby_id));
+            setIsDeleteModalOpen(false);
+            setBabyToDelete(null);
+        } catch (error) {
+            console.error("Error deleting baby: ", error);
+            alert("Failed to delete baby. Please try again.");
+        }
+    };
+
+    const cancelDeleteBaby = () => {
+        setIsDeleteModalOpen(false);
+        setBabyToDelete(null);
+    };
+
     return (
         <>
             <div className="settings-container">
@@ -200,6 +229,15 @@ export default function PersonalInformation() {
                     <div className="babies-grid">
                         {babyData.map((baby, index) => (
                             <Card key={baby.baby_id || index} className="baby-card">
+                                <Button
+                                    isIconOnly
+                                    variant="light"
+                                    size="sm"
+                                    className="delete-baby-button"
+                                    onPress={() => handleDeleteBaby(baby)}
+                                >
+                                    <TrashIcon className="w-4 h-4 text-red-500" />
+                                </Button>
                                 <div className="baby-card-content">
                                     <Avatar
                                         name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
@@ -367,6 +405,36 @@ export default function PersonalInformation() {
                             </Button>
                         </ModalFooter>
 
+                    </ModalContent>
+                </Modal>
+
+                <Modal isOpen={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen} className="settings-modal">
+                    <ModalContent>
+                        <ModalHeader>
+                            Delete Baby
+                        </ModalHeader>
+
+                        <ModalBody>
+                            <p>Are you sure you want to delete <strong>{babyToDelete?.first_name}</strong>?</p>
+                            <p className="text-small text-red-500 mt-2">
+                                This action cannot be undone. All records and data associated with this baby will be permanently deleted.
+                            </p>
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button
+                                variant="light"
+                                onPress={cancelDeleteBaby}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                color="danger"
+                                onPress={confirmDeleteBaby}
+                            >
+                                Delete
+                            </Button>
+                        </ModalFooter>
                     </ModalContent>
                 </Modal>
             </div>
