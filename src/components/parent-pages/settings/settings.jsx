@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Card, Avatar, Image } from "@heroui/react";
+import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Card, Avatar, Image, Input, InputOtp } from "@heroui/react";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { FiBell } from "react-icons/fi";
 import { auth } from "../../../firebase/firebaseAuth";
@@ -12,6 +12,10 @@ import "./settings.css";
 export default function Settings() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [userData, setUserData] = useState(null);
+    const [verificationCode, setVerificationCode] = useState("");
+    const [verifyLoading, setVerifyLoading] = useState(false);
+    const [verifyError, setVerifyError] = useState("");
+    const [verifySuccess, setVerifySuccess] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -45,6 +49,35 @@ export default function Settings() {
         }
     };
 
+    const handleVerifyCode = async () => {
+        if (!verificationCode || verificationCode.length !== 4) {
+            setVerifyError("Please enter a valid 4-digit verification code");
+            return;
+        }
+
+        setVerifyLoading(true);
+        setVerifyError("");
+        setVerifySuccess("");
+
+        try {
+            await axios.post(
+                "http://localhost:3000/api/babysitter-sharing/verify",
+                {
+                    verification_code: verificationCode,
+                    babysitter_id: userData.account_id
+                },
+                { withCredentials: true }
+            );
+
+            setVerifySuccess("Verification successful! You now have access to shared children information.");
+            setVerificationCode("");
+        } catch (error) {
+            setVerifyError(error.response?.data?.error || "Verification failed. Please try again.");
+        } finally {
+            setVerifyLoading(false);
+        }
+    };
+
     const handleDeleteAccount = async () => {
         const user = auth.currentUser;
         if (!user) {
@@ -55,7 +88,7 @@ export default function Settings() {
         try {
             console.log("Starting account deletion for user:", user.uid);
             console.log("Deleting from database...");
-            
+
             await axios.delete("http://localhost:3000/api/user", {
                 params: { firebase_uid: user.uid },
                 withCredentials: true,
@@ -63,7 +96,7 @@ export default function Settings() {
 
             console.log("Database deletion successful");
             console.log("Deleting from Firebase...");
-            
+
             await deleteUser(user);
             console.log("Firebase deletion successful");
             navigate("/sign-in");
@@ -118,17 +151,59 @@ export default function Settings() {
                         </div>
                     </Card>
 
-                    <Card
-                        isPressable
-                        shadow="sm"
-                        className="settings-option-card"
-                        onPress={() => navigate("/settings/shared-accounts")}
-                    >
-                        <div className="settings-card-content">
-                            <span className="settings-card-title">Shared Accounts</span>
-                            <ChevronRightIcon className="settings-arrow-icon" />
-                        </div>
-                    </Card>
+                    {userData?.account_type === "parent" && (
+                        <Card
+                            isPressable
+                            shadow="sm"
+                            className="settings-option-card"
+                            onPress={() => navigate("/settings/shared-accounts")}
+                        >
+                            <div className="settings-card-content">
+                                <span className="settings-card-title">Shared Accounts</span>
+                                <ChevronRightIcon className="settings-arrow-icon" />
+                            </div>
+                        </Card>
+                    )}
+
+                    {userData?.account_type === "babysitter" && (
+                        <Card shadow="sm" className="settings-option-card verification-card">
+                            <div className="verification-section">
+                                <h3>Verification Code</h3>
+                                <p>Enter the 4-digit code you received from a parent to access their child's information.</p>
+
+                                <div className="verification-input-container">
+                                    <InputOtp
+                                        value={verificationCode}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            setVerificationCode(value);
+                                        }}
+                                        variant="bordered"
+                                        maxLength={4}
+                                        className="verification-input"
+                                    />
+                                </div>
+
+                                {verifyError && (
+                                    <p className="verification-error">{verifyError}</p>
+                                )}
+
+                                {verifySuccess && (
+                                    <p className="verification-success">{verifySuccess}</p>
+                                )}
+
+                                <Button
+                                    color="primary"
+                                    onPress={handleVerifyCode}
+                                    isLoading={verifyLoading}
+                                    isDisabled={verificationCode.length !== 4}
+                                    className="verify-button"
+                                >
+                                    Verify Code
+                                </Button>
+                            </div>
+                        </Card>
+                    )}
 
                     <Card
                         isPressable

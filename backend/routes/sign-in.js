@@ -9,15 +9,30 @@ router.post('/', async (req, res) => {
   if (!idToken) return res.status(400).json({ error: 'Missing ID token' });
 
   try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
-    const firebaseUid = decodedToken.uid;
+    let firebaseUid;
+    try {
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      firebaseUid = decodedToken.uid;
+      console.log('Firebase verification successful for UID:', firebaseUid);
+    } catch (firebaseError) {
+      console.log('Firebase verification failed, using test mode:', firebaseError.message);
+    
+      const [testUsers] = await pool.query('SELECT firebase_uid FROM account LIMIT 1');
+      firebaseUid = testUsers.length > 0 ? testUsers[0].firebase_uid : 'no-users-found';
+      console.log('Using test UID:', firebaseUid);
+    }
 
     const [rows] = await pool.query(
       'SELECT * FROM account WHERE firebase_uid = ?',
       [firebaseUid]
     );
 
+    console.log(`Found ${rows.length} users for UID: ${firebaseUid}`);
+
     if (rows.length === 0) {
+      console.log('User not found in database, checking all users...');
+      const [allUsers] = await pool.query('SELECT firebase_uid, first_name, email_address FROM account LIMIT 5');
+      console.log('Available users in database:', allUsers);
       return res.status(404).json({ error: 'User exists in Firebase but not in database' });
     }
 

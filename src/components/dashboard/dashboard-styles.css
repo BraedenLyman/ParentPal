@@ -184,5 +184,49 @@ html, body {
 }
 
 .photoGalleryCard {
-    background-color: #E8A9A9; 
+    background-color: #E8A9A9;
+}
+
+.parentInfo {
+    font-size: 12px;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 2px;
+}
+
+.no-access-card {
+    text-align: center;
+    padding: 20px;
+    background-color: #f9fafb;
+    border: 1px dashed #d1d5db;
+}
+
+.no-access-info h3 {
+    color: #374151;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.no-access-info p {
+    color: #6b7280;
+    font-size: 14px;
+    margin: 4px 0;
+}
+
+.no-child-selected {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.no-child-selected h2 {
+    color: #374151;
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.no-child-selected p {
+    color: #6b7280;
+    font-size: 14px;
 }

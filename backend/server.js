@@ -1,4 +1,5 @@
 // server.js
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
@@ -14,10 +15,15 @@ const sickDayRouter = require("./routes/sickday");
 const feedingRouter = require("./routes/feeding");
 const observationRouter = require("./routes/observation");
 const userRouter = require("./routes/user");
+const babysitterSharingRouter = require("./routes/babysitter-sharing");
 
 const app = express();
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
+
+app.get("/api/test", (req, res) => {
+    res.json({ message: "Server is running!" });
+});
 
 // Routes
 app.use("/api/accounts", accountsRouter);
@@ -32,6 +38,7 @@ app.use("/api/sickday", sickDayRouter);
 app.use("/api/feeding", feedingRouter);
 app.use("/api/observation", observationRouter);
 app.use("/api/user", userRouter);
+app.use("/api/babysitter-sharing", babysitterSharingRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
