@@ -6,6 +6,7 @@ import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, Moda
 import {TimeInput} from "@heroui/react";
 import { Modal } from "@heroui/react";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
 import "../parent-pages.css";
 import { auth } from "../../../firebase/firebaseAuth";
@@ -13,39 +14,55 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 
 
 export default function SleepAnalytics() {
+    const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
     const [hours, setHours] = useState("");
     const [time, setTime] = useState("");
     const [date, setDate] = useState("");
-    const [babyId, setBabyId ] = useState(null);
+    const [userData, setUserData] = useState(null);
+    const [babyData, setBabyData] = useState([]);
+    const [selectedBaby, setSelectedBaby] = useState(null);
     const [sleepRecords, setSleepRecords] = useState([]);
 
     useEffect(() => {
-        const fetchBaby = async () => {
-            const user = auth.currentUser;
-            if (!user) return;
+        const fetchDashboardData = async () => {
+            const currentUser = auth.currentUser;
+
+            if (!currentUser) return;
 
             try {
-                const { data } = await axios.get("http://localhost:3000/api/babies", {
-                    params: { firebase_uid: user.uid },
-                    withCredentials: true,
-                });
-                setBabyId(data.baby_id);
-            } catch (err) {
-                console.error("Failed to fetch baby: ", err);
+                const idToken = await currentUser.getIdToken();
+                const response = await axios.post(
+                    "http://localhost:3000/api/sign-in",
+                    { idToken },
+                    { withCredentials: true }
+                );
+
+                const { user, babyData } = response.data;
+                setUserData(user);
+                setBabyData(babyData || []);
+
+                const passedBaby = location.state?.baby;
+                if (passedBaby) {
+                    setSelectedBaby(passedBaby);
+                } else if (babyData && babyData.length > 0) {
+                    setSelectedBaby(babyData[0]);
+                }
+            } catch (error) {
+                console.error("Error fetching dashboard data: ", error);
             }
         };
 
-        fetchBaby();
-    }, []);
+        fetchDashboardData();
+    }, [location.state]);
 
     useEffect(() => {
-        if (!babyId) return;
+        if (!selectedBaby) return;
 
         const fetchSleepRecords = async () => {
             try {
                 const { data } = await axios.get(`http://localhost:3000/api/sleep`, {
-                    params: { baby_id: babyId },
+                    params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
                 setSleepRecords(data);
@@ -55,7 +72,7 @@ export default function SleepAnalytics() {
         };
 
         fetchSleepRecords();
-    }, [babyId]);
+    }, [selectedBaby]);
 
     const handleAddSleep = async () => {
         if (!hours || !time || !date) {
@@ -69,7 +86,7 @@ export default function SleepAnalytics() {
             const { data: newRecord } = await axios.post(
                 "http://localhost:3000/api/sleep",
                 {
-                    baby_id: babyId,
+                    baby_id: selectedBaby.baby_id,
                     sleep_duration: hours,
                     time_fell_asleep: formattedTime,
                     date,
@@ -92,35 +109,53 @@ export default function SleepAnalytics() {
         <div className="mainDiv">
            <div className="header">
             <div className="headerContainer">
-                <Avatar 
+                <Avatar
                     className="avatar"
-                    name={"P"}
+                    name={userData?.first_name?.charAt(0)?.toUpperCase() || "P"}
                 />
-                <Avatar 
+                <Avatar
                     className="mainAvatar"
-                    name={"B"}
+                    name={selectedBaby?.first_name?.charAt(0)?.toUpperCase() || "B"}
                 />
                 <FiBell className="notification"/>
             </div>
             <div className="userInfo">
-                <h1 className="babysName">Baby's Sleep</h1>
+                <h1 className="babysName">{selectedBaby?.first_name || "Baby"}'s Sleep</h1>
 
                 <div className="cardContainer">
-                    <Card  isPressable shadow="sm" className="cardInfo">
-                        <div className="cardContent">
-                            <Avatar
-                                name={"B"} 
-                                className="avatar"
-                            />
-                            <div className="babyInfo">
-                                <h3 className="baby">Baby</h3>
-                                <p className="babyDate">2002-02-02</p>
-                            </div>
-                        </div>
-                    </Card>
+                    {babyData.length > 0 ? (
+                        babyData.map((baby, index) => (
+                            <Card
+                                key={baby.baby_id || index}
+                                isPressable
+                                shadow="sm"
+                                className={`cardInfo ${selectedBaby?.baby_id === baby.baby_id ? 'selectedCard' : ''}`}
+                                onClick={() => setSelectedBaby(baby)}
+                            >
+                                <div className="cardContent">
+                                    <Avatar
+                                        name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
+                                        size="lg"
+                                        className="avatar"
+                                    />
+                                    <div className="babyInfo">
+                                        <h3 className="baby">{baby.first_name}</h3>
+                                        <p className="babyDate">
+                                            {baby.birth_date
+                                                ? new Date(baby.birth_date).toLocaleDateString()
+                                                : "N/A"}
+                                        </p>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))
+                    ) : (
+                        <p>No baby information found.</p>
+                    )}
                 </div>
             </div>
         </div>
+
         <div className="pageMiddleNav">
             <PageMiddleNav />
         </div>

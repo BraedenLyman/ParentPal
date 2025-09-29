@@ -59,17 +59,27 @@ html, body {
     display: flex;
     flex-direction: row;
     gap: 20px;
-    overflow-y: auto; 
-
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding-bottom: 10px;
 }
 
 .cardInfo {
     display: flex;
     width: 300px;
+    min-width: 300px;
     height: 60px;
     padding: 10px;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
+}
+
+.selectedCard {
+    border: 3px solid #4A90E2;
+    background-color: #E6F3FF;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
 }
 
 .cardContent {

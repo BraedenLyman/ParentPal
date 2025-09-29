@@ -11,6 +11,7 @@ export default function ParentDashboard() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [babyData, setBabyData] = useState([]);
+  const [selectedBaby, setSelectedBaby] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,6 +34,9 @@ export default function ParentDashboard() {
         const { user, babyData } = response.data;
         setUserData(user);
         setBabyData(babyData || []);
+        if (babyData && babyData.length > 0) {
+          setSelectedBaby(babyData[0]);
+        }
       } catch (error) {
         console.error("Error fetching dashboard data: ", error);
         navigate("/sign-in");
@@ -78,7 +82,8 @@ export default function ParentDashboard() {
                     key={baby.baby_id || index}
                     isPressable
                     shadow="sm"
-                    className="cardInfo"
+                    className={`cardInfo ${selectedBaby?.baby_id === baby.baby_id ? 'selectedCard' : ''}`}
+                    onClick={() => setSelectedBaby(baby)}
                   >
                     <div className="cardContent">
                       <Avatar
@@ -105,12 +110,12 @@ export default function ParentDashboard() {
         </div>
 
         <div className="userTitle">
-          <Avatar 
-            className="mainAvatar" 
-            name={babyData[0].first_name?.charAt(0)?.toUpperCase() || "N/A"}
+          <Avatar
+            className="mainAvatar"
+            name={selectedBaby?.first_name?.charAt(0)?.toUpperCase() || "N/A"}
           />
           <h1 className="userTitleName">
-            {babyData.length > 0 ? babyData[0].first_name : "Baby"}'s Development
+            {selectedBaby?.first_name || "Baby"}'s Development
           </h1>
         </div>
 
@@ -125,7 +130,7 @@ export default function ParentDashboard() {
               isPressable
               shadow="sm"
               className="cardReports growthCard"
-              onClick={() => navigate("/growth-tracker", {state: {baby: babyData[0], user: userData}})}
+              onClick={() => navigate("/growth-tracker", {state: {baby: selectedBaby, user: userData}})}
             >
               <div>
                 <h1>Growth Tracker</h1>
@@ -136,7 +141,7 @@ export default function ParentDashboard() {
               isPressable
               shadow="sm"
               className="cardReports sleepCard"
-              onClick={() => navigate("/sleep-analytics")}
+              onClick={() => navigate("/sleep-analytics", {state: {baby: selectedBaby, user: userData}})}
             >
               <div>
                 <h1>Sleep Analytics</h1>
@@ -149,7 +154,7 @@ export default function ParentDashboard() {
               isPressable
               shadow="sm"
               className="cardReports healthCard"
-              onClick={() => navigate("/health-journal")}
+              onClick={() => navigate("/health-journal", {state: {baby: selectedBaby, user: userData}})}
             >
               <div>
                 <h1>Health Journal</h1>
@@ -160,7 +165,7 @@ export default function ParentDashboard() {
               isPressable
               shadow="sm"
               className="cardReports feedingCard"
-              onClick={() => navigate("/feeding-notes")}
+              onClick={() => navigate("/feeding-notes", {state: {baby: selectedBaby, user: userData}})}
             >
               <div>
                 <h1>Feeding Notes</h1>
@@ -173,7 +178,7 @@ export default function ParentDashboard() {
               isPressable
               shadow="sm"
               className="cardReports observationCard"
-              onClick={() => navigate("/observation-notes")}
+              onClick={() => navigate("/observation-notes", {state: {baby: selectedBaby, user: userData}})}
             >
               <div>
                 <h1>Observation Notes</h1>
@@ -193,7 +198,7 @@ export default function ParentDashboard() {
               isPressable
               shadow="sm"
               className="cardReports assignedCard"
-              onClick={() => navigate("/assigned-tasks")}
+              onClick={() => navigate("/assigned-tasks", {state: {baby: selectedBaby, user: userData}})}
             >
               <div>
                 <h1>Assigned Tasks</h1>
@@ -213,7 +218,7 @@ export default function ParentDashboard() {
               isPressable
               shadow="sm"
               className="cardReports photoGalleryCard"
-              onClick={() => navigate("/photo-gallery")}
+              onClick={() => navigate("/photo-gallery", {state: {baby: selectedBaby, user: userData}})}
             >
               <div>
                 <h1>Photo Gallery</h1>

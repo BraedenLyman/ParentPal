@@ -5,13 +5,17 @@ import Navbar from "../../nav-bar/navbar";
 import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, Tabs, Tab, RadioGroup, Radio, Select, SelectItem } from "@heroui/react";
 import { TimeInput, Modal } from "@heroui/react";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
 import "../parent-pages.css";
 import { auth } from "../../../firebase/firebaseAuth";
 import { Scrollbars } from "react-custom-scrollbars-2";
 
 export default function HealthJournal() {
-    const [babyId, setBabyId ] = useState(null);
+    const location = useLocation();
+    const [userData, setUserData] = useState(null);
+    const [babyData, setBabyData] = useState([]);
+    const [selectedBaby, setSelectedBaby] = useState(null);
 
     const [activeTab, setActiveTab] = useState("meds");
     const [isMedsOpen, setIsMedsOpen] = useState(false);
@@ -36,31 +40,44 @@ export default function HealthJournal() {
     const [vaccinationsRecords, setVaccinationsRecords] = useState([]);
 
     useEffect(() => {
-        const fetchBaby = async () => {
-            const user = auth.currentUser;
-            if (!user) return;
+        const fetchDashboardData = async () => {
+            const currentUser = auth.currentUser;
+
+            if (!currentUser) return;
 
             try {
-                const { data } = await axios.get("http://localhost:3000/api/babies", {
-                    params: { firebase_uid: user.uid },
-                    withCredentials: true,
-                });
-                setBabyId(data.baby_id);
-            } catch (err) {
-                console.error("Failed to fetch baby: ", err);
+                const idToken = await currentUser.getIdToken();
+                const response = await axios.post(
+                    "http://localhost:3000/api/sign-in",
+                    { idToken },
+                    { withCredentials: true }
+                );
+
+                const { user, babyData } = response.data;
+                setUserData(user);
+                setBabyData(babyData || []);
+
+                const passedBaby = location.state?.baby;
+                if (passedBaby) {
+                    setSelectedBaby(passedBaby);
+                } else if (babyData && babyData.length > 0) {
+                    setSelectedBaby(babyData[0]);
+                }
+            } catch (error) {
+                console.error("Error fetching dashboard data: ", error);
             }
         };
 
-        fetchBaby();
-    }, []);
+        fetchDashboardData();
+    }, [location.state]);
 
     useEffect(() => {
-        if (!babyId) return;
+        if (!selectedBaby) return;
 
         const fetchMedsRecords = async () => {
             try {
                 const { data } = await axios.get(`http://localhost:3000/api/meds`, {
-                    params: { baby_id: babyId },
+                    params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
                 setMedsRecords(data);
@@ -70,7 +87,7 @@ export default function HealthJournal() {
         };
 
         fetchMedsRecords();
-    }, [babyId]);
+    }, [selectedBaby]);
     
     const handleAddMeds = async () => {
         if (!medName || !medsTimeTaken || !medDate || !medDose || !medSympDescription) {
@@ -84,7 +101,7 @@ export default function HealthJournal() {
             const { data: newRecord } = await axios.post(
                 "http://localhost:3000/api/meds",
                 {
-                    baby_id: babyId,
+                    baby_id: selectedBaby.baby_id,
                     medication_name: medName,
                     time_taken: formattedTime,
                     date: medDate,
@@ -108,12 +125,12 @@ export default function HealthJournal() {
     };
 
     useEffect(() => {
-        if (!babyId) return;
+        if (!selectedBaby) return;
 
         const fetchAllergiesRecords = async () => {
             try {
                 const { data } = await axios.get(`http://localhost:3000/api/allergies`, {
-                    params: { baby_id: babyId },
+                    params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
                 setAllergiesRecords(data);
@@ -123,7 +140,7 @@ export default function HealthJournal() {
         };
 
         fetchAllergiesRecords();
-    }, [babyId]);
+    }, [selectedBaby]);
 
     const handleAddAllergies = async () => {
         if (!allergy || !severity || !epiPen || !allergyNotes) {
@@ -135,7 +152,7 @@ export default function HealthJournal() {
             const { data: newRecord } = await axios.post(
                 "http://localhost:3000/api/allergies",
                 {
-                    baby_id: babyId,
+                    baby_id: selectedBaby.baby_id,
                     allergy_name: allergy,
                     severity: severity,
                     epi_pen: epiPen,
@@ -157,12 +174,12 @@ export default function HealthJournal() {
     };
 
     useEffect(() => {
-        if (!babyId) return;
+        if (!selectedBaby) return;
 
         const fetchVaccinationsRecords = async () => {
             try {
                 const { data } = await axios.get(`http://localhost:3000/api/vaccinations`, {
-                    params: { baby_id: babyId },
+                    params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
                 setVaccinationsRecords(data);
@@ -172,7 +189,7 @@ export default function HealthJournal() {
         };
 
         fetchVaccinationsRecords();
-    }, [babyId]);
+    }, [selectedBaby]);
 
     const handleAddVaccinations = async () => {
         if (!vaccineName || !vaccineDate) {
@@ -184,7 +201,7 @@ export default function HealthJournal() {
             const { data: newRecord } = await axios.post(
                 "http://localhost:3000/api/vaccinations",
                 {
-                    baby_id: babyId,
+                    baby_id: selectedBaby.baby_id,
                     vaccination_name: vaccineName,
                     date_of_vaccine: vaccineDate,
                 },
@@ -207,31 +224,48 @@ export default function HealthJournal() {
             <div className="header">
                 <div className="headerContainer">
                     <Avatar
-                    className="avatar"
-                    name={"P"}
+                        className="avatar"
+                        name={userData?.first_name?.charAt(0)?.toUpperCase() || "P"}
                     />
                     <Avatar
-                    className="mainAvatar"
-                    name={"B"}
+                        className="mainAvatar"
+                        name={selectedBaby?.first_name?.charAt(0)?.toUpperCase() || "B"}
                     />
                     <FiBell className="notification" />
                 </div>
 
                 <div className="userInfo">
-                    <h1 className="babysName">Baby's Health</h1>
+                    <h1 className="babysName">{selectedBaby?.first_name || "Baby"}'s Health</h1>
                     <div className="cardContainer">
-                        <Card isPressable shadow="sm" className="cardInfo">
-                            <div className="cardContent">
-                                <Avatar
-                                    name={"B"}
-                                    className="avatar"
-                                />
-                                <div className="babyInfo">
-                                    <h3 className="baby">Baby</h3>
-                                    <p className="babyDate">2002-02-02</p>
-                                </div>
-                            </div>
-                        </Card>
+                        {babyData.length > 0 ? (
+                            babyData.map((baby, index) => (
+                                <Card
+                                    key={baby.baby_id || index}
+                                    isPressable
+                                    shadow="sm"
+                                    className={`cardInfo ${selectedBaby?.baby_id === baby.baby_id ? 'selectedCard' : ''}`}
+                                    onClick={() => setSelectedBaby(baby)}
+                                >
+                                    <div className="cardContent">
+                                        <Avatar
+                                            name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
+                                            size="lg"
+                                            className="avatar"
+                                        />
+                                        <div className="babyInfo">
+                                            <h3 className="baby">{baby.first_name}</h3>
+                                            <p className="babyDate">
+                                                {baby.birth_date
+                                                    ? new Date(baby.birth_date).toLocaleDateString()
+                                                    : "N/A"}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </Card>
+                            ))
+                        ) : (
+                            <p>No baby information found.</p>
+                        )}
                     </div>
                 </div>
             </div>
