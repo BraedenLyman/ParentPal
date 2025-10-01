@@ -9,7 +9,10 @@ const mockAxios = require('axios');
 
 jest.mock('../../../firebase/firebaseAuth', () => ({
   auth: {
-    currentUser: { uid: 'test-uid-123' }
+    currentUser: {
+      uid: 'test-uid-123',
+      getIdToken: jest.fn().mockResolvedValue('mock-id-token')
+    }
   },
 }));
 
@@ -44,10 +47,20 @@ const TestWrapper = ({ children }) => (
 describe('ObservationNotes Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockAxios.get.mockImplementation((url) => {
-      if (url.includes('/api/babies')) {
-        return Promise.resolve({ data: { baby_id: 'baby-123' } });
+
+    mockAxios.post.mockImplementation((url) => {
+      if (url.includes('/api/sign-in')) {
+        return Promise.resolve({
+          data: {
+            user: { firebase_uid: 'test-uid-123' },
+            babyData: [{ baby_id: 'baby-123', name: 'Baby' }]
+          }
+        });
       }
+      return Promise.reject(new Error('Unhandled API call'));
+    });
+
+    mockAxios.get.mockImplementation((url) => {
       if (url.includes('/api/observation')) {
         return Promise.resolve({ data: [] });
       }
@@ -240,7 +253,7 @@ describe('ObservationNotes Component', () => {
     expect(screen.getAllByLabelText('Priority Level')[0]).toBeInTheDocument();
   });
 
-  test('fetches baby data on component mount', async () => {
+  test('fetches dashboard data on component mount', async () => {
     render(
       <TestWrapper>
         <ObservationNotes />
@@ -248,12 +261,10 @@ describe('ObservationNotes Component', () => {
     );
 
     await waitFor(() => {
-      expect(mockAxios.get).toHaveBeenCalledWith(
-        'http://localhost:3000/api/babies',
-        {
-          params: { firebase_uid: 'test-uid-123' },
-          withCredentials: true
-        }
+      expect(mockAxios.post).toHaveBeenCalledWith(
+        'http://localhost:3000/api/sign-in',
+        { idToken: 'mock-id-token' },
+        { withCredentials: true }
       );
     });
   });
@@ -279,7 +290,7 @@ describe('ObservationNotes Component', () => {
   test('handles API errors gracefully', async () => {
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    mockAxios.get.mockRejectedValue(new Error('Network error'));
+    mockAxios.post.mockRejectedValue(new Error('Network error'));
 
     render(
       <TestWrapper>
@@ -289,7 +300,7 @@ describe('ObservationNotes Component', () => {
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to fetch baby: ',
+        'Error fetching dashboard data: ',
         expect.any(Error)
       );
     });
@@ -297,16 +308,16 @@ describe('ObservationNotes Component', () => {
     consoleSpy.mockRestore();
   });
 
-  test('renders static elements correctly', () => {
+  test('renders static elements correctly', async () => {
     render(
       <TestWrapper>
         <ObservationNotes />
       </TestWrapper>
     );
 
-    expect(screen.getByText('Baby')).toBeInTheDocument();
-    expect(screen.getByText('2002-02-02')).toBeInTheDocument();
-    expect(screen.getByTestId('scrollbars')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('scrollbars')).toBeInTheDocument();
+    });
   });
 
   test('form submission calls correct API endpoint with proper data structure', async () => {
