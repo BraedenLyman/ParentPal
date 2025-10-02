@@ -8,52 +8,17 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
 import "../../parent-pages.css";
-import { auth } from "../../../../firebase/firebaseAuth";
 import { Scrollbars } from "react-custom-scrollbars-2";
+import { useBabyData } from "../../../../hooks/useBabyData";
 
 
 export default function ObservationNotes() {
     const location = useLocation();
+    const { userData, babyData, selectedBaby, setSelectedBaby } = useBabyData(location.state);
     const [isOpen, setIsOpen] = useState(false);
     const [priorityLevel, setPriorityLevel] = useState("");
     const [obsNotes, setObsNotes] = useState("");
-
-    const [userData, setUserData] = useState(null);
-    const [babyData, setBabyData] = useState([]);
-    const [selectedBaby, setSelectedBaby] = useState(null);
     const [observationRecords, setObservationRecords] = useState([]);
-
-    useEffect(() => {
-        const fetchDashboardData = async () => {
-            const currentUser = auth.currentUser;
-
-            if (!currentUser) return;
-
-            try {
-                const idToken = await currentUser.getIdToken();
-                const response = await axios.post(
-                    "http://localhost:3000/api/sign-in",
-                    { idToken },
-                    { withCredentials: true }
-                );
-
-                const { user, babyData } = response.data;
-                setUserData(user);
-                setBabyData(babyData || []);
-
-                const passedBaby = location.state?.baby;
-                if (passedBaby) {
-                    setSelectedBaby(passedBaby);
-                } else if (babyData && babyData.length > 0) {
-                    setSelectedBaby(babyData[0]);
-                }
-            } catch (error) {
-                console.error("Error fetching dashboard data: ", error);
-            }
-        };
-
-        fetchDashboardData();
-    }, [location.state]);
 
     useEffect(() => {
         if (!selectedBaby) return;

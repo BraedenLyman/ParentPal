@@ -8,14 +8,12 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
 import "../parent-pages.css";
-import { auth } from "../../../firebase/firebaseAuth";
 import { Scrollbars } from "react-custom-scrollbars-2";
+import { useBabyData } from "../../../hooks/useBabyData";
 
 export default function HealthJournal() {
     const location = useLocation();
-    const [userData, setUserData] = useState(null);
-    const [babyData, setBabyData] = useState([]);
-    const [selectedBaby, setSelectedBaby] = useState(null);
+    const { userData, babyData, selectedBaby, setSelectedBaby } = useBabyData(location.state);
 
     const [activeTab, setActiveTab] = useState("meds");
     const [isMedsOpen, setIsMedsOpen] = useState(false);
@@ -28,48 +26,16 @@ export default function HealthJournal() {
     const [medDose, setMedDose] = useState("");
     const [medSympDescription, setMedSympDescription] = useState("");
     const [medsRecords, setMedsRecords] = useState([]);
-    
+
     const [allergy, setAllergy] = useState("");
     const [severity, setSeverity] = useState("");
     const [allergyNotes, setAllergyNotes] = useState("");
-    const [epiPen, setEpiPen] = useState(""); 
+    const [epiPen, setEpiPen] = useState("");
     const [allergiesRecords, setAllergiesRecords] = useState([])
 
     const [vaccineName, setVaccineName] = useState("");
     const [vaccineDate, setVaccineDate] = useState("");
     const [vaccinationsRecords, setVaccinationsRecords] = useState([]);
-
-    useEffect(() => {
-        const fetchDashboardData = async () => {
-            const currentUser = auth.currentUser;
-
-            if (!currentUser) return;
-
-            try {
-                const idToken = await currentUser.getIdToken();
-                const response = await axios.post(
-                    "http://localhost:3000/api/sign-in",
-                    { idToken },
-                    { withCredentials: true }
-                );
-
-                const { user, babyData } = response.data;
-                setUserData(user);
-                setBabyData(babyData || []);
-
-                const passedBaby = location.state?.baby;
-                if (passedBaby) {
-                    setSelectedBaby(passedBaby);
-                } else if (babyData && babyData.length > 0) {
-                    setSelectedBaby(babyData[0]);
-                }
-            } catch (error) {
-                console.error("Error fetching dashboard data: ", error);
-            }
-        };
-
-        fetchDashboardData();
-    }, [location.state]);
 
     useEffect(() => {
         if (!selectedBaby) return;

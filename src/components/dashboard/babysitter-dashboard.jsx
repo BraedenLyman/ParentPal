@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./dashboard-styles.css"
 import { Avatar, Card, Image } from "@heroui/react";
 import { FiBell } from "react-icons/fi";
@@ -9,14 +9,16 @@ import { auth } from "../../firebase/firebaseAuth";
 
 export default function BabysitterDashboard() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [userData, setUserData] = useState(null);
     const [accessibleChildren, setAccessibleChildren] = useState([]);
     const [selectedChild, setSelectedChild] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setLoading(true);
         fetchDashboardData();
-    }, []);
+    }, [location.pathname]);
 
     const fetchDashboardData = async () => {
         const currentUser = auth.currentUser;
@@ -45,10 +47,18 @@ export default function BabysitterDashboard() {
             setAccessibleChildren(childrenResponse.data.children);
             if (childrenResponse.data.children.length > 0) {
                 setSelectedChild(childrenResponse.data.children[0]);
+            } else {
+                console.log('No children found - babysitter has no verified access');
             }
         } catch (error) {
-            console.error("Error fetching dashboard data:", error);
-            navigate("/sign-in");
+            if (error.response?.status === 401 || error.response?.status === 403) {
+                console.log('Authentication error, redirecting to sign-in');
+                navigate("/sign-in");
+            } else {
+                console.log('Data fetch error, but user is still authenticated');
+                setAccessibleChildren([]);
+                setSelectedChild(null);
+            }
         } finally {
             setLoading(false);
         }
@@ -113,9 +123,7 @@ export default function BabysitterDashboard() {
                             <Card className="cardInfo no-access-card">
                                 <div className="cardContent">
                                     <div className="no-access-info">
-                                        <h3>No Access Yet</h3>
-                                        <p>Ask a parent to share their child's information with you.</p>
-                                        <p>Go to Settings to enter a verification code.</p>
+                                        <p>No babies available.</p>
                                     </div>
                                 </div>
                             </Card>
@@ -230,8 +238,8 @@ export default function BabysitterDashboard() {
             ) : (
                 <Card className="reportSections">
                     <div className="no-child-selected">
-                        <h2>No Child Selected</h2>
-                        <p>Please verify your access code in Settings to view child information.</p>
+                        <h2>No Access Yet</h2>
+                        <p>A parent has to share their child's development with you.</p>
                     </div>
                 </Card>
             )}

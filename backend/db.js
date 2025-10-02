@@ -1,11 +1,13 @@
 // db.js
+require('dotenv').config();
 const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'parentpal_user',
-  password: 'Password123!',
-  database: 'parentpal_db',
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'parentpal_user',
+  password: process.env.DB_PASSWORD || 'Password123!',
+  database: process.env.DB_NAME || 'parentpal_db',
+  port: process.env.DB_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0

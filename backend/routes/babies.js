@@ -63,8 +63,10 @@ router.post('/', async (req, res) => {
 
         res.status(201).json(newBaby);
     } catch (err) {
-        console.error('Error adding baby:', err);
-        res.status(500).json({ error: 'Failed to add baby' });
+        console.error('Error:', err);
+        res.status(500).json({
+            error: 'Failed to add baby',
+        });
     }
 });
 

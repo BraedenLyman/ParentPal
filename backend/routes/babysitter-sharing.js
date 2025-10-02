@@ -52,26 +52,41 @@ router.post('/invite', async (req, res) => {
 
         console.log(`Verification code for ${babysitter_email}: ${verificationCode}`);
 
-        // const mailOptions = {
-        //     from: process.env.EMAIL_USER,
-        //     to: babysitter_email,
-        //     subject: 'ParentPal - Babysitter Access Invitation',
-        //     html: `
-        //         <h2>You've been invited to access child information on ParentPal!</h2>
-        //         <p>Hi ${babysitter_name},</p>
-        //         <p>${parentName} has invited you to access their child's information on ParentPal.</p>
-        //         <p>Your verification code is: <strong>${verificationCode}</strong></p>
-        //         <p>To accept this invitation:</p>
-        //         <ol>
-        //             <li>Download and sign up for ParentPal as a babysitter</li>
-        //             <li>Go to your settings</li>
-        //             <li>Enter the verification code above</li>
-        //         </ol>
-        //         <p>This code will expire in 7 days.</p>
-        //         <p>Best regards,<br>The ParentPal Team</p>
-        //     `
-        // };
-        // await transporter.sendMail(mailOptions);
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: babysitter_email,
+            subject: 'ParentPal - Babysitter Access Invitation',
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+                    <div style="background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <h2 style="color: #333; margin-top: 0;">You've been invited to ParentPal!</h2>
+                        <p style="color: #666; font-size: 16px;">Hi ${babysitter_name},</p>
+                        <p style="color: #666; font-size: 16px;">${parentName} has invited you to access their child's information on ParentPal.</p>
+
+                        <div style="background-color: #f0f7ff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+                            <p style="color: #333; margin: 0 0 10px 0; font-size: 14px;">Your verification code:</p>
+                            <p style="font-size: 32px; font-weight: bold; color: #007AFF; margin: 0; letter-spacing: 8px;">${verificationCode}</p>
+                        </div>
+
+                        <p style="color: #666; font-size: 16px; margin-bottom: 10px;">To accept this invitation:</p>
+                        <ol style="color: #666; font-size: 16px; line-height: 1.8;">
+                            <li>Sign up for ParentPal as a babysitter (or sign in if you already have an account)</li>
+                            <li>Go to Settings</li>
+                            <li>Enter the verification code above in the Verification Code section</li>
+                        </ol>
+                        <p style="color: #999; font-size: 14px; margin-top: 30px;">This code will expire in 7 days.</p>
+                        <p style="color: #666; font-size: 16px; margin-bottom: 0;">Best regards,<br><strong>The ParentPal Team</strong></p>
+                    </div>
+                </div>
+            `
+        };
+
+        try {
+            await transporter.sendMail(mailOptions);
+            console.log('Email sent successfully');
+        } catch (emailError) {
+            console.error('Failed to send email:', emailError);
+        }
 
         res.status(201).json({
             message: 'Invitation sent successfully',
@@ -97,6 +112,10 @@ router.post('/verify', async (req, res) => {
             [verification_code]
         );
 
+        if (shares.length > 0) {
+            console.log('Share details:', shares[0]);
+        }
+
         if (shares.length === 0) {
             return res.status(400).json({ error: 'Invalid or expired verification code' });
         }
@@ -116,9 +135,15 @@ router.post('/verify', async (req, res) => {
             return res.status(400).json({ error: 'Email address does not match the invitation' });
         }
 
-        await pool.query(
+        const [updateResult] = await pool.query(
             'UPDATE babysitter_shares SET is_verified = TRUE, babysitter_id = ?, verified_at = NOW() WHERE share_id = ?',
             [babysitter_id, share.share_id]
+        );
+
+        // Verify the update worked
+        const [verifyUpdate] = await pool.query(
+            'SELECT * FROM babysitter_shares WHERE share_id = ?',
+            [share.share_id]
         );
 
         res.status(200).json({ message: 'Verification successful' });
@@ -133,6 +158,11 @@ router.get('/children/:babysitter_id', async (req, res) => {
     const { babysitter_id } = req.params;
 
     try {
+        const [allShares] = await pool.query(
+            'SELECT * FROM babysitter_shares WHERE babysitter_id = ?',
+            [babysitter_id]
+        );
+
         const [children] = await pool.query(`
             SELECT
                 b.baby_id,
@@ -142,7 +172,9 @@ router.get('/children/:babysitter_id', async (req, res) => {
                 b.gender,
                 a.first_name as parent_first_name,
                 a.last_name as parent_last_name,
-                bs.verified_at
+                bs.verified_at,
+                bs.share_id,
+                bs.is_verified
             FROM babysitter_shares bs
             JOIN account a ON bs.parent_id = a.account_id
             JOIN baby b ON bs.parent_id = b.parent_id

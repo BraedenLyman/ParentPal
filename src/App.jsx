@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/protected-route";
-import IndexPage from "./pages/index";
+import IndexPage from "./components/page-components";
 import SignIn from "./components/auth/sign-in/sign-in";
 import SignUp from "./components/auth/register/sign-up";
 import ForgotPassword from "./components/auth/sign-in/forgot-password/forgot-password";

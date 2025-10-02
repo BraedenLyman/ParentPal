@@ -1,4 +1,4 @@
-import SignIn from "../components/auth/sign-in/sign-in";
+import SignIn from "../auth/sign-in/sign-in";
 
 export default function IndexPage() {
   return (
