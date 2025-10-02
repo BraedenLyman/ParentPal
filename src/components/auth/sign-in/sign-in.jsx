@@ -7,6 +7,7 @@ import "./sign-in-styles.css";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseAuth";
+import API_URL from "../../../config/api";
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
@@ -27,7 +28,7 @@ export default function SignIn() {
             const idToken = await user.getIdToken();
         
             const response = await axios.post(
-                "http://localhost:3000/api/sign-in",
+                `${API_URL}/api/sign-in`,
                 { idToken },
                 { withCredentials: true }
             );

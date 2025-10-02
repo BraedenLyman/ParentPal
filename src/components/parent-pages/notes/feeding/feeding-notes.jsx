@@ -10,6 +10,7 @@ import { FiBell } from "react-icons/fi";
 import "../../parent-pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useBabyData } from "../../../../hooks/useBabyData";
+import API_URL from "../../../../config/api";
 
 
 export default function FeedingNotes() {
@@ -52,7 +53,7 @@ export default function FeedingNotes() {
 
         try {
             const { data: newRecord } = await axios.post(
-                "http://localhost:3000/api/feeding",
+                `${API_URL}/api/feeding`,
                 {
                     baby_id: selectedBaby.baby_id,
                     time_fed: formattedTime,

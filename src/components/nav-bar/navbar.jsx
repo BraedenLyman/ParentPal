@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { auth } from "../../firebase/firebaseAuth";
+import API_URL from "../../config/api";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export default function Navbar() {
       try {
         const idToken = await currentUser.getIdToken();
         const response = await axios.post(
-          "http://localhost:3000/api/sign-in",
+          `${API_URL}/api/sign-in`,
           { idToken },
           { withCredentials: true }
         );

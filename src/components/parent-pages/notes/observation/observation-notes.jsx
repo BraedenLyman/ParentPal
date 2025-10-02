@@ -10,6 +10,7 @@ import { FiBell } from "react-icons/fi";
 import "../../parent-pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useBabyData } from "../../../../hooks/useBabyData";
+import API_URL from "../../../../config/api";
 
 
 export default function ObservationNotes() {
@@ -46,7 +47,7 @@ export default function ObservationNotes() {
 
         try {
             const { data: newRecord } = await axios.post(
-                "http://localhost:3000/api/observation",
+                `${API_URL}/api/observation`,
                 {
                     baby_id: selectedBaby.baby_id,
                     priority_level: priorityLevel,

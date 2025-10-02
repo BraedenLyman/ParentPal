@@ -41,9 +41,23 @@ app.use(cors({
 
 app.use(express.json());
 
+// Root endpoint
+app.get("/", (req, res) => {
+    res.json({
+        message: "ParentPal API",
+        status: "running",
+        endpoints: {
+            health: "/api/test",
+        }
+    });
+});
+
 app.get("/api/test", (req, res) => {
     res.json({ message: "Server is running!" });
 });
+
+// Favicon handler (prevents 404 errors)
+app.get("/favicon.ico", (req, res) => res.status(204).end());
 
 // Routes
 app.use("/api/accounts", accountsRouter);

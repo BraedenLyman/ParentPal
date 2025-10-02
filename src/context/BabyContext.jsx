@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { auth } from '../firebase/firebaseAuth';
+import API_URL from "../config/api";
 
 const BabyContext = createContext();
 
@@ -32,7 +33,7 @@ export function BabyProvider({ children }) {
         try {
             const idToken = await currentUser.getIdToken();
             const response = await axios.post(
-                "http://localhost:3000/api/sign-in",
+                `${API_URL}/api/sign-in`,
                 { idToken },
                 { withCredentials: true }
             );

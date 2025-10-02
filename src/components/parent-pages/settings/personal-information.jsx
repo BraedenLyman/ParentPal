@@ -7,6 +7,7 @@ import { auth } from "../../../firebase/firebaseAuth";
 import { updatePassword } from "firebase/auth";
 import axios from "axios";
 import Navbar from "../../nav-bar/navbar";
+import API_URL from "../../../config/api";
 import "./settings.css";
 
 export default function PersonalInformation() {
@@ -44,7 +45,7 @@ export default function PersonalInformation() {
             try {
                 const idToken = await currentUser.getIdToken();
                 const response = await axios.post(
-                    "http://localhost:3000/api/sign-in",
+                    `${API_URL}/api/sign-in`,
                     { idToken },
                     { withCredentials: true }
                 );
@@ -98,7 +99,7 @@ export default function PersonalInformation() {
             if (!user) return;
 
             const response = await axios.post(
-                "http://localhost:3000/api/babies",
+                `${API_URL}/api/babies`,
                 {
                     parent_id: userData.account_id,
                     first_name: newBaby.firstName,

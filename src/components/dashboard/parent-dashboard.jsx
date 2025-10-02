@@ -5,6 +5,7 @@ import { Avatar, Card, Image } from "@heroui/react";
 import { FiBell } from "react-icons/fi";
 import Navbar from "../nav-bar/navbar";
 import { auth } from "../../firebase/firebaseAuth";
+import API_URL from "../../config/api";
 import "./dashboard-styles.css";
 
 export default function ParentDashboard() {
@@ -26,7 +27,7 @@ export default function ParentDashboard() {
       try {
         const idToken = await currentUser.getIdToken();
         const response = await axios.post(
-          "http://localhost:3000/api/sign-in",
+          `${API_URL}/api/sign-in`,
           { idToken },
           { withCredentials: true }
         );

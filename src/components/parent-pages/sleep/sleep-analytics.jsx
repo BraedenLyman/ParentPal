@@ -11,6 +11,7 @@ import { FiBell } from "react-icons/fi";
 import "../parent-pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useBabyData } from "../../../hooks/useBabyData";
+import API_URL from "../../../config/api";
 
 
 export default function SleepAnalytics() {
@@ -50,7 +51,7 @@ export default function SleepAnalytics() {
 
         try {
             const { data: newRecord } = await axios.post(
-                "http://localhost:3000/api/sleep",
+                `${API_URL}/api/sleep`,
                 {
                     baby_id: selectedBaby.baby_id,
                     sleep_duration: hours,

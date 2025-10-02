@@ -6,6 +6,7 @@ import Navbar from "../nav-bar/navbar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { auth } from "../../firebase/firebaseAuth";
+import API_URL from "../../config/api";
 
 export default function BabysitterDashboard() {
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ export default function BabysitterDashboard() {
         try {
             const idToken = await currentUser.getIdToken();
             const response = await axios.post(
-                "http://localhost:3000/api/sign-in",
+                `${API_URL}/api/sign-in`,
                 { idToken },
                 { withCredentials: true }
             );

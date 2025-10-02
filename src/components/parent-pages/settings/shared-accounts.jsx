@@ -7,6 +7,7 @@ import "./settings.css";
 import { FiBell } from "react-icons/fi";
 import axios from "axios";
 import { auth } from "../../../firebase/firebaseAuth";
+import API_URL from "../../../config/api";
 
 export default function SharedAccounts() {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function SharedAccounts() {
         try {
             const idToken = await currentUser.getIdToken();
             const response = await axios.post(
-                "http://localhost:3000/api/sign-in",
+                `${API_URL}/api/sign-in`,
                 { idToken },
                 { withCredentials: true }
             );
@@ -58,7 +59,7 @@ export default function SharedAccounts() {
 
         try {
             await axios.post(
-                "http://localhost:3000/api/babysitter-sharing/invite",
+                `${API_URL}/api/babysitter-sharing/invite`,
                 {
                     parent_id: userData.account_id,
                     babysitter_email: babysitterEmail,

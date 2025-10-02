@@ -5,6 +5,7 @@ import { Button, Image, Input, Link, Select, SelectItem, Avatar } from "@heroui/
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseAuth";
+import API_URL from "../../../config/api";
 import "./register-styles.css";
 
 export const genders = [
@@ -96,7 +97,7 @@ export default function CreateAccount() {
       };
     }
 
-    await axios.post("http://localhost:3000/api/accounts", {
+    await axios.post(`${API_URL}/api/accounts`, {
       firebaseUid,
       ...payload,
     });

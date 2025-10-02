@@ -10,6 +10,7 @@ import { FiBell } from "react-icons/fi";
 import "../parent-pages.css";
 import { auth } from "../../../firebase/firebaseAuth";
 import { Scrollbars } from "react-custom-scrollbars-2";
+import API_URL from "../../../config/api";
 
 
 export default function GrowthTracker() {
@@ -32,7 +33,7 @@ export default function GrowthTracker() {
             try {
                 const idToken = await currentUser.getIdToken();
                 const response = await axios.post(
-                    "http://localhost:3000/api/sign-in",
+                    `${API_URL}/api/sign-in`,
                     { idToken },
                     { withCredentials: true }
                 );
@@ -81,7 +82,7 @@ export default function GrowthTracker() {
 
         try {
             const { data: newRecord } = await axios.post(
-                "http://localhost:3000/api/growth",
+                `${API_URL}/api/growth`,
                 {
                     baby_id: selectedBaby.baby_id,
                     height: parseFloat(height),

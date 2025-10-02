@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { auth } from '../firebase/firebaseAuth';
+import API_URL from "../config/api";
 
 /**
  * Custom hook to fetch baby data for both parents and babysitters
@@ -25,7 +26,7 @@ export function useBabyData(locationState) {
                 // Get user data from sign-in
                 const idToken = await currentUser.getIdToken();
                 const response = await axios.post(
-                    "http://localhost:3000/api/sign-in",
+                    `${API_URL}/api/sign-in`,
                     { idToken },
                     { withCredentials: true }
                 );

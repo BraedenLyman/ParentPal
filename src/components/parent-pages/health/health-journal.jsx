@@ -10,6 +10,7 @@ import { FiBell } from "react-icons/fi";
 import "../parent-pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useBabyData } from "../../../hooks/useBabyData";
+import API_URL from "../../../config/api";
 
 export default function HealthJournal() {
     const location = useLocation();
@@ -65,7 +66,7 @@ export default function HealthJournal() {
 
         try {
             const { data: newRecord } = await axios.post(
-                "http://localhost:3000/api/meds",
+                `${API_URL}/api/meds`,
                 {
                     baby_id: selectedBaby.baby_id,
                     medication_name: medName,
@@ -116,7 +117,7 @@ export default function HealthJournal() {
 
         try {
             const { data: newRecord } = await axios.post(
-                "http://localhost:3000/api/allergies",
+                `${API_URL}/api/allergies`,
                 {
                     baby_id: selectedBaby.baby_id,
                     allergy_name: allergy,
@@ -165,7 +166,7 @@ export default function HealthJournal() {
 
         try {
             const { data: newRecord } = await axios.post(
-                "http://localhost:3000/api/vaccinations",
+                `${API_URL}/api/vaccinations`,
                 {
                     baby_id: selectedBaby.baby_id,
                     vaccination_name: vaccineName,

@@ -7,6 +7,7 @@ import { auth } from "../../../firebase/firebaseAuth";
 import { deleteUser, signOut } from "firebase/auth";
 import axios from "axios";
 import Navbar from "../../nav-bar/navbar";
+import API_URL from "../../../config/api";
 import "./settings.css";
 
 export default function Settings() {
@@ -26,7 +27,7 @@ export default function Settings() {
             try {
                 const idToken = await currentUser.getIdToken();
                 const response = await axios.post(
-                    "http://localhost:3000/api/sign-in",
+                    `${API_URL}/api/sign-in`,
                     { idToken },
                     { withCredentials: true }
                 );
@@ -61,7 +62,7 @@ export default function Settings() {
 
         try {
             await axios.post(
-                "http://localhost:3000/api/babysitter-sharing/verify",
+                `${API_URL}/api/babysitter-sharing/verify`,
                 {
                     verification_code: verificationCode,
                     babysitter_id: userData.account_id
@@ -89,7 +90,7 @@ export default function Settings() {
             console.log("Starting account deletion for user:", user.uid);
             console.log("Deleting from database...");
 
-            await axios.delete("http://localhost:3000/api/user", {
+            await axios.delete(`${API_URL}/api/user`, {
                 params: { firebase_uid: user.uid },
                 withCredentials: true,
             });
