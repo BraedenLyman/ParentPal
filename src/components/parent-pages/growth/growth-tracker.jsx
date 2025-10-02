@@ -48,7 +48,7 @@ export default function GrowthTracker() {
                     setSelectedBaby(babyData[0]);
                 }
             } catch (error) {
-                console.error("Error fetching dashboard data: ", error);
+                console.error("Error fetching dashboard data:", error);
             }
         };
 

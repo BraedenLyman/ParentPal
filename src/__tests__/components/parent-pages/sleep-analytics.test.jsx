@@ -252,7 +252,7 @@ describe('SleepAnalytics Component', () => {
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalledWith(
-        'Error fetching dashboard data: ',
+        'Error fetching dashboard data:',
         expect.any(Error)
       );
     });
