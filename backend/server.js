@@ -22,6 +22,8 @@ const app = express();
 // CORS configuration for development and production
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://parent-pal-86b9a.web.app",
+  "https://parent-pal-86b9a.firebaseapp.com",
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
@@ -33,6 +35,8 @@ app.use(cors({
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.log('CORS blocked origin:', origin);
+      console.log('Allowed origins:', allowedOrigins);
       callback(new Error('Not allowed by CORS'));
     }
   },
