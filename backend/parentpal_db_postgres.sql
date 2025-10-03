@@ -34,7 +34,8 @@ CREATE TABLE baby (
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
   birth_date DATE DEFAULT NULL,
-  gender VARCHAR(10) DEFAULT NULL CHECK (gender IN ('M', 'F', 'Other', 'Male', 'Female'))
+  gender VARCHAR(10) DEFAULT NULL CHECK (gender IN ('M', 'F', 'Other', 'Male', 'Female')),
+  category VARCHAR(50)
 );
 
 -- Insert data for baby
