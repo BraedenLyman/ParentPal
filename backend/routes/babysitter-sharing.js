@@ -24,31 +24,31 @@ router.post('/invite', async (req, res) => {
     }
 
     try {
-        const result = await pool.query(
+        const existingInvite = await pool.query(
             'SELECT * FROM babysitter_shares WHERE parent_id = $1 AND babysitter_email = $2 AND expires_at > NOW() AND is_verified = FALSE',
             [parent_id, babysitter_email]
         );
 
-        if (existingInvitations.length > 0) {
+        if (existingInvite.rows.length > 0) {
             return res.status(400).json({ error: 'An active invitation already exists for this babysitter' });
         }
 
         const verificationCode = generateVerificationCode();
 
         const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + 7); 
+        expiresAt.setDate(expiresAt.getDate() + 7);
 
-        const result = await pool.query(
+        const insertResult = await pool.query(
             'INSERT INTO babysitter_shares (parent_id, babysitter_email, babysitter_name, verification_code, expires_at) VALUES ($1, $2, $3, $4, $5) RETURNING share_id',
             [parent_id, babysitter_email, babysitter_name, verificationCode, expiresAt]
         );
 
-        const result = await pool.query(
+        const parentResult = await pool.query(
             'SELECT first_name, last_name FROM account WHERE account_id = $1',
             [parent_id]
         );
 
-        const parentName = `${parentInfo[0].first_name} ${parentInfo[0].last_name}`;
+        const parentName = `${parentResult.rows[0].first_name} ${parentResult.rows[0].last_name}`;
 
         console.log(`Verification code for ${babysitter_email}: ${verificationCode}`);
 
@@ -107,41 +107,41 @@ router.post('/verify', async (req, res) => {
     }
 
     try {
-        const result = await pool.query(
+        const shareResult = await pool.query(
             'SELECT * FROM babysitter_shares WHERE verification_code = $1 AND expires_at > NOW() AND is_verified = FALSE',
             [verification_code]
         );
 
-        if (shares.length > 0) {
-            console.log('Share details:', shares[0]);
+        if (shareResult.rows.length > 0) {
+            console.log('Share details:', shareResult.rows[0]);
         }
 
-        if (shares.length === 0) {
+        if (shareResult.rows.length === 0) {
             return res.status(400).json({ error: 'Invalid or expired verification code' });
         }
 
-        const share = shares[0];
+        const share = shareResult.rows[0];
 
-        const result = await pool.query(
-            'SELECT email_address FROM account WHERE account_id = $1 AND account_type = "babysitter"',
-            [babysitter_id]
+        const babysitterResult = await pool.query(
+            'SELECT email_address FROM account WHERE account_id = $1 AND account_type = $2',
+            [babysitter_id, 'babysitter']
         );
 
-        if (babysitterInfo.length === 0) {
+        if (babysitterResult.rows.length === 0) {
             return res.status(400).json({ error: 'Babysitter account not found' });
         }
 
-        if (babysitterInfo[0].email_address !== share.babysitter_email) {
+        if (babysitterResult.rows[0].email_address !== share.babysitter_email) {
             return res.status(400).json({ error: 'Email address does not match the invitation' });
         }
 
-        const result = await pool.query(
+        const updateResult = await pool.query(
             'UPDATE babysitter_shares SET is_verified = TRUE, babysitter_id = $1, verified_at = NOW() WHERE share_id = $2',
             [babysitter_id, share.share_id]
         );
 
         // Verify the update worked
-        const result = await pool.query(
+        const verifyResult = await pool.query(
             'SELECT * FROM babysitter_shares WHERE share_id = $1',
             [share.share_id]
         );
@@ -158,12 +158,12 @@ router.get('/children/:babysitter_id', async (req, res) => {
     const { babysitter_id } = req.params;
 
     try {
-        const result = await pool.query(
+        const sharesResult = await pool.query(
             'SELECT * FROM babysitter_shares WHERE babysitter_id = $1',
             [babysitter_id]
         );
 
-        const result = await pool.query(`
+        const childrenResult = await pool.query(`
             SELECT
                 b.baby_id,
                 b.first_name,
@@ -178,11 +178,11 @@ router.get('/children/:babysitter_id', async (req, res) => {
             FROM babysitter_shares bs
             JOIN account a ON bs.parent_id = a.account_id
             JOIN baby b ON bs.parent_id = b.parent_id
-            WHERE bs.babysitter_id = ? AND bs.is_verified = TRUE
+            WHERE bs.babysitter_id = $1 AND bs.is_verified = TRUE
             ORDER BY b.first_name
         `, [babysitter_id]);
 
-        res.status(200).json({ children });
+        res.status(200).json({ children: childrenResult.rows });
 
     } catch (err) {
         console.error('Failed to get babysitter children:', err);
@@ -194,7 +194,7 @@ router.get('/babysitters/:parent_id', async (req, res) => {
     const { parent_id } = req.params;
 
     try {
-        const result = await pool.query(`
+        const babysittersResult = await pool.query(`
             SELECT
                 bs.share_id,
                 bs.babysitter_name,
@@ -207,11 +207,11 @@ router.get('/babysitters/:parent_id', async (req, res) => {
                 a.last_name as babysitter_last_name
             FROM babysitter_shares bs
             LEFT JOIN account a ON bs.babysitter_id = a.account_id
-            WHERE bs.parent_id = ?
+            WHERE bs.parent_id = $1
             ORDER BY bs.created_at DESC
         `, [parent_id]);
 
-        res.status(200).json({ babysitters });
+        res.status(200).json({ babysitters: babysittersResult.rows });
 
     } catch (err) {
         console.error('Failed to get parent babysitters:', err);

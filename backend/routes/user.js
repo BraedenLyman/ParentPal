@@ -13,24 +13,24 @@ router.delete('/', async (req, res) => {
   try {
     await pool.query('START TRANSACTION');
 
-    const result = await pool.query(
+    const accountResult = await pool.query(
       'SELECT account_id FROM account WHERE firebase_uid = $1',
       [firebase_uid]
     );
 
-    if (accountRows.length === 0) {
+    if (accountResult.rows.length === 0) {
       await pool.query('ROLLBACK');
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const parentId = accountRows[0].account_id;
+    const parentId = accountResult.rows[0].account_id;
 
-    const result = await pool.query(
+    const babyResult = await pool.query(
       'SELECT baby_id FROM baby WHERE parent_id = $1',
       [parentId]
     );
 
-    for (const baby of babyRows) {
+    for (const baby of babyResult.rows) {
       const babyId = baby.baby_id;
 
       await pool.query('DELETE FROM growth WHERE baby_id = $1', [babyId]);
