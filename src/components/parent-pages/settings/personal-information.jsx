@@ -172,7 +172,7 @@ export default function PersonalInformation() {
         if (!babyToDelete) return;
 
         try {
-            await axios.delete(`http://localhost:3000/api/babies/${babyToDelete.baby_id}`, {
+            await axios.delete(`${API_URL}/api/babies/${babyToDelete.baby_id}`, {
                 withCredentials: true
             });
 

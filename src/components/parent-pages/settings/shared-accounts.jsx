@@ -39,7 +39,7 @@ export default function SharedAccounts() {
             setUserData(user);
 
             const babysittersResponse = await axios.get(
-                `http://localhost:3000/api/babysitter-sharing/babysitters/${user.account_id}`,
+                `${API_URL}/api/babysitter-sharing/babysitters/${user.account_id}`,
                 { withCredentials: true }
             );
             setBabysitters(babysittersResponse.data.babysitters);
@@ -83,7 +83,7 @@ export default function SharedAccounts() {
     const handleRemoveBabysitter = async (shareId) => {
         try {
             await axios.delete(
-                `http://localhost:3000/api/babysitter-sharing/remove/${shareId}`,
+                `${API_URL}/api/babysitter-sharing/remove/${shareId}`,
                 {
                     data: { parent_id: userData.account_id },
                     withCredentials: true

@@ -26,7 +26,7 @@ export default function ObservationNotes() {
 
         const fetchObservationRecords = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:3000/api/observation`, {
+                const { data } = await axios.get(`${API_URL}/api/observation`, {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });

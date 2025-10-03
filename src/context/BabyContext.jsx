@@ -48,7 +48,7 @@ export function BabyProvider({ children }) {
                 }
             } else if (user.account_type === 'babysitter') {
                 const childrenResponse = await axios.get(
-                    `http://localhost:3000/api/babysitter-sharing/children/${user.account_id}`,
+                    `${API_URL}/api/babysitter-sharing/children/${user.account_id}`,
                     { withCredentials: true }
                 );
 

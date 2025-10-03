@@ -30,7 +30,7 @@ export default function FeedingNotes() {
 
         const fetchFeedingRecords = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:3000/api/feeding`, {
+                const { data } = await axios.get(`${API_URL}/api/feeding`, {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });

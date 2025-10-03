@@ -28,7 +28,7 @@ export default function SleepAnalytics() {
 
         const fetchSleepRecords = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:3000/api/sleep`, {
+                const { data } = await axios.get(`${API_URL}/api/sleep`, {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });

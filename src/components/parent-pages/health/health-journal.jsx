@@ -43,7 +43,7 @@ export default function HealthJournal() {
 
         const fetchMedsRecords = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:3000/api/meds`, {
+                const { data } = await axios.get(`${API_URL}/api/meds`, {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
@@ -96,7 +96,7 @@ export default function HealthJournal() {
 
         const fetchAllergiesRecords = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:3000/api/allergies`, {
+                const { data } = await axios.get(`${API_URL}/api/allergies`, {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
@@ -145,7 +145,7 @@ export default function HealthJournal() {
 
         const fetchVaccinationsRecords = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:3000/api/vaccinations`, {
+                const { data } = await axios.get(`${API_URL}/api/vaccinations`, {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });

@@ -61,7 +61,7 @@ export default function GrowthTracker() {
 
         const fetchGrowthRecords = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:3000/api/growth`, {
+                const { data } = await axios.get(`${API_URL}/api/growth`, {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });

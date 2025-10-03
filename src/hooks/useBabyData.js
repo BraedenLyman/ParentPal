@@ -41,7 +41,7 @@ export function useBabyData(locationState) {
                     console.log('Fetching shared children for babysitter');
                     // Fetch shared children for babysitter
                     const childrenResponse = await axios.get(
-                        `http://localhost:3000/api/babysitter-sharing/children/${user.account_id}`,
+                        `${API_URL}/api/babysitter-sharing/children/${user.account_id}`,
                         { withCredentials: true }
                     );
                     babies = childrenResponse.data.children || [];
