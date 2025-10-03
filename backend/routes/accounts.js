@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const [accountResult] = await pool.query(
+    const accountResultResult = await pool.query(
       `INSERT INTO account (firebase_uid, first_name, last_name, email_address, account_type, birth_date, gender)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [firebaseUid, fName, lName, email, accountType, dob || null, gender || null]

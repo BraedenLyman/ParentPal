@@ -16,37 +16,37 @@ router.post('/', async (req, res) => {
       console.log('Firebase verification successful for UID:', firebaseUid);
     } catch (firebaseError) {
       console.log('Firebase verification failed, using test mode:', firebaseError.message);
-    
-      const [testUsers] = await pool.query('SELECT firebase_uid FROM account LIMIT 1');
-      firebaseUid = testUsers.length > 0 ? testUsers[0].firebase_uid : 'no-users-found';
+
+      const testUsers = await pool.query('SELECT firebase_uid FROM account LIMIT 1');
+      firebaseUid = testUsers.rows.length > 0 ? testUsers.rows[0].firebase_uid : 'no-users-found';
       console.log('Using test UID:', firebaseUid);
     }
 
-    const [rows] = await pool.query(
-      'SELECT * FROM account WHERE firebase_uid = ?',
+    const result = await pool.query(
+      'SELECT * FROM account WHERE firebase_uid = $1',
       [firebaseUid]
     );
 
-    console.log(`Found ${rows.length} users for UID: ${firebaseUid}`);
+    console.log(`Found ${result.rows.length} users for UID: ${firebaseUid}`);
 
-    if (rows.length === 0) {
+    if (result.rows.length === 0) {
       console.log('User not found in database, checking all users...');
-      const [allUsers] = await pool.query('SELECT firebase_uid, first_name, email_address FROM account LIMIT 5');
-      console.log('Available users in database:', allUsers);
+      const allUsers = await pool.query('SELECT firebase_uid, first_name, email_address FROM account LIMIT 5');
+      console.log('Available users in database:', allUsers.rows);
       return res.status(404).json({ error: 'User exists in Firebase but not in database' });
     }
 
-    const accountData = rows[0];
+    const accountData = result.rows[0];
     let babyData = null;
 
     if (accountData.account_type === 'parent') {
-      const [babyRows] = await pool.query(
-        'SELECT baby_id, first_name, last_name, birth_date FROM baby WHERE parent_id = ?',
+      const babyResult = await pool.query(
+        'SELECT baby_id, first_name, last_name, birth_date FROM baby WHERE parent_id = $1',
         [accountData.account_id]
       );
 
-      if (babyRows.length > 0) {
-        babyData = babyRows;
+      if (babyResult.rows.length > 0) {
+        babyData = babyResult.rows;
         console.log('Backend found baby data:', babyData);
       } else {
         console.log('Backend: No baby data found for parent_id:', accountData.account_id);

@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
             params.push(baby_id);
         }
 
-        const [rows] = await pool.query(query, params);
+        const rowsResult = await pool.query(query, params);
         res.json(rows);
     } catch (err) {
         console.error("Error fetching meds records: ", err);
@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const [result] = await pool.query(
+        const resultResult = await pool.query(
             'INSERT INTO medications (baby_id, medication_name, time_taken, date, dosage, symptoms) VALUES (?, ?, ?, ?, ?, ?)',
             [baby_id, medication_name, time_taken, date, dosage, symptoms]
         );

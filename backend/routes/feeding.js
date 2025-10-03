@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
             params.push(baby_id);
         }
 
-        const [rows] = await pool.query(query, params);
+        const rowsResult = await pool.query(query, params);
         res.json(rows);
     } catch (err) {
         console.error("Error fetching feeding records: ", err);
@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const [result] = await pool.query(
+        const resultResult = await pool.query(
             'INSERT INTO feeding (baby_id, time_fed, date, fed_from, type_of_food, amount, notes) VALUES (?, ?, ?, ?, ?, ?, ?)',
             [baby_id, time_fed, date, fed_from, type_of_food, amount, notes]
         );

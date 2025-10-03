@@ -13,7 +13,7 @@ router.delete('/', async (req, res) => {
   try {
     await pool.query('START TRANSACTION');
 
-    const [accountRows] = await pool.query(
+    const accountRowsResult = await pool.query(
       'SELECT account_id FROM account WHERE firebase_uid = ?',
       [firebase_uid]
     );
@@ -25,7 +25,7 @@ router.delete('/', async (req, res) => {
 
     const parentId = accountRows[0].account_id;
 
-    const [babyRows] = await pool.query(
+    const babyRowsResult = await pool.query(
       'SELECT baby_id FROM baby WHERE parent_id = ?',
       [parentId]
     );
@@ -33,17 +33,17 @@ router.delete('/', async (req, res) => {
     for (const baby of babyRows) {
       const babyId = baby.baby_id;
 
-      await pool.query('DELETE FROM growth WHERE baby_id = ?', [babyId]);
-      await pool.query('DELETE FROM sleep WHERE baby_id = ?', [babyId]);
-      await pool.query('DELETE FROM feeding WHERE baby_id = ?', [babyId]);
-      await pool.query('DELETE FROM observation WHERE baby_id = ?', [babyId]);
-      await pool.query('DELETE FROM medications WHERE baby_id = ?', [babyId]);
-      await pool.query('DELETE FROM allergies WHERE baby_id = ?', [babyId]);
-      await pool.query('DELETE FROM vaccinations WHERE baby_id = ?', [babyId]);
+      await pool.query('DELETE FROM growth WHERE baby_id = $1', [babyId]);
+      await pool.query('DELETE FROM sleep WHERE baby_id = $1', [babyId]);
+      await pool.query('DELETE FROM feeding WHERE baby_id = $1', [babyId]);
+      await pool.query('DELETE FROM observation WHERE baby_id = $1', [babyId]);
+      await pool.query('DELETE FROM medications WHERE baby_id = $1', [babyId]);
+      await pool.query('DELETE FROM allergies WHERE baby_id = $1', [babyId]);
+      await pool.query('DELETE FROM vaccinations WHERE baby_id = $1', [babyId]);
     }
 
-    await pool.query('DELETE FROM baby WHERE parent_id = ?', [parentId]);
-    await pool.query('DELETE FROM account WHERE firebase_uid = ?', [firebase_uid]);
+    await pool.query('DELETE FROM baby WHERE parent_id = $1', [parentId]);
+    await pool.query('DELETE FROM account WHERE firebase_uid = $1', [firebase_uid]);
     await pool.query('COMMIT');
 
     res.status(200).json({ message: 'User account and all associated data deleted successfully' });

@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     }
 
     try {
-        const [accountRows] = await pool.query(
+        const accountRowsResult = await pool.query(
             'SELECT account_id FROM account WHERE firebase_uid = ? AND account_type = "parent"',
             [firebase_uid]
         );
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 
         const parentId = accountRows[0].account_id;
 
-        const [babyRows] = await pool.query(
+        const babyRowsResult = await pool.query(
             'SELECT * FROM baby WHERE parent_id = ?',
             [parentId]
         );
@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const [result] = await pool.query(
+        const resultResult = await pool.query(
             'INSERT INTO baby (parent_id, first_name, last_name, birth_date, gender, category) VALUES (?, ?, ?, ?, ?, ?)',
             [parent_id, first_name, last_name, birth_date, gender, category]
         );
@@ -78,7 +78,7 @@ router.delete('/:baby_id', async (req, res) => {
     }
 
     try {
-        const [babyRows] = await pool.query(
+        const babyRowsResult = await pool.query(
             'SELECT * FROM baby WHERE baby_id = ?',
             [baby_id]
         );
@@ -87,16 +87,16 @@ router.delete('/:baby_id', async (req, res) => {
             return res.status(404).json({ error: 'Baby not found' });
         }
 
-        await pool.query('DELETE FROM growth WHERE baby_id = ?', [baby_id]);
-        await pool.query('DELETE FROM sleep WHERE baby_id = ?', [baby_id]);
-        await pool.query('DELETE FROM medications WHERE baby_id = ?', [baby_id]);
-        await pool.query('DELETE FROM allergies WHERE baby_id = ?', [baby_id]);
-        await pool.query('DELETE FROM vaccinations WHERE baby_id = ?', [baby_id]);
-        await pool.query('DELETE FROM feeding WHERE baby_id = ?', [baby_id]);
-        await pool.query('DELETE FROM observation WHERE baby_id = ?', [baby_id]);
-        await pool.query('DELETE FROM sick_day WHERE baby_id = ?', [baby_id]);
+        await pool.query('DELETE FROM growth WHERE baby_id = $1', [baby_id]);
+        await pool.query('DELETE FROM sleep WHERE baby_id = $1', [baby_id]);
+        await pool.query('DELETE FROM medications WHERE baby_id = $1', [baby_id]);
+        await pool.query('DELETE FROM allergies WHERE baby_id = $1', [baby_id]);
+        await pool.query('DELETE FROM vaccinations WHERE baby_id = $1', [baby_id]);
+        await pool.query('DELETE FROM feeding WHERE baby_id = $1', [baby_id]);
+        await pool.query('DELETE FROM observation WHERE baby_id = $1', [baby_id]);
+        await pool.query('DELETE FROM sick_day WHERE baby_id = $1', [baby_id]);
 
-        const [result] = await pool.query(
+        const resultResult = await pool.query(
             'DELETE FROM baby WHERE baby_id = ?',
             [baby_id]
         );

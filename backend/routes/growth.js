@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
             params.push(baby_id);
         }
 
-        const [rows] = await pool.query(query, params);
+        const rowsResult = await pool.query(query, params);
         res.json(rows);
     } catch (err) {
         console.error("Error fetching growth records: ", err);
@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const [result] = await pool.query(
+        const resultResult = await pool.query(
             'INSERT INTO growth (baby_id, weight, height, date) VALUES (?, ?, ?, ?)',
             [baby_id, weight, height, date]
         );
@@ -55,7 +55,7 @@ router.put('/:id', async (req, res) => {
     }
     
     try {
-        const [result] = await pool.query(
+        const resultResult = await pool.query(
             'UPDATE growth SET baby_id = ?, weight = ?, height = ?, date = ? WHERE growth_id = ?',
             [baby_id, weight, height, date, id]
         );
@@ -76,7 +76,7 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     
     try {
-        const [result] = await pool.query('DELETE FROM growth WHERE growth_id = ?', [id]);
+        const resultResult = await pool.query('DELETE FROM growth WHERE growth_id = $1', [id]);
         
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Growth record not found' });
