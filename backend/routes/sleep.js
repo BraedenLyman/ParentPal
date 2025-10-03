@@ -12,12 +12,12 @@ router.get('/', async (req, res) => {
         const params = [];
 
         if (baby_id) {
-            query += " WHERE baby_id = ?";
+            query += " WHERE baby_id = $1";
             params.push(baby_id);
         }
 
-        const rowsResult = await pool.query(query, params);
-        res.json(rows);
+        const result = await pool.query(query, params);
+        res.json(result.rows);
     } catch (err) {
         console.error("Error fetching sleep records: ", err);
         res.status(500).json({ error: "Failed to fetch sleep records"})
@@ -33,12 +33,12 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const resultResult = await pool.query(
-            'INSERT INTO sleep (baby_id, sleep_duration, time_fell_asleep, date) VALUES (?, ?, ?, ?)',
+        const result = await pool.query(
+            'INSERT INTO sleep (baby_id, sleep_duration, time_fell_asleep, date) VALUES ($1, $2, $3, $4) RETURNING sleep_id',
             [baby_id, sleep_duration, time_fell_asleep, date]
         );
 
-        res.status(201).json({ sleep_id: result.insertId, baby_id, sleep_duration, time_fell_asleep, date });
+        res.status(201).json({ sleep_id: result.rows[0], baby_id, sleep_duration, time_fell_asleep, date });
     } catch (err) {
         console.error('Error adding sleep record:', err);
         res.status(500).json({ error: 'Failed to add sleep record' });

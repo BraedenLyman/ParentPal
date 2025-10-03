@@ -12,12 +12,12 @@ router.get('/', async (req, res) => {
         const params = [];
 
         if (baby_id) {
-            query += " WHERE baby_id = ?";
+            query += " WHERE baby_id = $1";
             params.push(baby_id);
         }
 
-        const rowsResult = await pool.query(query, params);
-        res.json(rows);
+        const result = await pool.query(query, params);
+        res.json(result.rows);
     } catch (err) {
         console.error("Error fetching observation records: ", err);
         res.status(500).json({ error: "Failed to fetch observation records"})
@@ -33,12 +33,12 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const resultResult = await pool.query(
-            'INSERT INTO observation (baby_id, priority_level, notes) VALUES (?, ?, ?)',
+        const result = await pool.query(
+            'INSERT INTO observation (baby_id, priority_level, notes) VALUES ($1, $2, $3) RETURNING observation_id',
             [baby_id, priority_level, notes]
         );
 
-        res.status(201).json({ observation_id: result.insertId, baby_id, priority_level, notes });
+        res.status(201).json({ observation_id: result.rows[0], baby_id, priority_level, notes });
     } catch (err) {
         console.error('Error adding observation record:', err);
         res.status(500).json({ error: 'Failed to add observation record' });

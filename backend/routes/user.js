@@ -13,8 +13,8 @@ router.delete('/', async (req, res) => {
   try {
     await pool.query('START TRANSACTION');
 
-    const accountRowsResult = await pool.query(
-      'SELECT account_id FROM account WHERE firebase_uid = ?',
+    const result = await pool.query(
+      'SELECT account_id FROM account WHERE firebase_uid = $1',
       [firebase_uid]
     );
 
@@ -25,8 +25,8 @@ router.delete('/', async (req, res) => {
 
     const parentId = accountRows[0].account_id;
 
-    const babyRowsResult = await pool.query(
-      'SELECT baby_id FROM baby WHERE parent_id = ?',
+    const result = await pool.query(
+      'SELECT baby_id FROM baby WHERE parent_id = $1',
       [parentId]
     );
 

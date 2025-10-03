@@ -12,12 +12,12 @@ router.get('/', async (req, res) => {
         const params = [];
 
         if (baby_id) {
-            query += " WHERE baby_id = ?";
+            query += " WHERE baby_id = $1";
             params.push(baby_id);
         }
 
-        const rowsResult = await pool.query(query, params);
-        res.json(rows);
+        const result = await pool.query(query, params);
+        res.json(result.rows);
     } catch (err) {
         console.error("Error fetching meds records: ", err);
         res.status(500).json({ error: "Failed to fetch meds records"})
@@ -33,12 +33,12 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const resultResult = await pool.query(
-            'INSERT INTO medications (baby_id, medication_name, time_taken, date, dosage, symptoms) VALUES (?, ?, ?, ?, ?, ?)',
+        const result = await pool.query(
+            'INSERT INTO medications (baby_id, medication_name, time_taken, date, dosage, symptoms) VALUES ($1, $2, $3, $4, $5, $6) RETURNING med_id',
             [baby_id, medication_name, time_taken, date, dosage, symptoms]
         );
 
-        res.status(201).json({ meds_id: result.insertId, baby_id, medication_name, time_taken, date, dosage, symptoms });
+        res.status(201).json({ meds_id: result.rows[0], baby_id, medication_name, time_taken, date, dosage, symptoms });
     } catch (err) {
         console.error('Error adding meds record:', err);
         res.status(500).json({ error: 'Failed to add meds record' });

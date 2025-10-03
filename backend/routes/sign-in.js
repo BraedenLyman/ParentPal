@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
       console.log('Firebase verification failed, using test mode:', firebaseError.message);
 
       const testUsers = await pool.query('SELECT firebase_uid FROM account LIMIT 1');
-      firebaseUid = testUsers.rows.length > 0 ? testUsers.rows[0].firebase_uid : 'no-users-found';
+      firebaseUid = testUsers.rows.length > 0 $1 testUsers.rows[0].firebase_uid : 'no-users-found';
       console.log('Using test UID:', firebaseUid);
     }
 
@@ -40,13 +40,13 @@ router.post('/', async (req, res) => {
     let babyData = null;
 
     if (accountData.account_type === 'parent') {
-      const babyResult = await pool.query(
+      const result = await pool.query(
         'SELECT baby_id, first_name, last_name, birth_date FROM baby WHERE parent_id = $1',
         [accountData.account_id]
       );
 
-      if (babyResult.rows.length > 0) {
-        babyData = babyResult.rows;
+      if (result.rows.length > 0) {
+        babyData = result.rows;
         console.log('Backend found baby data:', babyData);
       } else {
         console.log('Backend: No baby data found for parent_id:', accountData.account_id);

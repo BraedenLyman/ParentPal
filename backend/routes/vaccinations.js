@@ -12,12 +12,12 @@ router.get('/', async (req, res) => {
         const params = [];
 
         if (baby_id) {
-            query += " WHERE baby_id = ?";
+            query += " WHERE baby_id = $1";
             params.push(baby_id);
         }
 
-        const rowsResult = await pool.query(query, params);
-        res.json(rows);
+        const result = await pool.query(query, params);
+        res.json(result.rows);
     } catch (err) {
         console.error("Error fetching vaccinations records: ", err);
         res.status(500).json({ error: "Failed to fetch vaccinations records"})
@@ -33,12 +33,12 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const resultResult = await pool.query(
-            'INSERT INTO vaccinations (baby_id, vaccination_name, date_of_vaccine) VALUES (?, ?, ?)',
+        const result = await pool.query(
+            'INSERT INTO vaccinations (baby_id, vaccination_name, date_of_vaccine) VALUES ($1, $2, $3) RETURNING vaccine_id',
             [baby_id, vaccination_name, date_of_vaccine]
         );
 
-        res.status(201).json({ vaccine_id: result.insertId, baby_id, vaccination_name, date_of_vaccine });
+        res.status(201).json({ vaccine_id: result.rows[0], baby_id, vaccination_name, date_of_vaccine });
     } catch (err) {
         console.error('Error adding vaccination record:', err);
         res.status(500).json({ error: 'Failed to add vaccination record' });

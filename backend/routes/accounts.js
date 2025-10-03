@@ -11,9 +11,9 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const accountResultResult = await pool.query(
+    const result = await pool.query(
       `INSERT INTO account (firebase_uid, first_name, last_name, email_address, account_type, birth_date, gender)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [firebaseUid, fName, lName, email, accountType, dob || null, gender || null]
     );
 
@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
 
       await pool.query(
         `INSERT INTO baby (parent_id, first_name, last_name, birth_date, gender)
-         VALUES (?, ?, ?, ?, ?)`,
+         VALUES ($1, $2, $3, $4, $5)`,
         [parentId, bFName, bLName, bDob || null, bGender || null]
       );
     }

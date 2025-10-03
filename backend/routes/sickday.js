@@ -12,12 +12,12 @@ router.get('/', async (req, res) => {
         const params = [];
 
         if (baby_id) {
-            query += " WHERE baby_id = ?";
+            query += " WHERE baby_id = $1";
             params.push(baby_id);
         }
 
-        const rowsResult = await pool.query(query, params);
-        res.json(rows);
+        const result = await pool.query(query, params);
+        res.json(result.rows);
     } catch (err) {
         console.error("Error fetching sick day records: ", err);
         res.status(500).json({ error: "Failed to fetch sick day records"})
@@ -33,12 +33,12 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const resultResult = await pool.query(
-            'INSERT INTO sick_day (baby_id, date, meds_taken, temp) VALUES (?, ?, ?, ?)',
+        const result = await pool.query(
+            'INSERT INTO sick_day (baby_id, date, meds_taken, temp) VALUES ($1, $2, $3, $4) RETURNING sick_id',
             [baby_id, date, meds_taken, temp]
         );
 
-        res.status(201).json({ sick_id: result.insertId, baby_id, date, meds_taken, temp });
+        res.status(201).json({ sick_id: result.rows[0], baby_id, date, meds_taken, temp });
     } catch (err) {
         console.error('Error adding sick day record:', err);
         res.status(500).json({ error: 'Failed to add sick day record' });

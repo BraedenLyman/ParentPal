@@ -12,12 +12,12 @@ router.get('/', async (req, res) => {
         const params = [];
 
         if (baby_id) {
-            query += " WHERE baby_id = ?";
+            query += " WHERE baby_id = $1";
             params.push(baby_id);
         }
 
-        const rowsResult = await pool.query(query, params);
-        res.json(rows);
+        const result = await pool.query(query, params);
+        res.json(result.rows);
     } catch (err) {
         console.error("Error fetching feeding records: ", err);
         res.status(500).json({ error: "Failed to fetch feeding records"})
@@ -33,12 +33,12 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const resultResult = await pool.query(
-            'INSERT INTO feeding (baby_id, time_fed, date, fed_from, type_of_food, amount, notes) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        const result = await pool.query(
+            'INSERT INTO feeding (baby_id, time_fed, date, fed_from, type_of_food, amount, notes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING feeding_id',
             [baby_id, time_fed, date, fed_from, type_of_food, amount, notes]
         );
 
-        res.status(201).json({ feeding_id: result.insertId, baby_id, time_fed, date, fed_from, type_of_food, amount, notes });
+        res.status(201).json({ feeding_id: result.rows[0], baby_id, time_fed, date, fed_from, type_of_food, amount, notes });
     } catch (err) {
         console.error('Error adding feeding record:', err);
         res.status(500).json({ error: 'Failed to add feeding record' });

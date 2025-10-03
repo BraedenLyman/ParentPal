@@ -11,8 +11,8 @@ router.get('/', async (req, res) => {
     }
 
     try {
-        const accountRowsResult = await pool.query(
-            'SELECT account_id FROM account WHERE firebase_uid = ? AND account_type = "parent"',
+        const result = await pool.query(
+            'SELECT account_id FROM account WHERE firebase_uid = $1 AND account_type = "parent"',
             [firebase_uid]
         );
 
@@ -22,8 +22,8 @@ router.get('/', async (req, res) => {
 
         const parentId = accountRows[0].account_id;
 
-        const babyRowsResult = await pool.query(
-            'SELECT * FROM baby WHERE parent_id = ?',
+        const result = await pool.query(
+            'SELECT * FROM baby WHERE parent_id = $1',
             [parentId]
         );
 
@@ -46,13 +46,13 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const resultResult = await pool.query(
-            'INSERT INTO baby (parent_id, first_name, last_name, birth_date, gender, category) VALUES (?, ?, ?, ?, ?, ?)',
+        const result = await pool.query(
+            'INSERT INTO baby (parent_id, first_name, last_name, birth_date, gender, category) VALUES ($1, $2, $3, $4, $5, $6) RETURNING baby_id',
             [parent_id, first_name, last_name, birth_date, gender, category]
         );
 
         const newBaby = {
-            baby_id: result.insertId,
+            baby_id: result.rows[0],
             parent_id,
             first_name,
             last_name,
@@ -78,8 +78,8 @@ router.delete('/:baby_id', async (req, res) => {
     }
 
     try {
-        const babyRowsResult = await pool.query(
-            'SELECT * FROM baby WHERE baby_id = ?',
+        const result = await pool.query(
+            'SELECT * FROM baby WHERE baby_id = $1',
             [baby_id]
         );
 
@@ -96,12 +96,12 @@ router.delete('/:baby_id', async (req, res) => {
         await pool.query('DELETE FROM observation WHERE baby_id = $1', [baby_id]);
         await pool.query('DELETE FROM sick_day WHERE baby_id = $1', [baby_id]);
 
-        const resultResult = await pool.query(
-            'DELETE FROM baby WHERE baby_id = ?',
+        const result = await pool.query(
+            'DELETE FROM baby WHERE baby_id = $1',
             [baby_id]
         );
 
-        if (result.affectedRows === 0) {
+        if (result.rowCount === 0) {
             return res.status(404).json({ error: 'Baby not found' });
         }
 

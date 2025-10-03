@@ -12,12 +12,12 @@ router.get('/', async (req, res) => {
         const params = [];
 
         if (baby_id) {
-            query += " WHERE baby_id = ?";
+            query += " WHERE baby_id = $1";
             params.push(baby_id);
         }
 
-        const rowsResult = await pool.query(query, params);
-        res.json(rows);
+        const result = await pool.query(query, params);
+        res.json(result.rows);
     } catch (err) {
         console.error("Error fetching allergies records: ", err);
         res.status(500).json({ error: "Failed to fetch allergies records"})
@@ -33,12 +33,12 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const resultResult = await pool.query(
-            'INSERT INTO allergies (baby_id, allergy_name, severity, epi_pen, notes) VALUES (?, ?, ?, ?, ?)',
+        const result = await pool.query(
+            'INSERT INTO allergies (baby_id, allergy_name, severity, epi_pen, notes) VALUES ($1, $2, $3, $4, $5) RETURNING allergy_id',
             [baby_id, allergy_name, severity, epi_pen, notes]
         );
 
-        res.status(201).json({ allergy_id: result.insertId, baby_id, allergy_name, severity, epi_pen, notes });
+        res.status(201).json({ allergy_id: result.rows[0], baby_id, allergy_name, severity, epi_pen, notes });
     } catch (err) {
         console.error('Error adding allergies record:', err);
         res.status(500).json({ error: 'Failed to add allergies record' });
