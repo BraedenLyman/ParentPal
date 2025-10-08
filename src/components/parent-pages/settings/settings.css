@@ -448,3 +448,119 @@
   margin-top: 8px;
   min-width: 120px;
 }
+
+/* Custom Notifications Styles */
+.custom-notifications-content {
+  padding: 20px;
+}
+
+.add-notification-button {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.no-notifications-message {
+  text-align: center;
+  color: #666;
+  margin-top: 20px;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.notification-card {
+  padding: 15px;
+}
+
+.notification-card-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.notification-details {
+  flex: 1;
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.notification-baby-name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.notification-type-badge {
+  background-color: #E4C1F9;
+  color: #6B21A8;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.notification-datetime {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.notification-notes {
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-button {
+  width: 100%;
+}
+
+/* Notification Preferences Styles */
+.preferences-content {
+  padding: 20px;
+}
+
+.preference-card {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.preference-section-title {
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.preference-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.preference-item:last-child {
+  margin-bottom: 0;
+}
+
+.saving-message {
+  text-align: center;
+  margin-top: 15px;
+  color: #666;
+}

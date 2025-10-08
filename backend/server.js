@@ -16,10 +16,11 @@ const feedingRouter = require("./routes/feeding");
 const observationRouter = require("./routes/observation");
 const userRouter = require("./routes/user");
 const babysitterSharingRouter = require("./routes/babysitter-sharing");
+const notificationPreferencesRouter = require("./routes/notification-preferences");
+const customNotificationsRouter = require("./routes/custom-notifications");
 
 const app = express();
 
-// CORS configuration for development and production
 const allowedOrigins = [
   "http://localhost:5173",
   "https://parent-pal-86b9a.web.app",
@@ -29,7 +30,6 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.indexOf(origin) !== -1) {
@@ -45,7 +45,6 @@ app.use(cors({
 
 app.use(express.json());
 
-// Root endpoint
 app.get("/", (req, res) => {
     res.json({
         message: "ParentPal API",
@@ -60,10 +59,8 @@ app.get("/api/test", (req, res) => {
     res.json({ message: "Server is running!" });
 });
 
-// Favicon handler (prevents 404 errors)
 app.get("/favicon.ico", (req, res) => res.status(204).end());
 
-// Routes
 app.use("/api/accounts", accountsRouter);
 app.use("/api/sign-in", signinRouter);
 app.use("/api/growth", growthRouter);
@@ -77,6 +74,8 @@ app.use("/api/feeding", feedingRouter);
 app.use("/api/observation", observationRouter);
 app.use("/api/user", userRouter);
 app.use("/api/babysitter-sharing", babysitterSharingRouter);
+app.use("/api/notification-preferences", notificationPreferencesRouter);
+app.use("/api/custom-notifications", customNotificationsRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

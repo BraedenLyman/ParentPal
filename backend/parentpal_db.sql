@@ -100,6 +100,19 @@ INSERT INTO allergies (allergy_id, baby_id, allergy_name, severity, epi_pen, not
 -- Set sequence for allergies
 SELECT setval('allergies_allergy_id_seq', 4);
 
+-- Table: notification_preferences
+CREATE TABLE notification_preferences (
+  preference_id SERIAL PRIMARY KEY,
+  account_id INTEGER NOT NULL,
+  sleep_reminders BOOLEAN DEFAULT TRUE,
+  feeding_reminders BOOLEAN DEFAULT TRUE,
+  doctors_appointments BOOLEAN DEFAULT TRUE,
+  games_development BOOLEAN DEFAULT TRUE,
+  playdates_development BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Table: custom_notifications
 CREATE TABLE custom_notifications (
   custom_notification_id SERIAL PRIMARY KEY,
@@ -108,7 +121,9 @@ CREATE TABLE custom_notifications (
   notification_type VARCHAR(50) DEFAULT NULL,
   date DATE DEFAULT NULL,
   time TIME DEFAULT NULL,
-  notes TEXT
+  notes TEXT,
+  is_sent BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table: feeding
@@ -240,6 +255,9 @@ ALTER TABLE babysitter_shares
 
 ALTER TABLE allergies
   ADD CONSTRAINT allergies_ibfk_1 FOREIGN KEY (baby_id) REFERENCES baby (baby_id);
+
+ALTER TABLE notification_preferences
+  ADD CONSTRAINT notification_preferences_ibfk_1 FOREIGN KEY (account_id) REFERENCES account (account_id) ON DELETE CASCADE;
 
 ALTER TABLE custom_notifications
   ADD CONSTRAINT custom_notifications_ibfk_1 FOREIGN KEY (baby_id) REFERENCES baby (baby_id),

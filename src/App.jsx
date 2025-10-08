@@ -24,6 +24,8 @@ import Settings from "./components/parent-pages/settings/settings";
 import PersonalInformation from "./components/parent-pages/settings/personal-information";
 import SharedAccounts from "./components/parent-pages/settings/shared-accounts";
 import Notifications from "./components/parent-pages/settings/notifications";
+import NotificationPreferences from "./components/parent-pages/settings/notification-preferences";
+import CustomNotifications from "./components/parent-pages/settings/custom-notifications";
 import DataExport from "./components/parent-pages/settings/data-export";
 
 function App() {
@@ -133,6 +135,22 @@ function App() {
         element={
           <ProtectedRoute>
             <Notifications />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings/notifications/preferences"
+        element={
+          <ProtectedRoute>
+            <NotificationPreferences />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings/notifications/custom"
+        element={
+          <ProtectedRoute>
+            <CustomNotifications />
           </ProtectedRoute>
         }
       />

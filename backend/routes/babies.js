@@ -3,6 +3,22 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
+router.get('/:accountId', async (req, res) => {
+    const { accountId } = req.params;
+
+    try {
+        const babyResult = await pool.query(
+            'SELECT * FROM baby WHERE parent_id = $1',
+            [accountId]
+        );
+
+        res.json(babyResult.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch babies" });
+    }
+});
+
 router.get('/', async (req, res) => {
     const { firebase_uid } = req.query;
 
