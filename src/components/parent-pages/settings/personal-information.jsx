@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Avatar, Image, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Select, SelectItem } from "@heroui/react";
+import { Button, Avatar, Image, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input } from "@heroui/react";
 import { ArrowLeftIcon, PlusIcon, EyeIcon, EyeSlashIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { FiBell } from "react-icons/fi";
 import { auth } from "../../../firebase/firebaseAuth";
@@ -9,6 +9,7 @@ import axios from "axios";
 import Navbar from "../../nav-bar/navbar";
 import API_URL from "../../../config/api";
 import "./settings.css";
+import Select from "../../custom-select/CustomSelect";
 
 export default function PersonalInformation() {
     const navigate = useNavigate();
@@ -358,16 +359,19 @@ export default function PersonalInformation() {
                                 onChange={(e) => setNewBaby(prev => ({ ...prev, birthDate: e.target.value }))}
                             />
 
-                            <Select
-                                label="Gender"
-                                placeholder="Select gender"
-                                selectedKeys={newBaby.gender ? [newBaby.gender] : []}
-                                onSelectionChange={(keys) => setNewBaby(prev => ({ ...prev, gender: [...keys][0] }))}
-                            >
-                                <SelectItem key="male">Male</SelectItem>
-                                <SelectItem key="female">Female</SelectItem>
-                                <SelectItem key="other">Other</SelectItem>
-                            </Select>
+                            <div className="form-field">
+                                <label className="form-label">Gender</label>
+                                <Select
+                                    options={[
+                                        { value: "male", label: "Male" },
+                                        { value: "female", label: "Female" },
+                                        { value: "other", label: "Other" }
+                                    ]}
+                                    value={newBaby.gender ? { value: newBaby.gender, label: newBaby.gender.charAt(0).toUpperCase() + newBaby.gender.slice(1) } : null}
+                                    onChange={(option) => setNewBaby(prev => ({ ...prev, gender: option ? option.value : "" }))}
+                                    placeholder="Select gender"
+                                />
+                            </div>
 
                             {newBaby.gender === "other" && (
                                 <Input
@@ -378,17 +382,25 @@ export default function PersonalInformation() {
                                 />
                             )}
 
-                            <Select
-                                label="Category"
-                                placeholder="Select baby's category"
-                                selectedKeys={newBaby.category ? [newBaby.category] : []}
-                                onSelectionChange={(keys) => setNewBaby(prev => ({ ...prev, category: [...keys][0] }))}
-                            >
-                                <SelectItem key="Baby">Baby (0–12 months old)</SelectItem>
-                                <SelectItem key="Toddler">Toddler (1–3 years old)</SelectItem>
-                                <SelectItem key="Pre-Schooler">Pre-Schooler (3–5 years old)</SelectItem>
-                                <SelectItem key="Grade-Schooler">Grade-Schooler (5–12 years old)</SelectItem>
-                            </Select>
+                            <div className="form-field">
+                                <label className="form-label">Category</label>
+                                <Select
+                                    options={[
+                                        { value: "Baby", label: "Baby (0–12 months old)" },
+                                        { value: "Toddler", label: "Toddler (1–3 years old)" },
+                                        { value: "Pre-Schooler", label: "Pre-Schooler (3–5 years old)" },
+                                        { value: "Grade-Schooler", label: "Grade-Schooler (5–12 years old)" }
+                                    ]}
+                                    value={newBaby.category ? [
+                                        { value: "Baby", label: "Baby (0–12 months old)" },
+                                        { value: "Toddler", label: "Toddler (1–3 years old)" },
+                                        { value: "Pre-Schooler", label: "Pre-Schooler (3–5 years old)" },
+                                        { value: "Grade-Schooler", label: "Grade-Schooler (5–12 years old)" }
+                                    ].find(opt => opt.value === newBaby.category) : null}
+                                    onChange={(option) => setNewBaby(prev => ({ ...prev, category: option ? option.value : "" }))}
+                                    placeholder="Select baby's category"
+                                />
+                            </div>
                         </ModalBody>
 
                         <ModalFooter>

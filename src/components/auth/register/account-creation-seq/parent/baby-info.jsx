@@ -2,7 +2,8 @@ import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../../register-styles.css";
-import { Button, Input, Progress, Select, SelectItem, Avatar } from "@heroui/react";
+import { Button, Input, Progress, Avatar } from "@heroui/react";
+import Select from "../../../../custom-select/CustomSelect";
 
 export const genders = [
   { key: "Male", label: "Male" },
@@ -100,20 +101,18 @@ export default function BabyInfo() {
           onChange={(e) => setBDob(e.target.value)}
         />
 
-        <Select
-          selectedKeys={[selectedBGender]}
-          onSelectionChange={(keys) => {
-            setSelectedBGender(Array.from(keys)[0]);
-            setOtherGender("");
-          }}
-          items={genders}
-          label="Gender"
-          placeholder="Select your gender"
-          variant="bordered"
-          isRequired
-        >
-          {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-        </Select>
+        <div className="form-field">
+          <label className="form-label">Gender *</label>
+          <Select
+            options={genders.map(g => ({ value: g.key, label: g.label }))}
+            value={selectedBGender ? { value: selectedBGender, label: selectedBGender } : null}
+            onChange={(option) => {
+              setSelectedBGender(option ? option.value : "");
+              setOtherGender("");
+            }}
+            placeholder="Select your gender"
+          />
+        </div>
 
         {selectedBGender === "Other" && (
           <Input

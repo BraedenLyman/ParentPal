@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { Button, Image, Input, Link, Select, SelectItem, Avatar } from "@heroui/react";
+import { Button, Image, Input, Link, Avatar } from "@heroui/react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseAuth";
 import API_URL from "../../../config/api";
 import "./register-styles.css";
+import Select from "../../custom-select/CustomSelect";
 
 export const genders = [
   { key: "Male", label: "Male" },
@@ -186,17 +187,15 @@ export default function CreateAccount() {
           }
         />
 
-        <Select
-          selectedKeys={[accountType]}
-          onSelectionChange={(keys) => setAccountType(Array.from(keys)[0])}
-          items={accountTypes}
-          label="Account Type"
-          placeholder="Select your account type"
-          //variant="bordered"
-          isRequired
-        >
-          {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-        </Select>
+        <div className="form-field">
+          <label className="form-label">Account Type *</label>
+          <Select
+            options={accountTypes.map(t => ({ value: t.key, label: t.label }))}
+            value={accountType ? { value: accountType, label: accountTypes.find(t => t.key === accountType)?.label } : null}
+            onChange={(option) => setAccountType(option ? option.value : "")}
+            placeholder="Select your account type"
+          />
+        </div>
 
         {accountType && (
           <>
@@ -210,20 +209,18 @@ export default function CreateAccount() {
               onChange={(e) => setUserDOB(e.target.value)}
             />
 
-            <Select
-              selectedKeys={[selectedGender]}
-              onSelectionChange={(keys) => {
-                setSelectedGender(Array.from(keys)[0]);
-                setOtherGender("");
-              }}
-              items={genders}
-              label="Gender"
-              placeholder="Select your gender"
-              //variant="bordered"
-              isRequired
-            >
-              {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-            </Select>
+            <div className="form-field">
+              <label className="form-label">Gender *</label>
+              <Select
+                options={genders.map(g => ({ value: g.key, label: g.label }))}
+                value={selectedGender ? { value: selectedGender, label: selectedGender } : null}
+                onChange={(option) => {
+                  setSelectedGender(option ? option.value : "");
+                  setOtherGender("");
+                }}
+                placeholder="Select your gender"
+              />
+            </div>
 
             {selectedGender === "Other" && (
               <Input
@@ -241,17 +238,15 @@ export default function CreateAccount() {
 
         {accountType === "parent" && (
           <>
-            <Select
-              selectedKeys={[babyCategory]}
-              onSelectionChange={(keys) => setBabyCategory(Array.from(keys)[0])}
-              items={babyCategories}
-              label="Baby Type"
-              placeholder="Select your baby's age group"
-              //variant="bordered"
-              isRequired
-            >
-              {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-            </Select>
+            <div className="form-field">
+              <label className="form-label">Baby Type *</label>
+              <Select
+                options={babyCategories.map(b => ({ value: b.key, label: `${b.key} (${b.label})` }))}
+                value={babyCategory ? { value: babyCategory, label: `${babyCategory} (${babyCategories.find(b => b.key === babyCategory)?.label})` } : null}
+                onChange={(option) => setBabyCategory(option ? option.value : "")}
+                placeholder="Select your baby's age group"
+              />
+            </div>
 
             <Input
               label="Baby First Name"
@@ -282,20 +277,18 @@ export default function CreateAccount() {
               onChange={(e) => setBDob(e.target.value)}
             />
 
-            <Select
-              selectedKeys={[bGender]}
-              onSelectionChange={(keys) => {
-                setBGender(Array.from(keys)[0]);
-                setBOtherGender("");
-              }}
-              items={genders}
-              label="Baby Gender"
-              placeholder="Select your baby's gender"
-              //variant="bordered"
-              isRequired
-            >
-              {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-            </Select>
+            <div className="form-field">
+              <label className="form-label">Baby Gender *</label>
+              <Select
+                options={genders.map(g => ({ value: g.key, label: g.label }))}
+                value={bGender ? { value: bGender, label: bGender } : null}
+                onChange={(option) => {
+                  setBGender(option ? option.value : "");
+                  setBOtherGender("");
+                }}
+                placeholder="Select your baby's gender"
+              />
+            </div>
 
             {bGender === "Other" && (
               <Input

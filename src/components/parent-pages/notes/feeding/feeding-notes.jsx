@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import PageMiddleNav from "../../../page-components/page-middle-nav/page-middle-nav";
 import Navbar from "../../../nav-bar/navbar";
-import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, TimeInput } from "@heroui/react";
+import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, TimeInput } from "@heroui/react";
 import { Modal } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -11,6 +11,7 @@ import "../../parent-pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useBabyData } from "../../../../hooks/useBabyData";
 import API_URL from "../../../../config/api";
+import Select from "../../../custom-select/CustomSelect";
 
 
 export default function FeedingNotes() {
@@ -183,29 +184,33 @@ export default function FeedingNotes() {
                             onChange={(e) => setFeedDate(e.target.value)}
                         />
 
-                        <Select
-                            variant="bordered"
-                            label="Fed From"
-                            placeholder="Select where the baby was fed from"
-                            selectedKeys={fedFrom ? [fedFrom] : []}
-                            onSelectionChange={(keys) => setFedFrom([...keys][0])}
-                        >
-                            <SelectItem key="bottle">Bottle</SelectItem>
-                            <SelectItem key="left-boob">Left Boob</SelectItem>
-                            <SelectItem key="right-boob">Right Boob</SelectItem>
-                        </Select>
+                        <div className="form-field">
+                            <label className="form-label">Fed From</label>
+                            <Select
+                                options={[
+                                    { value: "bottle", label: "Bottle" },
+                                    { value: "left-boob", label: "Left Boob" },
+                                    { value: "right-boob", label: "Right Boob" }
+                                ]}
+                                value={fedFrom ? { value: fedFrom, label: fedFrom.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') } : null}
+                                onChange={(option) => setFedFrom(option ? option.value : "")}
+                                placeholder="Select where the baby was fed from"
+                            />
+                        </div>
 
-                        <Select
-                            variant="bordered"
-                            label="Type of Food"
-                            placeholder="Select what type of food they had"
-                            selectedKeys={feedType ? [feedType] : []}
-                            onSelectionChange={(keys) => setFeedType([...keys][0])}
-                        >
-                            <SelectItem key="milk">Milk</SelectItem>
-                            <SelectItem key="water">Water</SelectItem>
-                            <SelectItem key="juice">Juice</SelectItem>
-                        </Select>
+                        <div className="form-field">
+                            <label className="form-label">Type of Food</label>
+                            <Select
+                                options={[
+                                    { value: "milk", label: "Milk" },
+                                    { value: "water", label: "Water" },
+                                    { value: "juice", label: "Juice" }
+                                ]}
+                                value={feedType ? { value: feedType, label: feedType.charAt(0).toUpperCase() + feedType.slice(1) } : null}
+                                onChange={(option) => setFeedType(option ? option.value : "")}
+                                placeholder="Select what type of food they had"
+                            />
+                        </div>
 
                         <Input
                             variant="bordered"

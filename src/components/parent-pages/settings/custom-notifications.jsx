@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Image, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Select, SelectItem, Textarea } from "@heroui/react";
+import { Button, Image, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Textarea } from "@heroui/react";
 import { ArrowLeftIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Navbar from "../../nav-bar/navbar";
 import { auth } from "../../../firebase/firebaseAuth";
@@ -8,6 +8,7 @@ import axios from "axios";
 import API_URL from "../../../config/api";
 import "./settings.css";
 import { FiBell } from "react-icons/fi";
+import Select from "../../custom-select/CustomSelect";
 
 export default function CustomNotifications() {
     const navigate = useNavigate();
@@ -277,31 +278,37 @@ export default function CustomNotifications() {
                     </ModalHeader>
                     <ModalBody>
                         <div className="modal-form">
-                            <Select
-                                label="Type of Notification"
-                                placeholder="Select baby/sitter"
-                                selectedKeys={formData.baby_id ? [formData.baby_id.toString()] : []}
-                                onChange={(e) => setFormData({ ...formData, baby_id: parseInt(e.target.value) })}
-                            >
-                                {babies.map((baby) => (
-                                    <SelectItem key={baby.baby_id} value={baby.baby_id}>
-                                        {baby.first_name} {baby.last_name}
-                                    </SelectItem>
-                                ))}
-                            </Select>
+                            <div className="form-field">
+                                <label className="form-label">Baby/Sitter</label>
+                                <Select
+                                    placeholder="Select baby/sitter"
+                                    options={babies.map((baby) => ({
+                                        value: baby.baby_id,
+                                        label: `${baby.first_name} ${baby.last_name}`
+                                    }))}
+                                    value={babies.find(baby => baby.baby_id === formData.baby_id) ? {
+                                        value: formData.baby_id,
+                                        label: `${babies.find(b => b.baby_id === formData.baby_id).first_name} ${babies.find(b => b.baby_id === formData.baby_id).last_name}`
+                                    } : null}
+                                    onChange={(option) => setFormData({ ...formData, baby_id: option ? option.value : "" })}
+                                />
+                            </div>
 
-                            <Select
-                                label="Type of Notification"
-                                placeholder="Select type"
-                                selectedKeys={formData.notification_type ? [formData.notification_type] : []}
-                                onChange={(e) => setFormData({ ...formData, notification_type: e.target.value })}
-                            >
-                                {notificationTypes.map((type) => (
-                                    <SelectItem key={type.key} value={type.key}>
-                                        {type.label}
-                                    </SelectItem>
-                                ))}
-                            </Select>
+                            <div className="form-field">
+                                <label className="form-label">Type of Notification</label>
+                                <Select
+                                    placeholder="Select type"
+                                    options={notificationTypes.map((type) => ({
+                                        value: type.key,
+                                        label: type.label
+                                    }))}
+                                    value={formData.notification_type ? {
+                                        value: formData.notification_type,
+                                        label: notificationTypes.find(t => t.key === formData.notification_type)?.label
+                                    } : null}
+                                    onChange={(option) => setFormData({ ...formData, notification_type: option ? option.value : "" })}
+                                />
+                            </div>
 
                             <Input
                                 type="date"

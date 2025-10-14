@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../register-styles.css";
-import { Button, Progress, Input, Select, SelectItem, Avatar } from "@heroui/react";
+import { Button, Progress, Input, Avatar } from "@heroui/react";
+import Select from "../../../../custom-select/CustomSelect";
 
 export const genders = [
   { key: "Male", label: "Male" },
@@ -66,20 +67,18 @@ export default function ParentInfo() {
         />
 
         {/* Gender Selection */}
-        <Select
-          selectedKeys={[selectedGender]}
-          onSelectionChange={(keys) => {
-            setSelectedGender(Array.from(keys)[0]);
-            setOtherGender("");
-          }}
-          items={genders}
-          label="Gender"
-          placeholder="Select your gender"
-          variant="bordered"
-          isRequired
-        >
-          {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
-        </Select>
+        <div className="form-field">
+          <label className="form-label">Gender *</label>
+          <Select
+            options={genders.map(g => ({ value: g.key, label: g.label }))}
+            value={selectedGender ? { value: selectedGender, label: selectedGender } : null}
+            onChange={(option) => {
+              setSelectedGender(option ? option.value : "");
+              setOtherGender("");
+            }}
+            placeholder="Select your gender"
+          />
+        </div>
 
         {/* Other Gender Input */}
         {selectedGender === "Other" && (

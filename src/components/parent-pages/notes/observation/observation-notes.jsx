@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import PageMiddleNav from "../../../page-components/page-middle-nav/page-middle-nav";
 import Navbar from "../../../nav-bar/navbar";
-import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, TimeInput } from "@heroui/react";
+import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, TimeInput } from "@heroui/react";
 import { Modal } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -11,6 +11,7 @@ import "../../parent-pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useBabyData } from "../../../../hooks/useBabyData";
 import API_URL from "../../../../config/api";
+import Select from "../../../custom-select/CustomSelect";
 
 
 export default function ObservationNotes() {
@@ -152,16 +153,19 @@ export default function ObservationNotes() {
                     </ModalHeader>
                     <ModalBody className="modalBody">
                         
-                        <Select
-                            variant="bordered"
-                            label="Priority Level"
-                            selectedKeys={priorityLevel ? [priorityLevel] : []}
-                            onSelectionChange={(keys) => setPriorityLevel([...keys][0])}
-                        >
-                            <SelectItem key="low">Low</SelectItem>
-                            <SelectItem key="medium">Medium</SelectItem>
-                            <SelectItem key="high">High</SelectItem>
-                        </Select>
+                        <div className="form-field">
+                            <label className="form-label">Priority Level</label>
+                            <Select
+                                options={[
+                                    { value: "low", label: "Low" },
+                                    { value: "medium", label: "Medium" },
+                                    { value: "high", label: "High" }
+                                ]}
+                                value={priorityLevel ? { value: priorityLevel, label: priorityLevel.charAt(0).toUpperCase() + priorityLevel.slice(1) } : null}
+                                onChange={(option) => setPriorityLevel(option ? option.value : "")}
+                                placeholder="Select priority level"
+                            />
+                        </div>
 
                         <Input
                             variant="bordered"

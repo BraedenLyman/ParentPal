@@ -1,0 +1,216 @@
+/* Custom React Select Styles to match HeroUI */
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+/* React Select Container */
+.react-select-container {
+  width: 100%;
+}
+
+/* Control (main input box) */
+.react-select__control {
+  min-height: 40px;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  background-color: #f9fafb !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.react-select__control:hover {
+  border-color: #d1d5db !important;
+}
+
+.react-select__control--is-focused {
+  border-color: #3b82f6 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.react-select__control--menu-is-open {
+  border-color: #3b82f6 !important;
+}
+
+/* Value Container */
+.react-select__value-container {
+  padding: 2px 12px !important;
+}
+
+/* Input */
+.react-select__input-container {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #374151 !important;
+}
+
+/* Placeholder */
+.react-select__placeholder {
+  color: #9ca3af !important;
+  font-size: 14px !important;
+}
+
+/* Single Value (selected option) */
+.react-select__single-value {
+  color: #374151 !important;
+  font-size: 14px !important;
+}
+
+/* Indicators Container */
+.react-select__indicators {
+  padding-right: 4px !important;
+}
+
+/* Dropdown Indicator */
+.react-select__indicator-separator {
+  display: none !important;
+}
+
+.react-select__dropdown-indicator {
+  color: #9ca3af !important;
+  padding: 8px !important;
+  transition: color 0.2s ease !important;
+}
+
+.react-select__dropdown-indicator:hover {
+  color: #6b7280 !important;
+}
+
+/* Clear Indicator */
+.react-select__clear-indicator {
+  color: #9ca3af !important;
+  padding: 8px !important;
+  cursor: pointer !important;
+}
+
+.react-select__clear-indicator:hover {
+  color: #ef4444 !important;
+}
+
+/* Menu (dropdown) */
+.react-select__menu {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid #e5e7eb !important;
+  margin-top: 4px !important;
+  overflow: hidden !important;
+  z-index: 9999 !important;
+}
+
+.react-select__menu-list {
+  padding: 4px !important;
+  max-height: 200px !important;
+}
+
+/* Menu Options */
+.react-select__option {
+  border-radius: 8px !important;
+  padding: 10px 12px !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  color: #374151 !important;
+  transition: all 0.15s ease !important;
+}
+
+.react-select__option:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.react-select__option--is-focused {
+  background-color: #eff6ff !important;
+  color: #1e40af !important;
+}
+
+.react-select__option--is-selected {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+.react-select__option--is-selected:hover {
+  background-color: #2563eb !important;
+}
+
+/* Multi-value (for multi-select) */
+.react-select__multi-value {
+  background-color: #e0e7ff !important;
+  border-radius: 6px !important;
+}
+
+.react-select__multi-value__label {
+  color: #3730a3 !important;
+  font-size: 14px !important;
+  padding: 4px 8px !important;
+}
+
+.react-select__multi-value__remove {
+  color: #6366f1 !important;
+  cursor: pointer !important;
+  border-radius: 0 6px 6px 0 !important;
+}
+
+.react-select__multi-value__remove:hover {
+  background-color: #c7d2fe !important;
+  color: #4338ca !important;
+}
+
+/* Loading */
+.react-select__loading-indicator {
+  color: #3b82f6 !important;
+}
+
+/* No Options Message */
+.react-select__no-options-message {
+  color: #6b7280 !important;
+  font-size: 14px !important;
+  padding: 12px !important;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  .react-select__control {
+    background-color: #1f2937 !important;
+    border-color: #374151 !important;
+  }
+
+  .react-select__control--is-focused {
+    background-color: #111827 !important;
+    border-color: #60a5fa !important;
+  }
+
+  .react-select__single-value,
+  .react-select__input-container {
+    color: #f9fafb !important;
+  }
+
+  .react-select__placeholder {
+    color: #6b7280 !important;
+  }
+
+  .react-select__menu {
+    background-color: #1f2937 !important;
+    border-color: #374151 !important;
+  }
+
+  .react-select__option {
+    color: #f9fafb !important;
+  }
+
+  .react-select__option:hover {
+    background-color: #374151 !important;
+  }
+
+  .react-select__option--is-focused {
+    background-color: #1e3a8a !important;
+  }
+}

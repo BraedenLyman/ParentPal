@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import PageMiddleNav from "../../page-components/page-middle-nav/page-middle-nav";
 import Navbar from "../../nav-bar/navbar";
-import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, Tabs, Tab, RadioGroup, Radio, Select, SelectItem } from "@heroui/react";
+import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, Tabs, Tab, RadioGroup, Radio } from "@heroui/react";
 import { TimeInput, Modal } from "@heroui/react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -382,17 +382,19 @@ export default function HealthJournal() {
                                 onChange={(e) => setAllergy(e.target.value)}
                             />
 
-                            <Select
-                                variant="bordered"
-                                label="Severity"
-                                placeholder="Select severity"
-                                selectedKeys={severity ? [severity] : []}
-                                onSelectionChange={(keys) => setSeverity([...keys][0])}
-                            >
-                                <SelectItem key="low">Low</SelectItem>
-                                <SelectItem key="medium">Medium</SelectItem>
-                                <SelectItem key="high">High</SelectItem>
-                            </Select>
+                            <div className="custom-select-wrapper">
+                                <label className="custom-select-label">Severity</label>
+                                <select
+                                    className="custom-select"
+                                    value={severity}
+                                    onChange={(e) => setSeverity(e.target.value)}
+                                >
+                                    <option value="">Select severity</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
 
                             <RadioGroup
                                 label="EpiPen"
