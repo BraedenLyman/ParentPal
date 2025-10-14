@@ -1,10 +1,25 @@
 import { Navigate } from "react-router-dom";
-import { auth } from "../firebase/firebaseAuth";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function ProtectedRoute({ children }) {
-  const user = auth.currentUser;
+  const { currentUser, loading } = useAuth();
 
-  if (!user) {
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        fontSize: '18px',
+        color: '#666'
+      }}>
+        Loading...
+      </div>
+    );
+  }
+
+  if (!currentUser) {
     return <Navigate to="/sign-in" replace />;
   }
 

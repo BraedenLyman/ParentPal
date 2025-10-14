@@ -27,8 +27,29 @@ import Notifications from "./components/parent-pages/settings/notifications";
 import NotificationPreferences from "./components/parent-pages/settings/notification-preferences";
 import CustomNotifications from "./components/parent-pages/settings/custom-notifications";
 import DataExport from "./components/parent-pages/settings/data-export";
-
+import { useEffect } from 'react';
+import { useFCMToken } from './hooks/useFCMToken';
 function App() {
+  const { notification } = useFCMToken();
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/firebase-messaging-sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered:', registration);
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error);
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (notification) {
+      console.log('Received notification:', notification);
+    }
+  }, [notification]);
+
   return (
     <Routes>
       {/** Public Routes  */}
