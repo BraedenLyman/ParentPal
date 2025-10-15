@@ -1,15 +1,18 @@
 .navBarContainer {
-  position: fixed; 
-  bottom: 0;   
+  position: fixed;
+  bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1000; 
+  z-index: 1000;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  background-color: #BDE3C3; 
-  border-top: 1px solid #ccc;
-  height: 60px; 
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  height: 70px;
+  padding: 0 20px;
 }
 
 .navSection {
@@ -17,7 +20,113 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 33%;
-  height: 100%;
+  gap: 4px;
+  padding: 8px 20px;
   cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  min-width: 70px;
+}
+
+.navSection:hover {
+  background-color: rgba(189, 227, 195, 0.2);
+  transform: translateY(-2px);
+}
+
+.navSection:active {
+  transform: translateY(0);
+}
+
+.navSection.active {
+  background-color: rgba(189, 227, 195, 0.3);
+}
+
+.navSection.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #BDE3C3, #8AC98E);
+  border-radius: 0 0 3px 3px;
+}
+
+.nav-icon {
+  width: 24px;
+  height: 24px;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.navSection:hover .nav-icon {
+  color: #4CAF50;
+  transform: scale(1.1);
+}
+
+.navSection.active .nav-icon {
+  color: #4CAF50;
+}
+
+.nav-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.navSection:hover .nav-label {
+  color: #4CAF50;
+}
+
+.navSection.active .nav-label {
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .navBarContainer {
+    height: 65px;
+    padding: 0 10px;
+  }
+
+  .navSection {
+    padding: 8px 12px;
+    min-width: 60px;
+    gap: 2px;
+  }
+
+  .nav-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .nav-label {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 360px) {
+  .navBarContainer {
+    height: 60px;
+    padding: 0 5px;
+  }
+
+  .navSection {
+    padding: 6px 8px;
+    min-width: 50px;
+  }
+
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .nav-label {
+    font-size: 10px;
+  }
 }

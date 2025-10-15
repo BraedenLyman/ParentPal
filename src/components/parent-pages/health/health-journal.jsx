@@ -2,11 +2,12 @@ import React from "react";
 import axios from "axios";
 import PageMiddleNav from "../../page-components/page-middle-nav/page-middle-nav";
 import Navbar from "../../nav-bar/navbar";
-import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, Tabs, Tab, RadioGroup, Radio } from "@heroui/react";
+import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, Tabs, Tab, RadioGroup, Radio, Image } from "@heroui/react";
 import { TimeInput, Modal } from "@heroui/react";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import "../parent-pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useBabyData } from "../../../hooks/useBabyData";
@@ -14,6 +15,7 @@ import API_URL from "../../../config/api";
 
 export default function HealthJournal() {
     const location = useLocation();
+    const navigate = useNavigate();
     const { userData, babyData, selectedBaby, setSelectedBaby } = useBabyData(location.state);
 
     const [activeTab, setActiveTab] = useState("meds");
@@ -185,24 +187,33 @@ export default function HealthJournal() {
         }
     };
 
+    const isBabysitter = location.state?.isBabysitter;
+
     return (
         <div className="mainDiv">
             {/* Header */}
             <div className="header">
                 <div className="headerContainer">
-                    <Avatar
-                        className="avatar"
-                        name={userData?.first_name?.charAt(0)?.toUpperCase() || "P"}
-                    />
-                    <Avatar
-                        className="mainAvatar"
-                        name={selectedBaby?.first_name?.charAt(0)?.toUpperCase() || "B"}
+                    <Button
+                        isIconOnly
+                        variant="light"
+                        onPress={() => navigate(isBabysitter ? "/babysitter-dashboard" : "/parent-dashboard")}
+                        className="back-button-header"
+                    >
+                        <ArrowLeftIcon className="w-6 h-6" />
+                    </Button>
+                    <Image
+                        alt="Parent Pal Logo"
+                        src="/images/ParentPal.png"
+                        width={80}
+                        className="logo"
                     />
                     <FiBell className="notification" />
                 </div>
-
+                <div className="headerTitle">
+                    <h1>{selectedBaby?.first_name || "Baby"}'s Health</h1>
+                </div>
                 <div className="userInfo">
-                    <h1 className="babysName">{selectedBaby?.first_name || "Baby"}'s Health</h1>
                     <div className="cardContainer">
                         {babyData.length > 0 ? (
                             babyData.map((baby, index) => (

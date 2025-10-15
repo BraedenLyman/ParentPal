@@ -1,6 +1,9 @@
-import { HomeIcon } from "@heroicons/react/24/outline";
-import { ChartBarIcon } from "@heroicons/react/24/outline";
-import { Cog6ToothIcon } from "@heroicons/react/24/outline";
+import { HomeIcon as HomeIconOutline } from "@heroicons/react/24/outline";
+import { ChartBarIcon as ChartBarIconOutline } from "@heroicons/react/24/outline";
+import { Cog6ToothIcon as Cog6ToothIconOutline } from "@heroicons/react/24/outline";
+import { HomeIcon as HomeIconSolid } from "@heroicons/react/24/solid";
+import { ChartBarIcon as ChartBarIconSolid } from "@heroicons/react/24/solid";
+import { Cog6ToothIcon as Cog6ToothIconSolid } from "@heroicons/react/24/solid";
 import "./nav-bar.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -35,7 +38,6 @@ export default function Navbar() {
   }, []);
 
   const handleHomeClick = () => {
-    console.log('Home clicked, user type:', userType);
     if (userType === 'babysitter') {
       navigate("/babysitter-dashboard");
     } else {
@@ -43,30 +45,55 @@ export default function Navbar() {
     }
   };
 
+  const isHomeActive = () => {
+    const dashboardPaths = ["/parent-dashboard", "/babysitter-dashboard"];
+    return dashboardPaths.includes(location.pathname);
+  };
+
+  const isSettingsActive = () => {
+    return location.pathname.startsWith("/settings");
+  };
+
+  const isReportsActive = () => {
+    return location.pathname === "/reports";
+  };
+
   return (
    <div className="navBarContainer">
         <div
-          className="navSection"
+          className={`navSection ${isHomeActive() ? 'active' : ''}`}
           onClick={handleHomeClick}
         >
-          <HomeIcon width={20}/>
-          <h1>Home</h1>
+          {isHomeActive() ? (
+            <HomeIconSolid className="nav-icon" />
+          ) : (
+            <HomeIconOutline className="nav-icon" />
+          )}
+          <span className="nav-label">Home</span>
         </div>
 
         <div
-          className="navSection"
+          className={`navSection ${isReportsActive() ? 'active' : ''}`}
           onClick={() => navigate("/reports")}
         >
-          <ChartBarIcon width={20}/>
-          <h1>Reports</h1>
+          {isReportsActive() ? (
+            <ChartBarIconSolid className="nav-icon" />
+          ) : (
+            <ChartBarIconOutline className="nav-icon" />
+          )}
+          <span className="nav-label">Reports</span>
         </div>
 
         <div
-          className="navSection"
+          className={`navSection ${isSettingsActive() ? 'active' : ''}`}
           onClick={() => navigate("/settings")}
         >
-          <Cog6ToothIcon width={20}/>
-          <h1>Settings</h1>
+          {isSettingsActive() ? (
+            <Cog6ToothIconSolid className="nav-icon" />
+          ) : (
+            <Cog6ToothIconOutline className="nav-icon" />
+          )}
+          <span className="nav-label">Settings</span>
         </div>
     </div>
   );
