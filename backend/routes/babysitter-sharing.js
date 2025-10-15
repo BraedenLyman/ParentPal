@@ -196,6 +196,7 @@ router.get('/babysitters/:parent_id', async (req, res) => {
         const babysittersResult = await pool.query(`
             SELECT
                 bs.share_id,
+                bs.babysitter_id,
                 bs.babysitter_name,
                 bs.babysitter_email,
                 bs.is_verified,

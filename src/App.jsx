@@ -5,15 +5,11 @@ import SignIn from "./components/auth/sign-in/sign-in";
 import SignUp from "./components/auth/register/sign-up";
 import ForgotPassword from "./components/auth/sign-in/forgot-password/forgot-password";
 import CreateAccount from "./components/auth/register/create-account";
-import NewAccountOTP from "./components/auth/register/new-accountOTP";
-import AccountType from "./components/auth/register/account-creation-seq/account-type";
-import ParentInfo from "./components/auth/register/account-creation-seq/parent/parent-info";
-import AddBaby from "./components/auth/register/account-creation-seq/parent/add-baby";
-import BabyInfo from "./components/auth/register/account-creation-seq/parent/baby-info";
 import AccountComplete from "./components/auth/register/account-creation-seq/account-complete";
 import ParentDashboard from "./components/dashboard/parent-dashboard";
 import BabysitterDashboard from "./components/dashboard/babysitter-dashboard";
-import BabysitterInfo from "./components/auth/register/account-creation-seq/babystter/babysitter-info";
+import AssignedTasks from "./components/babysitter-pages/assigned-tasks";
+import ParentAssignedTasks from "./components/parent-pages/assigned-tasks/parent-assigned-tasks";
 import ResetPassword from "./components/auth/sign-in/forgot-password/reset-password";
 import GrowthTracker from "./components/parent-pages/growth/growth-tracker";
 import SleepAnalytics from "./components/parent-pages/sleep/sleep-analytics";
@@ -87,8 +83,24 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/assigned-tasks"
+        element={
+          <ProtectedRoute>
+            <AssignedTasks />
+          </ProtectedRoute>
+        }
+      />
 
       {/** Parent pages */}
+      <Route
+        path="/parent-assigned-tasks"
+        element={
+          <ProtectedRoute>
+            <ParentAssignedTasks />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/growth-tracker"
         element={

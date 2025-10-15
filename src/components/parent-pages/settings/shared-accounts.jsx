@@ -141,7 +141,7 @@ export default function SharedAccounts() {
                     <div className="babysitter-list">
                         {babysitters.length > 0 ? (
                             babysitters.map((babysitter) => (
-                                <Card key={babysitter.share_id} className="babysitter-card">
+                                <Card key={babysitter.share_id} className="babysitter-card-wrapper">
                                     <div className="card-content">
                                         <div className="babysitter-info">
                                             <Avatar
@@ -159,14 +159,16 @@ export default function SharedAccounts() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <Button
-                                            isIconOnly
-                                            color="danger"
-                                            variant="light"
-                                            onPress={() => handleRemoveBabysitter(babysitter.share_id)}
-                                        >
-                                            <TrashIcon className="w-4 h-4" />
-                                        </Button>
+                                        <div className="card-actions">
+                                            <Button
+                                                isIconOnly
+                                                color="danger"
+                                                variant="light"
+                                                onPress={() => handleRemoveBabysitter(babysitter.share_id)}
+                                            >
+                                                <TrashIcon className="w-4 h-4" />
+                                            </Button>
+                                        </div>
                                     </div>
                                 </Card>
                             ))

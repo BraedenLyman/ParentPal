@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(set PGPASSWORD=Password123!)",
+      "Bash(psql:*)",
+      "Bash(node:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

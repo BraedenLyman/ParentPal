@@ -188,7 +188,6 @@ export default function ParentDashboard() {
           </div>
         </Card>
 
-        {/* Assigned Tasks */}
         <Card className="reportSections">
           <h1 className="sectionTitle">Assigned Tasks</h1>
           <p className="sectionDescription">
@@ -199,7 +198,7 @@ export default function ParentDashboard() {
               isPressable
               shadow="sm"
               className="cardReports assignedCard"
-              onClick={() => navigate("/assigned-tasks", {state: {baby: selectedBaby, user: userData}})}
+              onClick={() => navigate("/parent-assigned-tasks", {state: {baby: selectedBaby, user: userData}})}
             >
               <div>
                 <h1>Assigned Tasks</h1>
@@ -208,7 +207,6 @@ export default function ParentDashboard() {
           </div>
         </Card>
 
-        {/* Photo Gallery */}
         <Card className="reportSections">
           <h1 className="sectionTitle">Photo Gallery</h1>
           <p className="sectionDescription">
