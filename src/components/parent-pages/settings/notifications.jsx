@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Image, Card } from "@heroui/react";
 import { ArrowLeftIcon, ChevronRightIcon, BellAlertIcon, CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
@@ -10,10 +9,8 @@ import { FiBell } from "react-icons/fi";
 export default function Notifications() {
     const navigate = useNavigate();
     const { permissionStatus, requestPermission } = useFCMToken();
-    const [isRequesting, setIsRequesting] = useState(false);
 
     const handleEnableNotifications = async () => {
-        setIsRequesting(true);
         try {
             const token = await requestPermission();
             if (token) {
@@ -24,8 +21,6 @@ export default function Notifications() {
         } catch (error) {
             console.error("Error requesting permission:", error);
             alert("An error occurred while enabling notifications.");
-        } finally {
-            setIsRequesting(false);
         }
     };
 
@@ -80,43 +75,31 @@ export default function Notifications() {
             </div>
 
             <div className="settings-cards-container">
-                <Card
-                    shadow="sm"
-                    className="settings-option-card"
-                    style={{
-                        marginBottom: '1rem',
-                        border: permissionStatus === 'granted' ? '2px solid #22c55e' :
-                                permissionStatus === 'denied' ? '2px solid #ef4444' :
-                                '2px solid #f97316'
-                    }}
-                >
-                    <div style={{ padding: '1rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                            {statusInfo.icon}
-                            <span style={{ fontWeight: '600', fontSize: '1rem' }}>
-                                Push Notifications
-                            </span>
+                {permissionStatus !== 'granted' && (
+                    <Card
+                        isPressable={permissionStatus === 'default'}
+                        shadow="sm"
+                        className="settings-option-card"
+                        onPress={permissionStatus === 'default' ? handleEnableNotifications : undefined}
+                        style={{
+                            border: permissionStatus === 'denied' ? '2px solid #ef4444' : '2px solid #f97316'
+                        }}
+                    >
+                        <div className="settings-card-content">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                {statusInfo.icon}
+                                <span className="settings-card-title">
+                                    {permissionStatus === 'denied' ? 'Push Notifications Blocked' : 'Enable Push Notifications'}
+                                </span>
+                            </div>
+                            {permissionStatus === 'default' ? (
+                                <ChevronRightIcon className="settings-arrow-icon" />
+                            ) : (
+                                <span style={{ fontSize: '0.75rem', color: '#999' }}>Check browser settings</span>
+                            )}
                         </div>
-                        <p style={{ fontSize: '0.875rem', color: '#666', marginBottom: '1rem' }}>
-                            {statusInfo.text}
-                        </p>
-                        {permissionStatus !== 'granted' && permissionStatus !== 'denied' && (
-                            <Button
-                                color="primary"
-                                onPress={handleEnableNotifications}
-                                isLoading={isRequesting}
-                                fullWidth
-                            >
-                                Enable Push Notifications
-                            </Button>
-                        )}
-                        {permissionStatus === 'denied' && (
-                            <p style={{ fontSize: '0.75rem', color: '#999', marginTop: '0.5rem' }}>
-                                To enable notifications, go to your browser settings and allow notifications for this site.
-                            </p>
-                        )}
-                    </div>
-                </Card>
+                    </Card>
+                )}
 
                 <Card
                     isPressable

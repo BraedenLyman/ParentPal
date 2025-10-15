@@ -90,7 +90,7 @@ router.post('/invite', async (req, res) => {
 
         res.status(201).json({
             message: 'Invitation sent successfully',
-            share_id: result.rows[0]
+            share_id: insertResult.rows[0].share_id
         });
 
     } catch (err) {

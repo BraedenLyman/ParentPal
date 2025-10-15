@@ -71,22 +71,34 @@ router.put('/:notificationId', async (req, res) => {
   const { notification_type, date, time, notes } = req.body;
 
   try {
+    const now = new Date();
+    const notificationDateTime = new Date(`${date}T${time}`);
+    const isFuture = notificationDateTime > now;
     const result = await pool.query(
       `UPDATE custom_notifications
        SET notification_type = $2,
            date = $3,
            time = $4,
-           notes = $5
+           notes = $5,
+           is_sent = $6
        WHERE custom_notification_id = $1
        RETURNING *`,
-      [notificationId, notification_type, date, time, notes || null]
+      [notificationId, notification_type, date, time, notes || null, !isFuture]
     );
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Notification not found' });
     }
 
-    res.json(result.rows[0]);
+    const message = isFuture
+      ? 'Notification updated and scheduled to be sent'
+      : 'Notification updated (past date/time - will not be sent)';
+
+    res.json({
+      ...result.rows[0],
+      message,
+      willBeSent: isFuture
+    });
   } catch (error) {
     console.error('Error updating custom notification:', error);
     res.status(500).json({ error: 'Failed to update custom notification' });

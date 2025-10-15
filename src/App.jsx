@@ -29,6 +29,7 @@ import CustomNotifications from "./components/parent-pages/settings/custom-notif
 import DataExport from "./components/parent-pages/settings/data-export";
 import { useEffect } from 'react';
 import { useFCMToken } from './hooks/useFCMToken';
+
 function App() {
   const { notification } = useFCMToken();
   useEffect(() => {

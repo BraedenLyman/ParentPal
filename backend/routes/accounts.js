@@ -13,11 +13,12 @@ router.post('/', async (req, res) => {
   try {
     const result = await pool.query(
       `INSERT INTO account (firebase_uid, first_name, last_name, email_address, account_type, birth_date, gender)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING account_id`,
       [firebaseUid, fName, lName, email, accountType, dob || null, gender || null]
     );
 
-    const parentId = accountResult.insertId;
+    const parentId = result.rows[0].account_id;
 
     if (baby) {
       const { bFName, bLName, bDob, bGender } = baby;

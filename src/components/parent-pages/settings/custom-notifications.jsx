@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Image, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Textarea } from "@heroui/react";
-import { ArrowLeftIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, PencilIcon, TrashIcon, CheckCircleIcon, ClockIcon } from "@heroicons/react/24/outline";
 import Navbar from "../../nav-bar/navbar";
 import { auth } from "../../../firebase/firebaseAuth";
 import axios from "axios";
@@ -119,17 +119,24 @@ export default function CustomNotifications() {
 
         try {
             if (editingNotification) {
-                await axios.put(
+                const updateResponse = await axios.put(
                     `${API_URL}/api/custom-notifications/${editingNotification.custom_notification_id}`,
                     formData,
                     { withCredentials: true }
                 );
+
+                if (updateResponse.data.willBeSent) {
+                    alert("Notification updated and scheduled to be sent at the new time!");
+                } else {
+                    alert("Notification updated. Note: Past date/time will not trigger notification.");
+                }
             } else {
                 await axios.post(
                     `${API_URL}/api/custom-notifications`,
                     { ...formData, parent_id: accountId },
                     { withCredentials: true }
                 );
+                alert("Notification created successfully!");
             }
 
             const response = await axios.get(
@@ -176,6 +183,32 @@ export default function CustomNotifications() {
         const ampm = hour >= 12 ? 'PM' : 'AM';
         const hour12 = hour % 12 || 12;
         return `${hour12}:${minutes} ${ampm}`;
+    };
+
+    const getNotificationTypeColor = (type) => {
+        const colors = {
+            sleep: {
+                background: '#ede9fe', 
+                text: '#7c3aed'       
+            },
+            feeding: {
+                background: '#dbeafe', 
+                text: '#2563eb'       
+            },
+            doctors: {
+                background: '#fee2e2',
+                text: '#dc2626'      
+            },
+            games: {
+                background: '#d1fae5',
+                text: '#059669'       
+            },
+            playdates: {
+                background: '#fef3c7',
+                text: '#d97706'      
+            }
+        };
+        return colors[type] || { background: '#f3f4f6', text: '#6b7280' };
     };
 
     return (
@@ -229,12 +262,55 @@ export default function CustomNotifications() {
                                 <div className="notification-card-layout">
                                     <div className="notification-details">
                                         <div className="notification-header">
-                                            <span className="notification-baby-name">
-                                                {notification.baby_first_name}
-                                            </span>
-                                            <span className="notification-type-badge">
-                                                {notification.notification_type}
-                                            </span>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                                <span className="notification-baby-name">
+                                                    {notification.baby_first_name}
+                                                </span>
+                                                <div style={{ display: 'flex', gap: '0.375rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                    <span
+                                                        style={{
+                                                            backgroundColor: getNotificationTypeColor(notification.notification_type).background,
+                                                            color: getNotificationTypeColor(notification.notification_type).text,
+                                                            padding: '0.125rem 0.5rem',
+                                                            borderRadius: '0.25rem',
+                                                            fontSize: '0.75rem',
+                                                            fontWeight: '600',
+                                                            textTransform: 'capitalize'
+                                                        }}
+                                                    >
+                                                        {notification.notification_type}
+                                                    </span>
+                                                    {notification.is_sent ? (
+                                                        <span style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '0.25rem',
+                                                            fontSize: '0.65rem',
+                                                            color: '#22c55e',
+                                                            padding: '0.125rem 0.375rem',
+                                                            background: '#f0fdf4',
+                                                            borderRadius: '0.25rem'
+                                                        }}>
+                                                            <CheckCircleIcon style={{ width: '0.75rem', height: '0.75rem' }} />
+                                                            Sent
+                                                        </span>
+                                                    ) : (
+                                                        <span style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '0.25rem',
+                                                            fontSize: '0.65rem',
+                                                            color: '#f59e0b',
+                                                            padding: '0.125rem 0.375rem',
+                                                            background: '#fffbeb',
+                                                            borderRadius: '0.25rem'
+                                                        }}>
+                                                            <ClockIcon style={{ width: '0.75rem', height: '0.75rem' }} />
+                                                            Pending
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
                                         <p className="notification-datetime">
                                             {formatDate(notification.date)} @ {formatTime(notification.time)}
