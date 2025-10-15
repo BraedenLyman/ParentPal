@@ -27,6 +27,7 @@ import Notifications from "./components/parent-pages/settings/notifications";
 import NotificationPreferences from "./components/parent-pages/settings/notification-preferences";
 import CustomNotifications from "./components/parent-pages/settings/custom-notifications";
 import DataExport from "./components/parent-pages/settings/data-export";
+import PhotoGallery from "./components/parent-pages/photo-gallery/photo-gallery";
 import { useEffect } from 'react';
 import { useFCMToken } from './hooks/useFCMToken';
 
@@ -125,6 +126,14 @@ function App() {
         element={
           <ProtectedRoute>
             <ObservationNotes />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/photo-gallery"
+        element={
+          <ProtectedRoute>
+            <PhotoGallery />
           </ProtectedRoute>
         }
       />

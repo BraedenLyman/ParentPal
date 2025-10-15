@@ -140,7 +140,6 @@ router.post('/verify', async (req, res) => {
             [babysitter_id, share.share_id]
         );
 
-        // Verify the update worked
         const verifyResult = await pool.query(
             'SELECT * FROM babysitter_shares WHERE share_id = $1',
             [share.share_id]

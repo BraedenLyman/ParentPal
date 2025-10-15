@@ -20,7 +20,9 @@ const notificationPreferencesRouter = require("./routes/notification-preferences
 const customNotificationsRouter = require("./routes/custom-notifications");
 const fcmTokensRouter = require("./routes/fcm-tokens");
 const sendNotificationRouter = require("./routes/send-notification");
+const photoGalleryRouter = require("./routes/photo-gallery");
 const notificationScheduler = require("./scheduler/notificationScheduler");
+const path = require('path');
 
 const app = express();
 
@@ -47,6 +49,9 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get("/", (req, res) => {
     res.json({
@@ -81,6 +86,7 @@ app.use("/api/notification-preferences", notificationPreferencesRouter);
 app.use("/api/custom-notifications", customNotificationsRouter);
 app.use("/api/fcm-token", fcmTokensRouter);
 app.use("/api/send-notification", sendNotificationRouter);
+app.use("/api/photo-gallery", photoGalleryRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
