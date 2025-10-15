@@ -31,6 +31,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://parent-pal-86b9a.web.app",
   "https://parent-pal-86b9a.firebaseapp.com",
+  "https://parentpals.ca",
   process.env.FRONTEND_URL
 ].filter(Boolean);
 

@@ -34,8 +34,6 @@ export default function ParentAssignedTasks() {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
-
-    // Form fields
     const [taskTitle, setTaskTitle] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
     const [dueDate, setDueDate] = useState("");
@@ -358,7 +356,6 @@ export default function ParentAssignedTasks() {
                 </div>
             </div>
 
-            {/* Add Task Modal */}
             <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} size="2xl">
                 <ModalContent>
                     <ModalHeader>Add New Task</ModalHeader>
