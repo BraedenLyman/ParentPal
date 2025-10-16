@@ -217,116 +217,118 @@ export default function PersonalInformation() {
                     </div>
                 </div>
              
-                <div className="personal-data-section">
-                    <h2>Personal Data</h2>
-                    <Input
-                        label="Email Address"
-                        disabled
-                        value={userData?.email_address || "Loading..."}
-                    />
-                </div>
+                <div className="settings-content">  
+                    <div className="personal-data-section">
+                        <h2>Personal Data</h2>
+                        <Input
+                            label="Email Address"
+                            disabled
+                            value={userData?.email_address || "Loading..."}
+                        />
+                    </div>
 
-                <div className="little-ones-section">
-                    <h2>Your Little Ones</h2>
-                    <div className="babies-grid">
-                        {babyData.map((baby, index) => (
-                            <Card key={baby.baby_id || index} className="baby-card">
-                                <Button
-                                    isIconOnly
-                                    variant="light"
-                                    size="sm"
-                                    className="delete-baby-button"
-                                    onPress={() => handleDeleteBaby(baby)}
-                                >
-                                    <TrashIcon className="w-4 h-4 text-red-500" />
-                                </Button>
-                                <div className="baby-card-content">
-                                    <Avatar
-                                        name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
-                                        size="md"
-                                        className="baby-avatar"
-                                    />
-                                    <div className="baby-info">
-                                        <h3 className="baby-name">{baby.first_name}</h3>
-                                        <p className="baby-dob">
-                                            {baby.birth_date
-                                                ? new Date(baby.birth_date).toLocaleDateString()
-                                                : "N/A"}
-                                        </p>
+                    <div className="little-ones-section">
+                        <h2>Your Little Ones</h2>
+                        <div className="babies-grid">
+                            {babyData.map((baby, index) => (
+                                <Card key={baby.baby_id || index} className="baby-card">
+                                    <Button
+                                        isIconOnly
+                                        variant="light"
+                                        size="sm"
+                                        className="delete-baby-button"
+                                        onPress={() => handleDeleteBaby(baby)}
+                                    >
+                                        <TrashIcon className="w-4 h-4 text-red-500" />
+                                    </Button>
+                                    <div className="baby-card-content">
+                                        <Avatar
+                                            name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
+                                            size="md"
+                                            className="baby-avatar"
+                                        />
+                                        <div className="baby-info">
+                                            <h3 className="baby-name">{baby.first_name}</h3>
+                                            <p className="baby-dob">
+                                                {baby.birth_date
+                                                    ? new Date(baby.birth_date).toLocaleDateString()
+                                                    : "N/A"}
+                                            </p>
+                                        </div>
                                     </div>
+                                </Card>
+                            ))}
+
+                            <Card
+                                isPressable
+                                className="baby-card add-baby-card"
+                                onPress={() => setIsAddBabyModalOpen(true)}
+                            >
+                                <div className="baby-card-content add-baby-content">
+                                    <PlusIcon className="add-baby-icon" />
+                                    <p className="add-baby-text">Add Baby</p>
                                 </div>
                             </Card>
-                        ))}
-
-                        <Card
-                            isPressable
-                            className="baby-card add-baby-card"
-                            onPress={() => setIsAddBabyModalOpen(true)}
-                        >
-                            <div className="baby-card-content add-baby-content">
-                                <PlusIcon className="add-baby-icon" />
-                                <p className="add-baby-text">Add Baby</p>
-                            </div>
-                        </Card>
+                        </div>
                     </div>
-                </div>
 
-                <div className="change-password-section">
-                    <h2>Change Password</h2>
-                    <div className="password-fields">
-                        <Input
-                            type={isNewPasswordVisible ? "text" : "password"}
-                            label="New Password"
-                            placeholder="Enter new password"
-                            value={passwordData.newPassword}
-                            onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
-                            onBlur={() => setPasswordTouched(prev => ({ ...prev, newPassword: true }))}
-                            isInvalid={passwordTouched.newPassword && passwordErrors.length > 0}
-                            errorMessage={passwordTouched.newPassword && passwordErrors.length > 0 ? passwordErrors[0] : ""}
-                            endContent={
-                                <button
-                                    type="button"
-                                    onClick={() => setIsNewPasswordVisible(!isNewPasswordVisible)}
-                                    className="focus:outline-none"
-                                >
-                                    {isNewPasswordVisible ?
-                                        <EyeSlashIcon className="w-5 h-5 text-gray-400" /> :
-                                        <EyeIcon className="w-5 h-5 text-gray-400" />
-                                    }
-                                </button>
-                            }
-                        />
+                    <div className="change-password-section">
+                        <h2>Change Password</h2>
+                        <div className="password-fields">
+                            <Input
+                                type={isNewPasswordVisible ? "text" : "password"}
+                                label="New Password"
+                                placeholder="Enter new password"
+                                value={passwordData.newPassword}
+                                onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
+                                onBlur={() => setPasswordTouched(prev => ({ ...prev, newPassword: true }))}
+                                isInvalid={passwordTouched.newPassword && passwordErrors.length > 0}
+                                errorMessage={passwordTouched.newPassword && passwordErrors.length > 0 ? passwordErrors[0] : ""}
+                                endContent={
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsNewPasswordVisible(!isNewPasswordVisible)}
+                                        className="focus:outline-none"
+                                    >
+                                        {isNewPasswordVisible ?
+                                            <EyeSlashIcon className="w-5 h-5 text-gray-400" /> :
+                                            <EyeIcon className="w-5 h-5 text-gray-400" />
+                                        }
+                                    </button>
+                                }
+                            />
 
-                        <Input
-                            type={isConfirmPasswordVisible ? "text" : "password"}
-                            label="Confirm Password"
-                            placeholder="Confirm new password"
-                            value={passwordData.confirmPassword}
-                            onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                            onBlur={() => setPasswordTouched(prev => ({ ...prev, confirmPassword: true }))}
-                            isInvalid={passwordTouched.confirmPassword && passwordData.confirmPassword && passwordData.newPassword !== passwordData.confirmPassword}
-                            errorMessage={passwordTouched.confirmPassword && passwordData.confirmPassword && passwordData.newPassword !== passwordData.confirmPassword ? "Passwords do not match." : ""}
-                            endContent={
-                                <button
-                                    type="button"
-                                    onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
-                                    className="focus:outline-none"
-                                >
-                                    {isConfirmPasswordVisible ?
-                                        <EyeSlashIcon className="w-5 h-5 text-gray-400" /> :
-                                        <EyeIcon className="w-5 h-5 text-gray-400" />
-                                    }
-                                </button>
-                            }
-                        />
+                            <Input
+                                type={isConfirmPasswordVisible ? "text" : "password"}
+                                label="Confirm Password"
+                                placeholder="Confirm new password"
+                                value={passwordData.confirmPassword}
+                                onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                                onBlur={() => setPasswordTouched(prev => ({ ...prev, confirmPassword: true }))}
+                                isInvalid={passwordTouched.confirmPassword && passwordData.confirmPassword && passwordData.newPassword !== passwordData.confirmPassword}
+                                errorMessage={passwordTouched.confirmPassword && passwordData.confirmPassword && passwordData.newPassword !== passwordData.confirmPassword ? "Passwords do not match." : ""}
+                                endContent={
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}
+                                        className="focus:outline-none"
+                                    >
+                                        {isConfirmPasswordVisible ?
+                                            <EyeSlashIcon className="w-5 h-5 text-gray-400" /> :
+                                            <EyeIcon className="w-5 h-5 text-gray-400" />
+                                        }
+                                    </button>
+                                }
+                            />
 
-                        <Button
-                            color="primary"
-                            onPress={handleChangePassword}
-                            className="change-password-button"
-                        >
-                            Accept Changes
-                        </Button>
+                            <Button
+                                color="primary"
+                                onPress={handleChangePassword}
+                                className="change-password-button"
+                            >
+                                Accept Changes
+                            </Button>
+                        </div>
                     </div>
                 </div>
 

@@ -128,7 +128,6 @@ export default function SharedAccounts() {
             <div className="settings-content">
                 <div className="babysitter-section">
                     <div className="section-header">
-                        <h2>Babysitters</h2>
                         <Button
                             color="primary"
                             onPress={onOpen}
@@ -138,9 +137,9 @@ export default function SharedAccounts() {
                         </Button>
                     </div>
 
-                    <div className="babysitter-list">
-                        {babysitters.length > 0 ? (
-                            babysitters.map((babysitter) => (
+                    {babysitters.length > 0 ? (
+                        <div className="babysitter-list">
+                            {babysitters.map((babysitter) => (
                                 <Card key={babysitter.share_id} className="babysitter-card-wrapper">
                                     <div className="card-content">
                                         <div className="babysitter-info">
@@ -171,11 +170,15 @@ export default function SharedAccounts() {
                                         </div>
                                     </div>
                                 </Card>
-                            ))
-                        ) : (
-                            <p className="no-babysitters">No babysitters added yet. Add a babysitter to share your child's information.</p>
-                        )}
-                    </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <Card className="empty-state-card">
+                            <div className="empty-state-content">
+                                <p className="no-babysitters">No babysitters added yet. Add a babysitter to share your child's information.</p>
+                            </div>
+                        </Card>
+                    )}
                 </div>
             </div>
 

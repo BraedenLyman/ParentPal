@@ -148,7 +148,7 @@ export default function AssignedTasks() {
     }
 
     return (
-        <div className="babysitter-tasks-container">
+        <div className="settings-container">
             <div className="header">
                 <div className="headerContainer">
                     <Button
@@ -175,10 +175,10 @@ export default function AssignedTasks() {
                 </div>
             </div>
 
-            <div className="babysitter-tasks-content">
-            
+            <div className="settings-content">
+
                 {pendingTasks.length > 0 && (
-                    <div className="tasks-section">
+                    <div className="babysitter-section">
                         <h2 className="section-title">
                             <ClockIcon className="section-icon" />
                             Pending Tasks
@@ -290,7 +290,7 @@ export default function AssignedTasks() {
                 )}
 
                 {completedTasks.length > 0 && (
-                    <div className="tasks-section">
+                    <div className="babysitter-section">
                         <h2 className="section-title">
                             <CheckCircleIcon className="section-icon completed-icon" />
                             Completed Tasks

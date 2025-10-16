@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Image, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Textarea } from "@heroui/react";
-import { ArrowLeftIcon, PencilIcon, TrashIcon, CheckCircleIcon, ClockIcon } from "@heroicons/react/24/outline";
+import { Button, Image, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Textarea, Avatar } from "@heroui/react";
+import { ArrowLeftIcon, PencilIcon, TrashIcon, CheckCircleIcon, ClockIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Navbar from "../../nav-bar/navbar";
 import { auth } from "../../../firebase/firebaseAuth";
 import axios from "axios";
@@ -236,115 +236,84 @@ export default function CustomNotifications() {
                 </div>
             </div>
 
-            <div className="settings-content custom-notifications-content">
-                <Button
-                    color="primary"
-                    onPress={() => handleOpenModal()}
-                    className="add-notification-button"
-                >
-                    Add Custom Notification
-                </Button>
+            <div className="settings-content">
+                <div className="babysitter-section">
+                    <div className="section-header">
+                        
+                        <Button
+                            color="primary"
+                            onPress={() => handleOpenModal()}
+                            startContent={<PlusIcon className="w-4 h-4" />}
+                        >
+                            Add Custom Notification
+                        </Button>
+                    </div>
 
-                {loading ? (
-                    <p>Loading notifications...</p>
-                ) : notifications.length === 0 ? (
-                    <p className="no-notifications-message">
-                        No custom notifications yet. Click "Add Custom Notification" to create one.
-                    </p>
-                ) : (
-                    <div className="notifications-list">
-                        {notifications.map((notification) => (
-                            <Card
-                                key={notification.custom_notification_id}
-                                shadow="sm"
-                                className="notification-card"
-                            >
-                                <div className="notification-card-layout">
-                                    <div className="notification-details">
-                                        <div className="notification-header">
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                                <span className="notification-baby-name">
-                                                    {notification.baby_first_name}
-                                                </span>
-                                                <div style={{ display: 'flex', gap: '0.375rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                    {loading ? (
+                        <p>Loading notifications...</p>
+                    ) : notifications.length > 0 ? (
+                        <div className="babysitter-list">
+                            {notifications.map((notification) => (
+                                <Card key={notification.custom_notification_id} className="babysitter-card-wrapper">
+                                    <div className="card-actions">
+                                        <Button
+                                            isIconOnly
+                                            variant="light"
+                                            onPress={() => handleOpenModal(notification)}
+                                        >
+                                            <PencilIcon className="w-4 h-4" />
+                                        </Button>
+                                        <Button
+                                            isIconOnly
+                                            color="danger"
+                                            variant="light"
+                                            onPress={() => handleDelete(notification.custom_notification_id)}
+                                        >
+                                            <TrashIcon className="w-4 h-4" />
+                                        </Button>
+                                    </div>
+                                    <div className="card-content">
+                                        <div className="babysitter-info">
+                                            <Avatar
+                                                name={notification.baby_first_name?.charAt(0) || "?"}
+                                                size="md"
+                                            />
+                                            <div className="info">
+                                                <h3>{notification.baby_first_name}</h3>
+                                                <p>{formatDate(notification.date)} @ {formatTime(notification.time)}</p>
+                                                <div className="notification-badges">
                                                     <span
+                                                        className="notification-type-badge"
                                                         style={{
                                                             backgroundColor: getNotificationTypeColor(notification.notification_type).background,
-                                                            color: getNotificationTypeColor(notification.notification_type).text,
-                                                            padding: '0.125rem 0.5rem',
-                                                            borderRadius: '0.25rem',
-                                                            fontSize: '0.75rem',
-                                                            fontWeight: '600',
-                                                            textTransform: 'capitalize'
+                                                            color: getNotificationTypeColor(notification.notification_type).text
                                                         }}
                                                     >
                                                         {notification.notification_type}
                                                     </span>
-                                                    {notification.is_sent ? (
-                                                        <span style={{
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            gap: '0.25rem',
-                                                            fontSize: '0.65rem',
-                                                            color: '#22c55e',
-                                                            padding: '0.125rem 0.375rem',
-                                                            background: '#f0fdf4',
-                                                            borderRadius: '0.25rem'
-                                                        }}>
-                                                            <CheckCircleIcon style={{ width: '0.75rem', height: '0.75rem' }} />
-                                                            Sent
-                                                        </span>
-                                                    ) : (
-                                                        <span style={{
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            gap: '0.25rem',
-                                                            fontSize: '0.65rem',
-                                                            color: '#f59e0b',
-                                                            padding: '0.125rem 0.375rem',
-                                                            background: '#fffbeb',
-                                                            borderRadius: '0.25rem'
-                                                        }}>
-                                                            <ClockIcon style={{ width: '0.75rem', height: '0.75rem' }} />
-                                                            Pending
-                                                        </span>
-                                                    )}
+                                                    <span className={`status ${notification.is_sent ? 'verified' : 'pending'}`}>
+                                                        {notification.is_sent ? '✓ Sent' : '⏱ Pending'}
+                                                    </span>
                                                 </div>
+                                                {notification.notes && (
+                                                    <p className="notification-notes-text">{notification.notes}</p>
+                                                )}
                                             </div>
                                         </div>
-                                        <p className="notification-datetime">
-                                            {formatDate(notification.date)} @ {formatTime(notification.time)}
-                                        </p>
-                                        {notification.notes && (
-                                            <p className="notification-notes">
-                                                {notification.notes}
-                                            </p>
-                                        )}
                                     </div>
-                                    <div className="notification-actions">
-                                        <Button
-                                            isIconOnly
-                                            variant="light"
-                                            size="sm"
-                                            onPress={() => handleOpenModal(notification)}
-                                        >
-                                            <PencilIcon className="w-5 h-5" />
-                                        </Button>
-                                        <Button
-                                            isIconOnly
-                                            variant="light"
-                                            size="sm"
-                                            color="danger"
-                                            onPress={() => handleDelete(notification.custom_notification_id)}
-                                        >
-                                            <TrashIcon className="w-5 h-5" />
-                                        </Button>
-                                    </div>
-                                </div>
-                            </Card>
-                        ))}
-                    </div>
-                )}
+                                </Card>
+                            ))}
+                        </div>
+                    ) : (
+                        <Card className="empty-state-card">
+                            <div className="empty-state-content">
+                                <p className="no-babysitters">
+                                    No custom notifications yet. Click "Add Custom Notification" to create one.
+                                </p>
+                            </div>
+                        </Card>
+                    )}
+                </div>
             </div>
 
             <Modal isOpen={isModalOpen} onOpenChange={handleCloseModal} className="settings-modal">

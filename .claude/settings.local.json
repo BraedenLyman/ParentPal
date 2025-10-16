@@ -3,7 +3,8 @@
     "allow": [
       "Bash(set PGPASSWORD=Password123!)",
       "Bash(psql:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []
