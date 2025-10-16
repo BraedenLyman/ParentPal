@@ -1,5 +1,4 @@
 import axios from "axios";
-import PageMiddleNav from "../../page-components/page-middle-nav/page-middle-nav";
 import Navbar from "../../nav-bar/navbar";
 import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, Image } from "@heroui/react";
 import { Modal } from "@heroui/react";
@@ -11,6 +10,7 @@ import "../parent-pages.css";
 import { auth } from "../../../firebase/firebaseAuth";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import API_URL from "../../../config/api";
+import Select from "../../custom-select/CustomSelect";
 
 
 export default function GrowthTracker() {
@@ -106,6 +106,16 @@ export default function GrowthTracker() {
 
     const isBabysitter = location.state?.isBabysitter;
 
+    const logCategories = [
+        { value: "/growth-tracker", label: "Growth Tracker" },
+        { value: "/sleep-analytics", label: "Sleep Analytics" },
+        { value: "/health-journal", label: "Health Journal" },
+        { value: "/feeding-notes", label: "Feeding Notes" },
+        { value: "/observation-notes", label: "Observation Notes" }
+    ];
+
+    const currentCategory = logCategories.find(cat => cat.value === "/growth-tracker");
+
     return (
         <div className="mainDiv">
             <div className="header">
@@ -130,42 +140,53 @@ export default function GrowthTracker() {
                     <h1>{selectedBaby?.first_name || "Baby"}'s Growth</h1>
                 </div>
                 <div className="userInfo">
-                    <div className="cardContainer">
-                        {babyData.length > 0 ? (
-                            babyData.map((baby, index) => (
-                                <Card
-                                    key={baby.baby_id || index}
-                                    isPressable
-                                    shadow="sm"
-                                    className={`cardInfo ${selectedBaby?.baby_id === baby.baby_id ? 'selectedCard' : ''}`}
-                                    onClick={() => setSelectedBaby(baby)}
-                                >
-                                    <div className="cardContent">
-                                        <Avatar
-                                            name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
-                                            size="lg"
-                                            className="avatar"
-                                        />
-                                        <div className="babyInfo">
-                                            <h3 className="baby">{baby.first_name}</h3>
-                                            <p className="babyDate">
-                                                {baby.birth_date
-                                                    ? new Date(baby.birth_date).toLocaleDateString()
-                                                    : "N/A"}
-                                            </p>
+                    <div className="logCategorySelect">
+                        <Select
+                            options={logCategories}
+                            value={currentCategory}
+                            onChange={(option) => {
+                                if (option) {
+                                    navigate(option.value, { state: { baby: selectedBaby, user: userData, isBabysitter } });
+                                }
+                            }}
+                            placeholder="Select Log"
+                            isSearchable={false}
+                        />
+                    </div>
+                    <div className="headerBabyCardsWrapper">
+                        <div className="cardContainer">
+                            {babyData.length > 0 ? (
+                                babyData.map((baby, index) => (
+                                    <Card
+                                        key={baby.baby_id || index}
+                                        isPressable
+                                        shadow="sm"
+                                        className={`cardInfo ${selectedBaby?.baby_id === baby.baby_id ? 'selectedCard' : ''}`}
+                                        onClick={() => setSelectedBaby(baby)}
+                                    >
+                                        <div className="cardContent">
+                                            <Avatar
+                                                name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
+                                                size="lg"
+                                                className="avatar"
+                                            />
+                                            <div className="babyInfo">
+                                                <h3 className="baby">{baby.first_name}</h3>
+                                                <p className="babyDate">
+                                                    {baby.birth_date
+                                                        ? new Date(baby.birth_date).toLocaleDateString()
+                                                        : "N/A"}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Card>
-                            ))
-                        ) : (
-                            <p>No baby information found.</p>
-                        )}
+                                    </Card>
+                                ))
+                            ) : (
+                                <p>No baby information found.</p>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="pageMiddleNav">
-                <PageMiddleNav />
             </div>
 
             
@@ -175,11 +196,22 @@ export default function GrowthTracker() {
                         <h1>No growth records yet</h1>
                     ) : (
                         growthRecords.map((record) => (
-                            <Card className="cardEntry" key={record.growth_id}>
+                            <Card className="cardEntry" key={record.growth_id} shadow="sm">
                                 <div className="cardEntryContent">
-                                    <h2>Height: {record.height}</h2>
-                                    <h2>Weight: {record.weight}</h2>
-                                    <h2>Date: {record.date.slice(0, 10)}</h2>
+                                    <div className="cardEntryHeader">
+                                        <h3 className="cardEntryTitle">Growth Record</h3>
+                                        <span className="cardEntryDate">{new Date(record.date).toLocaleDateString()}</span>
+                                    </div>
+                                    <div className="cardEntryDetails">
+                                        <div className="cardEntryDetail">
+                                            <span className="cardEntryDetailLabel">Height</span>
+                                            <span className="cardEntryDetailValue">{record.height}</span>
+                                        </div>
+                                        <div className="cardEntryDetail">
+                                            <span className="cardEntryDetailLabel">Weight</span>
+                                            <span className="cardEntryDetailValue">{record.weight}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </Card>
                         ))

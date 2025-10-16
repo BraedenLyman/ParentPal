@@ -1,5 +1,4 @@
 import axios from "axios";
-import PageMiddleNav from "../../../page-components/page-middle-nav/page-middle-nav";
 import Navbar from "../../../nav-bar/navbar";
 import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, TimeInput, Image } from "@heroui/react";
 import { Modal } from "@heroui/react";
@@ -71,6 +70,16 @@ export default function ObservationNotes() {
 
     const isBabysitter = location.state?.isBabysitter;
 
+    const logCategories = [
+        { value: "/growth-tracker", label: "Growth Tracker" },
+        { value: "/sleep-analytics", label: "Sleep Analytics" },
+        { value: "/health-journal", label: "Health Journal" },
+        { value: "/feeding-notes", label: "Feeding Notes" },
+        { value: "/observation-notes", label: "Observation Notes" }
+    ];
+
+    const currentCategory = logCategories.find(cat => cat.value === "/observation-notes");
+
     return (
         <div className="mainDiv">
             <div className="header">
@@ -95,42 +104,53 @@ export default function ObservationNotes() {
                     <h1>{selectedBaby?.first_name || "Baby"}'s Observation</h1>
                 </div>
                 <div className="userInfo">
-                    <div className="cardContainer">
-                        {babyData.length > 0 ? (
-                            babyData.map((baby, index) => (
-                                <Card
-                                    key={baby.baby_id || index}
-                                    isPressable
-                                    shadow="sm"
-                                    className={`cardInfo ${selectedBaby?.baby_id === baby.baby_id ? 'selectedCard' : ''}`}
-                                    onClick={() => setSelectedBaby(baby)}
-                                >
-                                    <div className="cardContent">
-                                        <Avatar
-                                            name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
-                                            size="lg"
-                                            className="avatar"
-                                        />
-                                        <div className="babyInfo">
-                                            <h3 className="baby">{baby.first_name}</h3>
-                                            <p className="babyDate">
-                                                {baby.birth_date
-                                                    ? new Date(baby.birth_date).toLocaleDateString()
-                                                    : "N/A"}
-                                            </p>
+                    <div className="logCategorySelect">
+                        <Select
+                            options={logCategories}
+                            value={currentCategory}
+                            onChange={(option) => {
+                                if (option) {
+                                    navigate(option.value, { state: { baby: selectedBaby, user: userData, isBabysitter } });
+                                }
+                            }}
+                            placeholder="Select Log"
+                            isSearchable={false}
+                        />
+                    </div>
+                    <div className="headerBabyCardsWrapper">
+                        <div className="cardContainer">
+                            {babyData.length > 0 ? (
+                                babyData.map((baby, index) => (
+                                    <Card
+                                        key={baby.baby_id || index}
+                                        isPressable
+                                        shadow="sm"
+                                        className={`cardInfo ${selectedBaby?.baby_id === baby.baby_id ? 'selectedCard' : ''}`}
+                                        onClick={() => setSelectedBaby(baby)}
+                                    >
+                                        <div className="cardContent">
+                                            <Avatar
+                                                name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
+                                                size="lg"
+                                                className="avatar"
+                                            />
+                                            <div className="babyInfo">
+                                                <h3 className="baby">{baby.first_name}</h3>
+                                                <p className="babyDate">
+                                                    {baby.birth_date
+                                                        ? new Date(baby.birth_date).toLocaleDateString()
+                                                        : "N/A"}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Card>
-                            ))
-                        ) : (
-                            <p>No baby information found.</p>
-                        )}
+                                    </Card>
+                                ))
+                            ) : (
+                                <p>No baby information found.</p>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="pageMiddleNav">
-                <PageMiddleNav />
             </div>
 
             
@@ -140,10 +160,21 @@ export default function ObservationNotes() {
                         <h1>No observation records yet</h1>
                     ) : (
                         observationRecords.map((record) => (
-                            <Card className="cardEntry" key={record.observation_id}>
+                            <Card className="cardEntry" key={record.observation_id} shadow="sm">
                                 <div className="cardEntryContent">
-                                    <h2>Priority Level: {record.priority_level}</h2>
-                                    <h2>Notes: {record.notes}</h2>
+                                    <div className="cardEntryHeader">
+                                        <h3 className="cardEntryTitle">Observation</h3>
+                                        <span className="cardEntryDate" style={{
+                                            backgroundColor: record.priority_level === 'high' ? '#fee' : record.priority_level === 'medium' ? '#ffeaa7' : '#d1f2eb',
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            textTransform: 'capitalize',
+                                            fontWeight: '600'
+                                        }}>{record.priority_level}</span>
+                                    </div>
+                                    <div style={{ marginTop: '8px' }}>
+                                        <p style={{ fontSize: '14px', margin: '0', color: '#333', lineHeight: '1.5' }}>{record.notes}</p>
+                                    </div>
                                 </div>
                             </Card>
                         ))

@@ -1,5 +1,4 @@
 import axios from "axios";
-import PageMiddleNav from "../../page-components/page-middle-nav/page-middle-nav";
 import Navbar from "../../nav-bar/navbar";
 import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, Image } from "@heroui/react";
 import {TimeInput} from "@heroui/react";
@@ -12,6 +11,7 @@ import "../parent-pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useBabyData } from "../../../hooks/useBabyData";
 import API_URL from "../../../config/api";
+import Select from "../../custom-select/CustomSelect";
 
 
 export default function SleepAnalytics() {
@@ -75,6 +75,16 @@ export default function SleepAnalytics() {
 
     const isBabysitter = location.state?.isBabysitter;
 
+    const logCategories = [
+        { value: "/growth-tracker", label: "Growth Tracker" },
+        { value: "/sleep-analytics", label: "Sleep Analytics" },
+        { value: "/health-journal", label: "Health Journal" },
+        { value: "/feeding-notes", label: "Feeding Notes" },
+        { value: "/observation-notes", label: "Observation Notes" }
+    ];
+
+    const currentCategory = logCategories.find(cat => cat.value === "/sleep-analytics");
+
     return (
         <div className="mainDiv">
            <div className="header">
@@ -99,42 +109,53 @@ export default function SleepAnalytics() {
                 <h1>{selectedBaby?.first_name || "Baby"}'s Sleep</h1>
             </div>
             <div className="userInfo">
-                <div className="cardContainer">
-                    {babyData.length > 0 ? (
-                        babyData.map((baby, index) => (
-                            <Card
-                                key={baby.baby_id || index}
-                                isPressable
-                                shadow="sm"
-                                className={`cardInfo ${selectedBaby?.baby_id === baby.baby_id ? 'selectedCard' : ''}`}
-                                onClick={() => setSelectedBaby(baby)}
-                            >
-                                <div className="cardContent">
-                                    <Avatar
-                                        name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
-                                        size="lg"
-                                        className="avatar"
-                                    />
-                                    <div className="babyInfo">
-                                        <h3 className="baby">{baby.first_name}</h3>
-                                        <p className="babyDate">
-                                            {baby.birth_date
-                                                ? new Date(baby.birth_date).toLocaleDateString()
-                                                : "N/A"}
-                                        </p>
+                <div className="logCategorySelect">
+                    <Select
+                        options={logCategories}
+                        value={currentCategory}
+                        onChange={(option) => {
+                            if (option) {
+                                navigate(option.value, { state: { baby: selectedBaby, user: userData, isBabysitter } });
+                            }
+                        }}
+                        placeholder="Select Log"
+                        isSearchable={false}
+                    />
+                </div>
+                <div className="headerBabyCardsWrapper">
+                    <div className="cardContainer">
+                        {babyData.length > 0 ? (
+                            babyData.map((baby, index) => (
+                                <Card
+                                    key={baby.baby_id || index}
+                                    isPressable
+                                    shadow="sm"
+                                    className={`cardInfo ${selectedBaby?.baby_id === baby.baby_id ? 'selectedCard' : ''}`}
+                                    onClick={() => setSelectedBaby(baby)}
+                                >
+                                    <div className="cardContent">
+                                        <Avatar
+                                            name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
+                                            size="lg"
+                                            className="avatar"
+                                        />
+                                        <div className="babyInfo">
+                                            <h3 className="baby">{baby.first_name}</h3>
+                                            <p className="babyDate">
+                                                {baby.birth_date
+                                                    ? new Date(baby.birth_date).toLocaleDateString()
+                                                    : "N/A"}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            </Card>
-                        ))
-                    ) : (
-                        <p>No baby information found.</p>
-                    )}
+                                </Card>
+                            ))
+                        ) : (
+                            <p>No baby information found.</p>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div className="pageMiddleNav">
-            <PageMiddleNav />
         </div>
 
         <Scrollbars className="scrollContainer" >
@@ -143,11 +164,22 @@ export default function SleepAnalytics() {
                     <h1>No sleep records yet</h1>
                 ) : (
                     sleepRecords.map((record) => (
-                        <Card className="cardEntry" key={record.sleep_id}>
+                        <Card className="cardEntry" key={record.sleep_id} shadow="sm">
                             <div className="cardEntryContent">
-                                <h2>Duration: {record.sleep_duration}</h2>
-                                <h2>Time fell asleep at: {record.time_fell_asleep}</h2>
-                                <h2>Date: {record.date.slice(0, 10)}</h2>
+                                <div className="cardEntryHeader">
+                                    <h3 className="cardEntryTitle">Sleep Record</h3>
+                                    <span className="cardEntryDate">{new Date(record.date).toLocaleDateString()}</span>
+                                </div>
+                                <div className="cardEntryDetails">
+                                    <div className="cardEntryDetail">
+                                        <span className="cardEntryDetailLabel">Duration</span>
+                                        <span className="cardEntryDetailValue">{record.sleep_duration} hrs</span>
+                                    </div>
+                                    <div className="cardEntryDetail">
+                                        <span className="cardEntryDetailLabel">Fell Asleep</span>
+                                        <span className="cardEntryDetailValue">{record.time_fell_asleep}</span>
+                                    </div>
+                                </div>
                             </div>
                         </Card>
                     ))
