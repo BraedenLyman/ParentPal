@@ -24,7 +24,6 @@ export default function Notifications() {
 
             const token = await requestPermission();
 
-            // Restore header styles
             if (header) {
                 header.style.position = originalPosition;
                 header.style.zIndex = originalZIndex;
@@ -37,13 +36,32 @@ export default function Notifications() {
             }
         } catch (error) {
             console.error("Error requesting permission:", error);
-            // Restore header styles on error
+
             const header = document.querySelector('.header');
             if (header) {
                 header.style.position = '';
                 header.style.zIndex = '';
             }
-            alert("An error occurred while enabling notifications.");
+
+            let errorMessage = "An error occurred while enabling notifications.";
+
+            if (error.message) {
+                if (error.message.includes("IOS_VERSION_NOT_SUPPORTED")) {
+                    errorMessage = "Push notifications require iOS 16.4 or later. Please update your iOS version to use this feature.";
+                } else if (error.message.includes("IOS_STANDALONE_NOT_SUPPORTED")) {
+                    errorMessage = "Push notifications are not supported when this app is added to your home screen. Please use Safari browser instead.";
+                } else if (error.message.includes("NOTIFICATIONS_NOT_SUPPORTED")) {
+                    errorMessage = "Your browser doesn't support push notifications. Please try using Safari on iOS or Chrome on Android.";
+                } else if (error.message.includes("MESSAGING_NOT_INITIALIZED")) {
+                    errorMessage = "Push notifications are not available on your device. This feature requires a compatible browser.";
+                } else if (error.message.includes("PERMISSION_DENIED")) {
+                    errorMessage = "You denied notification permission. Please enable notifications in your browser settings.";
+                } else if (error.message.includes("TOKEN_GENERATION_FAILED")) {
+                    errorMessage = "Failed to register for notifications. Please check your internet connection and try again.";
+                }
+            }
+
+            alert(errorMessage);
         }
     };
 
