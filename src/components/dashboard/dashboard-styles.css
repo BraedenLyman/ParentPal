@@ -45,9 +45,9 @@ html, body {
 }
 
 .avatar {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
     background: var(--gradient-ocean);
     color: white;
     display: flex;
@@ -62,8 +62,8 @@ html, body {
 }
 
 .notification {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     color: var(--text-secondary);
     cursor: pointer;
     transition: all var(--transition-base);
@@ -79,23 +79,23 @@ html, body {
    ======================================== */
 
 .userInfo {
-    padding: var(--spacing-lg) var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm) var(--spacing-md);
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
 }
 
 .username {
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
     font-weight: var(--weight-medium);
     color: var(--text-secondary);
-    margin: 0 0 var(--spacing-xs) 0;
+    margin: 0 0 var(--spacing-2xs) 0;
 }
 
 .welcomeMessage {
-    font-size: var(--text-3xl);
+    font-size: var(--text-2xl);
     font-weight: var(--weight-bold);
-    margin: 0 0 var(--spacing-xl) 0;
+    margin: 0 0 var(--spacing-md) 0;
     background: var(--gradient-ocean);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -109,10 +109,10 @@ html, body {
 .cardContainer {
     display: flex;
     flex-direction: row;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
     overflow-x: auto;
     overflow-y: hidden;
-    padding-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
     scrollbar-width: thin;
     scrollbar-color: var(--primary-200) transparent;
 }
@@ -136,16 +136,15 @@ html, body {
 
 .cardInfo {
     display: flex;
-    min-width: 280px;
+    min-width: 240px;
     height: auto;
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
     justify-content: flex-start;
     align-items: center;
     flex-shrink: 0;
     background: white;
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
-    border: 2px solid transparent;
     transition: all var(--transition-base);
     cursor: pointer;
 }
@@ -156,23 +155,22 @@ html, body {
 }
 
 .selectedCard {
-    border: 2px solid var(--primary-500);
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 197, 253, 0.05) 100%);
-    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+    border: 2px solid var(--primary-500) !important;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 197, 253, 0.05) 100%) !important;
 }
 
 .cardContent {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
     width: 100%;
 }
 
 .cardContent .avatar {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
     flex-shrink: 0;
 }
 
@@ -182,14 +180,14 @@ html, body {
 }
 
 .baby {
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
     font-weight: var(--weight-semibold);
     color: var(--text-primary);
-    margin: 0 0 var(--spacing-xs) 0;
+    margin: 0 0 var(--spacing-2xs) 0;
 }
 
 .babyDate {
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     color: var(--text-secondary);
     margin: 0;
 }
@@ -391,7 +389,11 @@ html, body {
 
 @media (max-width: 768px) {
     .welcomeMessage {
-        font-size: var(--text-2xl);
+        font-size: var(--text-xl);
+    }
+
+    .username {
+        font-size: var(--text-sm);
     }
 
     .userTitleName {

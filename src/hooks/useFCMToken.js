@@ -15,7 +15,7 @@ export const useFCMToken = () => {
     const currentUser = auth.currentUser;
     if (!currentUser) {
       console.error('User not authenticated');
-      throw new Error('USER_NOT_AUTHENTICATED');
+      return null;
     }
 
     try {
@@ -53,7 +53,7 @@ export const useFCMToken = () => {
     } catch (error) {
       console.error('Error setting up FCM:', error);
       setPermissionStatus(Notification.permission);
-      throw error;
+      return null;
     }
   }, []);
 

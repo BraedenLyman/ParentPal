@@ -12,22 +12,7 @@ export default function Notifications() {
 
     const handleEnableNotifications = async () => {
         try {
-            // Temporarily hide sticky header to prevent z-index conflicts on mobile
-            const header = document.querySelector('.header');
-            const originalPosition = header?.style.position;
-            const originalZIndex = header?.style.zIndex;
-
-            if (header) {
-                header.style.position = 'relative';
-                header.style.zIndex = '1';
-            }
-
             const token = await requestPermission();
-
-            if (header) {
-                header.style.position = originalPosition;
-                header.style.zIndex = originalZIndex;
-            }
 
             if (token) {
                 alert("Push notifications enabled successfully!");
@@ -36,32 +21,7 @@ export default function Notifications() {
             }
         } catch (error) {
             console.error("Error requesting permission:", error);
-
-            const header = document.querySelector('.header');
-            if (header) {
-                header.style.position = '';
-                header.style.zIndex = '';
-            }
-
-            let errorMessage = "An error occurred while enabling notifications.";
-
-            if (error.message) {
-                if (error.message.includes("IOS_VERSION_NOT_SUPPORTED")) {
-                    errorMessage = "Push notifications require iOS 16.4 or later. Please update your iOS version to use this feature.";
-                } else if (error.message.includes("IOS_STANDALONE_NOT_SUPPORTED")) {
-                    errorMessage = "Push notifications are not supported when this app is added to your home screen. Please use Safari browser instead.";
-                } else if (error.message.includes("NOTIFICATIONS_NOT_SUPPORTED")) {
-                    errorMessage = "Your browser doesn't support push notifications. Please try using Safari on iOS or Chrome on Android.";
-                } else if (error.message.includes("MESSAGING_NOT_INITIALIZED")) {
-                    errorMessage = "Push notifications are not available on your device. This feature requires a compatible browser.";
-                } else if (error.message.includes("PERMISSION_DENIED")) {
-                    errorMessage = "You denied notification permission. Please enable notifications in your browser settings.";
-                } else if (error.message.includes("TOKEN_GENERATION_FAILED")) {
-                    errorMessage = "Failed to register for notifications. Please check your internet connection and try again.";
-                }
-            }
-
-            alert(errorMessage);
+            alert("An error occurred while enabling notifications.");
         }
     };
 
@@ -118,32 +78,25 @@ export default function Notifications() {
             <div className="settings-cards-container">
                 {permissionStatus !== 'granted' && (
                     <Card
+                        isPressable={permissionStatus === 'default'}
                         shadow="sm"
                         className="settings-option-card"
+                        onPress={permissionStatus === 'default' ? handleEnableNotifications : undefined}
                         style={{
                             border: permissionStatus === 'denied' ? '2px solid #ef4444' : '2px solid #f97316'
                         }}
                     >
-                        <div className="settings-card-content" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '1rem' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    {statusInfo.icon}
-                                    <span className="settings-card-title">
-                                        {permissionStatus === 'denied' ? 'Push Notifications Blocked' : 'Enable Push Notifications'}
-                                    </span>
-                                </div>
-                                {permissionStatus === 'denied' && (
-                                    <span style={{ fontSize: '0.75rem', color: '#999' }}>Check browser settings</span>
-                                )}
+                        <div className="settings-card-content">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                {statusInfo.icon}
+                                <span className="settings-card-title">
+                                    {permissionStatus === 'denied' ? 'Push Notifications Blocked' : 'Enable Push Notifications'}
+                                </span>
                             </div>
-                            {permissionStatus === 'default' && (
-                                <Button
-                                    color="warning"
-                                    onPress={handleEnableNotifications}
-                                    style={{ width: '100%', marginTop: '0.5rem' }}
-                                >
-                                    Allow Notifications
-                                </Button>
+                            {permissionStatus === 'default' ? (
+                                <ChevronRightIcon className="settings-arrow-icon" />
+                            ) : (
+                                <span style={{ fontSize: '0.75rem', color: '#999' }}>Check browser settings</span>
                             )}
                         </div>
                     </Card>
