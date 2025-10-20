@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
             [baby_id, vaccination_name, date_of_vaccine]
         );
 
-        res.status(201).json({ vaccine_id: result.rows[0], baby_id, vaccination_name, date_of_vaccine });
+        res.status(201).json({ vaccine_id: result.rows[0].vaccine_id, baby_id, vaccination_name, date_of_vaccine });
     } catch (err) {
         console.error('Error adding vaccination record:', err);
         res.status(500).json({ error: 'Failed to add vaccination record' });

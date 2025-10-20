@@ -48,7 +48,16 @@ export default function HealthJournal() {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
-                setMedsRecords(data);
+
+                // Normalize meds_id in fetched records
+                const normalizedData = data.map(record => ({
+                    ...record,
+                    meds_id: typeof record.meds_id === 'object'
+                        ? record.meds_id.meds_id
+                        : record.meds_id
+                }));
+
+                setMedsRecords(normalizedData);
             } catch (err) {
                 console.error("Failed to fetch meds records: ", err)
             }
@@ -89,6 +98,7 @@ export default function HealthJournal() {
             setIsMedsOpen(false);
         } catch (err) {
             console.error("Failed to add meds record: ", err);
+            alert(`Failed to add medication: ${err.response?.data?.error || err.message}`);
         }
     };
 
@@ -101,7 +111,16 @@ export default function HealthJournal() {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
-                setAllergiesRecords(data);
+
+                // Normalize allergy_id in fetched records
+                const normalizedData = data.map(record => ({
+                    ...record,
+                    allergy_id: typeof record.allergy_id === 'object'
+                        ? record.allergy_id.allergy_id
+                        : record.allergy_id
+                }));
+
+                setAllergiesRecords(normalizedData);
             } catch (err) {
                 console.error("Failed to fetch allergies records: ", err)
             }
@@ -138,6 +157,7 @@ export default function HealthJournal() {
             setIsAllergiesOpen(false);
         } catch (err) {
             console.error("Failed to add allergy record: ", err);
+            alert(`Failed to add allergy: ${err.response?.data?.error || err.message}`);
         }
     };
 
@@ -150,7 +170,16 @@ export default function HealthJournal() {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
-                setVaccinationsRecords(data);
+
+                // Normalize vaccine_id in fetched records
+                const normalizedData = data.map(record => ({
+                    ...record,
+                    vaccine_id: typeof record.vaccine_id === 'object'
+                        ? record.vaccine_id.vaccine_id
+                        : record.vaccine_id
+                }));
+
+                setVaccinationsRecords(normalizedData);
             } catch (err) {
                 console.error("Failed to fetch vaccinations records: ", err)
             }
@@ -183,6 +212,7 @@ export default function HealthJournal() {
             setIsVaccinationsOpen(false);
         } catch (err) {
             console.error("Failed to add vaccinations record: ", err);
+            alert(`Failed to add vaccination: ${err.response?.data?.error || err.message}`);
         }
     };
 
@@ -264,75 +294,81 @@ export default function HealthJournal() {
                 onSelectionChange={setActiveTab}
                 className="tabs"
             >
-                <Tab key="meds" title="Meds">
-                    <Button className="addButton healthButton" onPress={() => setIsMedsOpen(true)}>
-                        Add
-                    </Button>
-                    <Scrollbars className="scrollContainer" >
-                        <div className="scrollContent">
-                            {medsRecords.length === 0 ? (
-                                <h1>No med records yet</h1>
-                            ) : (
-                                medsRecords.map((record) => (
-                                    <Card className="cardEntry" key={record.meds_id}>
-                                        <div className="cardEntryContent">
-                                            <h2>Medication Name: {record.medication_name}</h2>
-                                            <h2>Time taken at: {record.time_taken}</h2>
-                                            <h2>Dosage: {record.dosage}</h2>
-                                            <h2>Symptoms/Description: {record.symptoms}</h2>
-                                            <h2>Date: {record.date.slice(0, 10)}</h2>
-                                        </div>
-                                    </Card>
-                                ))
-                            )}
-                        </div>
-                    </Scrollbars>
+                <Tab key="meds" title="Medications">
+                    <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
+                        <Button className="addButton healthButton" onPress={() => setIsMedsOpen(true)}>
+                            Add
+                        </Button>
+                        <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
+                            <div className="scrollContent" style={{ minHeight: '100%' }}>
+                                {medsRecords.length === 0 ? (
+                                    <h1>No med records yet</h1>
+                                ) : (
+                                    medsRecords.map((record, index) => (
+                                        <Card className="cardEntry" key={record.meds_id || `med-${index}`} shadow="sm">
+                                            <div className="cardEntryContent">
+                                                <h2>Medication Name: {record.medication_name}</h2>
+                                                <h2>Time taken at: {record.time_taken}</h2>
+                                                <h2>Dosage: {record.dosage}</h2>
+                                                <h2>Symptoms/Description: {record.symptoms}</h2>
+                                                <h2>Date: {typeof record.date === 'string' ? record.date.slice(0, 10) : new Date(record.date).toLocaleDateString()}</h2>
+                                            </div>
+                                        </Card>
+                                    ))
+                                )}
+                            </div>
+                        </Scrollbars>
+                    </div>
                 </Tab>
 
                 <Tab key="allergies" title="Allergies">
-                    <Button className="addButton" onPress={() => setIsAllergiesOpen(true)}>
-                        Add
-                    </Button>
-                    <Scrollbars className="scrollContainer" >
-                        <div className="scrollContent">
-                            {allergiesRecords.length === 0 ? (
-                                <h1>No allergy records yet</h1>
-                            ) : (
-                                allergiesRecords.map((record) => (
-                                    <Card className="cardEntry" key={record.allergy_id}>
-                                        <div className="cardEntryContent">
-                                            <h2>Allergy: {record.allergy_name}</h2>
-                                            <h2>Severity: {record.severity}</h2>
-                                            <h2>Epi Pen: {record.epi_pen}</h2>
-                                            <h2>Notes: {record.notes}</h2>
-                                        </div>
-                                    </Card>
-                                ))
-                            )}
-                        </div>
-                    </Scrollbars>
+                    <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
+                        <Button className="addButton healthButton" onPress={() => setIsAllergiesOpen(true)}>
+                            Add
+                        </Button>
+                        <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
+                            <div className="scrollContent" style={{ minHeight: '100%' }}>
+                                {allergiesRecords.length === 0 ? (
+                                    <h1>No allergy records yet</h1>
+                                ) : (
+                                    allergiesRecords.map((record, index) => (
+                                        <Card className="cardEntry" key={record.allergy_id || `allergy-${index}`} shadow="sm">
+                                            <div className="cardEntryContent">
+                                                <h2>Allergy: {record.allergy_name}</h2>
+                                                <h2>Severity: {record.severity}</h2>
+                                                <h2>Epi Pen: {typeof record.epi_pen === 'boolean' ? (record.epi_pen ? 'Yes' : 'No') : record.epi_pen}</h2>
+                                                <h2>Notes: {record.notes}</h2>
+                                            </div>
+                                        </Card>
+                                    ))
+                                )}
+                            </div>
+                        </Scrollbars>
+                    </div>
                 </Tab>
 
                 <Tab key="vaccinations" title="Vaccinations">
-                    <Button className="addButton" onPress={() => setIsVaccinationsOpen(true)}>
-                        Add
-                    </Button>
-                    <Scrollbars className="scrollContainer" >
-                        <div className="scrollContent">
-                            {vaccinationsRecords.length === 0 ? (
-                                <h1>No vaccinations records yet</h1>
-                            ) : (
-                                vaccinationsRecords.map((record) => (
-                                    <Card className="cardEntry" key={record.vaccine_id}>
-                                        <div className="cardEntryContent">
-                                            <h2>Vaccine: {record.vaccination_name}</h2>
-                                            <h2>Date of Vaccine: {record.date_of_vaccine.slice(0, 10)}</h2>
-                                        </div>
-                                    </Card>
-                                ))
-                            )}
-                        </div>
-                    </Scrollbars>
+                    <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
+                        <Button className="addButton healthButton" onPress={() => setIsVaccinationsOpen(true)}>
+                            Add
+                        </Button>
+                        <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
+                            <div className="scrollContent" style={{ minHeight: '100%' }}>
+                                {vaccinationsRecords.length === 0 ? (
+                                    <h1>No vaccinations records yet</h1>
+                                ) : (
+                                    vaccinationsRecords.map((record, index) => (
+                                        <Card className="cardEntry" key={record.vaccine_id || `vaccine-${index}`} shadow="sm">
+                                            <div className="cardEntryContent">
+                                                <h2>Vaccine: {record.vaccination_name}</h2>
+                                                <h2>Date of Vaccine: {typeof record.date_of_vaccine === 'string' ? record.date_of_vaccine.slice(0, 10) : new Date(record.date_of_vaccine).toLocaleDateString()}</h2>
+                                            </div>
+                                        </Card>
+                                    ))
+                                )}
+                            </div>
+                        </Scrollbars>
+                    </div>
                 </Tab>
             </Tabs>
 

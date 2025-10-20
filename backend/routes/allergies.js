@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
             [baby_id, allergy_name, severity, epi_pen, notes]
         );
 
-        res.status(201).json({ allergy_id: result.rows[0], baby_id, allergy_name, severity, epi_pen, notes });
+        res.status(201).json({ allergy_id: result.rows[0].allergy_id, baby_id, allergy_name, severity, epi_pen, notes });
     } catch (err) {
         console.error('Error adding allergies record:', err);
         res.status(500).json({ error: 'Failed to add allergies record' });
