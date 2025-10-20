@@ -62,10 +62,17 @@ html, body {
     padding: 0;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
 }
 
 .logCategorySelect {
+    min-width: 160px;
+    max-width: 180px;
+    flex-shrink: 0;
+}
+
+.babySelect {
     min-width: 160px;
     max-width: 180px;
     flex-shrink: 0;
@@ -133,9 +140,14 @@ html, body {
 
 .modal {
     width: 80%;
+    max-width: 500px;
     height: auto;
-    bottom: 120px;
     background-color: whitesmoke;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: 70px;
+    transform: translate(-50%, -50%);
 }
 
 .modalHeader {

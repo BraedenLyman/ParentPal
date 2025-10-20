@@ -1,6 +1,6 @@
 import axios from "axios";
 import Navbar from "../../../nav-bar/navbar";
-import { Avatar, Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, TimeInput, Image } from "@heroui/react";
+import { Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, TimeInput, Image } from "@heroui/react";
 import { Modal } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -130,38 +130,25 @@ export default function FeedingNotes() {
                             isSearchable={false}
                         />
                     </div>
-                    <div className="headerBabyCardsWrapper">
-                        <div className="cardContainer">
-                            {babyData.length > 0 ? (
-                                babyData.map((baby, index) => (
-                                    <Card
-                                        key={baby.baby_id || index}
-                                        isPressable
-                                        shadow="sm"
-                                        className={`cardInfo ${selectedBaby?.baby_id === baby.baby_id ? 'selectedCard' : ''}`}
-                                        onClick={() => setSelectedBaby(baby)}
-                                    >
-                                        <div className="cardContent">
-                                            <Avatar
-                                                name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
-                                                size="lg"
-                                                className="avatar"
-                                            />
-                                            <div className="babyInfo">
-                                                <h3 className="baby">{baby.first_name}</h3>
-                                                <p className="babyDate">
-                                                    {baby.birth_date
-                                                        ? new Date(baby.birth_date).toLocaleDateString()
-                                                        : "N/A"}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </Card>
-                                ))
-                            ) : (
-                                <p>No baby information found.</p>
-                            )}
-                        </div>
+                    <div className="babySelect">
+                        <Select
+                            options={babyData.map(baby => ({
+                                value: baby.baby_id,
+                                label: baby.first_name
+                            }))}
+                            value={selectedBaby ? {
+                                value: selectedBaby.baby_id,
+                                label: selectedBaby.first_name
+                            } : null}
+                            onChange={(option) => {
+                                if (option) {
+                                    const baby = babyData.find(b => b.baby_id === option.value);
+                                    setSelectedBaby(baby);
+                                }
+                            }}
+                            placeholder="Select Baby"
+                            isSearchable={false}
+                        />
                     </div>
                 </div>
             </div>
