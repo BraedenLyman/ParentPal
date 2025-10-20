@@ -200,8 +200,7 @@ export default function HealthJournal() {
 
     return (
         <div className="mainDiv">
-            {/* Header */}
-            <div className="header">
+            <div className="header healthHeader">
                 <div className="headerContainer">
                     <Button
                         isIconOnly
@@ -266,7 +265,7 @@ export default function HealthJournal() {
                 className="tabs"
             >
                 <Tab key="meds" title="Meds">
-                    <Button className="addButton" onPress={() => setIsMedsOpen(true)}>
+                    <Button className="addButton healthButton" onPress={() => setIsMedsOpen(true)}>
                         Add
                     </Button>
                     <Scrollbars className="scrollContainer" >

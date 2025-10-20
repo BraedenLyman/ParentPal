@@ -210,18 +210,6 @@ export default function Settings() {
                         isPressable
                         shadow="sm"
                         className="settings-option-card"
-                        onPress={() => navigate("/settings/notifications")}
-                    >
-                        <div className="settings-card-content">
-                            <span className="settings-card-title">Notifications</span>
-                            <ChevronRightIcon className="settings-arrow-icon" />
-                        </div>
-                    </Card>
-
-                    <Card
-                        isPressable
-                        shadow="sm"
-                        className="settings-option-card"
                         onPress={() => navigate("/settings/data-export")}
                     >
                         <div className="settings-card-content">

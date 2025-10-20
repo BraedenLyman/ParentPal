@@ -130,8 +130,10 @@ export default function SharedAccounts() {
                     <div className="section-header">
                         <Button
                             color="primary"
+                            size="lg"
                             onPress={onOpen}
-                            startContent={<PlusIcon className="w-4 h-4" />}
+                            startContent={<PlusIcon className="w-5 h-5" />}
+                            className="add-babysitter-button"
                         >
                             Add Babysitter
                         </Button>

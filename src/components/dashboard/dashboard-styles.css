@@ -78,7 +78,7 @@ html, body {
    User Info Section
    ======================================== */
 
-.userInfo {
+.userInfoMain {
     padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm) var(--spacing-md);
     max-width: 1400px;
     margin: 0 auto;

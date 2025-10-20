@@ -323,6 +323,7 @@ export default function PersonalInformation() {
 
                             <Button
                                 color="primary"
+                                size="lg"
                                 onPress={handleChangePassword}
                                 className="change-password-button"
                             >

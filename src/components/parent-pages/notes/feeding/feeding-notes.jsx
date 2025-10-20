@@ -95,7 +95,7 @@ export default function FeedingNotes() {
 
     return (
         <div className="mainDiv">
-            <div className="header">
+            <div className="header feedingHeader">
                 <div className="headerContainer">
                     <Button
                         isIconOnly
@@ -194,7 +194,7 @@ export default function FeedingNotes() {
             </Scrollbars>
           
             <Navbar />
-            <Button className="addButton" onPress={() => setIsOpen(true)}>
+            <Button className="addButton feedingButton" onPress={() => setIsOpen(true)}>
                 Add
             </Button >
 

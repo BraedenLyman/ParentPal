@@ -70,54 +70,12 @@ export default function ParentDashboard() {
             <FiBell className="notification" />
           </div>
 
-          <div className="userInfo">
+          <div className="userInfoMain">
             <h2 className="username">
               Hi, {userData?.first_name || "Parent"},
             </h2>
             <h1 className="welcomeMessage">Welcome Back!</h1>
-
-            <div className="cardContainer">
-              {babyData.length > 0 ? (
-                babyData.map((baby, index) => (
-                  <Card
-                    key={baby.baby_id || index}
-                    isPressable
-                    shadow="sm"
-                    className={`cardInfo ${selectedBaby?.baby_id === baby.baby_id ? 'selectedCard' : ''}`}
-                    onClick={() => setSelectedBaby(baby)}
-                  >
-                    <div className="cardContent">
-                      <Avatar
-                        name={baby.first_name?.charAt(0)?.toUpperCase() || ""}
-                        size="lg"
-                        className="avatar"
-                      />
-                      <div className="babyInfo">
-                        <h3 className="baby">{baby.first_name}</h3>
-                        <p className="babyDate">
-                          {baby.birth_date
-                            ? new Date(baby.birth_date).toLocaleDateString()
-                            : "N/A"}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                ))
-              ) : (
-                <p>No baby information found.</p>
-              )}
-            </div>
           </div>
-        </div>
-
-        <div className="userTitle">
-          <Avatar
-            className="mainAvatar"
-            name={selectedBaby?.first_name?.charAt(0)?.toUpperCase() || "N/A"}
-          />
-          <h1 className="userTitleName">
-            {selectedBaby?.first_name || "Baby"}'s Development
-          </h1>
         </div>
 
         {/* Report Sections */}

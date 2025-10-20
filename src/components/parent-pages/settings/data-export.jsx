@@ -508,97 +508,85 @@ export default function DataExport() {
 
                         <div className="export-options-section">
                             <h2>Select Data to Export</h2>
-                            <div className="export-options-grid">
-                                <Card className="export-option-card" shadow="sm">
-                                    <Checkbox
-                                        isSelected={exportOptions.growthCharts}
-                                        onValueChange={() => handleCheckboxChange('growthCharts')}
-                                        color="success"
+                            <Card className="export-options-card" shadow="sm">
+                                <div className="export-card-content">
+                                    <Button
+                                        color="primary"
                                         size="lg"
+                                        onPress={generatePDF}
+                                        isLoading={generating}
+                                        startContent={!generating && <DocumentArrowDownIcon className="w-5 h-5" />}
+                                        className="generate-pdf-button"
                                     >
-                                        <span className="export-option-label">Growth Charts</span>
-                                    </Checkbox>
-                                </Card>
+                                        {generating ? "Generating PDF..." : "Generate PDF"}
+                                    </Button>
 
-                                <Card className="export-option-card" shadow="sm">
-                                    <Checkbox
-                                        isSelected={exportOptions.sleepAnalytics}
-                                        onValueChange={() => handleCheckboxChange('sleepAnalytics')}
-                                        color="success"
-                                        size="lg"
-                                    >
-                                        <span className="export-option-label">Sleep Analytics</span>
-                                    </Checkbox>
-                                </Card>
+                                    <div className="export-checkboxes">
+                                        <Checkbox
+                                            isSelected={exportOptions.growthCharts}
+                                            onValueChange={() => handleCheckboxChange('growthCharts')}
+                                            color="success"
+                                            size="lg"
+                                        >
+                                            <span className="export-option-label">Growth Charts</span>
+                                        </Checkbox>
 
-                                <Card className="export-option-card" shadow="sm">
-                                    <Checkbox
-                                        isSelected={exportOptions.medications}
-                                        onValueChange={() => handleCheckboxChange('medications')}
-                                        color="success"
-                                        size="lg"
-                                    >
-                                        <span className="export-option-label">Medications</span>
-                                    </Checkbox>
-                                </Card>
+                                        <Checkbox
+                                            isSelected={exportOptions.sleepAnalytics}
+                                            onValueChange={() => handleCheckboxChange('sleepAnalytics')}
+                                            color="success"
+                                            size="lg"
+                                        >
+                                            <span className="export-option-label">Sleep Analytics</span>
+                                        </Checkbox>
 
-                                <Card className="export-option-card" shadow="sm">
-                                    <Checkbox
-                                        isSelected={exportOptions.allergies}
-                                        onValueChange={() => handleCheckboxChange('allergies')}
-                                        color="success"
-                                        size="lg"
-                                    >
-                                        <span className="export-option-label">Allergies</span>
-                                    </Checkbox>
-                                </Card>
+                                        <Checkbox
+                                            isSelected={exportOptions.medications}
+                                            onValueChange={() => handleCheckboxChange('medications')}
+                                            color="success"
+                                            size="lg"
+                                        >
+                                            <span className="export-option-label">Medications</span>
+                                        </Checkbox>
 
-                                <Card className="export-option-card" shadow="sm">
-                                    <Checkbox
-                                        isSelected={exportOptions.vaccinations}
-                                        onValueChange={() => handleCheckboxChange('vaccinations')}
-                                        color="success"
-                                        size="lg"
-                                    >
-                                        <span className="export-option-label">Vaccinations</span>
-                                    </Checkbox>
-                                </Card>
+                                        <Checkbox
+                                            isSelected={exportOptions.allergies}
+                                            onValueChange={() => handleCheckboxChange('allergies')}
+                                            color="success"
+                                            size="lg"
+                                        >
+                                            <span className="export-option-label">Allergies</span>
+                                        </Checkbox>
 
-                                <Card className="export-option-card" shadow="sm">
-                                    <Checkbox
-                                        isSelected={exportOptions.feedingNotes}
-                                        onValueChange={() => handleCheckboxChange('feedingNotes')}
-                                        color="success"
-                                        size="lg"
-                                    >
-                                        <span className="export-option-label">Feeding Notes</span>
-                                    </Checkbox>
-                                </Card>
+                                        <Checkbox
+                                            isSelected={exportOptions.vaccinations}
+                                            onValueChange={() => handleCheckboxChange('vaccinations')}
+                                            color="success"
+                                            size="lg"
+                                        >
+                                            <span className="export-option-label">Vaccinations</span>
+                                        </Checkbox>
 
-                                <Card className="export-option-card" shadow="sm">
-                                    <Checkbox
-                                        isSelected={exportOptions.observationNotes}
-                                        onValueChange={() => handleCheckboxChange('observationNotes')}
-                                        color="success"
-                                        size="lg"
-                                    >
-                                        <span className="export-option-label">Observation Notes</span>
-                                    </Checkbox>
-                                </Card>
-                            </div>
-                        </div>
+                                        <Checkbox
+                                            isSelected={exportOptions.feedingNotes}
+                                            onValueChange={() => handleCheckboxChange('feedingNotes')}
+                                            color="success"
+                                            size="lg"
+                                        >
+                                            <span className="export-option-label">Feeding Notes</span>
+                                        </Checkbox>
 
-                        <div className="generate-pdf-section">
-                            <Button
-                                color="primary"
-                                size="lg"
-                                onPress={generatePDF}
-                                isLoading={generating}
-                                startContent={!generating && <DocumentArrowDownIcon className="w-5 h-5" />}
-                                className="generate-pdf-button"
-                            >
-                                {generating ? "Generating PDF..." : "Generate PDF"}
-                            </Button>
+                                        <Checkbox
+                                            isSelected={exportOptions.observationNotes}
+                                            onValueChange={() => handleCheckboxChange('observationNotes')}
+                                            color="success"
+                                            size="lg"
+                                        >
+                                            <span className="export-option-label">Observation Notes</span>
+                                        </Checkbox>
+                                    </div>
+                                </div>
+                            </Card>
                         </div>
                     </>
                 )}

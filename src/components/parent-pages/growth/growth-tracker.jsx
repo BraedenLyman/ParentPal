@@ -118,7 +118,7 @@ export default function GrowthTracker() {
 
     return (
         <div className="mainDiv">
-            <div className="header">
+            <div className="header growthHeader">
                 <div className="headerContainer">
                     <Button
                         isIconOnly
@@ -207,7 +207,7 @@ export default function GrowthTracker() {
             </Scrollbars>
           
             <Navbar />
-            <Button className="addButton" onPress={() => setIsOpen(true)}>
+            <Button className="addButton growthButton" onPress={() => setIsOpen(true)}>
                 Add
             </Button >
 

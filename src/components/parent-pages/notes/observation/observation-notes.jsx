@@ -82,7 +82,7 @@ export default function ObservationNotes() {
 
     return (
         <div className="mainDiv">
-            <div className="header">
+            <div className="header observationHeader">
                 <div className="headerContainer">
                     <Button
                         isIconOnly
@@ -170,7 +170,7 @@ export default function ObservationNotes() {
             </Scrollbars>
           
             <Navbar />
-            <Button className="addButton" onPress={() => setIsOpen(true)}>
+            <Button className="addButton observationButton" onPress={() => setIsOpen(true)}>
                 Add
             </Button >
 

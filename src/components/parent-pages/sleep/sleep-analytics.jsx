@@ -87,7 +87,7 @@ export default function SleepAnalytics() {
 
     return (
         <div className="mainDiv">
-           <div className="header">
+           <div className="header sleepHeader">
             <div className="headerContainer">
                 <Button
                     isIconOnly
@@ -175,7 +175,7 @@ export default function SleepAnalytics() {
         </Scrollbars>
 
         <Navbar />
-        <Button className="addButton" onPress={() => setIsOpen(true)}>
+        <Button className="addButton sleepButton" onPress={() => setIsOpen(true)}>
             Add
         </Button >
 

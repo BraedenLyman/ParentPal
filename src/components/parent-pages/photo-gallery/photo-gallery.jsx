@@ -187,6 +187,7 @@ export default function PhotoGallery() {
             <div className="photo-gallery-content">
                 <Button
                     color="primary"
+                    size="lg"
                     onPress={() => setIsUploadModalOpen(true)}
                     className="upload-photo-button"
                     startContent={<PhotoIcon className="w-5 h-5" />}

@@ -1,8 +1,3 @@
-/* ========================================
-   Modern Settings Styles
-   Uses Design System Variables
-   ======================================== */
-
 .settings-container {
   min-height: 100vh;
   background: var(--gradient-background);
@@ -95,10 +90,6 @@
   border: 1px solid var(--border-light);
   animation: fadeInUp 0.3s ease-out;
 }
-
-/* ========================================
-   Data Export Styles
-   ======================================== */
 
 .data-export-content {
   padding: var(--spacing-lg);
@@ -208,6 +199,47 @@
   transform: translateY(0);
 }
 
+.export-options-card {
+  width: 100%;
+  padding: var(--spacing-xl);
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+}
+
+.export-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.export-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.add-babysitter-button {
+  min-width: 250px;
+  height: 56px;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  transition: all var(--transition-base);
+}
+
+.add-babysitter-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.add-babysitter-button:active {
+  transform: translateY(0);
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .data-export-content {
@@ -227,6 +259,12 @@
   }
 
   .generate-pdf-button {
+    min-width: 100%;
+    height: 52px;
+    font-size: var(--text-base);
+  }
+
+  .add-babysitter-button {
     min-width: 100%;
     height: 52px;
     font-size: var(--text-base);
@@ -487,7 +525,23 @@
 .change-password-button {
   align-self: flex-start;
   margin-top: var(--spacing-md);
-  min-width: 160px;
+  min-width: 250px;
+  height: 56px;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  transition: all var(--transition-base);
+}
+
+.change-password-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.change-password-button:active {
+  transform: translateY(0);
 }
 
 .babysitter-section {
@@ -854,6 +908,12 @@
 
   .settings-card-content {
     padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .change-password-button {
+    min-width: 100%;
+    height: 52px;
+    font-size: var(--text-base);
   }
 }
 
