@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
             [baby_id, time_fed, date, fed_from, type_of_food, amount, notes]
         );
 
-        res.status(201).json({ feeding_id: result.rows[0], baby_id, time_fed, date, fed_from, type_of_food, amount, notes });
+        res.status(201).json({ feeding_id: result.rows[0].feeding_id, baby_id, time_fed, date, fed_from, type_of_food, amount, notes });
     } catch (err) {
         console.error('Error adding feeding record:', err);
         res.status(500).json({ error: 'Failed to add feeding record' });

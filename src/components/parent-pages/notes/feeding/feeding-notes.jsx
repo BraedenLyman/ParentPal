@@ -224,10 +224,12 @@ export default function FeedingNotes() {
                             <Select
                                 options={[
                                     { value: "bottle", label: "Bottle" },
-                                    { value: "left-boob", label: "Left Boob" },
-                                    { value: "right-boob", label: "Right Boob" }
+                                    { value: "breast", label: "Breast" }
                                 ]}
-                                value={fedFrom ? { value: fedFrom, label: fedFrom.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') } : null}
+                                value={fedFrom ? {
+                                    value: fedFrom,
+                                    label: fedFrom === "bottle" ? "Bottle" : fedFrom === "breast" ? "Breast" : fedFrom
+                                } : null}
                                 onChange={(option) => setFedFrom(option ? option.value : "")}
                                 placeholder="Select where the baby was fed from"
                             />

@@ -48,16 +48,7 @@ export default function HealthJournal() {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
-
-                // Normalize meds_id in fetched records
-                const normalizedData = data.map(record => ({
-                    ...record,
-                    meds_id: typeof record.meds_id === 'object'
-                        ? record.meds_id.meds_id
-                        : record.meds_id
-                }));
-
-                setMedsRecords(normalizedData);
+                setMedsRecords(data);
             } catch (err) {
                 console.error("Failed to fetch meds records: ", err)
             }
@@ -111,16 +102,7 @@ export default function HealthJournal() {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
-
-                // Normalize allergy_id in fetched records
-                const normalizedData = data.map(record => ({
-                    ...record,
-                    allergy_id: typeof record.allergy_id === 'object'
-                        ? record.allergy_id.allergy_id
-                        : record.allergy_id
-                }));
-
-                setAllergiesRecords(normalizedData);
+                setAllergiesRecords(data);
             } catch (err) {
                 console.error("Failed to fetch allergies records: ", err)
             }
@@ -170,16 +152,7 @@ export default function HealthJournal() {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
-
-                // Normalize vaccine_id in fetched records
-                const normalizedData = data.map(record => ({
-                    ...record,
-                    vaccine_id: typeof record.vaccine_id === 'object'
-                        ? record.vaccine_id.vaccine_id
-                        : record.vaccine_id
-                }));
-
-                setVaccinationsRecords(normalizedData);
+                setVaccinationsRecords(data);
             } catch (err) {
                 console.error("Failed to fetch vaccinations records: ", err)
             }
