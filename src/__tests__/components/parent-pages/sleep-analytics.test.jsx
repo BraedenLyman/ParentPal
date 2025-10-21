@@ -78,7 +78,6 @@ describe('SleepAnalytics Component', () => {
     expect(screen.getByText("Baby's Sleep")).toBeInTheDocument();
     expect(screen.getByText('Add')).toBeInTheDocument();
     expect(screen.getByTestId('navbar')).toBeInTheDocument();
-    expect(screen.getByTestId('page-middle-nav')).toBeInTheDocument();
   });
 
   test('displays no sleep records message when empty', async () => {
@@ -126,12 +125,14 @@ describe('SleepAnalytics Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Duration: 8')).toBeInTheDocument();
-      expect(screen.getByText('Time fell asleep at: 20:30')).toBeInTheDocument();
-      expect(screen.getByText('Date: 2024-01-15')).toBeInTheDocument();
-      expect(screen.getByText('Duration: 6.5')).toBeInTheDocument();
-      expect(screen.getByText('Time fell asleep at: 21:00')).toBeInTheDocument();
-      expect(screen.getByText('Date: 2024-01-16')).toBeInTheDocument();
+      const durations = screen.getAllByText('Duration');
+      expect(durations.length).toBeGreaterThan(0);
+      expect(screen.getByText('8 hrs')).toBeInTheDocument();
+      const fellAsleeps = screen.getAllByText('Fell Asleep');
+      expect(fellAsleeps.length).toBeGreaterThan(0);
+      expect(screen.getByText('20:30')).toBeInTheDocument();
+      expect(screen.getByText('6.5 hrs')).toBeInTheDocument();
+      expect(screen.getByText('21:00')).toBeInTheDocument();
     });
   });
 

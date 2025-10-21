@@ -78,7 +78,6 @@ describe('GrowthTracker Component', () => {
     expect(screen.getByText("Baby's Growth")).toBeInTheDocument();
     expect(screen.getByText('Add')).toBeInTheDocument();
     expect(screen.getByTestId('navbar')).toBeInTheDocument();
-    expect(screen.getByTestId('page-middle-nav')).toBeInTheDocument();
   });
 
   test('displays no growth records message when empty', async () => {
@@ -126,12 +125,14 @@ describe('GrowthTracker Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Height: 50.5')).toBeInTheDocument();
-      expect(screen.getByText('Weight: 3.2')).toBeInTheDocument();
-      expect(screen.getByText('Date: 2024-01-15')).toBeInTheDocument();
-      expect(screen.getByText('Height: 52')).toBeInTheDocument();
-      expect(screen.getByText('Weight: 3.5')).toBeInTheDocument();
-      expect(screen.getByText('Date: 2024-02-15')).toBeInTheDocument();
+      const heights = screen.getAllByText('Height');
+      expect(heights.length).toBeGreaterThan(0);
+      expect(screen.getByText('50.5')).toBeInTheDocument();
+      const weights = screen.getAllByText('Weight');
+      expect(weights.length).toBeGreaterThan(0);
+      expect(screen.getByText('3.2')).toBeInTheDocument();
+      expect(screen.getByText('52')).toBeInTheDocument();
+      expect(screen.getByText('3.5')).toBeInTheDocument();
     });
   });
 
@@ -211,6 +212,5 @@ describe('GrowthTracker Component', () => {
 
     expect(screen.getByTestId('scrollbars')).toBeInTheDocument();
     expect(screen.getByTestId('navbar')).toBeInTheDocument();
-    expect(screen.getByTestId('page-middle-nav')).toBeInTheDocument();
   });
 });

@@ -82,11 +82,10 @@ describe('HealthJournal Component', () => {
     );
 
     expect(screen.getByText("Baby's Health")).toBeInTheDocument();
-    expect(screen.getByText('Meds')).toBeInTheDocument();
+    expect(screen.getByText('Medications')).toBeInTheDocument();
     expect(screen.getByText('Allergies')).toBeInTheDocument();
     expect(screen.getByText('Vaccinations')).toBeInTheDocument();
     expect(screen.getByTestId('navbar')).toBeInTheDocument();
-    expect(screen.getByTestId('page-middle-nav')).toBeInTheDocument();
   });
 
   test('displays no med records message when empty', async () => {

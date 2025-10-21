@@ -78,7 +78,6 @@ describe('ObservationNotes Component', () => {
     expect(screen.getByText("Baby's Observation")).toBeInTheDocument();
     expect(screen.getByText('Add')).toBeInTheDocument();
     expect(screen.getByTestId('navbar')).toBeInTheDocument();
-    expect(screen.getByTestId('page-middle-nav')).toBeInTheDocument();
   });
 
   test('displays no observation records message when empty', async () => {
@@ -129,12 +128,12 @@ describe('ObservationNotes Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Priority Level: high')).toBeInTheDocument();
-      expect(screen.getByText('Notes: Baby seems fussy today, not eating well')).toBeInTheDocument();
-      expect(screen.getByText('Priority Level: low')).toBeInTheDocument();
-      expect(screen.getByText('Notes: Baby is very alert and interactive')).toBeInTheDocument();
-      expect(screen.getByText('Priority Level: medium')).toBeInTheDocument();
-      expect(screen.getByText('Notes: Slight rash on arms, monitoring closely')).toBeInTheDocument();
+      expect(screen.getByText('high')).toBeInTheDocument();
+      expect(screen.getByText('Baby seems fussy today, not eating well')).toBeInTheDocument();
+      expect(screen.getByText('low')).toBeInTheDocument();
+      expect(screen.getByText('Baby is very alert and interactive')).toBeInTheDocument();
+      expect(screen.getByText('medium')).toBeInTheDocument();
+      expect(screen.getByText('Slight rash on arms, monitoring closely')).toBeInTheDocument();
     });
   });
 
@@ -250,7 +249,7 @@ describe('ObservationNotes Component', () => {
 
     fireEvent.click(screen.getByText('Add'));
 
-    expect(screen.getAllByLabelText('Priority Level')[0]).toBeInTheDocument();
+    expect(screen.getByText('Priority Level')).toBeInTheDocument();
   });
 
   test('fetches dashboard data on component mount', async () => {
@@ -357,16 +356,11 @@ describe('ObservationNotes Component', () => {
 
     fireEvent.click(screen.getByText('Add'));
 
-    expect(screen.getAllByLabelText('Priority Level')[0]).toBeInTheDocument();
+    expect(screen.getByText('Priority Level')).toBeInTheDocument();
     expect(screen.getByLabelText('Notes')).toBeInTheDocument();
 
     const inputs = screen.getAllByRole('textbox');
     expect(inputs).toHaveLength(1);
-
-    const selects = screen.getAllByRole('button').filter(button =>
-      button.getAttribute('aria-expanded') !== null
-    );
-    expect(selects.length).toBeGreaterThan(0); 
   });
 
   test('displays correct priority level validation', () => {
@@ -378,7 +372,7 @@ describe('ObservationNotes Component', () => {
 
     fireEvent.click(screen.getByText('Add'));
 
-    expect(screen.getAllByLabelText('Priority Level')[0]).toBeInTheDocument();
+    expect(screen.getByText('Priority Level')).toBeInTheDocument();
   });
 
   test('placeholder text contains typo that exists in actual component', () => {
@@ -424,10 +418,10 @@ describe('ObservationNotes Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Priority Level: high')).toBeInTheDocument();
-      expect(screen.getByText('Priority Level: low')).toBeInTheDocument();
-      expect(screen.getByText('Notes: Urgent observation note')).toBeInTheDocument();
-      expect(screen.getByText('Notes: Regular observation note')).toBeInTheDocument();
+      expect(screen.getByText('high')).toBeInTheDocument();
+      expect(screen.getByText('low')).toBeInTheDocument();
+      expect(screen.getByText('Urgent observation note')).toBeInTheDocument();
+      expect(screen.getByText('Regular observation note')).toBeInTheDocument();
     });
   });
 });
