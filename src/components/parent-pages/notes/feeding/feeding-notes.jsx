@@ -27,6 +27,15 @@ export default function FeedingNotes() {
     const [feedNotes, setFeedNotes] = useState("");
     const [feedingRecords, setFeedingRecords] = useState([]);
 
+    const formatTime12Hour = (time24) => {
+        if (!time24) return "";
+        const [hours, minutes] = time24.split(":");
+        const hour = parseInt(hours, 10);
+        const ampm = hour >= 12 ? "PM" : "AM";
+        const hour12 = hour % 12 || 12;
+        return `${hour12}:${minutes} ${ampm}`;
+    };
+
     useEffect(() => {
         if (!selectedBaby) return;
 
@@ -51,6 +60,12 @@ export default function FeedingNotes() {
             return;
         }
 
+        const amountFlOz = parseFloat(feedAmount);
+        if (isNaN(amountFlOz) || amountFlOz <= 0) {
+            alert("Feeding amount must be a valid number greater than 0 (in fluid ounces).");
+            return;
+        }
+
         const formattedTime = `${String(feedTime.hour).padStart(2, "0")}:${String(feedTime.minute).padStart(2, "0")}`;
 
         try {
@@ -62,7 +77,7 @@ export default function FeedingNotes() {
                     date: feedDate,
                     fed_from: fedFrom,
                     type_of_food: feedType,
-                    amount: feedAmount,
+                    amount: amountFlOz,
                     notes: feedNotes,
                 },
                 { withCredentials: true }
@@ -170,7 +185,7 @@ export default function FeedingNotes() {
                                     <div className="cardEntryDetails">
                                         <div className="cardEntryDetail">
                                             <span className="cardEntryDetailLabel">Time Fed</span>
-                                            <span className="cardEntryDetailValue">{record.time_fed}</span>
+                                            <span className="cardEntryDetailValue">{formatTime12Hour(record.time_fed)}</span>
                                         </div>
                                         <div className="cardEntryDetail">
                                             <span className="cardEntryDetailLabel">Fed From</span>
@@ -178,7 +193,7 @@ export default function FeedingNotes() {
                                         </div>
                                         <div className="cardEntryDetail">
                                             <span className="cardEntryDetailLabel">Amount</span>
-                                            <span className="cardEntryDetailValue">{record.amount}</span>
+                                            <span className="cardEntryDetailValue">{record.amount} fl oz</span>
                                         </div>
                                     </div>
                                     {record.notes && (
@@ -252,8 +267,11 @@ export default function FeedingNotes() {
 
                         <Input
                             variant="bordered"
-                            label="Amount"
-                            placeholder="Amount of food they were fed"
+                            label="Amount (fl oz)"
+                            placeholder="Amount in fluid ounces"
+                            type="number"
+                            step="0.1"
+                            min="0.1"
                             value={feedAmount}
                             onChange={(e) => setFeedAmount(e.target.value)}
                         />

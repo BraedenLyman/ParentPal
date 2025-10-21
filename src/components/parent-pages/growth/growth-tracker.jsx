@@ -18,7 +18,8 @@ export default function GrowthTracker() {
     const location = useLocation();
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
-    const [height, setHeight] = useState("");
+    const [heightFeet, setHeightFeet] = useState("");
+    const [heightInches, setHeightInches] = useState("");
     const [weight, setWeight] = useState("");
     const [date, setDate] = useState("");
     const [userData, setUserData] = useState(null);
@@ -77,18 +78,38 @@ export default function GrowthTracker() {
     }, [selectedBaby]);
 
     const handleAddGrowth = async () => {
-        if (!height || !weight || !date) {
+        if (!heightFeet || !heightInches || !weight || !date) {
             alert("Please fill out all fields.");
             return;
         }
+
+        const feet = parseFloat(heightFeet);
+        if (isNaN(feet) || feet < 0) {
+            alert("Height (feet) must be a valid number greater than or equal to 0.");
+            return;
+        }
+
+        const inches = parseFloat(heightInches);
+        if (isNaN(inches) || inches < 0 || inches >= 12) {
+            alert("Height (inches) must be a valid number between 0 and 11.99.");
+            return;
+        }
+
+        const weightLbs = parseFloat(weight);
+        if (isNaN(weightLbs) || weightLbs <= 0) {
+            alert("Weight must be a valid number greater than 0 (in lbs).");
+            return;
+        }
+
+        const totalInches = feet * 12 + inches;
 
         try {
             const { data: newRecord } = await axios.post(
                 `${API_URL}/api/growth`,
                 {
                     baby_id: selectedBaby.baby_id,
-                    height: parseFloat(height),
-                    weight: parseFloat(weight),
+                    height: totalInches,
+                    weight: weightLbs,
                     date,
                 },
                 { withCredentials: true }
@@ -96,7 +117,8 @@ export default function GrowthTracker() {
 
             setGrowthRecords((prev) => [...prev, newRecord]);
 
-            setHeight("");
+            setHeightFeet("");
+            setHeightInches("");
             setWeight("");
             setDate("");
             setIsOpen(false);
@@ -183,26 +205,32 @@ export default function GrowthTracker() {
                     {growthRecords.length === 0 ? (
                         <h1>No growth records yet</h1>
                     ) : (
-                        growthRecords.map((record) => (
-                            <Card className="cardEntry" key={record.growth_id} shadow="sm">
-                                <div className="cardEntryContent">
-                                    <div className="cardEntryHeader">
-                                        <h3 className="cardEntryTitle">Growth Record</h3>
-                                        <span className="cardEntryDate">{new Date(record.date).toLocaleDateString()}</span>
-                                    </div>
-                                    <div className="cardEntryDetails">
-                                        <div className="cardEntryDetail">
-                                            <span className="cardEntryDetailLabel">Height</span>
-                                            <span className="cardEntryDetailValue">{record.height}</span>
+                        growthRecords.map((record) => {
+                            const totalInches = record.height;
+                            const feet = Math.floor(totalInches / 12);
+                            const inches = (totalInches % 12).toFixed(1);
+
+                            return (
+                                <Card className="cardEntry" key={record.growth_id} shadow="sm">
+                                    <div className="cardEntryContent">
+                                        <div className="cardEntryHeader">
+                                            <h3 className="cardEntryTitle">Growth Record</h3>
+                                            <span className="cardEntryDate">{new Date(record.date).toLocaleDateString()}</span>
                                         </div>
-                                        <div className="cardEntryDetail">
-                                            <span className="cardEntryDetailLabel">Weight</span>
-                                            <span className="cardEntryDetailValue">{record.weight}</span>
+                                        <div className="cardEntryDetails">
+                                            <div className="cardEntryDetail">
+                                                <span className="cardEntryDetailLabel">Height</span>
+                                                <span className="cardEntryDetailValue">{feet}' {inches}"</span>
+                                            </div>
+                                            <div className="cardEntryDetail">
+                                                <span className="cardEntryDetailLabel">Weight</span>
+                                                <span className="cardEntryDetailValue">{record.weight} lbs</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Card>
-                        ))
+                                </Card>
+                            );
+                        })
                     )}
                 </div>
             </Scrollbars>
@@ -218,20 +246,39 @@ export default function GrowthTracker() {
                         Add Growth
                     </ModalHeader>
                     <ModalBody className="modalBody">
-                        <Input 
-                            variant="bordered"
-                            label="Height" 
-                            placeholder="How tall are they" 
-                            type="text"
-                            value={height}
-                            onChange={(e) => setHeight(e.target.value)}
-                        />
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                            <Input
+                                variant="bordered"
+                                label="Height (feet)"
+                                placeholder="Feet"
+                                type="number"
+                                step="1"
+                                min="0"
+                                value={heightFeet}
+                                onChange={(e) => setHeightFeet(e.target.value)}
+                                style={{ flex: 1 }}
+                            />
+                            <Input
+                                variant="bordered"
+                                label="Height (inches)"
+                                placeholder="Inches"
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                max="11.99"
+                                value={heightInches}
+                                onChange={(e) => setHeightInches(e.target.value)}
+                                style={{ flex: 1 }}
+                            />
+                        </div>
 
-                        <Input 
+                        <Input
                             variant="bordered"
-                            label="Weight" 
-                            placeholder="How much do they weigh" 
-                            type="text"
+                            label="Weight (lbs)"
+                            placeholder="Weight in pounds"
+                            type="number"
+                            step="0.1"
+                            min="0.1"
                             value={weight}
                             onChange={(e) => setWeight(e.target.value)}
                         />

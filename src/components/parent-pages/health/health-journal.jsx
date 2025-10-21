@@ -19,6 +19,16 @@ export default function HealthJournal() {
     const { userData, babyData, selectedBaby, setSelectedBaby } = useBabyData(location.state);
 
     const [activeTab, setActiveTab] = useState("meds");
+
+    const formatTime12Hour = (time24) => {
+        if (!time24) return "";
+        const [hours, minutes] = time24.split(":");
+        const hour = parseInt(hours, 10);
+        const ampm = hour >= 12 ? "PM" : "AM";
+        const hour12 = hour % 12 || 12;
+        return `${hour12}:${minutes} ${ampm}`;
+    };
+
     const [isMedsOpen, setIsMedsOpen] = useState(false);
     const [isAllergiesOpen, setIsAllergiesOpen] = useState(false);
     const [isVaccinationsOpen, setIsVaccinationsOpen] = useState(false);
@@ -80,6 +90,12 @@ export default function HealthJournal() {
             return;
         }
 
+        const dosageFlOz = parseFloat(medDose);
+        if (isNaN(dosageFlOz) || dosageFlOz <= 0) {
+            alert("Medication amount must be a valid number greater than 0 (in fluid ounces).");
+            return;
+        }
+
         const formattedTime = `${String(medsTimeTaken.hour).padStart(2, "0")}:${String(medsTimeTaken.minute).padStart(2, "0")}`;
 
         try {
@@ -91,7 +107,7 @@ export default function HealthJournal() {
                     medication_name: medName,
                     time_taken: formattedTime,
                     date: medDate,
-                    dosage: medDose,
+                    dosage: dosageFlOz,
                     symptoms: medSympDescription,
                 },
                 { withCredentials: true }
@@ -369,11 +385,11 @@ export default function HealthJournal() {
                                                 <div className="cardEntryDetails">
                                                     <div className="cardEntryDetail">
                                                         <span className="cardEntryDetailLabel">Time Taken</span>
-                                                        <span className="cardEntryDetailValue">{record.time_taken}</span>
+                                                        <span className="cardEntryDetailValue">{formatTime12Hour(record.time_taken)}</span>
                                                     </div>
                                                     <div className="cardEntryDetail">
                                                         <span className="cardEntryDetailLabel">Dosage</span>
-                                                        <span className="cardEntryDetailValue">{record.dosage}</span>
+                                                        <span className="cardEntryDetailValue">{record.dosage} fl oz</span>
                                                     </div>
                                                 </div>
                                                 {record.symptoms && (
@@ -488,9 +504,11 @@ export default function HealthJournal() {
                         />
                         <Input
                             variant="bordered"
-                            label="Amount"
-                            placeholder="Amount of meds taken"
+                            label="Amount (fl oz)"
+                            placeholder="Amount in fluid ounces"
                             type="number"
+                            step="0.01"
+                            min="0.01"
                             value={medDose}
                             onChange={(e) => setMedDose(e.target.value)}
                         />

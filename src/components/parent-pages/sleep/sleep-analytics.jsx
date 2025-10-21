@@ -25,6 +25,15 @@ export default function SleepAnalytics() {
     const [date, setDate] = useState("");
     const [sleepRecords, setSleepRecords] = useState([]);
 
+    const formatTime12Hour = (time24) => {
+        if (!time24) return "";
+        const [hours, minutes] = time24.split(":");
+        const hour = parseInt(hours, 10);
+        const ampm = hour >= 12 ? "PM" : "AM";
+        const hour12 = hour % 12 || 12;
+        return `${hour12}:${minutes} ${ampm}`;
+    };
+
     useEffect(() => {
         if (!selectedBaby) return;
 
@@ -49,6 +58,12 @@ export default function SleepAnalytics() {
             return;
         }
 
+        const sleepHours = parseFloat(hours);
+        if (isNaN(sleepHours) || sleepHours <= 0 || sleepHours > 24) {
+            alert("Sleep duration must be a valid number between 0 and 24 hours.");
+            return;
+        }
+
         const formattedTime = `${String(time.hour).padStart(2, "0")}:${String(time.minute).padStart(2, "0")}`;
 
         try {
@@ -56,7 +71,7 @@ export default function SleepAnalytics() {
                 `${API_URL}/api/sleep`,
                 {
                     baby_id: selectedBaby.baby_id,
-                    sleep_duration: hours,
+                    sleep_duration: sleepHours,
                     time_fell_asleep: formattedTime,
                     date,
                 },
@@ -70,7 +85,7 @@ export default function SleepAnalytics() {
             setDate("");
             setIsOpen(false);
         } catch (err) {
-            console.error("Failed to add growth record: ", err);
+            console.error("Failed to add sleep record: ", err);
         }
     };
 
@@ -165,7 +180,7 @@ export default function SleepAnalytics() {
                                     </div>
                                     <div className="cardEntryDetail">
                                         <span className="cardEntryDetailLabel">Fell Asleep</span>
-                                        <span className="cardEntryDetailValue">{record.time_fell_asleep}</span>
+                                        <span className="cardEntryDetailValue">{formatTime12Hour(record.time_fell_asleep)}</span>
                                     </div>
                                 </div>
                             </div>
@@ -186,11 +201,14 @@ export default function SleepAnalytics() {
                         Add Sleep
                     </ModalHeader>
                     <ModalBody className="modalBody">
-                        <Input 
+                        <Input
                             variant="bordered"
-                            label="Hours" 
-                            placeholder="Hours slept" 
+                            label="Sleep Duration (hours)"
+                            placeholder="Hours slept (e.g., 8.5)"
                             type="number"
+                            step="0.1"
+                            min="0.1"
+                            max="24"
                             value={hours}
                             onChange={(e) => setHours(e.target.value)}
                         />
