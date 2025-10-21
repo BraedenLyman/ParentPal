@@ -22,6 +22,7 @@ import Navbar from "../../nav-bar/navbar";
 import axios from "axios";
 import { auth } from "../../../firebase/firebaseAuth";
 import API_URL from "../../../config/api";
+import "../settings/settings.css";
 import "./parent-assigned-tasks.css";
 
 export default function ParentAssignedTasks() {
@@ -256,7 +257,7 @@ export default function ParentAssignedTasks() {
     }
 
     return (
-        <div className="parent-assigned-tasks-container">
+        <div className="settings-container">
             <div className="header">
                 <div className="headerContainer">
                     <Button
@@ -280,78 +281,84 @@ export default function ParentAssignedTasks() {
                 </div>
             </div>
 
-            <div className="parent-assigned-tasks-content">
-                <div className="add-task-button-container">
-                    <Button
-                        color="primary"
-                        startContent={<PlusIcon className="w-5 h-5" />}
-                        onPress={openAddModal}
-                    >
-                        Add Task
-                    </Button>
-                </div>
+            <div className="settings-content">
+                <div className="babysitter-section">
+                    <div className="section-header">
+                        <Button
+                            color="primary"
+                            size="lg"
+                            startContent={<PlusIcon className="w-5 h-5" />}
+                            onPress={openAddModal}
+                            className="add-babysitter-button"
+                        >
+                            Add Task
+                        </Button>
+                    </div>
 
-                <div className="tasks-list">
                     {tasks.length > 0 ? (
-                        tasks.map((task) => (
-                            <Card key={task.task_id} className="task-card">
-                                <div className="task-card-content">
-                                    <div className="task-checkbox">
-                                        <Checkbox
-                                            isSelected={task.is_completed}
-                                            onValueChange={() => handleToggleComplete(task)}
-                                            color="success"
-                                        />
-                                    </div>
-                                    <div className={`task-info ${task.is_completed ? 'completed' : ''}`}>
-                                        <h3 className="task-title">{task.task_title}</h3>
-                                        {task.task_description && (
-                                            <p className="task-description">{task.task_description}</p>
-                                        )}
-                                        <div className="task-meta">
-                                            <span className="task-baby">Baby: {getBabyName(task.baby_id)}</span>
-                                            <span className="task-babysitter">Babysitter: {getBabysitterName(task.babysitter_id)}</span>
-                                            {task.due_date && (
-                                                <span className="task-due-date">
-                                                    Due: {new Date(task.due_date).toLocaleDateString()}
-                                                </span>
-                                            )}
+                        <div className="babysitter-list">
+                            {tasks.map((task) => (
+                                <Card key={task.task_id} className="babysitter-card-wrapper">
+                                    <div className="card-content">
+                                        <div className="task-checkbox">
+                                            <Checkbox
+                                                isSelected={task.is_completed}
+                                                onValueChange={() => handleToggleComplete(task)}
+                                                color="success"
+                                            />
                                         </div>
-                                        {task.is_completed && (
-                                            <div className="task-completion-info">
-                                                <CheckCircleIcon className="w-5 h-5 text-green-600" />
-                                                <span>Completed {new Date(task.completed_at).toLocaleDateString()}</span>
-                                                {task.babysitter_notes && (
-                                                    <p className="babysitter-notes">Notes: {task.babysitter_notes}</p>
+                                        <div className={`babysitter-info ${task.is_completed ? 'completed' : ''}`}>
+                                            <div className="info">
+                                                <h3>{task.task_title}</h3>
+                                                {task.task_description && (
+                                                    <p>{task.task_description}</p>
+                                                )}
+                                                <div className="task-meta">
+                                                    <p>Baby: {getBabyName(task.baby_id)}</p>
+                                                    <p>Babysitter: {getBabysitterName(task.babysitter_id)}</p>
+                                                    {task.due_date && (
+                                                        <p className="status">
+                                                            Due: {new Date(task.due_date).toLocaleDateString()}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                {task.is_completed && (
+                                                    <div className="task-completion-info">
+                                                        <CheckCircleIcon className="w-5 h-5 text-green-600" />
+                                                        <span>Completed {new Date(task.completed_at).toLocaleDateString()}</span>
+                                                        {task.babysitter_notes && (
+                                                            <p>Notes: {task.babysitter_notes}</p>
+                                                        )}
+                                                    </div>
                                                 )}
                                             </div>
-                                        )}
+                                        </div>
+                                        <div className="card-actions">
+                                            <Button
+                                                isIconOnly
+                                                variant="light"
+                                                onPress={() => openEditModal(task)}
+                                            >
+                                                <PencilIcon className="w-4 h-4" />
+                                            </Button>
+                                            <Button
+                                                isIconOnly
+                                                color="danger"
+                                                variant="light"
+                                                onPress={() => openDeleteModal(task)}
+                                            >
+                                                <TrashIcon className="w-4 h-4" />
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <div className="task-actions">
-                                        <Button
-                                            isIconOnly
-                                            size="sm"
-                                            variant="light"
-                                            onPress={() => openEditModal(task)}
-                                        >
-                                            <PencilIcon className="w-5 h-5" />
-                                        </Button>
-                                        <Button
-                                            isIconOnly
-                                            size="sm"
-                                            variant="light"
-                                            color="danger"
-                                            onPress={() => openDeleteModal(task)}
-                                        >
-                                            <TrashIcon className="w-5 h-5" />
-                                        </Button>
-                                    </div>
-                                </div>
-                            </Card>
-                        ))
+                                </Card>
+                            ))}
+                        </div>
                     ) : (
-                        <Card className="empty-state">
-                            <p>No tasks created yet. Click "Add Task" to create your first task.</p>
+                        <Card className="empty-state-card">
+                            <div className="empty-state-content">
+                                <p className="no-babysitters">No tasks created yet. Click "Add Task" to create your first task.</p>
+                            </div>
                         </Card>
                     )}
                 </div>
