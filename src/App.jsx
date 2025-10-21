@@ -25,6 +25,7 @@ import NotificationPreferences from "./components/parent-pages/settings/notifica
 import CustomNotifications from "./components/parent-pages/settings/custom-notifications";
 import DataExport from "./components/parent-pages/settings/data-export";
 import PhotoGallery from "./components/parent-pages/photo-gallery/photo-gallery";
+import Reports from "./components/reports/Reports";
 import { useEffect } from 'react';
 import { useFCMToken } from './hooks/useFCMToken';
 
@@ -147,6 +148,14 @@ function App() {
         element={
           <ProtectedRoute>
             <PhotoGallery />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reports"
+        element={
+          <ProtectedRoute>
+            <Reports />
           </ProtectedRoute>
         }
       />
