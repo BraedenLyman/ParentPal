@@ -420,3 +420,35 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ========================================
+   HeroUI Modal Z-Index Overrides
+   Ensures modals appear above all content
+   ======================================== */
+
+/* HeroUI Modal Wrapper - outermost container */
+div[data-slot="wrapper"],
+[data-slot="wrapper"] {
+    z-index: 10000 !important;
+    position: fixed !important;
+    inset: 0 !important;
+}
+
+/* HeroUI Modal Backdrop */
+div[data-slot="backdrop"],
+[data-slot="backdrop"] {
+    z-index: 9998 !important;
+    position: fixed !important;
+    inset: 0 !important;
+}
+
+/* HeroUI Modal Dialog */
+section[role="dialog"],
+[role="dialog"] {
+    z-index: 9999 !important;
+}
+
+/* Catch-all for any HeroUI overlay components */
+[data-overlay-container="true"] {
+    z-index: 10001 !important;
+}

@@ -24,8 +24,6 @@
     background: linear-gradient(135deg, #fc8181 0%, #f56565 100%) !important;
 }
 
-
-
 .addButton {
     position: fixed;   
     bottom: 70px; 
@@ -160,7 +158,29 @@ html, body {
     height: 100px;
 }
 
+/* HeroUI Modal Wrapper - contains both backdrop and modal */
+div[role="dialog"][data-slot="wrapper"],
+div[data-slot="wrapper"],
+[data-slot="wrapper"] {
+    z-index: 10000 !important;
+    position: fixed !important;
+}
+
+/* HeroUI Modal Backdrop */
+div[data-slot="backdrop"],
+[data-slot="backdrop"] {
+    z-index: 9998 !important;
+    position: fixed !important;
+}
+
+/* HeroUI Modal Base - the dialog element itself */
+section[role="dialog"],
+[role="dialog"] {
+    z-index: 9999 !important;
+}
+
 .modal {
+    z-index: 9999 !important;
     width: 80%;
     max-width: 500px;
     max-height: 80vh;
@@ -304,7 +324,6 @@ html, body {
     margin-top: 40px;
 }
 
-/* Make mainDiv flex container to allow scrollContainer to grow */
 .mainDiv {
     display: flex;
     flex-direction: column;

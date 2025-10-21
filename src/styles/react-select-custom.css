@@ -104,7 +104,6 @@
   border: 1px solid #e5e7eb !important;
   margin-top: 4px !important;
   overflow: hidden !important;
-  z-index: 9999 !important;
 }
 
 .react-select__menu-list {

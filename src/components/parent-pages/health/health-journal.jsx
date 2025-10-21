@@ -114,7 +114,6 @@ export default function HealthJournal() {
             setMedDose("");
             setMedSympDescription("");
             setIsMedsOpen(false);
-            alert("Medication added successfully!");
         } catch (err) {
             console.error("Failed to add meds record: ", err);
             console.error("Error response:", err.response?.data);
@@ -192,7 +191,6 @@ export default function HealthJournal() {
             setEpiPen("");
             setAllergyNotes("");
             setIsAllergiesOpen(false);
-            alert("Allergy added successfully!");
         } catch (err) {
             console.error("Failed to add allergy record: ", err);
             console.error("Error response:", err.response?.data);
@@ -266,7 +264,6 @@ export default function HealthJournal() {
             setVaccineName("");
             setVaccineDate("");
             setIsVaccinationsOpen(false);
-            alert("Vaccination added successfully!");
         } catch (err) {
             console.error("Failed to add vaccinations record: ", err);
             console.error("Error response:", err.response?.data);
@@ -353,74 +350,112 @@ export default function HealthJournal() {
                 className="tabs"
             >
                 <Tab key="meds" title="Medications">
-                    <Button className="addButton healthButton" onPress={() => setIsMedsOpen(true)}>
-                        Add
-                    </Button>
-                    <Scrollbars className="scrollContainer" >
-                        <div className="scrollContent">
-                            {medsRecords.length === 0 ? (
-                                <h1>No med records yet</h1>
-                            ) : (
-                                medsRecords.map((record, index) => (
-                                    <Card className="cardEntry" key={record.meds_id || `med-${index}`}>
-                                        <div className="cardEntryContent">
-                                            <h2>Medication Name: {record.medication_name}</h2>
-                                            <h2>Time taken at: {record.time_taken}</h2>
-                                            <h2>Dosage: {record.dosage}</h2>
-                                            <h2>Symptoms/Description: {record.symptoms}</h2>
-                                            <h2>Date: {record.date.slice(0, 10)}</h2>
-                                        </div>
-                                    </Card>
-                                ))
-                            )}
-                        </div>
-                    </Scrollbars>
+                    <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
+                        <Button className="addButton healthButton" onPress={() => setIsMedsOpen(true)}>
+                            Add
+                        </Button>
+                        <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
+                            <div className="scrollContent" style={{ minHeight: '100%' }}>
+                                {medsRecords.length === 0 ? (
+                                    <h1>No med records yet</h1>
+                                ) : (
+                                    medsRecords.map((record, index) => (
+                                        <Card className="cardEntry" key={record.meds_id || `med-${index}`} shadow="sm">
+                                            <div className="cardEntryContent">
+                                                <div className="cardEntryHeader">
+                                                    <h3 className="cardEntryTitle">{record.medication_name}</h3>
+                                                    <span className="cardEntryDate">{typeof record.date === 'string' ? new Date(record.date).toLocaleDateString() : new Date(record.date).toLocaleDateString()}</span>
+                                                </div>
+                                                <div className="cardEntryDetails">
+                                                    <div className="cardEntryDetail">
+                                                        <span className="cardEntryDetailLabel">Time Taken</span>
+                                                        <span className="cardEntryDetailValue">{record.time_taken}</span>
+                                                    </div>
+                                                    <div className="cardEntryDetail">
+                                                        <span className="cardEntryDetailLabel">Dosage</span>
+                                                        <span className="cardEntryDetailValue">{record.dosage}</span>
+                                                    </div>
+                                                </div>
+                                                {record.symptoms && (
+                                                    <div style={{ marginTop: '8px' }}>
+                                                        <span className="cardEntryDetailLabel">Symptoms/Description</span>
+                                                        <p style={{ fontSize: '13px', margin: '4px 0 0 0', color: '#555' }}>{record.symptoms}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </Card>
+                                    ))
+                                )}
+                            </div>
+                        </Scrollbars>
+                    </div>
                 </Tab>
 
                 <Tab key="allergies" title="Allergies">
-                    <Button className="addButton healthButton" onPress={() => setIsAllergiesOpen(true)}>
-                        Add
-                    </Button>
-                    <Scrollbars className="scrollContainer" >
-                        <div className="scrollContent">
-                            {allergiesRecords.length === 0 ? (
-                                <h1>No allergy records yet</h1>
-                            ) : (
-                                allergiesRecords.map((record, index) => (
-                                    <Card className="cardEntry" key={record.allergy_id || `allergy-${index}`}>
-                                        <div className="cardEntryContent">
-                                            <h2>Allergy: {record.allergy_name}</h2>
-                                            <h2>Severity: {record.severity}</h2>
-                                            <h2>Epi Pen: {record.epi_pen}</h2>
-                                            <h2>Notes: {record.notes}</h2>
-                                        </div>
-                                    </Card>
-                                ))
-                            )}
-                        </div>
-                    </Scrollbars>
+                    <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
+                        <Button className="addButton healthButton" onPress={() => setIsAllergiesOpen(true)}>
+                            Add
+                        </Button>
+                        <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
+                            <div className="scrollContent" style={{ minHeight: '100%' }}>
+                                {allergiesRecords.length === 0 ? (
+                                    <h1>No allergy records yet</h1>
+                                ) : (
+                                    allergiesRecords.map((record, index) => (
+                                        <Card className="cardEntry" key={record.allergy_id || `allergy-${index}`} shadow="sm">
+                                            <div className="cardEntryContent">
+                                                <div className="cardEntryHeader">
+                                                    <h3 className="cardEntryTitle">{record.allergy_name}</h3>
+                                                </div>
+                                                <div className="cardEntryDetails">
+                                                    <div className="cardEntryDetail">
+                                                        <span className="cardEntryDetailLabel">Severity</span>
+                                                        <span className="cardEntryDetailValue">{record.severity.charAt(0).toUpperCase() + record.severity.slice(1)}</span>
+                                                    </div>
+                                                    <div className="cardEntryDetail">
+                                                        <span className="cardEntryDetailLabel">Epi Pen</span>
+                                                        <span className="cardEntryDetailValue">{typeof record.epi_pen === 'boolean' ? (record.epi_pen ? 'Yes' : 'No') : record.epi_pen}</span>
+                                                    </div>
+                                                </div>
+                                                {record.notes && (
+                                                    <div style={{ marginTop: '8px' }}>
+                                                        <span className="cardEntryDetailLabel">Notes</span>
+                                                        <p style={{ fontSize: '13px', margin: '4px 0 0 0', color: '#555' }}>{record.notes}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </Card>
+                                    ))
+                                )}
+                            </div>
+                        </Scrollbars>
+                    </div>
                 </Tab>
 
                 <Tab key="vaccinations" title="Vaccinations">
-                    <Button className="addButton healthButton" onPress={() => setIsVaccinationsOpen(true)}>
-                        Add
-                    </Button>
-                    <Scrollbars className="scrollContainer" >
-                        <div className="scrollContent">
-                            {vaccinationsRecords.length === 0 ? (
-                                <h1>No vaccinations records yet</h1>
-                            ) : (
-                                vaccinationsRecords.map((record, index) => (
-                                    <Card className="cardEntry" key={record.vaccine_id || `vaccine-${index}`}>
-                                        <div className="cardEntryContent">
-                                            <h2>Vaccine: {record.vaccination_name}</h2>
-                                            <h2>Date of Vaccine: {record.date_of_vaccine.slice(0, 10)}</h2>
-                                        </div>
-                                    </Card>
-                                ))
-                            )}
-                        </div>
-                    </Scrollbars>
+                    <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
+                        <Button className="addButton healthButton" onPress={() => setIsVaccinationsOpen(true)}>
+                            Add
+                        </Button>
+                        <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
+                            <div className="scrollContent" style={{ minHeight: '100%' }}>
+                                {vaccinationsRecords.length === 0 ? (
+                                    <h1>No vaccinations records yet</h1>
+                                ) : (
+                                    vaccinationsRecords.map((record, index) => (
+                                        <Card className="cardEntry" key={record.vaccine_id || `vaccine-${index}`} shadow="sm">
+                                            <div className="cardEntryContent">
+                                                <div className="cardEntryHeader">
+                                                    <h3 className="cardEntryTitle">{record.vaccination_name}</h3>
+                                                    <span className="cardEntryDate">{typeof record.date_of_vaccine === 'string' ? new Date(record.date_of_vaccine).toLocaleDateString() : new Date(record.date_of_vaccine).toLocaleDateString()}</span>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    ))
+                                )}
+                            </div>
+                        </Scrollbars>
+                    </div>
                 </Tab>
             </Tabs>
 
@@ -468,8 +503,10 @@ export default function HealthJournal() {
                             onChange={(e) => setMedSympDescription(e.target.value)}
                         />
                     </ModalBody>
-                <ModalFooter>
-                    <Button onPress={() => setIsMedsOpen(false)}>Cancel</Button>
+                <ModalFooter className="modalFooter">
+                    <Button onPress={() => setIsMedsOpen(false)}>
+                        Cancel
+                    </Button>
                     <Button onPress={handleAddMeds}>
                         Add
                     </Button>
@@ -489,18 +526,23 @@ export default function HealthJournal() {
                                 onChange={(e) => setAllergy(e.target.value)}
                             />
 
-                            <div className="custom-select-wrapper">
-                                <label className="custom-select-label">Severity</label>
-                                <select
-                                    className="custom-select"
-                                    value={severity}
-                                    onChange={(e) => setSeverity(e.target.value)}
-                                >
-                                    <option value="">Select severity</option>
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
-                                </select>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>Severity</label>
+                                <Select
+                                    options={[
+                                        { value: 'low', label: 'Low' },
+                                        { value: 'medium', label: 'Medium' },
+                                        { value: 'high', label: 'High' }
+                                    ]}
+                                    value={severity ? { value: severity, label: severity.charAt(0).toUpperCase() + severity.slice(1) } : null}
+                                    onChange={(option) => {
+                                        if (option) {
+                                            setSeverity(option.value);
+                                        }
+                                    }}
+                                    placeholder="Select severity"
+                                    isSearchable={false}
+                                />
                             </div>
 
                             <RadioGroup
@@ -520,8 +562,10 @@ export default function HealthJournal() {
                                 onChange={(e) => setAllergyNotes(e.target.value)}
                             />
                         </ModalBody>
-                    <ModalFooter>
-                        <Button onPress={() => setIsAllergiesOpen(false)}>Cancel</Button>
+                    <ModalFooter className="modalFooter">
+                        <Button onPress={() => setIsAllergiesOpen(false)}>
+                            Cancel
+                        </Button>
                         <Button onPress={handleAddAllergies}>
                             Add
                         </Button>
@@ -552,8 +596,10 @@ export default function HealthJournal() {
                                 onChange={(e) => setVaccineDate(e.target.value)}
                             />
                         </ModalBody>
-                        <ModalFooter>
-                            <Button onPress={() => setIsVaccinationsOpen(false)}>Cancel</Button>
+                        <ModalFooter className="modalFooter">
+                            <Button onPress={() => setIsVaccinationsOpen(false)}>
+                                Cancel
+                            </Button>
                             <Button onPress={handleAddVaccinations}>
                                 Add
                             </Button>
