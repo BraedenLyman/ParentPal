@@ -1,3 +1,4 @@
+import React from "react";
 import axios from "axios";
 import Navbar from "../../nav-bar/navbar";
 import { Button, Card, Input, ModalBody, ModalContent, ModalFooter, ModalHeader, Tabs, Tab, RadioGroup, Radio, Image } from "@heroui/react";
@@ -48,7 +49,15 @@ export default function HealthJournal() {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
-                setMedsRecords(data);
+
+                const normalizedData = data.map(record => ({
+                    ...record,
+                    meds_id: typeof record.meds_id === 'object'
+                        ? record.meds_id.meds_id
+                        : record.meds_id
+                }));
+
+                setMedsRecords(normalizedData);
             } catch (err) {
                 console.error("Failed to fetch meds records: ", err)
             }
@@ -58,14 +67,23 @@ export default function HealthJournal() {
     }, [selectedBaby]);
     
     const handleAddMeds = async () => {
+        console.log("handleAddMeds called");
+        console.log("Form values:", { medName, medsTimeTaken, medDate, medDose, medSympDescription, selectedBaby });
+
         if (!medName || !medsTimeTaken || !medDate || !medDose || !medSympDescription) {
             alert("Please fill out all fields.");
+            return;
+        }
+
+        if (!selectedBaby || !selectedBaby.baby_id) {
+            alert("No baby selected. Please select a baby first.");
             return;
         }
 
         const formattedTime = `${String(medsTimeTaken.hour).padStart(2, "0")}:${String(medsTimeTaken.minute).padStart(2, "0")}`;
 
         try {
+            console.log("Sending medication data to API...");
             const { data: newRecord } = await axios.post(
                 `${API_URL}/api/meds`,
                 {
@@ -79,7 +97,16 @@ export default function HealthJournal() {
                 { withCredentials: true }
             );
 
-            setMedsRecords((prev) => [...prev, newRecord]);
+            console.log("Medication record added successfully:", newRecord);
+
+            const normalizedRecord = {
+                ...newRecord,
+                meds_id: typeof newRecord.meds_id === 'object'
+                    ? newRecord.meds_id.meds_id
+                    : newRecord.meds_id
+            };
+
+            setMedsRecords((prev) => [...prev, normalizedRecord]);
 
             setMedName("");
             setMedsTimeTaken("");
@@ -87,8 +114,10 @@ export default function HealthJournal() {
             setMedDose("");
             setMedSympDescription("");
             setIsMedsOpen(false);
+            alert("Medication added successfully!");
         } catch (err) {
             console.error("Failed to add meds record: ", err);
+            console.error("Error response:", err.response?.data);
             alert(`Failed to add medication: ${err.response?.data?.error || err.message}`);
         }
     };
@@ -102,7 +131,15 @@ export default function HealthJournal() {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
-                setAllergiesRecords(data);
+
+                const normalizedData = data.map(record => ({
+                    ...record,
+                    allergy_id: typeof record.allergy_id === 'object'
+                        ? record.allergy_id.allergy_id
+                        : record.allergy_id
+                }));
+
+                setAllergiesRecords(normalizedData);
             } catch (err) {
                 console.error("Failed to fetch allergies records: ", err)
             }
@@ -112,12 +149,21 @@ export default function HealthJournal() {
     }, [selectedBaby]);
 
     const handleAddAllergies = async () => {
+        console.log("handleAddAllergies called");
+        console.log("Form values:", { allergy, severity, epiPen, allergyNotes, selectedBaby });
+
         if (!allergy || !severity || !epiPen || !allergyNotes) {
             alert("Please fill out all fields.");
             return;
         }
 
+        if (!selectedBaby || !selectedBaby.baby_id) {
+            alert("No baby selected. Please select a baby first.");
+            return;
+        }
+
         try {
+            console.log("Sending allergy data to API...");
             const { data: newRecord } = await axios.post(
                 `${API_URL}/api/allergies`,
                 {
@@ -130,15 +176,26 @@ export default function HealthJournal() {
                 { withCredentials: true }
             );
 
-            setAllergiesRecords((prev) => [...prev, newRecord]);
+            console.log("Allergy record added successfully:", newRecord);
+
+            const normalizedRecord = {
+                ...newRecord,
+                allergy_id: typeof newRecord.allergy_id === 'object'
+                    ? newRecord.allergy_id.allergy_id
+                    : newRecord.allergy_id
+            };
+
+            setAllergiesRecords((prev) => [...prev, normalizedRecord]);
 
             setAllergy("");
             setSeverity("");
             setEpiPen("");
             setAllergyNotes("");
             setIsAllergiesOpen(false);
+            alert("Allergy added successfully!");
         } catch (err) {
             console.error("Failed to add allergy record: ", err);
+            console.error("Error response:", err.response?.data);
             alert(`Failed to add allergy: ${err.response?.data?.error || err.message}`);
         }
     };
@@ -152,7 +209,15 @@ export default function HealthJournal() {
                     params: { baby_id: selectedBaby.baby_id },
                     withCredentials: true,
                 });
-                setVaccinationsRecords(data);
+
+                const normalizedData = data.map(record => ({
+                    ...record,
+                    vaccine_id: typeof record.vaccine_id === 'object'
+                        ? record.vaccine_id.vaccine_id
+                        : record.vaccine_id
+                }));
+
+                setVaccinationsRecords(normalizedData);
             } catch (err) {
                 console.error("Failed to fetch vaccinations records: ", err)
             }
@@ -162,12 +227,21 @@ export default function HealthJournal() {
     }, [selectedBaby]);
 
     const handleAddVaccinations = async () => {
+        console.log("handleAddVaccinations called");
+        console.log("Form values:", { vaccineName, vaccineDate, selectedBaby });
+
         if (!vaccineName || !vaccineDate) {
             alert("Please fill out all fields.");
             return;
         }
 
+        if (!selectedBaby || !selectedBaby.baby_id) {
+            alert("No baby selected. Please select a baby first.");
+            return;
+        }
+
         try {
+            console.log("Sending vaccination data to API...");
             const { data: newRecord } = await axios.post(
                 `${API_URL}/api/vaccinations`,
                 {
@@ -178,13 +252,24 @@ export default function HealthJournal() {
                 { withCredentials: true }
             );
 
-            setVaccinationsRecords((prev) => [...prev, newRecord]);
+            console.log("Vaccination record added successfully:", newRecord);
+
+            const normalizedRecord = {
+                ...newRecord,
+                vaccine_id: typeof newRecord.vaccine_id === 'object'
+                    ? newRecord.vaccine_id.vaccine_id
+                    : newRecord.vaccine_id
+            };
+
+            setVaccinationsRecords((prev) => [...prev, normalizedRecord]);
 
             setVaccineName("");
             setVaccineDate("");
             setIsVaccinationsOpen(false);
+            alert("Vaccination added successfully!");
         } catch (err) {
             console.error("Failed to add vaccinations record: ", err);
+            console.error("Error response:", err.response?.data);
             alert(`Failed to add vaccination: ${err.response?.data?.error || err.message}`);
         }
     };
@@ -268,80 +353,74 @@ export default function HealthJournal() {
                 className="tabs"
             >
                 <Tab key="meds" title="Medications">
-                    <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
-                        <Button className="addButton healthButton" onPress={() => setIsMedsOpen(true)}>
-                            Add
-                        </Button>
-                        <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
-                            <div className="scrollContent" style={{ minHeight: '100%' }}>
-                                {medsRecords.length === 0 ? (
-                                    <h1>No med records yet</h1>
-                                ) : (
-                                    medsRecords.map((record, index) => (
-                                        <Card className="cardEntry" key={record.meds_id || `med-${index}`} shadow="sm">
-                                            <div className="cardEntryContent">
-                                                <h2>Medication Name: {record.medication_name}</h2>
-                                                <h2>Time taken at: {record.time_taken}</h2>
-                                                <h2>Dosage: {record.dosage}</h2>
-                                                <h2>Symptoms/Description: {record.symptoms}</h2>
-                                                <h2>Date: {typeof record.date === 'string' ? record.date.slice(0, 10) : new Date(record.date).toLocaleDateString()}</h2>
-                                            </div>
-                                        </Card>
-                                    ))
-                                )}
-                            </div>
-                        </Scrollbars>
-                    </div>
+                    <Button className="addButton healthButton" onPress={() => setIsMedsOpen(true)}>
+                        Add
+                    </Button>
+                    <Scrollbars className="scrollContainer" >
+                        <div className="scrollContent">
+                            {medsRecords.length === 0 ? (
+                                <h1>No med records yet</h1>
+                            ) : (
+                                medsRecords.map((record, index) => (
+                                    <Card className="cardEntry" key={record.meds_id || `med-${index}`}>
+                                        <div className="cardEntryContent">
+                                            <h2>Medication Name: {record.medication_name}</h2>
+                                            <h2>Time taken at: {record.time_taken}</h2>
+                                            <h2>Dosage: {record.dosage}</h2>
+                                            <h2>Symptoms/Description: {record.symptoms}</h2>
+                                            <h2>Date: {record.date.slice(0, 10)}</h2>
+                                        </div>
+                                    </Card>
+                                ))
+                            )}
+                        </div>
+                    </Scrollbars>
                 </Tab>
 
                 <Tab key="allergies" title="Allergies">
-                    <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
-                        <Button className="addButton healthButton" onPress={() => setIsAllergiesOpen(true)}>
-                            Add
-                        </Button>
-                        <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
-                            <div className="scrollContent" style={{ minHeight: '100%' }}>
-                                {allergiesRecords.length === 0 ? (
-                                    <h1>No allergy records yet</h1>
-                                ) : (
-                                    allergiesRecords.map((record, index) => (
-                                        <Card className="cardEntry" key={record.allergy_id || `allergy-${index}`} shadow="sm">
-                                            <div className="cardEntryContent">
-                                                <h2>Allergy: {record.allergy_name}</h2>
-                                                <h2>Severity: {record.severity}</h2>
-                                                <h2>Epi Pen: {typeof record.epi_pen === 'boolean' ? (record.epi_pen ? 'Yes' : 'No') : record.epi_pen}</h2>
-                                                <h2>Notes: {record.notes}</h2>
-                                            </div>
-                                        </Card>
-                                    ))
-                                )}
-                            </div>
-                        </Scrollbars>
-                    </div>
+                    <Button className="addButton healthButton" onPress={() => setIsAllergiesOpen(true)}>
+                        Add
+                    </Button>
+                    <Scrollbars className="scrollContainer" >
+                        <div className="scrollContent">
+                            {allergiesRecords.length === 0 ? (
+                                <h1>No allergy records yet</h1>
+                            ) : (
+                                allergiesRecords.map((record, index) => (
+                                    <Card className="cardEntry" key={record.allergy_id || `allergy-${index}`}>
+                                        <div className="cardEntryContent">
+                                            <h2>Allergy: {record.allergy_name}</h2>
+                                            <h2>Severity: {record.severity}</h2>
+                                            <h2>Epi Pen: {record.epi_pen}</h2>
+                                            <h2>Notes: {record.notes}</h2>
+                                        </div>
+                                    </Card>
+                                ))
+                            )}
+                        </div>
+                    </Scrollbars>
                 </Tab>
 
                 <Tab key="vaccinations" title="Vaccinations">
-                    <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
-                        <Button className="addButton healthButton" onPress={() => setIsVaccinationsOpen(true)}>
-                            Add
-                        </Button>
-                        <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
-                            <div className="scrollContent" style={{ minHeight: '100%' }}>
-                                {vaccinationsRecords.length === 0 ? (
-                                    <h1>No vaccinations records yet</h1>
-                                ) : (
-                                    vaccinationsRecords.map((record, index) => (
-                                        <Card className="cardEntry" key={record.vaccine_id || `vaccine-${index}`} shadow="sm">
-                                            <div className="cardEntryContent">
-                                                <h2>Vaccine: {record.vaccination_name}</h2>
-                                                <h2>Date of Vaccine: {typeof record.date_of_vaccine === 'string' ? record.date_of_vaccine.slice(0, 10) : new Date(record.date_of_vaccine).toLocaleDateString()}</h2>
-                                            </div>
-                                        </Card>
-                                    ))
-                                )}
-                            </div>
-                        </Scrollbars>
-                    </div>
+                    <Button className="addButton healthButton" onPress={() => setIsVaccinationsOpen(true)}>
+                        Add
+                    </Button>
+                    <Scrollbars className="scrollContainer" >
+                        <div className="scrollContent">
+                            {vaccinationsRecords.length === 0 ? (
+                                <h1>No vaccinations records yet</h1>
+                            ) : (
+                                vaccinationsRecords.map((record, index) => (
+                                    <Card className="cardEntry" key={record.vaccine_id || `vaccine-${index}`}>
+                                        <div className="cardEntryContent">
+                                            <h2>Vaccine: {record.vaccination_name}</h2>
+                                            <h2>Date of Vaccine: {record.date_of_vaccine.slice(0, 10)}</h2>
+                                        </div>
+                                    </Card>
+                                ))
+                            )}
+                        </div>
+                    </Scrollbars>
                 </Tab>
             </Tabs>
 

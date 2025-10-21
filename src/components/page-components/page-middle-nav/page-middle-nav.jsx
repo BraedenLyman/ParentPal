@@ -1,3 +1,4 @@
+import React from "react";
 import { Card } from "@heroui/react";
 import "./page-middle-nav.css";
 import { useNavigate } from "react-router-dom";

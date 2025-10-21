@@ -1,3 +1,4 @@
+import React from "react";
 import {Button, Image} from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import "./register-styles.css";

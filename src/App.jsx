@@ -1,3 +1,4 @@
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/protected-route";
 import IndexPage from "./components/page-components";

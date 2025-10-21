@@ -1,4 +1,5 @@
 // forgot-password.jsx
+import React from "react";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import { Button, Input } from "@heroui/react";
 import { useNavigate } from "react-router-dom";

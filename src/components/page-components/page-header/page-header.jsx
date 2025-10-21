@@ -1,3 +1,4 @@
+import React from "react";
 import { FiBell } from "react-icons/fi";
 import "./page-header.css";
 import { Avatar, Card } from "@heroui/react";

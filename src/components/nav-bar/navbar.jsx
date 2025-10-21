@@ -1,3 +1,4 @@
+import React from "react";
 import { HomeIcon as HomeIconOutline } from "@heroicons/react/24/outline";
 import { ChartBarIcon as ChartBarIconOutline } from "@heroicons/react/24/outline";
 import { Cog6ToothIcon as Cog6ToothIconOutline } from "@heroicons/react/24/outline";

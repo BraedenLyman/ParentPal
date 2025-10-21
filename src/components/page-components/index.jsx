@@ -1,3 +1,4 @@
+import React from "react";
 import SignIn from "../auth/sign-in/sign-in";
 
 export default function IndexPage() {

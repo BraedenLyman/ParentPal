@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./dashboard-styles.css"
 import { Avatar, Card, Image } from "@heroui/react";
