@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import "../register-styles.css";
+import "./register-styles.css";
 import { Button, Progress } from "@heroui/react";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 

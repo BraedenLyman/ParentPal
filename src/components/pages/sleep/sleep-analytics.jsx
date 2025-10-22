@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import "../parent-pages.css";
+import "../pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useBabyData } from "../../../hooks/useBabyData";
 import API_URL from "../../../config/api";

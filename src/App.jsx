@@ -1,16 +1,15 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/protected-route";
-import IndexPage from "./components/page-components";
 import SignIn from "./components/auth/sign-in/sign-in";
 import SignUp from "./components/auth/register/sign-up";
 import ForgotPassword from "./components/auth/sign-in/forgot-password/forgot-password";
 import CreateAccount from "./components/auth/register/create-account";
-import AccountComplete from "./components/auth/register/account-creation-seq/account-complete";
+import AccountComplete from "./components/auth/register/account-complete";
 import ParentDashboard from "./components/pages/dashboard/parent-dashboard";
 import BabysitterDashboard from "./components/pages/dashboard/babysitter-dashboard";
 import AssignedTasks from "./components/pages/babysitter-assigned-tasks/assigned-tasks";
-import ParentAssignedTasks from "./components/pages/assigned-tasks/parent-assigned-tasks";
+import ParentAssignedTasks from "./components/pages/parent-assigned-tasks/parent-assigned-tasks";
 import ResetPassword from "./components/auth/sign-in/forgot-password/reset-password";
 import GrowthTracker from "./components/pages/growth/growth-tracker";
 import SleepAnalytics from "./components/pages/sleep/sleep-analytics";
@@ -21,35 +20,11 @@ import Settings from "./components/pages/settings/settings";
 import PersonalInformation from "./components/pages/settings/personal-information";
 import SharedAccounts from "./components/pages/settings/shared-accounts";
 import BabysitterSharedAccounts from "./components/pages/settings/babysitter-shared-accounts";
-import Notifications from "./components/pages/settings/notifications";
-import NotificationPreferences from "./components/pages/settings/notification-preferences";
-import CustomNotifications from "./components/pages/settings/custom-notifications";
 import DataExport from "./components/pages/settings/data-export";
 import PhotoGallery from "./components/pages/photo-gallery/photo-gallery";
-import Reports from "./components/reports/Reports";
-import { useEffect } from 'react';
-import { useFCMToken } from './hooks/useFCMToken';
+import Reports from "./components/pages/reports/Reports";
 
 function App() {
-  const { notification } = useFCMToken();
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/firebase-messaging-sw.js')
-        .then((registration) => {
-          console.log('Service Worker registered:', registration);
-        })
-        .catch((error) => {
-          console.error('Service Worker registration failed:', error);
-        });
-    }
-  }, []);
-
-  useEffect(() => {
-    if (notification) {
-      console.log('Received notification:', notification);
-    }
-  }, [notification]);
 
   return (
     <Routes>
@@ -64,11 +39,7 @@ function App() {
       {/** Protected Routes  */}
       <Route
         path="/"
-        element={
-          <ProtectedRoute>
-            <IndexPage />
-          </ProtectedRoute>
-        }
+        element={<SignIn />}
       />
       <Route
         path="/parent-dashboard"
@@ -189,30 +160,6 @@ function App() {
         element={
           <ProtectedRoute>
             <BabysitterSharedAccounts />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/settings/notifications"
-        element={
-          <ProtectedRoute>
-            <Notifications />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/settings/notifications/preferences"
-        element={
-          <ProtectedRoute>
-            <NotificationPreferences />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/settings/notifications/custom"
-        element={
-          <ProtectedRoute>
-            <CustomNotifications />
           </ProtectedRoute>
         }
       />

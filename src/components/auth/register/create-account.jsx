@@ -104,7 +104,7 @@ export default function CreateAccount() {
       ...payload,
     });
 
-    navigate("/account-complete", { state: payload });
+    navigate("account-complete", { state: payload });
   } catch (error) {
     console.error("Error creating account:", error);
     setErrors([error.message]);

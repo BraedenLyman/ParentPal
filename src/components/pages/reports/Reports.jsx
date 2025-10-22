@@ -7,12 +7,12 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { FiBell } from "react-icons/fi";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
-import Navbar from "../pages/nav-bar/navbar";
-import Select from "../custom-select/CustomSelect";
-import { auth } from "../../firebase/firebaseAuth";
-import API_URL from "../../config/api";
+import Navbar from "../nav-bar/navbar";
+import Select from "../../custom-select/CustomSelect";
+import { auth } from "../../../firebase/firebaseAuth";
+import API_URL from "../../../config/api";
 import ReportsCharts from "./ReportsCharts";
-import "../pages/parent-pages.css";
+import "../pages.css";
 import "./reports.css";
 
 export default function Reports() {
