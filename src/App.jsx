@@ -7,24 +7,25 @@ import SignUp from "./components/auth/register/sign-up";
 import ForgotPassword from "./components/auth/sign-in/forgot-password/forgot-password";
 import CreateAccount from "./components/auth/register/create-account";
 import AccountComplete from "./components/auth/register/account-creation-seq/account-complete";
-import ParentDashboard from "./components/dashboard/parent-dashboard";
-import BabysitterDashboard from "./components/dashboard/babysitter-dashboard";
-import AssignedTasks from "./components/babysitter-pages/assigned-tasks";
-import ParentAssignedTasks from "./components/parent-pages/assigned-tasks/parent-assigned-tasks";
+import ParentDashboard from "./components/pages/dashboard/parent-dashboard";
+import BabysitterDashboard from "./components/pages/dashboard/babysitter-dashboard";
+import AssignedTasks from "./components/pages/babysitter-assigned-tasks/assigned-tasks";
+import ParentAssignedTasks from "./components/pages/assigned-tasks/parent-assigned-tasks";
 import ResetPassword from "./components/auth/sign-in/forgot-password/reset-password";
-import GrowthTracker from "./components/parent-pages/growth/growth-tracker";
-import SleepAnalytics from "./components/parent-pages/sleep/sleep-analytics";
-import HealthJournal from "./components/parent-pages/health/health-journal";
-import FeedingNotes from "./components/parent-pages/notes/feeding/feeding-notes";
-import ObservationNotes from "./components/parent-pages/notes/observation/observation-notes";
-import Settings from "./components/parent-pages/settings/settings";
-import PersonalInformation from "./components/parent-pages/settings/personal-information";
-import SharedAccounts from "./components/parent-pages/settings/shared-accounts";
-import Notifications from "./components/parent-pages/settings/notifications";
-import NotificationPreferences from "./components/parent-pages/settings/notification-preferences";
-import CustomNotifications from "./components/parent-pages/settings/custom-notifications";
-import DataExport from "./components/parent-pages/settings/data-export";
-import PhotoGallery from "./components/parent-pages/photo-gallery/photo-gallery";
+import GrowthTracker from "./components/pages/growth/growth-tracker";
+import SleepAnalytics from "./components/pages/sleep/sleep-analytics";
+import HealthJournal from "./components/pages/health/health-journal";
+import FeedingNotes from "./components/pages/notes/feeding/feeding-notes";
+import ObservationNotes from "./components/pages/notes/observation/observation-notes";
+import Settings from "./components/pages/settings/settings";
+import PersonalInformation from "./components/pages/settings/personal-information";
+import SharedAccounts from "./components/pages/settings/shared-accounts";
+import BabysitterSharedAccounts from "./components/pages/settings/babysitter-shared-accounts";
+import Notifications from "./components/pages/settings/notifications";
+import NotificationPreferences from "./components/pages/settings/notification-preferences";
+import CustomNotifications from "./components/pages/settings/custom-notifications";
+import DataExport from "./components/pages/settings/data-export";
+import PhotoGallery from "./components/pages/photo-gallery/photo-gallery";
 import Reports from "./components/reports/Reports";
 import { useEffect } from 'react';
 import { useFCMToken } from './hooks/useFCMToken';
@@ -180,6 +181,14 @@ function App() {
         element={
           <ProtectedRoute>
             <SharedAccounts />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings/babysitter-shared-accounts"
+        element={
+          <ProtectedRoute>
+            <BabysitterSharedAccounts />
           </ProtectedRoute>
         }
       />

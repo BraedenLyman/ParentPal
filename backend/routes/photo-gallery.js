@@ -83,6 +83,29 @@ router.get('/parent/:parentId', async (req, res) => {
     }
 });
 
+// Get all photos for babies accessible to a babysitter
+router.get('/babysitter/:babysitterId', async (req, res) => {
+    const { babysitterId } = req.params;
+
+    try {
+        const result = await pool.query(
+            `SELECT DISTINCT pg.*, b.first_name, b.last_name
+             FROM photo_gallery pg
+             JOIN baby b ON pg.baby_id = b.baby_id
+             JOIN babysitter_shares bs ON b.parent_id = bs.parent_id
+             WHERE bs.babysitter_id = $1
+               AND bs.is_verified = true
+             ORDER BY pg.uploaded_at DESC`,
+            [babysitterId]
+        );
+
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching photos:', error);
+        res.status(500).json({ error: 'Failed to fetch photos' });
+    }
+});
+
 // Upload a new photo
 router.post('/upload', upload.single('photo'), async (req, res) => {
     const { baby_id, parent_id, caption } = req.body;

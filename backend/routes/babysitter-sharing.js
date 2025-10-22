@@ -169,6 +169,7 @@ router.get('/children/:babysitter_id', async (req, res) => {
                 b.last_name,
                 b.birth_date,
                 b.gender,
+                b.parent_id,
                 a.first_name as parent_first_name,
                 a.last_name as parent_last_name,
                 bs.verified_at,
