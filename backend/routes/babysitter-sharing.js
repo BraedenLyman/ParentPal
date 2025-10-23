@@ -2,26 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
-const nodemailer = require('nodemailer');
+const { sendEmail } = require('../services/emailService');
 
 function generateVerificationCode() {
     return Math.floor(1000 + Math.random() * 9000).toString();
 }
-
-// Check if email credentials are configured
-if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-    console.error('WARNING: Email credentials not configured. EMAIL_USER or EMAIL_PASSWORD is missing.');
-}
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-    },
-    debug: true, // Enable debug output
-    logger: true // Log to console
-});
 
 router.post('/invite', async (req, res) => {
     const { parent_id, babysitter_email, babysitter_name } = req.body;
@@ -59,59 +44,42 @@ router.post('/invite', async (req, res) => {
 
         console.log(`Verification code for ${babysitter_email}: ${verificationCode}`);
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
+        const emailHtml = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+                <div style="background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h2 style="color: #333; margin-top: 0;">You've been invited to ParentPal!</h2>
+                    <p style="color: #666; font-size: 16px;">Hi ${babysitter_name},</p>
+                    <p style="color: #666; font-size: 16px;">${parentName} has invited you to access their child's information on ParentPal.</p>
+
+                    <div style="background-color: #f0f7ff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+                        <p style="color: #333; margin: 0 0 10px 0; font-size: 14px;">Your verification code:</p>
+                        <p style="font-size: 32px; font-weight: bold; color: #007AFF; margin: 0; letter-spacing: 8px;">${verificationCode}</p>
+                    </div>
+
+                    <p style="color: #666; font-size: 16px; margin-bottom: 10px;">To accept this invitation:</p>
+                    <ol style="color: #666; font-size: 16px; line-height: 1.8;">
+                        <li>Sign up for ParentPal as a babysitter (or sign in if you already have an account)</li>
+                        <li>Go to Settings</li>
+                        <li>Enter the verification code above in the Verification Code section</li>
+                    </ol>
+                    <p style="color: #999; font-size: 14px; margin-top: 30px;">This code will expire in 7 days.</p>
+                    <p style="color: #666; font-size: 16px; margin-bottom: 0;">Best regards,<br><strong>The ParentPal Team</strong></p>
+                </div>
+            </div>
+        `;
+
+        // Send email asynchronously (don't block response)
+        sendEmail({
             to: babysitter_email,
             subject: 'ParentPal - Babysitter Access Invitation',
-            html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
-                    <div style="background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                        <h2 style="color: #333; margin-top: 0;">You've been invited to ParentPal!</h2>
-                        <p style="color: #666; font-size: 16px;">Hi ${babysitter_name},</p>
-                        <p style="color: #666; font-size: 16px;">${parentName} has invited you to access their child's information on ParentPal.</p>
-
-                        <div style="background-color: #f0f7ff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
-                            <p style="color: #333; margin: 0 0 10px 0; font-size: 14px;">Your verification code:</p>
-                            <p style="font-size: 32px; font-weight: bold; color: #007AFF; margin: 0; letter-spacing: 8px;">${verificationCode}</p>
-                        </div>
-
-                        <p style="color: #666; font-size: 16px; margin-bottom: 10px;">To accept this invitation:</p>
-                        <ol style="color: #666; font-size: 16px; line-height: 1.8;">
-                            <li>Sign up for ParentPal as a babysitter (or sign in if you already have an account)</li>
-                            <li>Go to Settings</li>
-                            <li>Enter the verification code above in the Verification Code section</li>
-                        </ol>
-                        <p style="color: #999; font-size: 14px; margin-top: 30px;">This code will expire in 7 days.</p>
-                        <p style="color: #666; font-size: 16px; margin-bottom: 0;">Best regards,<br><strong>The ParentPal Team</strong></p>
-                    </div>
-                </div>
-            `
-        };
-
-        // Verify transporter configuration before attempting to send
-        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-            console.error('Email not sent - missing EMAIL_USER or EMAIL_PASSWORD environment variables');
-        } else {
-            console.log(`Attempting to send email from ${process.env.EMAIL_USER} to ${babysitter_email}`);
-
-            // Send email asynchronously (don't block response)
-            transporter.sendMail(mailOptions)
-                .then((info) => {
-                    console.log('✓ Email sent successfully:', {
-                        messageId: info.messageId,
-                        to: babysitter_email,
-                        response: info.response
-                    });
-                })
-                .catch(emailError => {
-                    console.error('✗ Failed to send email:', {
-                        error: emailError.message,
-                        code: emailError.code,
-                        to: babysitter_email,
-                        stack: emailError.stack
-                    });
-                });
-        }
+            html: emailHtml
+        })
+            .then((result) => {
+                console.log(`Email sent via ${result.provider} to ${babysitter_email}`);
+            })
+            .catch(emailError => {
+                console.error(`Failed to send email to ${babysitter_email}:`, emailError.message);
+            });
 
         res.status(201).json({
             message: 'Invitation sent successfully',
