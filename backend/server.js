@@ -67,6 +67,16 @@ app.get("/api/test", (req, res) => {
     res.json({ message: "Server is running!" });
 });
 
+// Diagnostic endpoint - remove after debugging email issue
+app.get("/api/email-config-check", (req, res) => {
+    res.json({
+        emailUserConfigured: !!process.env.EMAIL_USER,
+        emailPasswordConfigured: !!process.env.EMAIL_PASSWORD,
+        emailUser: process.env.EMAIL_USER ? `${process.env.EMAIL_USER.substring(0, 3)}...@${process.env.EMAIL_USER.split('@')[1]}` : 'NOT SET',
+        nodeEnv: process.env.NODE_ENV || 'not set'
+    });
+});
+
 app.get("/favicon.ico", (req, res) => res.status(204).end());
 
 app.use("/api/accounts", accountsRouter);

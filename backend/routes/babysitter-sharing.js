@@ -8,12 +8,19 @@ function generateVerificationCode() {
     return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
+// Check if email credentials are configured
+if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+    console.error('WARNING: Email credentials not configured. EMAIL_USER or EMAIL_PASSWORD is missing.');
+}
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD,
-    }
+    },
+    debug: true, // Enable debug output
+    logger: true // Log to console
 });
 
 router.post('/invite', async (req, res) => {
@@ -81,10 +88,30 @@ router.post('/invite', async (req, res) => {
             `
         };
 
-        // Send email asynchronously (don't block response)
-        transporter.sendMail(mailOptions)
-            .then(() => console.log('Email sent successfully'))
-            .catch(emailError => console.error('Failed to send email:', emailError));
+        // Verify transporter configuration before attempting to send
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+            console.error('Email not sent - missing EMAIL_USER or EMAIL_PASSWORD environment variables');
+        } else {
+            console.log(`Attempting to send email from ${process.env.EMAIL_USER} to ${babysitter_email}`);
+
+            // Send email asynchronously (don't block response)
+            transporter.sendMail(mailOptions)
+                .then((info) => {
+                    console.log('✓ Email sent successfully:', {
+                        messageId: info.messageId,
+                        to: babysitter_email,
+                        response: info.response
+                    });
+                })
+                .catch(emailError => {
+                    console.error('✗ Failed to send email:', {
+                        error: emailError.message,
+                        code: emailError.code,
+                        to: babysitter_email,
+                        stack: emailError.stack
+                    });
+                });
+        }
 
         res.status(201).json({
             message: 'Invitation sent successfully',
