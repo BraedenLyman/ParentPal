@@ -81,12 +81,10 @@ router.post('/invite', async (req, res) => {
             `
         };
 
-        try {
-            await transporter.sendMail(mailOptions);
-            console.log('Email sent successfully');
-        } catch (emailError) {
-            console.error('Failed to send email:', emailError);
-        }
+        // Send email asynchronously (don't block response)
+        transporter.sendMail(mailOptions)
+            .then(() => console.log('Email sent successfully'))
+            .catch(emailError => console.error('Failed to send email:', emailError));
 
         res.status(201).json({
             message: 'Invitation sent successfully',

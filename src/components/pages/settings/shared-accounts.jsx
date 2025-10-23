@@ -49,6 +49,20 @@ export default function SharedAccounts() {
         }
     };
 
+    const fetchBabysitters = async () => {
+        if (!userData) return;
+
+        try {
+            const babysittersResponse = await axios.get(
+                `${API_URL}/api/babysitter-sharing/babysitters/${userData.account_id}`,
+                { withCredentials: true }
+            );
+            setBabysitters(babysittersResponse.data.babysitters);
+        } catch (error) {
+            console.error("Error fetching babysitters:", error);
+        }
+    };
+
     const handleSendInvitation = async () => {
         if (!babysitterName || !babysitterEmail || !userData) {
             setError("Please fill in all fields");
@@ -73,7 +87,8 @@ export default function SharedAccounts() {
             setBabysitterEmail("");
             onOpenChange();
 
-            await fetchUserDataAndBabysitters();
+            // Only fetch updated babysitters list, not all user data
+            await fetchBabysitters();
         } catch (error) {
             setError(error.response?.data?.error || "Failed to send invitation");
         } finally {
@@ -91,7 +106,8 @@ export default function SharedAccounts() {
                 }
             );
 
-            await fetchUserDataAndBabysitters();
+            // Only fetch updated babysitters list, not all user data
+            await fetchBabysitters();
         } catch (error) {
             console.error("Error removing babysitter:", error);
         }
