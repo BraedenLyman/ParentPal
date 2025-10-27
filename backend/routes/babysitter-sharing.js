@@ -68,7 +68,6 @@ router.post('/invite', async (req, res) => {
             </div>
         `;
 
-        // Send email asynchronously (don't block response)
         sendEmail({
             to: babysitter_email,
             subject: 'ParentPal - Babysitter Access Invitation',

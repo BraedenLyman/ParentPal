@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-/** GET all allergies records */
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
     
@@ -24,7 +23,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-/** Add allergies record */
 router.post('/', async (req, res) => {
     const { baby_id, allergy_name, severity, epi_pen, notes } = req.body;
 

@@ -6,13 +6,11 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, '../uploads/photos');
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-// Configure multer for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, uploadsDir);
@@ -41,7 +39,6 @@ const upload = multer({
     }
 });
 
-// Get all photos for a specific baby
 router.get('/baby/:babyId', async (req, res) => {
     const { babyId } = req.params;
 
@@ -62,7 +59,6 @@ router.get('/baby/:babyId', async (req, res) => {
     }
 });
 
-// Get all photos for a parent (across all their babies)
 router.get('/parent/:parentId', async (req, res) => {
     const { parentId } = req.params;
 
@@ -83,7 +79,6 @@ router.get('/parent/:parentId', async (req, res) => {
     }
 });
 
-// Get all photos for babies accessible to a babysitter
 router.get('/babysitter/:babysitterId', async (req, res) => {
     const { babysitterId } = req.params;
 
@@ -106,7 +101,6 @@ router.get('/babysitter/:babysitterId', async (req, res) => {
     }
 });
 
-// Upload a new photo
 router.post('/upload', upload.single('photo'), async (req, res) => {
     const { baby_id, parent_id, caption } = req.body;
 
@@ -119,7 +113,6 @@ router.post('/upload', upload.single('photo'), async (req, res) => {
     }
 
     try {
-        // Store relative path to photo
         const photoUrl = `/uploads/photos/${req.file.filename}`;
 
         const result = await pool.query(
@@ -132,18 +125,15 @@ router.post('/upload', upload.single('photo'), async (req, res) => {
         res.status(201).json(result.rows[0]);
     } catch (error) {
         console.error('Error uploading photo:', error);
-        // Delete the uploaded file if database insert fails
         fs.unlinkSync(req.file.path);
         res.status(500).json({ error: 'Failed to upload photo' });
     }
 });
 
-// Delete a photo
 router.delete('/:photoId', async (req, res) => {
     const { photoId } = req.params;
 
     try {
-        // Get photo info first to delete the file
         const photoResult = await pool.query(
             'SELECT photo_url FROM photo_gallery WHERE photo_id = $1',
             [photoId]
@@ -156,10 +146,8 @@ router.delete('/:photoId', async (req, res) => {
         const photoUrl = photoResult.rows[0].photo_url;
         const filePath = path.join(__dirname, '..', photoUrl);
 
-        // Delete from database
         await pool.query('DELETE FROM photo_gallery WHERE photo_id = $1', [photoId]);
 
-        // Delete file from filesystem
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }

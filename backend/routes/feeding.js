@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-/** GET all feeding records */
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
     
@@ -24,7 +23,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-/** Add feeding record */
 router.post('/', async (req, res) => {
     const { baby_id, time_fed, date, fed_from, type_of_food, amount, notes } = req.body;
 

@@ -91,8 +91,7 @@ export default function DataExport() {
                 setGenerating(false);
                 return;
             }
-
-            // Fetch all selected data
+            
             const dataPromises = [];
 
             if (exportOptions.growthCharts) {
@@ -160,12 +159,10 @@ export default function DataExport() {
 
             const results = await Promise.all(dataPromises);
 
-            // Create PDF
             const doc = new jsPDF();
             const pageWidth = doc.internal.pageSize.getWidth();
             let yPosition = 20;
 
-            // Header with logo styling
             doc.setFillColor(189, 227, 195);
             doc.rect(0, 0, pageWidth, 40, 'F');
 
@@ -181,7 +178,6 @@ export default function DataExport() {
 
             yPosition = 55;
 
-            // Baby Information Section
             doc.setFontSize(16);
             doc.setTextColor(76, 175, 80);
             doc.setFont(undefined, 'bold');
@@ -196,7 +192,6 @@ export default function DataExport() {
                 ['Full Name:', `${baby.first_name || ''} ${baby.last_name || ''}`],
                 ['Date of Birth:', formatDate(baby.birth_date)],
                 ['Gender:', baby.gender || 'N/A'],
-                ['Category:', baby.category || 'N/A'],
                 ['Report Generated:', new Date().toLocaleDateString()]
             ];
 
@@ -210,7 +205,6 @@ export default function DataExport() {
 
             yPosition += 5;
 
-            // Add each selected data section
             results.forEach((result) => {
                 if (yPosition > 250) {
                     doc.addPage();
@@ -403,7 +397,6 @@ export default function DataExport() {
                 }
             });
 
-            // Footer on last page
             const pageCount = doc.internal.getNumberOfPages();
             for (let i = 1; i <= pageCount; i++) {
                 doc.setPage(i);
@@ -417,7 +410,6 @@ export default function DataExport() {
                 );
             }
 
-            // Save PDF
             const fileName = `${baby.first_name}_${baby.last_name}_Report_${new Date().toLocaleDateString().replace(/\//g, '-')}.pdf`;
             doc.save(fileName);
 

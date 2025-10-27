@@ -2,9 +2,13 @@ import React from "react";
 import { HomeIcon as HomeIconOutline } from "@heroicons/react/24/outline";
 import { ChartBarIcon as ChartBarIconOutline } from "@heroicons/react/24/outline";
 import { Cog6ToothIcon as Cog6ToothIconOutline } from "@heroicons/react/24/outline";
+import { DocumentTextIcon as DocumentTextIconOutline } from "@heroicons/react/24/outline";
+import { ClipboardDocumentListIcon as ClipboardDocumentListIconOutline } from "@heroicons/react/24/outline";
 import { HomeIcon as HomeIconSolid } from "@heroicons/react/24/solid";
 import { ChartBarIcon as ChartBarIconSolid } from "@heroicons/react/24/solid";
 import { Cog6ToothIcon as Cog6ToothIconSolid } from "@heroicons/react/24/solid";
+import { DocumentTextIcon as DocumentTextIconSolid } from "@heroicons/react/24/solid";
+import { ClipboardDocumentListIcon as ClipboardDocumentListIconSolid } from "@heroicons/react/24/solid";
 import "./nav-bar.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -29,7 +33,8 @@ export default function Navbar() {
           { idToken },
           { withCredentials: true }
         );
-        setUserType(response.data.user.account_type);
+        const accountType = response.data.user.account_type;
+        setUserType(accountType);
       } catch (error) {
         console.error("Error fetching user type:", error);
       }
@@ -46,6 +51,22 @@ export default function Navbar() {
     }
   };
 
+  const handleLogsClick = () => {
+    if (userType === 'babysitter') {
+      navigate("/sleep-analytics");
+    } else {
+      navigate("/growth-tracker");
+    }
+  };
+
+  const handleTasksClick = () => {
+    if (userType === 'babysitter') {
+      navigate("/assigned-tasks");
+    } else {
+      navigate("/parent-assigned-tasks");
+    }
+  };
+
   const isHomeActive = () => {
     const dashboardPaths = ["/parent-dashboard", "/babysitter-dashboard"];
     return dashboardPaths.includes(location.pathname);
@@ -57,6 +78,20 @@ export default function Navbar() {
 
   const isReportsActive = () => {
     return location.pathname === "/reports";
+  };
+
+  const isLogsActive = () => {
+    if (userType === 'babysitter') {
+      return location.pathname === "/sleep-analytics";
+    }
+    return location.pathname === "/growth-tracker";
+  };
+
+  const isTasksActive = () => {
+    if (userType === 'babysitter') {
+      return location.pathname === "/assigned-tasks";
+    }
+    return location.pathname === "/parent-assigned-tasks";
   };
 
   return (
@@ -74,16 +109,42 @@ export default function Navbar() {
         </div>
 
         <div
-          className={`navSection ${isReportsActive() ? 'active' : ''}`}
-          onClick={() => navigate("/reports")}
+          className={`navSection ${isLogsActive() ? 'active' : ''}`}
+          onClick={handleLogsClick}
         >
-          {isReportsActive() ? (
-            <ChartBarIconSolid className="nav-icon" />
+          {isLogsActive() ? (
+            <DocumentTextIconSolid className="nav-icon" />
           ) : (
-            <ChartBarIconOutline className="nav-icon" />
+            <DocumentTextIconOutline className="nav-icon" />
           )}
-          <span className="nav-label">Reports</span>
+          <span className="nav-label">Logs</span>
         </div>
+
+        <div
+          className={`navSection ${isTasksActive() ? 'active' : ''}`}
+          onClick={handleTasksClick}
+        >
+          {isTasksActive() ? (
+            <ClipboardDocumentListIconSolid className="nav-icon" />
+          ) : (
+            <ClipboardDocumentListIconOutline className="nav-icon" />
+          )}
+          <span className="nav-label">Tasks</span>
+        </div>
+
+        {userType !== 'babysitter' && (
+          <div
+            className={`navSection ${isReportsActive() ? 'active' : ''}`}
+            onClick={() => navigate("/reports")}
+          >
+            {isReportsActive() ? (
+              <ChartBarIconSolid className="nav-icon" />
+            ) : (
+              <ChartBarIconOutline className="nav-icon" />
+            )}
+            <span className="nav-label">Reports</span>
+          </div>
+        )}
 
         <div
           className={`navSection ${isSettingsActive() ? 'active' : ''}`}

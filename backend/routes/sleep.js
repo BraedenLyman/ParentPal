@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-/** GET all sleep records */
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
     
@@ -24,7 +23,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-/** Add sleep record */
 router.post('/', async (req, res) => {
     const { baby_id, sleep_duration, time_fell_asleep, date } = req.body;
 

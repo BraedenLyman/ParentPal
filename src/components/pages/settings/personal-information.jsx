@@ -384,6 +384,7 @@ export default function PersonalInformation() {
                                 <Input
                                     label="Other Gender"
                                     placeholder="Enter baby's gender"
+                                    maxLength={10}
                                     value={newBaby.customGender}
                                     onChange={(e) => setNewBaby(prev => ({ ...prev, customGender: e.target.value }))}
                                 />

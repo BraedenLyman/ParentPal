@@ -230,6 +230,7 @@ export default function CreateAccount() {
                 type="text"
                 //variant="bordered"
                 isRequired
+                maxLength={10}
                 value={otherGender}
                 onChange={(e) => setOtherGender(e.target.value)}
               />
@@ -298,6 +299,7 @@ export default function CreateAccount() {
                 type="text"
                 //variant="bordered"
                 isRequired
+                maxLength={10}
                 value={bOtherGender}
                 onChange={(e) => setBOtherGender(e.target.value)}
               />

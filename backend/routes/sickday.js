@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-/** GET all sick day records */
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
     
@@ -24,7 +23,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-/** Add vaccination record */
 router.post('/', async (req, res) => {
     const { baby_id, date,  meds_taken, temp } = req.body;
 

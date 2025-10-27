@@ -11,11 +11,13 @@ router.post('/', async (req, res) => {
   }
 
   try {
+    const truncatedGender = gender ? gender.substring(0, 7) : null;
+
     const result = await pool.query(
       `INSERT INTO account (firebase_uid, first_name, last_name, email_address, account_type, birth_date, gender)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING account_id`,
-      [firebaseUid, fName, lName, email, accountType, dob || null, gender || null]
+      [firebaseUid, fName, lName, email, accountType, dob || null, truncatedGender]
     );
 
     const parentId = result.rows[0].account_id;
@@ -23,10 +25,12 @@ router.post('/', async (req, res) => {
     if (baby) {
       const { bFName, bLName, bDob, bGender } = baby;
 
+      const truncatedBabyGender = bGender ? bGender.substring(0, 7) : null;
+
       await pool.query(
         `INSERT INTO baby (parent_id, first_name, last_name, birth_date, gender)
          VALUES ($1, $2, $3, $4, $5)`,
-        [parentId, bFName, bLName, bDob || null, bGender || null]
+        [parentId, bFName, bLName, bDob || null, truncatedBabyGender]
       );
     }
 

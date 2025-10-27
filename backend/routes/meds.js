@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-/** GET all meds records */
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
     
@@ -24,7 +23,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-/** Add growth record */
 router.post('/', async (req, res) => {
     const { baby_id, medication_name, time_taken, date, dosage, symptoms } = req.body;
 

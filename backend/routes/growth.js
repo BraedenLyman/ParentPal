@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-/** GET all growth records */
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
 
@@ -24,7 +23,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-/** Add growth record */
 router.post('/', async (req, res) => {
     const { baby_id, weight, height, date } = req.body;
 
@@ -45,7 +43,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-/** Edit growth record */
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
     const { baby_id, weight, height, date } = req.body;
@@ -71,7 +68,6 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-/** Delete growth record */
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
 

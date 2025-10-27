@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
 
     if (accountData.account_type === 'parent') {
       const babyResult = await pool.query(
-        'SELECT baby_id, first_name, last_name, birth_date FROM baby WHERE parent_id = $1',
+        'SELECT baby_id, first_name, last_name, birth_date, gender FROM baby WHERE parent_id = $1',
         [accountData.account_id]
       );
 
