@@ -16,13 +16,7 @@ jest.mock('../../../firebase/firebaseAuth', () => ({
   },
 }));
 
-jest.mock('../../../components/page-components/page-middle-nav/page-middle-nav', () => {
-  return function PageMiddleNav() {
-    return <div data-testid="page-middle-nav">Page Middle Nav</div>;
-  };
-});
-
-jest.mock('../../../components/nav-bar/navbar', () => {
+jest.mock('../../../components/pages/nav-bar/navbar', () => {
   return function Navbar() {
     return <div data-testid="navbar">Navbar</div>;
   };
@@ -133,18 +127,20 @@ describe('FeedingNotes Component', () => {
     await waitFor(() => {
       const timeFeds = screen.getAllByText('Time Fed');
       expect(timeFeds.length).toBeGreaterThan(0);
-      expect(screen.getByText('14:30')).toBeInTheDocument();
+      // 14:30 in 24-hour format = 2:30 PM in 12-hour format
+      expect(screen.getByText('2:30 PM')).toBeInTheDocument();
       const fedFroms = screen.getAllByText('Fed From');
       expect(fedFroms.length).toBeGreaterThan(0);
       expect(screen.getByText('bottle')).toBeInTheDocument();
       const amounts = screen.getAllByText('Amount');
       expect(amounts.length).toBeGreaterThan(0);
-      expect(screen.getByText('120ml')).toBeInTheDocument();
+      expect(screen.getByText('120ml fl oz')).toBeInTheDocument();
       expect(screen.getByText('Fed well, no issues')).toBeInTheDocument();
 
-      expect(screen.getByText('18:00')).toBeInTheDocument();
+      // 18:00 in 24-hour format = 6:00 PM in 12-hour format
+      expect(screen.getByText('6:00 PM')).toBeInTheDocument();
       expect(screen.getByText('left-boob')).toBeInTheDocument();
-      expect(screen.getByText('15min')).toBeInTheDocument();
+      expect(screen.getByText('15min fl oz')).toBeInTheDocument();
       expect(screen.getByText('Sleepy during feeding')).toBeInTheDocument();
     });
   });
@@ -160,7 +156,7 @@ describe('FeedingNotes Component', () => {
     fireEvent.click(addButton);
 
     expect(screen.getByText('Add Feeding')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Amount of food they were fed')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Amount in fluid ounces')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Add any other important information')).toBeInTheDocument();
   });
 
@@ -174,15 +170,15 @@ describe('FeedingNotes Component', () => {
     fireEvent.click(screen.getByText('Add'));
 
     const dateInput = screen.getByLabelText('Date');
-    const amountInput = screen.getByPlaceholderText('Amount of food they were fed');
+    const amountInput = screen.getByPlaceholderText('Amount in fluid ounces');
     const notesInput = screen.getByPlaceholderText('Add any other important information');
 
     fireEvent.change(dateInput, { target: { value: '2024-03-15' } });
-    fireEvent.change(amountInput, { target: { value: '150ml' } });
+    fireEvent.change(amountInput, { target: { value: '150' } });
     fireEvent.change(notesInput, { target: { value: 'Good feeding session' } });
 
     expect(dateInput.value).toBe('2024-03-15');
-    expect(amountInput.value).toBe('150ml');
+    expect(amountInput.value).toBe('150');
     expect(notesInput.value).toBe('Good feeding session');
   });
 
@@ -341,15 +337,15 @@ describe('FeedingNotes Component', () => {
     fireEvent.change(screen.getByLabelText('Date'), {
       target: { value: '2024-03-15' }
     });
-    fireEvent.change(screen.getByPlaceholderText('Amount of food they were fed'), {
-      target: { value: '180ml' }
+    fireEvent.change(screen.getByPlaceholderText('Amount in fluid ounces'), {
+      target: { value: '180' }
     });
     fireEvent.change(screen.getByPlaceholderText('Add any other important information'), {
       target: { value: 'Great feeding' }
     });
 
     expect(screen.getByLabelText('Date').value).toBe('2024-03-15');
-    expect(screen.getByPlaceholderText('Amount of food they were fed').value).toBe('180ml');
+    expect(screen.getByPlaceholderText('Amount in fluid ounces').value).toBe('180');
     expect(screen.getByPlaceholderText('Add any other important information').value).toBe('Great feeding');
   });
 
@@ -366,7 +362,7 @@ describe('FeedingNotes Component', () => {
     expect(screen.getByLabelText('Date')).toBeInTheDocument();
     expect(screen.getByText('Fed From')).toBeInTheDocument();
     expect(screen.getByText('Type of Food')).toBeInTheDocument();
-    expect(screen.getByLabelText('Amount')).toBeInTheDocument();
+    expect(screen.getByLabelText('Amount (fl oz)')).toBeInTheDocument();
     expect(screen.getByLabelText('Notes')).toBeInTheDocument();
   });
 

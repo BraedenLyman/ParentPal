@@ -16,13 +16,7 @@ jest.mock('../../../firebase/firebaseAuth', () => ({
   },
 }));
 
-jest.mock('../../../components/page-components/page-middle-nav/page-middle-nav', () => {
-  return function PageMiddleNav() {
-    return <div data-testid="page-middle-nav">Page Middle Nav</div>;
-  };
-});
-
-jest.mock('../../../components/nav-bar/navbar', () => {
+jest.mock('../../../components/pages/nav-bar/navbar', () => {
   return function Navbar() {
     return <div data-testid="navbar">Navbar</div>;
   };
@@ -135,11 +129,13 @@ describe('HealthJournal Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Medication Name: Tylenol')).toBeInTheDocument();
-      expect(screen.getByText('Time taken at: 14:30')).toBeInTheDocument();
-      expect(screen.getByText('Dosage: 5ml')).toBeInTheDocument();
-      expect(screen.getByText('Symptoms/Description: Fever and headache')).toBeInTheDocument();
-      expect(screen.getByText('Date: 2024-01-15')).toBeInTheDocument();
+      expect(screen.getByText('Tylenol')).toBeInTheDocument();
+      expect(screen.getByText('Time Taken')).toBeInTheDocument();
+      // 14:30 in 24-hour format = 2:30 PM in 12-hour format
+      expect(screen.getByText('2:30 PM')).toBeInTheDocument();
+      expect(screen.getByText('Dosage')).toBeInTheDocument();
+      expect(screen.getByText('5ml fl oz')).toBeInTheDocument();
+      expect(screen.getByText('Fever and headache')).toBeInTheDocument();
     });
   });
 
@@ -171,7 +167,7 @@ describe('HealthJournal Component', () => {
 
     expect(screen.getByText('Add Medication')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Enter medication name')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Amount of meds taken')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Amount in fluid ounces')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Describe how they are feeling')).toBeInTheDocument();
   });
 
@@ -275,7 +271,7 @@ describe('HealthJournal Component', () => {
     fireEvent.click(screen.getByText('Add'));
 
     const medNameInput = screen.getByPlaceholderText('Enter medication name');
-    const dosageInput = screen.getByPlaceholderText('Amount of meds taken');
+    const dosageInput = screen.getByPlaceholderText('Amount in fluid ounces');
     const symptomsInput = screen.getByPlaceholderText('Describe how they are feeling');
     const dateInput = screen.getByLabelText('Date');
 

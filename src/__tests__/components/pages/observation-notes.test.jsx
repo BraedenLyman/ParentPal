@@ -16,13 +16,7 @@ jest.mock('../../../firebase/firebaseAuth', () => ({
   },
 }));
 
-jest.mock('../../../components/page-components/page-middle-nav/page-middle-nav', () => {
-  return function PageMiddleNav() {
-    return <div data-testid="page-middle-nav">Page Middle Nav</div>;
-  };
-});
-
-jest.mock('../../../components/nav-bar/navbar', () => {
+jest.mock('../../../components/pages/nav-bar/navbar', () => {
   return function Navbar() {
     return <div data-testid="navbar">Navbar</div>;
   };

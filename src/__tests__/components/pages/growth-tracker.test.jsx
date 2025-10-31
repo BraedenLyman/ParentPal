@@ -16,13 +16,7 @@ jest.mock('../../../firebase/firebaseAuth', () => ({
   },
 }));
 
-jest.mock('../../../components/page-components/page-middle-nav/page-middle-nav', () => {
-  return function PageMiddleNav() {
-    return <div data-testid="page-middle-nav">Page Middle Nav</div>;
-  };
-});
-
-jest.mock('../../../components/nav-bar/navbar', () => {
+jest.mock('../../../components/pages/nav-bar/navbar', () => {
   return function Navbar() {
     return <div data-testid="navbar">Navbar</div>;
   };
@@ -127,12 +121,14 @@ describe('GrowthTracker Component', () => {
     await waitFor(() => {
       const heights = screen.getAllByText('Height');
       expect(heights.length).toBeGreaterThan(0);
-      expect(screen.getByText('50.5')).toBeInTheDocument();
+      // 50.5 inches = 4 feet 2.5 inches
+      expect(screen.getByText("4' 2.5\"")).toBeInTheDocument();
       const weights = screen.getAllByText('Weight');
       expect(weights.length).toBeGreaterThan(0);
-      expect(screen.getByText('3.2')).toBeInTheDocument();
-      expect(screen.getByText('52')).toBeInTheDocument();
-      expect(screen.getByText('3.5')).toBeInTheDocument();
+      expect(screen.getByText('3.2 lbs')).toBeInTheDocument();
+      // 52 inches = 4 feet 4.0 inches
+      expect(screen.getByText("4' 4.0\"")).toBeInTheDocument();
+      expect(screen.getByText('3.5 lbs')).toBeInTheDocument();
     });
   });
 

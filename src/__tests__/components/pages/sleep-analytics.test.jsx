@@ -16,13 +16,7 @@ jest.mock('../../../firebase/firebaseAuth', () => ({
   },
 }));
 
-jest.mock('../../../components/page-components/page-middle-nav/page-middle-nav', () => {
-  return function PageMiddleNav() {
-    return <div data-testid="page-middle-nav">Page Middle Nav</div>;
-  };
-});
-
-jest.mock('../../../components/nav-bar/navbar', () => {
+jest.mock('../../../components/pages/nav-bar/navbar', () => {
   return function Navbar() {
     return <div data-testid="navbar">Navbar</div>;
   };
@@ -130,9 +124,11 @@ describe('SleepAnalytics Component', () => {
       expect(screen.getByText('8 hrs')).toBeInTheDocument();
       const fellAsleeps = screen.getAllByText('Fell Asleep');
       expect(fellAsleeps.length).toBeGreaterThan(0);
-      expect(screen.getByText('20:30')).toBeInTheDocument();
+      // 20:30 in 24-hour format = 8:30 PM in 12-hour format
+      expect(screen.getByText('8:30 PM')).toBeInTheDocument();
       expect(screen.getByText('6.5 hrs')).toBeInTheDocument();
-      expect(screen.getByText('21:00')).toBeInTheDocument();
+      // 21:00 in 24-hour format = 9:00 PM in 12-hour format
+      expect(screen.getByText('9:00 PM')).toBeInTheDocument();
     });
   });
 
@@ -147,7 +143,7 @@ describe('SleepAnalytics Component', () => {
     fireEvent.click(addButton);
 
     expect(screen.getByText('Add Sleep')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Hours slept')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Hours slept (e.g., 8.5)')).toBeInTheDocument();
     expect(screen.getByLabelText('Date')).toBeInTheDocument();
   });
 
@@ -160,7 +156,7 @@ describe('SleepAnalytics Component', () => {
 
     fireEvent.click(screen.getByText('Add'));
 
-    const hoursInput = screen.getByPlaceholderText('Hours slept');
+    const hoursInput = screen.getByPlaceholderText('Hours slept (e.g., 8.5)');
     const dateInput = screen.getByLabelText('Date');
 
     fireEvent.change(hoursInput, { target: { value: '8' } });
@@ -295,7 +291,7 @@ describe('SleepAnalytics Component', () => {
 
     fireEvent.click(screen.getByText('Add'));
 
-    fireEvent.change(screen.getByPlaceholderText('Hours slept'), {
+    fireEvent.change(screen.getByPlaceholderText('Hours slept (e.g., 8.5)'), {
       target: { value: '7' }
     });
     fireEvent.change(screen.getByLabelText('Date'), {
@@ -305,7 +301,7 @@ describe('SleepAnalytics Component', () => {
     const modalAddButton = screen.getAllByText('Add')[1];
     const component = screen.getByText('Add Sleep').closest('[role="dialog"]');
 
-    expect(screen.getByPlaceholderText('Hours slept').value).toBe('7');
+    expect(screen.getByPlaceholderText('Hours slept (e.g., 8.5)').value).toBe('7');
     expect(screen.getByLabelText('Date').value).toBe('2024-03-15');
   });
 });
