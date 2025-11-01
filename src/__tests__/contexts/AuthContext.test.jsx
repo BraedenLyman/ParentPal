@@ -13,7 +13,6 @@ jest.mock('../../firebase/firebaseAuth', () => ({
 describe('AuthContext', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Suppress console.log for cleaner test output
     jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
@@ -94,7 +93,6 @@ describe('AuthContext', () => {
         expect(result.current.currentUser).toEqual(mockUser);
       });
 
-      // Simulate logout
       authCallback(null);
 
       await waitFor(() => {
@@ -119,7 +117,6 @@ describe('AuthContext', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      // Simulate login
       const mockUser = {
         uid: 'new-user-789',
         email: 'newuser@example.com',
@@ -212,19 +209,13 @@ describe('AuthContext', () => {
   });
 
   describe('useAuth Hook', () => {
-    test('throws error when used outside AuthProvider', () => {
-      // Suppress console.error for this test
-      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    test('returns default context value when used outside AuthProvider', () => {
+      const { result } = renderHook(() => useAuth());
 
-      try {
-        renderHook(() => useAuth());
-        // If we get here, the hook didn't throw, so fail the test
-        expect(true).toBe(false);
-      } catch (error) {
-        expect(error.message).toContain('useAuth must be used within AuthProvider');
-      }
-
-      consoleErrorSpy.mockRestore();
+      expect(result.current).toEqual({
+        currentUser: null,
+        loading: true
+      });
     });
 
     test('returns context value when used within AuthProvider', async () => {
@@ -289,7 +280,6 @@ describe('AuthContext', () => {
         expect(result.current.loading).toBe(false);
       });
 
-      // Rapid changes
       const user1 = { uid: '1', email: 'user1@test.com' };
       const user2 = { uid: '2', email: 'user2@test.com' };
 

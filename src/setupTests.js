@@ -1,6 +1,29 @@
 import '@testing-library/jest-dom';
 
-// Mock framer-motion to avoid animation issues in tests
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({}),
+    text: () => Promise.resolve(''),
+    ok: true,
+    status: 200,
+  })
+);
+
+global.Response = class Response {
+  constructor(body, init) {
+    this.body = body;
+    this.init = init;
+    this.ok = init?.status ? init.status >= 200 && init.status < 300 : true;
+    this.status = init?.status || 200;
+  }
+  json() {
+    return Promise.resolve(JSON.parse(this.body || '{}'));
+  }
+  text() {
+    return Promise.resolve(this.body || '');
+  }
+};
+
 jest.mock('framer-motion', () => ({
   ...jest.requireActual('framer-motion'),
   AnimatePresence: ({ children }) => children,
@@ -44,7 +67,6 @@ jest.mock('framer-motion', () => ({
   useSpring: () => ({}),
 }));
 
-// Suppress console errors during tests
 const originalError = console.error;
 beforeAll(() => {
   console.error = (...args) => {

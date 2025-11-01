@@ -145,7 +145,7 @@ describe('ParentDashboard Component', () => {
       });
 
       expect(screen.getByText('Welcome Back!')).toBeInTheDocument();
-      expect(screen.getByTestid('navbar')).toBeInTheDocument();
+      expect(screen.getByTestId('navbar')).toBeInTheDocument();
     });
 
     test('displays default name when user data is incomplete', async () => {

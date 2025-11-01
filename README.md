@@ -1,222 +1,236 @@
-# ParentPal - Complete User Manual & Technical Documentation
+# ParentPal
 
 <div align="center">
 
 ![ParentPal Logo](public/images/ParentPal.png)
 
-**A comprehensive childcare management platform for parents and babysitters**
+### A comprehensive childcare management platform for parents and babysitters
 
-[![React](https://img.shields.io/badge/React-18.3-blue.svg)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-Express-green.svg)](https://nodejs.org/)
-[![Firebase](https://img.shields.io/badge/Firebase-Auth-orange.svg)](https://firebase.google.com/)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat&logo=react&logoColor=white)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28?style=flat&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![License](https://img.shields.io/badge/License-Private-red.svg)]()
 
-[Features](#features) " [Installation](#installation) " [User Guide](#user-guide) " [API Documentation](#api-documentation) " [Development](#development)
+[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [API Reference](#-api-reference)
 
 </div>
 
 ---
 
-## =� Table of Contents
+## 📑 Table of Contents
 
-1. [Overview](#overview)
-2. [Features](#features)
-3. [Technology Stack](#technology-stack)
-4. [Installation & Setup](#installation--setup)
-5. [User Guide](#user-guide)
-   - [For Parents](#for-parents)
-   - [For Babysitters](#for-babysitters)
-6. [Feature Documentation](#feature-documentation)
-7. [API Documentation](#api-documentation)
-8. [Database Schema](#database-schema)
-9. [Development Guide](#development-guide)
-10. [Testing](#testing)
-11. [Deployment](#deployment)
-12. [Troubleshooting](#troubleshooting)
-
----
-
-## < Overview
-
-**ParentPal** is a modern, full-stack web application designed to help parents and babysitters manage childcare responsibilities efficiently. The platform provides comprehensive tracking for baby's health, growth, sleep patterns, feeding schedules, and more, while enabling seamless collaboration between parents and babysitters.
-
-### Key Highlights
-
-- = **Secure Authentication** - Firebase-based authentication with role-based access
-- =v **Child Management** - Support for multiple children per account
-- =� **Health Tracking** - Growth, sleep, feeding, medications, and vaccinations
-- =� **Notes & Observations** - Detailed daily logs and observations
-- = **Smart Notifications** - Customizable reminders and alerts
-- > **Account Sharing** - Parents can share access with babysitters
-- =� **Photo Gallery** - Store and organize baby photos
-- =� **Reports & Analytics** - Visual insights into child development
-- =� **Responsive Design** - Works on desktop, tablet, and mobile
+- [Overview](#-overview)
+- [Features](#-features)
+- [Technology Stack](#-technology-stack)
+- [Quick Start](#-quick-start)
+- [Installation](#-installation)
+- [User Guide](#-user-guide)
+- [API Reference](#-api-reference)
+- [Database Schema](#-database-schema)
+- [Development](#-development)
+- [Testing](#-testing)
+- [Deployment](#-deployment)
+- [Troubleshooting](#-troubleshooting)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ---
 
-## ( Features
+## 🌟 Overview
 
-### For Parents
+ParentPal is a modern, full-stack web application that helps parents and babysitters manage childcare responsibilities efficiently. Track your child's health, growth, sleep patterns, feeding schedules, and more while enabling seamless collaboration between caregivers.
 
-#### =v Child Profile Management
-- Add and manage multiple children
-- Store essential information (name, date of birth, gender)
-- View consolidated dashboard for all children
+### Why ParentPal?
 
-#### =� Growth & Development Tracking
-- **Growth Tracker**: Record height and weight measurements
-- **Milestone Tracking**: Document developmental milestones
-- **Visual Charts**: View growth trends over time
-
-#### =� Sleep Analytics
-- Log sleep sessions with start/end times
-- Track total sleep duration
-- View sleep patterns and statistics
-- Notes section for sleep behavior
-
-#### <| Feeding Management
-- Record feeding times and amounts
-- Track breastfeeding, bottle feeding, and solid foods
-- Monitor feeding patterns
-- Set feeding reminders
-
-#### =� Health Journal
-- **Medications**: Track prescribed medications and dosages
-- **Allergies**: Maintain allergy records
-- **Vaccinations**: Keep vaccination history up-to-date
-- **Sick Days**: Log illness symptoms and treatments
-
-#### =� Daily Observations
-- Document daily activities
-- Note behavioral observations
-- Track mood and temperament
-- Share observations with babysitters
-
-#### =� Photo Gallery
-- Upload and organize photos
-- Date-stamped memories
-- Share with family members
-
-#### =� Reports & Data Export
-- Generate comprehensive reports
-- Export data to PDF
-- View charts and analytics
-- Track trends over time
-
-#### � Settings & Preferences
-- Manage personal information
-- Set notification preferences
-- Share account access with babysitters
-- Export or delete data
-
-#### > Babysitter Management
-- Invite babysitters via email
-- Grant/revoke access to specific children
-- View babysitter activity logs
-- Assign tasks to babysitters
-
-### For Babysitters
-
-#### =@ View Shared Children
-- Access profiles of children shared with you
-- View all health and care information
-- See parent notes and instructions
-
-####  Task Management
-- View assigned tasks from parents
-- Mark tasks as complete
-- Add notes to completed tasks
-
-#### =� Log Care Activities
-- Record feeding sessions
-- Log sleep times
-- Document observations
-- Track medications given
-
-#### = Receive Notifications
-- Get reminders for scheduled tasks
-- Receive updates from parents
-- Emergency contact information
+- 🔐 **Secure** - Firebase authentication with role-based access control
+- 👶 **Comprehensive** - Complete childcare tracking in one place
+- 📊 **Insightful** - Visual analytics and detailed reports
+- 🤝 **Collaborative** - Seamless parent-babysitter coordination
+- 📱 **Responsive** - Works on any device
+- 🚀 **Modern** - Built with latest web technologies
 
 ---
 
-## =� Technology Stack
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 👨‍👩‍👧 For Parents
+
+- 👶 **Child Profile Management**
+  - Multiple children support
+  - Comprehensive profiles
+
+- 📊 **Health & Development**
+  - Growth tracking with charts
+  - Sleep pattern analysis
+  - Feeding logs
+  - Medication management
+  - Allergy tracking
+  - Vaccination records
+
+- 📝 **Daily Logging**
+  - Observation notes
+  - Behavioral tracking
+  - Photo gallery
+
+- 📈 **Reports & Analytics**
+  - PDF export
+  - Visual charts
+  - Trend analysis
+
+- 🤝 **Babysitter Coordination**
+  - Share access securely
+  - Assign tasks
+  - Monitor activity
+
+</td>
+<td width="50%">
+
+### 👶 For Babysitters
+
+- 👀 **Access Shared Information**
+  - View child profiles
+  - Health records
+  - Parent instructions
+
+- ✅ **Task Management**
+  - View assigned tasks
+  - Mark as complete
+  - Add notes
+
+- 📝 **Activity Logging**
+  - Record feedings
+  - Log sleep times
+  - Document observations
+  - Track medications
+
+- 🔔 **Stay Updated**
+  - Task reminders
+  - Parent notifications
+  - Emergency contacts
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🛠 Technology Stack
 
 ### Frontend
-
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **React** | 18.3.1 | UI framework |
-| **React Router** | 6.23.0 | Navigation and routing |
-| **Vite** | 6.3.5 | Build tool and dev server |
-| **HeroUI** | 2.8.3 | Component library |
-| **Tailwind CSS** | 4.1.11 | Styling framework |
-| **Axios** | 1.12.2 | HTTP client |
-| **Recharts** | 3.3.0 | Data visualization |
-| **Framer Motion** | 11.18.2 | Animations |
-| **jsPDF** | 3.0.3 | PDF generation |
+```
+React 18.3        │ UI Framework
+React Router 6.23 │ Navigation
+Vite 6.3         │ Build Tool
+TailwindCSS 4.1  │ Styling
+HeroUI 2.8       │ Components
+Recharts 3.3     │ Charts
+Axios 1.12       │ HTTP Client
+Framer Motion    │ Animations
+jsPDF 3.0        │ PDF Export
+```
 
 ### Backend
+```
+Node.js          │ Runtime
+Express 5.1      │ Web Framework
+PostgreSQL       │ Database
+Firebase Admin   │ Auth & Messaging
+Node-cron        │ Scheduling
+```
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| **Node.js** | - | Runtime environment |
-| **Express** | 5.1.0 | Web framework |
-| **PostgreSQL** | - | Database (via mysql2 driver) |
-| **Firebase Admin** | 13.5.0 | Authentication & messaging |
-| **CORS** | 2.8.5 | Cross-origin requests |
-| **Node-cron** | - | Scheduled tasks |
-
-### Development & Testing
-
-| Technology | Purpose |
-|------------|---------|
-| **Jest** | Unit testing framework |
-| **React Testing Library** | Component testing |
-| **Cypress** | E2E testing |
-| **ESLint** | Code linting |
-| **Prettier** | Code formatting |
-| **TypeScript** | Type checking |
+### Development
+```
+Jest             │ Testing Framework
+React Testing    │ Component Testing
+Cypress          │ E2E Testing
+ESLint           │ Code Quality
+Prettier         │ Formatting
+TypeScript       │ Type Safety
+```
 
 ---
 
-## =� Installation & Setup
+## ⚡ Quick Start
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/your-username/ParentPal.git
+cd ParentPal
+
+# 2. Install dependencies
+npm install
+cd backend && npm install && cd ..
+
+# 3. Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
+
+# 4. Start PostgreSQL database
+# Make sure PostgreSQL is running
+
+# 5. Run migrations
+cd backend && npm run migrate && cd ..
+
+# 6. Start the application
+# Terminal 1 - Backend
+cd backend && npm start
+
+# Terminal 2 - Frontend
+npm run dev
+
+# 7. Open your browser
+# Navigate to http://localhost:5173
+```
+
+---
+
+## 📥 Installation
 
 ### Prerequisites
 
-- **Node.js** (v18 or higher)
-- **npm** or **yarn**
-- **PostgreSQL** database
-- **Firebase** account (for authentication)
-- **Git**
+Ensure you have the following installed:
 
-### 1. Clone the Repository
+- **Node.js** v18+ ([Download](https://nodejs.org/))
+- **npm** or **yarn**
+- **PostgreSQL** 13+ ([Download](https://www.postgresql.org/download/))
+- **Git** ([Download](https://git-scm.com/downloads))
+- **Firebase Account** ([Sign up](https://firebase.google.com/))
+
+### Step 1: Clone Repository
 
 ```bash
 git clone https://github.com/your-username/ParentPal.git
 cd ParentPal
 ```
 
-### 2. Install Dependencies
+### Step 2: Install Dependencies
 
 ```bash
-# Install frontend dependencies
+# Frontend dependencies
 npm install
 
-# Install backend dependencies
+# Backend dependencies
 cd backend
 npm install
 cd ..
 ```
 
-### 3. Environment Configuration
+### Step 3: Environment Configuration
 
-#### Frontend (.env)
+#### Frontend Environment Variables
 
-Create a `.env` file in the root directory:
+Create `.env` in the root directory:
 
 ```env
+# API Configuration
 VITE_API_URL=http://localhost:3000
+
+# Firebase Configuration
 VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 VITE_FIREBASE_PROJECT_ID=your_project_id
@@ -226,716 +240,502 @@ VITE_FIREBASE_APP_ID=your_app_id
 VITE_FIREBASE_VAPID_KEY=your_vapid_key
 ```
 
-#### Backend (backend/.env)
+#### Backend Environment Variables
 
-Create a `.env` file in the backend directory:
+Create `backend/.env`:
 
 ```env
-# Server Configuration
+# Server
 PORT=3000
 NODE_ENV=development
 FRONTEND_URL=http://localhost:5173
 
-# Database Configuration
+# Database
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=your_db_user
 DB_PASSWORD=your_db_password
 DB_NAME=parentpal
 
-# Firebase Admin SDK
+# Firebase Admin
 FIREBASE_PROJECT_ID=your_project_id
-FIREBASE_PRIVATE_KEY=your_private_key
+FIREBASE_PRIVATE_KEY="your_private_key"
 FIREBASE_CLIENT_EMAIL=your_client_email
 
-# Email Service (for notifications)
+# Email Service
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASSWORD=your_app_password
 EMAIL_SERVICE=gmail
-
-# Optional: Firebase Storage
-FIREBASE_STORAGE_BUCKET=your_bucket_name
 ```
 
-### 4. Database Setup
-
-#### Create Database
-
-```sql
-CREATE DATABASE parentpal;
-```
-
-#### Run Migrations
+### Step 4: Database Setup
 
 ```bash
+# Create database
+psql -U postgres
+CREATE DATABASE parentpal;
+\q
+
+# Run migrations
 cd backend
 npm run migrate
-# or manually run SQL scripts from backend/migrations/
+cd ..
 ```
 
-#### Database Schema Overview
+### Step 5: Firebase Configuration
 
-The database includes tables for:
-- `account` - User accounts (parents and babysitters)
-- `baby` - Child profiles
-- `growth` - Growth measurements
-- `sleep` - Sleep records
-- `feeding` - Feeding logs
-- `medication` - Medication records
-- `allergy` - Allergy information
-- `vaccination` - Vaccination records
-- `observation` - Daily observations
-- `babysitter_sharing` - Account sharing relationships
-- `shared_task` - Task assignments
-- `notification_preference` - User notification settings
-- `custom_notification` - Scheduled notifications
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project
+3. Enable **Authentication** → Email/Password
+4. Enable **Cloud Messaging**
+5. Download service account key
+6. Add credentials to `backend/.env`
 
-### 5. Firebase Setup
+### Step 6: Start the Application
 
-1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
-2. Enable Authentication (Email/Password)
-3. Enable Cloud Messaging (for notifications)
-4. Download service account key and add to backend
-5. Configure authorized domains
-
-### 6. Start the Application
-
-#### Development Mode
-
-**Terminal 1 - Backend Server:**
 ```bash
+# Terminal 1 - Start backend server
 cd backend
 npm start
 # Server runs on http://localhost:3000
-```
 
-**Terminal 2 - Frontend Dev Server:**
-```bash
+# Terminal 2 - Start frontend dev server
 npm run dev
 # App runs on http://localhost:5173
 ```
 
-#### Production Build
-
-```bash
-# Build frontend
-npm run build
-
-# Serve production build
-npm run preview
-```
-
-### 7. Verify Installation
+### Step 7: Verify Installation
 
 1. Open browser to `http://localhost:5173`
 2. You should see the ParentPal login page
-3. Create a test account to verify database connectivity
-4. Check browser console and terminal for any errors
+3. Create a test account
+4. Verify database connectivity
 
 ---
 
-## =� User Guide
+## 📖 User Guide
 
 ### Getting Started
 
-#### Creating an Account
+#### Creating Your Account
 
-1. **Navigate to Sign Up**
-   - Open ParentPal in your browser
-   - Click "Create account" on the login page
-
-2. **Choose Account Type**
-   - Select "Parent" or "Babysitter"
-   - Click "Continue"
-
-3. **Enter Your Information**
+1. Navigate to ParentPal in your browser
+2. Click **"Create account"**
+3. Choose account type:
+   - **Parent** - Manage your children's care
+   - **Babysitter** - Access shared children
+4. Fill in your information:
    - First Name
    - Last Name
    - Email Address
-   - Password (minimum 6 characters)
-   - Confirm Password
+   - Password (min 6 characters)
+5. Click **"Create Account"**
+6. You'll be redirected to your dashboard
 
-4. **Complete Registration**
-   - Click "Create Account"
-   - Verify your email (if required)
-   - You'll be redirected to your dashboard
-
-#### Logging In
+#### First Login
 
 1. Enter your email and password
-2. Click "Log In"
-3. You'll be directed to your role-specific dashboard
-
-#### Forgot Password
-
-1. Click "Forgot Password?" on login page
-2. Enter your email address
-3. Check your email for reset link
-4. Follow link to create new password
+2. Click **"Log In"**
+3. Complete your profile setup
+4. Add your first child (Parents)
 
 ---
 
-## =h
-=i
-=g
-=f For Parents
+### For Parents
 
-### Dashboard Overview
-
-After logging in, parents see their **Parent Dashboard** with:
-
-- **Quick Stats**: Number of children, recent activities
-- **Feature Cards**: Quick access to all features
-- **Recent Updates**: Latest entries across all logs
-- **Notifications**: Pending tasks and reminders
-
-### Managing Children
+<details>
+<summary><b>👶 Managing Children</b></summary>
 
 #### Adding a Child
 
-1. Navigate to **Dashboard**
-2. Click **"Add Child"** or **Settings � Manage Children**
-3. Enter child information:
+1. Go to **Dashboard**
+2. Click **"Add Child"**
+3. Enter information:
    - First Name
    - Last Name
    - Date of Birth
    - Gender
-   - Optional: Photo
+   - Profile Photo (optional)
 4. Click **"Save"**
 
-#### Selecting Active Child
+#### Switching Between Children
 
-- Use the **child selector** dropdown in the navigation bar
-- All logs and entries will be filtered for the selected child
-- Switch between children at any time
+- Use the dropdown in the navigation bar
+- All data automatically filters for selected child
 
-### Using Features
+</details>
 
-#### =� Growth Tracker
+<details>
+<summary><b>📊 Growth Tracking</b></summary>
 
-**Purpose:** Monitor your child's physical development
+#### Recording Measurements
 
-**How to Use:**
-
-1. Navigate to **Growth Tracker** from dashboard
-2. Click **"Add"** button
-3. Enter measurement:
-   - Date of measurement
-   - Height (in inches or cm)
-   - Weight (in lbs or kg)
-   - Optional: Notes
+1. Navigate to **Growth Tracker**
+2. Click **"Add Measurement"**
+3. Enter:
+   - Date
+   - Height (inches or cm)
+   - Weight (lbs or kg)
+   - Notes (optional)
 4. Click **"Save"**
-5. View measurements in chronological list
-6. See growth chart visualization
 
-**Tips:**
-- Record measurements monthly for infants
-- Use same time of day for consistency
-- Consult with pediatrician about growth percentiles
+#### Viewing Growth Charts
 
-#### =� Sleep Analytics
+- Automatic chart generation
+- View trends over time
+- Compare against percentiles
 
-**Purpose:** Track and analyze sleep patterns
+**Best Practices:**
+- Measure monthly for infants
+- Same time of day for consistency
+- Keep measurements accurate
 
-**How to Use:**
+</details>
 
-1. Navigate to **Sleep Analytics**
+<details>
+<summary><b>🛌 Sleep Tracking</b></summary>
+
+#### Logging Sleep Sessions
+
+1. Go to **Sleep Analytics**
 2. Click **"Add Sleep Session"**
-3. Enter details:
+3. Enter:
    - Date
    - Start Time
-   - End Time (or mark "Currently Sleeping")
-   - Sleep Quality (optional)
-   - Notes (e.g., "Woke up crying")
+   - End Time
+   - Quality (optional)
+   - Notes
 4. Click **"Save"**
-5. View sleep statistics:
-   - Total sleep time
-   - Average sleep duration
-   - Sleep patterns chart
 
-**Tips:**
-- Log naps and nighttime sleep separately
-- Note any disruptions or wake-ups
-- Look for patterns over weeks
+#### Understanding Sleep Analytics
 
-#### <| Feeding Notes
+- Total sleep duration
+- Average sleep per day
+- Sleep pattern visualization
+- Night vs. day sleep breakdown
 
-**Purpose:** Record and track feeding schedule
+</details>
 
-**How to Use:**
+<details>
+<summary><b>🍼 Feeding Logs</b></summary>
+
+#### Recording Feedings
 
 1. Navigate to **Feeding Notes**
 2. Click **"Add Feeding"**
-3. Select feeding type:
-   - **Breastfeeding**: Left/Right/Both
-   - **Bottle**: Amount in oz/ml
-   - **Solid Food**: Type and amount
-4. Enter:
-   - Date and Time
-   - Duration or Amount
-   - Notes
+3. Select type:
+   - **Breastfeeding** - Left/Right/Both
+   - **Bottle** - Amount in oz/ml
+   - **Solid Food** - Description
+4. Enter time and notes
 5. Click **"Save"**
-6. View feeding history and patterns
 
-**Tips:**
-- Track immediately to avoid forgetting
-- Note baby's appetite and reactions
-- Share with pediatrician for consultations
+</details>
 
-#### =� Health Journal
+<details>
+<summary><b>💊 Health Journal</b></summary>
 
-**Purpose:** Comprehensive health record management
+#### Medications
 
-**Features:**
-
-##### Medications
 1. Click **"Medications"** tab
-2. Click **"Add Medication"**
-3. Enter:
-   - Medication Name
-   - Dosage
-   - Frequency
-   - Start Date
-   - End Date (optional)
-   - Prescribing Doctor
-   - Notes
-4. Set reminders if needed
-5. Mark doses as "Taken"
+2. Add medication details:
+   - Name, Dosage, Frequency
+   - Start/End dates
+   - Doctor information
+3. Set reminders
+4. Mark doses as taken
 
-##### Allergies
+#### Allergies
+
 1. Click **"Allergies"** tab
-2. Click **"Add Allergy"**
-3. Enter:
-   - Allergen Name
-   - Severity (Mild/Moderate/Severe)
-   - Reaction Symptoms
-   - Diagnosed Date
-   - Treatment
-4. Mark as **Active** or **Resolved**
+2. Add allergen information:
+   - Name, Severity
+   - Reactions, Symptoms
+   - Treatment plan
 
-##### Vaccinations
+#### Vaccinations
+
 1. Click **"Vaccinations"** tab
-2. Click **"Add Vaccination"**
-3. Enter:
-   - Vaccine Name
-   - Date Administered
-   - Healthcare Provider
-   - Lot Number
-   - Next Due Date
-   - Reactions (if any)
-4. Upload vaccine card (optional)
+2. Record vaccine details:
+   - Vaccine name, Date
+   - Provider, Lot number
+   - Next due date
 
-##### Sick Days
+#### Sick Days
+
 1. Click **"Sick Days"** tab
-2. Click **"Log Sick Day"**
-3. Enter:
-   - Date
-   - Symptoms
-   - Temperature
-   - Treatment Given
-   - Doctor Visit (Y/N)
-   - Notes
-4. Track recovery progress
+2. Log illness details:
+   - Symptoms, Temperature
+   - Treatment given
+   - Doctor visits
 
-**Tips:**
-- Keep Health Journal updated for emergencies
-- Share with babysitters for medication timing
-- Bring to pediatrician appointments
+</details>
 
-#### =� Observation Notes
+<details>
+<summary><b>📝 Observations & Notes</b></summary>
 
-**Purpose:** Document daily activities and behaviors
+#### Daily Observations
 
-**How to Use:**
-
-1. Navigate to **Observation Notes**
+1. Go to **Observation Notes**
 2. Click **"Add Observation"**
-3. Enter:
-   - Date and Time
-   - Activity/Behavior
-   - Context
-   - Child's Mood
-   - Detailed Notes
+3. Document:
+   - Activity or behavior
+   - Mood and temperament
+   - Milestones achieved
+   - Concerns or questions
 4. Add photos if relevant
 5. Click **"Save"**
 
-**Examples:**
-- "First time rolling over!"
-- "Tried peas today - made funny face"
-- "Seemed fussy before nap"
-- "Played with blocks for 20 minutes"
+**Example Entries:**
+- "First time standing unassisted!"
+- "Ate full serving of vegetables"
+- "Seemed tired before usual naptime"
+- "Very playful and engaging today"
 
-**Tips:**
-- Document milestones and firsts
-- Note patterns in behavior
-- Share with babysitters for consistency
+</details>
 
-#### =� Photo Gallery
+<details>
+<summary><b>📸 Photo Gallery</b></summary>
 
-**Purpose:** Store and organize memories
-
-**How to Use:**
+#### Uploading Photos
 
 1. Navigate to **Photo Gallery**
-2. Click **"Upload Photos"**
+2. Click **"Upload"**
 3. Select photos from device
 4. Photos are automatically:
    - Date-stamped
    - Organized by child
-   - Backed up securely
-5. View in grid or timeline view
-6. Download or share photos
+   - Securely stored
 
-**Tips:**
-- Upload regularly to track growth visually
-- Add captions to photos
-- Create albums for special events
+#### Managing Photos
 
-#### =� Reports
+- View in grid or timeline
+- Download originals
+- Delete as needed
 
-**Purpose:** Generate comprehensive care reports
+</details>
 
-**How to Use:**
+<details>
+<summary><b>📈 Reports & Export</b></summary>
 
-1. Navigate to **Reports**
+#### Generating Reports
+
+1. Go to **Reports**
 2. Select report type:
-   - **Growth Report**: Height/weight trends
-   - **Sleep Report**: Sleep patterns analysis
-   - **Feeding Report**: Feeding statistics
-   - **Health Summary**: Complete health overview
-   - **Custom Report**: Select specific data
+   - Growth Report
+   - Sleep Analysis
+   - Feeding Summary
+   - Health Overview
+   - Custom Report
 3. Choose date range
-4. Click **"Generate Report"**
+4. Click **"Generate"**
 5. View interactive charts
 6. Export to PDF
 
 **Use Cases:**
 - Pediatrician appointments
-- Sharing with family
-- Personal records
 - Insurance documentation
+- Personal records
+- Family sharing
 
-#### > Sharing with Babysitters
+</details>
 
-**Purpose:** Grant babysitters access to child information
+<details>
+<summary><b>🤝 Sharing with Babysitters</b></summary>
 
-**How to Share:**
+#### Inviting a Babysitter
 
-1. Navigate to **Settings � Shared Accounts**
+1. Go to **Settings** → **Shared Accounts**
 2. Click **"Invite Babysitter"**
 3. Enter:
-   - Babysitter's Email
-   - Select Child(ren) to share
+   - Babysitter's email
+   - Select children to share
    - Set permissions:
      - View Only
      - View & Log
      - Full Access
 4. Click **"Send Invitation"**
-5. Babysitter receives email invitation
-6. Once accepted, they can:
-   - View shared child profiles
-   - Log activities (if permitted)
-   - See health information
-   - Receive assigned tasks
 
-**Managing Access:**
-- View active shared accounts
-- Revoke access anytime
-- Change permissions
-- View activity log
+#### Managing Shared Access
 
-####  Assigning Tasks
+- View active babysitters
+- Change permissions anytime
+- Revoke access
+- View activity logs
 
-**Purpose:** Create task lists for babysitters
+</details>
 
-**How to Assign Tasks:**
+<details>
+<summary><b>✅ Task Management</b></summary>
 
-1. Navigate to **Parent Assigned Tasks**
+#### Creating Tasks
+
+1. Go to **Parent Assigned Tasks**
 2. Click **"Create Task"**
 3. Enter:
-   - Task Title (e.g., "Give lunch at noon")
-   - Description/Instructions
-   - Assign to Babysitter
-   - Due Date/Time
-   - Priority (High/Medium/Low)
-   - Repeat (Daily/Weekly/Once)
+   - Task title
+   - Detailed instructions
+   - Assign to babysitter
+   - Due date/time
+   - Priority level
 4. Click **"Assign"**
-5. Babysitter receives notification
-6. Track task completion
 
-**Example Tasks:**
-- "Give medication at 3 PM"
-- "Prepare bottle with 4 oz formula"
-- "Take to playground"
+#### Example Tasks
+
+- "Give 2ml medication at 3 PM"
+- "Prepare 4oz bottle with formula"
+- "30-minute outdoor play"
 - "Bath time at 7 PM"
-- "Read bedtime story"
+- "Read 2 bedtime stories"
 
-### Settings
+</details>
+
+<details>
+<summary><b>⚙️ Settings</b></summary>
 
 #### Personal Information
 
-1. Navigate to **Settings � Personal Information**
-2. Update:
-   - Name
-   - Email
-   - Phone Number
-   - Profile Photo
-   - Password
-3. Click **"Save Changes"**
+- Update name and email
+- Change password
+- Upload profile photo
+- Update phone number
 
 #### Notification Preferences
 
-1. Navigate to **Settings � Notifications**
-2. Configure:
-   - Email Notifications (On/Off)
-   - Push Notifications (On/Off)
-   - Notification Types:
-     - Task Reminders
-     - Medication Reminders
-     - Babysitter Updates
-     - Growth Milestones
-3. Set quiet hours
-4. Click **"Save"**
+- Email notifications on/off
+- Choose notification types:
+  - Task reminders
+  - Medication alerts
+  - Babysitter updates
+- Set quiet hours
 
-#### Data Export
+#### Data Management
 
-1. Navigate to **Settings � Data Export**
-2. Select data to export:
-   - All Data
-   - Specific Category
-   - Date Range
-3. Choose format:
-   - PDF Report
-   - JSON Data
-   - CSV Spreadsheet
-4. Click **"Export"**
-5. Download file
+- Export all data (PDF/JSON/CSV)
+- Delete specific records
+- Remove account (permanent)
 
-#### Account Management
-
-- **Change Password**: Settings � Security
-- **Delete Account**: Settings � Account � Delete
-  - Warning: This permanently deletes all data
-  - Confirmation required
-  - Shared data is removed from babysitters' access
+</details>
 
 ---
 
-## =v For Babysitters
+### For Babysitters
 
-### Dashboard Overview
+<details>
+<summary><b>👀 Viewing Shared Children</b></summary>
 
-Babysitters see the **Babysitter Dashboard** with:
+#### Accessing Child Information
 
-- **Shared Children**: Profiles of children shared with you
-- **Assigned Tasks**: Tasks from parents
-- **Recent Logs**: Your recent activity entries
-- **Quick Actions**: Fast access to logging features
-
-### Viewing Shared Children
-
-1. Dashboard shows all children shared with you
+1. Dashboard shows all shared children
 2. Click on a child's card to view:
-   - Basic Information
-   - Health Records (allergies, medications)
-   - Feeding Schedule
-   - Sleep Schedule
-   - Parent Notes and Instructions
-   - Emergency Contacts
+   - Basic information
+   - Health records
+   - Medication schedules
+   - Allergy information
+   - Parent notes
+   - Emergency contacts
 
-### Managing Tasks
+</details>
 
-#### Viewing Assigned Tasks
+<details>
+<summary><b>✅ Managing Tasks</b></summary>
 
-1. Navigate to **Assigned Tasks**
-2. See tasks organized by:
-   - **Today's Tasks**
-   - **Upcoming**
-   - **Overdue**
-   - **Completed**
-3. Each task shows:
-   - Title and description
-   - Due date/time
-   - Priority
-   - Instructions from parent
+#### Viewing Tasks
+
+Tasks are organized by:
+- **Today's Tasks**
+- **Upcoming**
+- **Overdue**
+- **Completed**
 
 #### Completing Tasks
 
-1. Click on a task
+1. Click on task
 2. Read instructions carefully
 3. Perform the task
-4. Click **"Mark as Complete"**
-5. Optionally add notes:
-   - What you did
-   - Any issues
-   - Child's reaction
+4. Click **"Mark Complete"**
+5. Add notes about completion
 6. Parent receives notification
 
-### Logging Activities
+</details>
 
-#### Recording Feeding
+<details>
+<summary><b>📝 Logging Activities</b></summary>
+
+#### Recording Care Activities
+
+You can log:
+- Feeding sessions
+- Sleep times
+- Diaper changes
+- Observations
+- Medications given (if authorized)
+
+#### Process
 
 1. Select child from dropdown
-2. Navigate to **Feeding Notes**
-3. Click **"Add Feeding"**
-4. Enter details as instructed by parent
-5. Click **"Save"**
-6. Entry appears in child's log
-7. Parent can view your entry
+2. Navigate to appropriate section
+3. Enter details accurately
+4. Add relevant notes
+5. Save entry
+6. Parents can view your logs
 
-#### Recording Sleep
+</details>
 
-1. Navigate to **Sleep Analytics**
-2. Click **"Add Sleep Session"**
-3. Enter sleep times
-4. Add any relevant notes
-5. Click **"Save"**
+<details>
+<summary><b>⚠️ Best Practices</b></summary>
 
-#### Adding Observations
+#### Do's ✅
 
-1. Navigate to **Observation Notes**
-2. Click **"Add Observation"**
-3. Document:
-   - Activities
-   - Behavior
-   - Mood
-   - Any concerns
-4. Click **"Save"**
-5. Parents can see your observations
-
-### Best Practices for Babysitters
-
- **Do:**
 - Log activities in real-time
-- Read parent instructions carefully
+- Read parent instructions thoroughly
 - Note any unusual behavior
-- Complete assigned tasks on time
-- Communicate through the app
-- Keep health information confidential
+- Complete tasks on schedule
+- Communicate through app
+- Keep information confidential
 
-L **Don't:**
+#### Don'ts ❌
+
 - Share login credentials
-- Share child information outside app
-- Make decisions about medications without parent approval
-- Ignore allergy information
+- Share child information externally
+- Make medication decisions without approval
+- Ignore allergy warnings
 - Forget to mark tasks complete
 
-### Emergency Situations
-
-1. **Medical Emergency**:
-   - Call 911 first
-   - Then contact parent
-   - Reference allergy/medication info in app
-
-2. **Parent Contact**:
-   - Phone number in child profile
-   - Emergency contacts listed
-   - Use in-app messaging if available
+</details>
 
 ---
 
-## =' Feature Documentation
-
-### Authentication System
-
-**Technology:** Firebase Authentication
-
-**Features:**
-- Email/Password authentication
-- Password reset via email
-- Secure token-based sessions
-- Role-based access control (Parent/Babysitter)
-
-**Protected Routes:**
-- All dashboard and feature routes require authentication
-- Automatic redirect to login if session expires
-- Token refresh for long sessions
-
-### State Management
-
-**Global State:**
-- `AuthContext`: User authentication state
-- `BabyContext`: Selected baby and baby list
-- Firebase user state
-
-**Local State:**
-- Component-specific state with React hooks
-- Form state management
-- Modal and UI state
-
-### Data Flow
-
-```
-User Action � Frontend Component � API Request � Backend Route �
-Database Query � Response � State Update � UI Re-render
-```
-
-### File Upload System
-
-**Supported:**
-- Photo uploads for gallery
-- Vaccine card images
-- Profile photos
-
-**Storage:**
-- Backend `/uploads` directory
-- File size limits enforced
-- Image optimization
-
-### Notification System
-
-**Types:**
-1. **Email Notifications**
-   - Account invitations
-   - Password reset
-   - Task assignments
-   - Scheduled reminders
-
-2. **In-App Notifications** (Future)
-   - Real-time updates
-   - Task reminders
-   - Activity alerts
-
-3. **Push Notifications** (Future)
-   - Mobile app notifications
-   - Browser push notifications
-
-**Scheduler:**
-- Node-cron for scheduled tasks
-- Medication reminders
-- Task due date alerts
-- Custom scheduled notifications
-
----
-
-## = API Documentation
+## 🔌 API Reference
 
 ### Base URL
 
 ```
 Development: http://localhost:3000/api
-Production: https://your-domain.com/api
+Production:  https://your-domain.com/api
 ```
 
 ### Authentication
 
-Most endpoints require authentication via Firebase ID token:
+All protected endpoints require Firebase ID token:
 
 ```http
 Authorization: Bearer <firebase_id_token>
 ```
 
-### API Endpoints
+### Endpoints Overview
 
-#### Authentication
+<details>
+<summary><b>Authentication Endpoints</b></summary>
 
-##### POST `/api/sign-in`
-Sign in user and retrieve account data
+#### POST `/api/sign-in`
+
+Sign in user and retrieve account data.
 
 **Request:**
 ```json
 {
-  "idToken": "firebase_id_token"
+  "idToken": "firebase_id_token_here"
 }
 ```
 
@@ -962,59 +762,46 @@ Sign in user and retrieve account data
 }
 ```
 
-#### Account Management
+</details>
 
-##### POST `/api/accounts`
+<details>
+<summary><b>Account Management</b></summary>
+
+#### POST `/api/accounts`
 Create new user account
 
-**Request:**
-```json
-{
-  "firebase_uid": "abc...",
-  "account_type": "parent",
-  "first_name": "John",
-  "last_name": "Doe",
-  "email_address": "john@example.com"
-}
-```
-
-##### GET `/api/user/:firebase_uid`
+#### GET `/api/user/:firebase_uid`
 Get user profile
 
-##### PUT `/api/user/:account_id`
+#### PUT `/api/user/:account_id`
 Update user profile
 
-#### Baby Management
+</details>
 
-##### GET `/api/babies/:parent_id`
+<details>
+<summary><b>Baby Management</b></summary>
+
+#### GET `/api/babies/:parent_id`
 Get all babies for a parent
 
-##### POST `/api/babies`
+#### POST `/api/babies`
 Add new baby
 
-**Request:**
-```json
-{
-  "parent_id": "123",
-  "first_name": "Emma",
-  "last_name": "Doe",
-  "birth_date": "2023-01-15",
-  "gender": "female"
-}
-```
-
-##### PUT `/api/babies/:baby_id`
+#### PUT `/api/babies/:baby_id`
 Update baby information
 
-##### DELETE `/api/babies/:baby_id`
+#### DELETE `/api/babies/:baby_id`
 Delete baby record
 
-#### Growth Tracking
+</details>
 
-##### GET `/api/growth?baby_id=1`
-Get growth records for baby
+<details>
+<summary><b>Growth Tracking</b></summary>
 
-##### POST `/api/growth`
+#### GET `/api/growth?baby_id=1`
+Get growth records
+
+#### POST `/api/growth`
 Add growth record
 
 **Request:**
@@ -1028,175 +815,90 @@ Add growth record
 }
 ```
 
-##### DELETE `/api/growth/:growth_id`
+#### DELETE `/api/growth/:growth_id`
 Delete growth record
 
-#### Sleep Tracking
+</details>
 
-##### GET `/api/sleep?baby_id=1`
+<details>
+<summary><b>Sleep Tracking</b></summary>
+
+#### GET `/api/sleep?baby_id=1`
 Get sleep records
 
-##### POST `/api/sleep`
+#### POST `/api/sleep`
 Add sleep record
 
-**Request:**
-```json
-{
-  "baby_id": "1",
-  "date": "2024-01-15",
-  "start_time": "20:00",
-  "end_time": "06:00",
-  "duration": 10,
-  "notes": "Slept through the night"
-}
-```
-
-##### DELETE `/api/sleep/:sleep_id`
+#### DELETE `/api/sleep/:sleep_id`
 Delete sleep record
 
-#### Feeding Tracking
+</details>
 
-##### GET `/api/feeding?baby_id=1`
+<details>
+<summary><b>Feeding Tracking</b></summary>
+
+#### GET `/api/feeding?baby_id=1`
 Get feeding records
 
-##### POST `/api/feeding`
+#### POST `/api/feeding`
 Add feeding record
 
-**Request:**
-```json
-{
-  "baby_id": "1",
-  "date": "2024-01-15",
-  "time": "10:30",
-  "type": "bottle",
-  "amount": 4,
-  "unit": "oz",
-  "notes": "Fed well"
-}
-```
-
-##### DELETE `/api/feeding/:feeding_id`
+#### DELETE `/api/feeding/:feeding_id`
 Delete feeding record
 
-#### Health Records
+</details>
 
-##### GET `/api/meds?baby_id=1`
-Get medication records
+<details>
+<summary><b>Health Records</b></summary>
 
-##### POST `/api/meds`
-Add medication
+#### Medications
+- GET `/api/meds?baby_id=1`
+- POST `/api/meds`
 
-##### GET `/api/allergies?baby_id=1`
-Get allergies
+#### Allergies
+- GET `/api/allergies?baby_id=1`
+- POST `/api/allergies`
 
-##### POST `/api/allergies`
-Add allergy
+#### Vaccinations
+- GET `/api/vaccinations?baby_id=1`
+- POST `/api/vaccinations`
 
-##### GET `/api/vaccinations?baby_id=1`
-Get vaccinations
+#### Sick Days
+- GET `/api/sickday?baby_id=1`
+- POST `/api/sickday`
 
-##### POST `/api/vaccinations`
-Add vaccination
+</details>
 
-##### GET `/api/sickday?baby_id=1`
-Get sick day records
+<details>
+<summary><b>Babysitter Sharing</b></summary>
 
-##### POST `/api/sickday`
-Log sick day
-
-#### Observations
-
-##### GET `/api/observation?baby_id=1`
-Get observations
-
-##### POST `/api/observation`
-Add observation
-
-**Request:**
-```json
-{
-  "baby_id": "1",
-  "date": "2024-01-15",
-  "time": "14:30",
-  "activity": "playing",
-  "notes": "Very active and happy today",
-  "mood": "happy"
-}
-```
-
-##### DELETE `/api/observation/:observation_id`
-Delete observation
-
-#### Babysitter Sharing
-
-##### GET `/api/babysitter-sharing/children/:babysitter_id`
+#### GET `/api/babysitter-sharing/children/:babysitter_id`
 Get children shared with babysitter
 
-##### POST `/api/babysitter-sharing`
+#### POST `/api/babysitter-sharing`
 Share child with babysitter
 
-**Request:**
-```json
-{
-  "parent_id": "123",
-  "babysitter_email": "sitter@example.com",
-  "baby_id": "1",
-  "permissions": "view_and_log"
-}
-```
-
-##### DELETE `/api/babysitter-sharing/:sharing_id`
+#### DELETE `/api/babysitter-sharing/:sharing_id`
 Revoke babysitter access
 
-#### Task Management
+</details>
 
-##### GET `/api/shared-tasks?assignee_id=456`
+<details>
+<summary><b>Task Management</b></summary>
+
+#### GET `/api/shared-tasks?assignee_id=456`
 Get assigned tasks
 
-##### POST `/api/shared-tasks`
+#### POST `/api/shared-tasks`
 Create task
 
-**Request:**
-```json
-{
-  "parent_id": "123",
-  "assignee_id": "456",
-  "baby_id": "1",
-  "title": "Give medication",
-  "description": "2ml at 3 PM",
-  "due_date": "2024-01-15",
-  "due_time": "15:00",
-  "priority": "high"
-}
-```
+#### PUT `/api/shared-tasks/:task_id`
+Update task
 
-##### PUT `/api/shared-tasks/:task_id`
-Update task (mark complete, etc.)
-
-##### DELETE `/api/shared-tasks/:task_id`
+#### DELETE `/api/shared-tasks/:task_id`
 Delete task
 
-#### Photo Gallery
-
-##### GET `/api/photo-gallery?baby_id=1`
-Get photos
-
-##### POST `/api/photo-gallery`
-Upload photo (multipart/form-data)
-
-##### DELETE `/api/photo-gallery/:photo_id`
-Delete photo
-
-#### Notifications
-
-##### GET `/api/notification-preferences/:account_id`
-Get notification settings
-
-##### PUT `/api/notification-preferences/:account_id`
-Update notification settings
-
-##### POST `/api/send-notification`
-Send custom notification
+</details>
 
 ### Error Responses
 
@@ -1209,36 +911,65 @@ All endpoints return consistent error format:
 }
 ```
 
-**HTTP Status Codes:**
+**Status Codes:**
 - `200` - Success
 - `201` - Created
-- `400` - Bad Request (validation error)
-- `401` - Unauthorized (auth required)
-- `403` - Forbidden (insufficient permissions)
+- `400` - Bad Request
+- `401` - Unauthorized
+- `403` - Forbidden
 - `404` - Not Found
 - `500` - Internal Server Error
 
 ---
 
-## =� Database Schema
+## 🗄 Database Schema
 
-### Tables Overview
+### Entity Relationship Diagram
 
-#### `account`
-User accounts (parents and babysitters)
+```
+┌─────────────┐
+│   account   │
+│  (parent)   │
+└──────┬──────┘
+       │ 1:N
+       ▼
+┌─────────────┐
+│    baby     │
+└──────┬──────┘
+       │ 1:N
+       ├──────► growth
+       ├──────► sleep
+       ├──────► feeding
+       ├──────► medication
+       ├──────► allergy
+       ├──────► vaccination
+       └──────► observation
+
+┌─────────────┐      ┌─────────────────────┐      ┌─────────────┐
+│   account   │      │ babysitter_sharing  │      │   account   │
+│  (parent)   │◄─────┤    (junction)       ├─────►│(babysitter) │
+└─────────────┘ N:N  └─────────────────────┘ N:N  └─────────────┘
+```
+
+### Core Tables
+
+<details>
+<summary><b>account</b> - User accounts</summary>
 
 | Column | Type | Description |
 |--------|------|-------------|
 | account_id | INT (PK) | Primary key |
-| firebase_uid | VARCHAR | Firebase auth UID |
+| firebase_uid | VARCHAR | Firebase UID (unique) |
 | account_type | ENUM | 'parent' or 'babysitter' |
 | first_name | VARCHAR | First name |
 | last_name | VARCHAR | Last name |
 | email_address | VARCHAR | Email (unique) |
-| created_at | TIMESTAMP | Creation date |
+| created_at | TIMESTAMP | Account creation date |
 
-#### `baby`
-Child profiles
+</details>
+
+<details>
+<summary><b>baby</b> - Child profiles</summary>
 
 | Column | Type | Description |
 |--------|------|-------------|
@@ -1248,10 +979,12 @@ Child profiles
 | last_name | VARCHAR | Last name |
 | birth_date | DATE | Date of birth |
 | gender | ENUM | 'male', 'female', 'other' |
-| created_at | TIMESTAMP | Creation date |
+| created_at | TIMESTAMP | Profile creation date |
 
-#### `growth`
-Growth measurements
+</details>
+
+<details>
+<summary><b>growth</b> - Growth measurements</summary>
 
 | Column | Type | Description |
 |--------|------|-------------|
@@ -1262,21 +995,25 @@ Growth measurements
 | weight | DECIMAL | Weight in pounds |
 | notes | TEXT | Optional notes |
 
-#### `sleep`
-Sleep records
+</details>
+
+<details>
+<summary><b>sleep</b> - Sleep records</summary>
 
 | Column | Type | Description |
 |--------|------|-------------|
 | sleep_id | INT (PK) | Primary key |
 | baby_id | INT (FK) | References baby |
 | date | DATE | Sleep date |
-| start_time | TIME | Sleep start |
-| end_time | TIME | Sleep end |
+| start_time | TIME | Sleep start time |
+| end_time | TIME | Sleep end time |
 | duration | DECIMAL | Hours slept |
 | notes | TEXT | Optional notes |
 
-#### `feeding`
-Feeding logs
+</details>
+
+<details>
+<summary><b>feeding</b> - Feeding logs</summary>
 
 | Column | Type | Description |
 |--------|------|-------------|
@@ -1289,224 +1026,62 @@ Feeding logs
 | unit | VARCHAR | 'oz', 'ml', etc. |
 | notes | TEXT | Optional notes |
 
-#### `medication`
-Medication records
+</details>
 
-| Column | Type | Description |
-|--------|------|-------------|
-| medication_id | INT (PK) | Primary key |
-| baby_id | INT (FK) | References baby |
-| medication_name | VARCHAR | Med name |
-| dosage | VARCHAR | Dosage info |
-| frequency | VARCHAR | How often |
-| start_date | DATE | Start date |
-| end_date | DATE | End date (optional) |
-| prescribing_doctor | VARCHAR | Doctor name |
-| notes | TEXT | Additional info |
+<details>
+<summary><b>View all tables</b></summary>
 
-#### `allergy`
-Allergy information
+Additional tables:
+- `medication` - Medication records
+- `allergy` - Allergy information
+- `vaccination` - Vaccination records
+- `observation` - Daily observations
+- `babysitter_sharing` - Sharing relationships
+- `shared_task` - Task assignments
+- `notification_preference` - Notification settings
+- `custom_notification` - Scheduled notifications
 
-| Column | Type | Description |
-|--------|------|-------------|
-| allergy_id | INT (PK) | Primary key |
-| baby_id | INT (FK) | References baby |
-| allergen | VARCHAR | Allergen name |
-| severity | ENUM | 'mild', 'moderate', 'severe' |
-| reaction | TEXT | Symptoms |
-| diagnosed_date | DATE | When diagnosed |
-| status | ENUM | 'active', 'resolved' |
+[See full schema in detailed documentation →](#)
 
-#### `vaccination`
-Vaccination records
-
-| Column | Type | Description |
-|--------|------|-------------|
-| vaccination_id | INT (PK) | Primary key |
-| baby_id | INT (FK) | References baby |
-| vaccine_name | VARCHAR | Vaccine name |
-| date_administered | DATE | When given |
-| healthcare_provider | VARCHAR | Provider |
-| lot_number | VARCHAR | Lot # |
-| next_due_date | DATE | Next dose |
-| reactions | TEXT | Side effects |
-
-#### `observation`
-Daily observations
-
-| Column | Type | Description |
-|--------|------|-------------|
-| observation_id | INT (PK) | Primary key |
-| baby_id | INT (FK) | References baby |
-| date | DATE | Observation date |
-| time | TIME | Time of day |
-| activity | VARCHAR | Activity type |
-| mood | VARCHAR | Child's mood |
-| notes | TEXT | Detailed notes |
-| logged_by | INT (FK) | References account |
-
-#### `babysitter_sharing`
-Account sharing relationships
-
-| Column | Type | Description |
-|--------|------|-------------|
-| sharing_id | INT (PK) | Primary key |
-| parent_id | INT (FK) | References account (parent) |
-| babysitter_id | INT (FK) | References account (babysitter) |
-| baby_id | INT (FK) | References baby |
-| permissions | VARCHAR | Access level |
-| created_at | TIMESTAMP | Share date |
-
-#### `shared_task`
-Task assignments
-
-| Column | Type | Description |
-|--------|------|-------------|
-| task_id | INT (PK) | Primary key |
-| parent_id | INT (FK) | Task creator |
-| assignee_id | INT (FK) | Assigned to |
-| baby_id | INT (FK) | Related baby |
-| title | VARCHAR | Task title |
-| description | TEXT | Task details |
-| due_date | DATE | Due date |
-| due_time | TIME | Due time |
-| priority | ENUM | 'low', 'medium', 'high' |
-| status | ENUM | 'pending', 'completed' |
-| completed_at | TIMESTAMP | Completion time |
-| completed_notes | TEXT | Notes on completion |
-
-### Database Relationships
-
-```
-account (parent)
-    � (1:N)
-baby
-    � (1:N)
-   growth
-   sleep
-   feeding
-   medication
-   allergy
-   vaccination
-   observation
-
-account (parent) �� account (babysitter)
-        � (N:N)
-   babysitter_sharing
-        �
-      baby
-
-account (parent) � shared_task � account (babysitter)
-```
+</details>
 
 ---
 
-## =� Development Guide
+## 💻 Development
 
 ### Project Structure
 
 ```
 ParentPal/
-   public/                  # Static assets
-      images/             # Images and logos
-   src/                    # Frontend source code
-      components/         # React components
-         auth/          # Authentication components
-            sign-in/
-            register/
-         pages/         # Feature pages
-             dashboard/
-             growth/
-             sleep/
-             health/
-             notes/
-             photo-gallery/
-             reports/
-             settings/
-      contexts/          # React Context providers
-         AuthContext.jsx
-         BabyContext.jsx
-      hooks/             # Custom React hooks
-         useBabyData.js
-      firebase/          # Firebase configuration
-         firebaseAuth.js
-         firebaseMessaging.js
-      config/            # Configuration files
-         api.js
-      styles/            # CSS files
-         globals.css
-         design-system.css
-      __tests__/         # Test files
-      App.jsx            # Main app component
-      main.jsx           # Entry point
-   backend/               # Backend source code
-      routes/           # API route handlers
-         accounts.js
-         sign-in.js
-         babies.js
-         growth.js
-         sleep.js
-         feeding.js
-         meds.js
-         allergies.js
-         vaccinations.js
-         observation.js
-         babysitter-sharing.js
-         shared-tasks.js
-         photo-gallery.js
-         ...
-      services/         # Business logic services
-         emailService.js
-         notificationService.js
-      scheduler/        # Scheduled tasks
-         notificationScheduler.js
-      __tests__/        # Backend tests
-      server.js         # Express server
-      db.js            # Database connection
-      firebase-admin.js # Firebase Admin SDK
-   .env                  # Environment variables
-   package.json          # Dependencies
-   vite.config.js       # Vite configuration
-   jest.config.js       # Jest configuration
-   tailwind.config.js   # Tailwind configuration
-   TESTING_SUMMARY.md   # Testing documentation
-   README.md            # This file
+├── public/              # Static assets
+├── src/                 # Frontend source
+│   ├── components/      # React components
+│   │   ├── auth/       # Authentication
+│   │   └── pages/      # Feature pages
+│   ├── contexts/       # Context providers
+│   ├── hooks/          # Custom hooks
+│   ├── firebase/       # Firebase config
+│   └── __tests__/      # Frontend tests
+├── backend/            # Backend source
+│   ├── routes/        # API routes
+│   ├── services/      # Business logic
+│   ├── scheduler/     # Scheduled tasks
+│   └── __tests__/     # Backend tests
+├── .env               # Environment variables
+└── README.md          # This file
 ```
 
-### Code Style Guidelines
-
-#### JavaScript/React
-
-```javascript
-// Use functional components with hooks
-function MyComponent() {
-  const [state, setState] = useState(initialValue);
-
-  useEffect(() => {
-    // Side effects
-  }, [dependencies]);
-
-  return <div>Content</div>;
-}
-
-// Use descriptive names
-const handleSubmit = () => { };
-const isLoading = false;
-const userData = {};
-
-// Destructure props
-function Component({ title, onClose }) {
-  return <div>{title}</div>;
-}
-```
+### Code Style
 
 #### Naming Conventions
 
-- **Components**: PascalCase (`ParentDashboard.jsx`)
-- **Files**: kebab-case (`use-baby-data.js`)
-- **Variables**: camelCase (`userData`, `isLoading`)
-- **Constants**: UPPER_SNAKE_CASE (`API_URL`)
-- **CSS Classes**: kebab-case (`.button-primary`)
+```
+Components:    PascalCase     ParentDashboard.jsx
+Files:         kebab-case     use-baby-data.js
+Variables:     camelCase      userData, isLoading
+Constants:     UPPER_SNAKE    API_URL
+CSS Classes:   kebab-case     .button-primary
+```
 
 #### Import Order
 
@@ -1517,7 +1092,6 @@ import { useState } from 'react';
 
 // 2. Internal modules
 import { useAuth } from '../contexts/AuthContext';
-import API_URL from '../config/api';
 
 // 3. Components
 import Button from '../components/Button';
@@ -1526,108 +1100,37 @@ import Button from '../components/Button';
 import './styles.css';
 ```
 
-### Adding New Features
-
-#### Frontend Feature
-
-1. **Create Component**
-   ```bash
-   src/components/pages/new-feature/NewFeature.jsx
-   ```
-
-2. **Add Route**
-   ```javascript
-   // In App.jsx
-   <Route
-     path="/new-feature"
-     element={
-       <ProtectedRoute>
-         <NewFeature />
-       </ProtectedRoute>
-     }
-   />
-   ```
-
-3. **Add Navigation**
-   ```javascript
-   // In appropriate dashboard or navbar
-   <Link to="/new-feature">New Feature</Link>
-   ```
-
-4. **Create Tests**
-   ```bash
-   src/__tests__/components/pages/new-feature.test.jsx
-   ```
-
-#### Backend Endpoint
-
-1. **Create Route File**
-   ```javascript
-   // backend/routes/new-feature.js
-   const express = require('express');
-   const router = express.Router();
-   const pool = require('../db');
-
-   router.get('/', async (req, res) => {
-     // Implementation
-   });
-
-   module.exports = router;
-   ```
-
-2. **Register Route**
-   ```javascript
-   // In backend/server.js
-   const newFeatureRouter = require('./routes/new-feature');
-   app.use('/api/new-feature', newFeatureRouter);
-   ```
-
-3. **Add Database Table** (if needed)
-   ```sql
-   -- Create migration file
-   CREATE TABLE new_feature (
-     id INT PRIMARY KEY AUTO_INCREMENT,
-     -- columns
-   );
-   ```
-
-4. **Create Tests**
-   ```javascript
-   // backend/__tests__/routes/new-feature.test.js
-   ```
-
 ### Git Workflow
 
 ```bash
 # Create feature branch
-git checkout -b feature/new-feature-name
+git checkout -b feature/feature-name
 
 # Make changes and commit
 git add .
-git commit -m "feat: add new feature description"
+git commit -m "feat: add feature description"
 
 # Push to remote
-git push origin feature/new-feature-name
+git push origin feature/feature-name
 
-# Create pull request
-# After review and approval, merge to main
+# Create pull request for review
 ```
 
-### Commit Message Convention
+### Commit Convention
 
 ```
-feat: Add new feature
-fix: Fix bug description
-docs: Update documentation
-style: Format code
-refactor: Refactor component
-test: Add tests
-chore: Update dependencies
+feat:     New feature
+fix:      Bug fix
+docs:     Documentation
+style:    Formatting
+refactor: Code restructure
+test:     Add tests
+chore:    Maintenance
 ```
 
 ---
 
-## >� Testing
+## 🧪 Testing
 
 ### Running Tests
 
@@ -1635,45 +1138,49 @@ chore: Update dependencies
 # Run all tests
 npm test
 
-# Run tests in watch mode
+# Watch mode
 npm test -- --watch
 
-# Run specific test file
+# Specific test file
 npm test -- signin.test.jsx
 
-# Run with coverage
+# With coverage
 npm run test:coverage
 
-# Run backend tests
-cd backend
-npm test
+# Backend tests
+cd backend && npm test
 ```
 
-### Test Coverage Goals
+### Test Coverage
 
-- **Unit Tests**: 80%+ coverage
-- **Integration Tests**: Key user flows
-- **E2E Tests**: Critical paths
+**Current Status:**
+- ✅ 155 passing tests
+- 📊 ~24% code coverage
+- 🎯 Target: 80%+ coverage
 
-### Writing Tests
+**Test Structure:**
+```
+src/__tests__/
+├── components/
+│   ├── auth/
+│   │   └── signin.test.jsx
+│   ├── protected-route.test.jsx
+│   └── pages/
+│       └── parent-dashboard.test.jsx
+├── contexts/
+│   ├── AuthContext.test.jsx
+│   └── BabyContext.test.jsx
+└── hooks/
+    └── useBabyData.test.js
+```
 
-See [TESTING_SUMMARY.md](./TESTING_SUMMARY.md) for:
-- Testing patterns
-- Test templates
-- Best practices
-- Coverage reports
-
-### Current Test Status
-
-- **155 passing tests**
-- **~24% code coverage**
-- See detailed breakdown in TESTING_SUMMARY.md
+For detailed testing guide, see [TESTING_SUMMARY.md](./TESTING_SUMMARY.md)
 
 ---
 
-## =� Deployment
+## 🚀 Deployment
 
-### Frontend Deployment (Firebase Hosting)
+### Frontend (Firebase Hosting)
 
 ```bash
 # Build production bundle
@@ -1686,154 +1193,124 @@ npm run firebase:deploy
 npm run firebase:serve
 ```
 
-### Backend Deployment
+### Backend (Production)
 
 #### Option 1: Heroku
 
 ```bash
-# Install Heroku CLI
-# Login
-heroku login
-
-# Create app
 heroku create parentpal-api
-
-# Set environment variables
-heroku config:set DB_HOST=your_db_host
-heroku config:set DB_PASSWORD=your_db_password
-# ... set all env vars
-
-# Deploy
+heroku config:set DB_HOST=your_host
+# Set all environment variables
 git push heroku main
-
-# View logs
-heroku logs --tail
 ```
 
-#### Option 2: DigitalOcean/AWS
-
-1. Set up server (Ubuntu recommended)
-2. Install Node.js and PostgreSQL
-3. Clone repository
-4. Install dependencies
-5. Configure environment variables
-6. Set up process manager (PM2)
-7. Configure nginx as reverse proxy
-8. Set up SSL certificate (Let's Encrypt)
-
-#### Database Migration
+#### Option 2: VPS (DigitalOcean/AWS)
 
 ```bash
-# Backup production database
-pg_dump -U username dbname > backup.sql
-
-# Run migrations
-npm run migrate
-
-# Verify
-psql -U username -d dbname -c "SELECT * FROM schema_version;"
+# On server
+git clone repo
+npm install
+pm2 start backend/server.js
+nginx configuration
+ssl certificate setup
 ```
 
-### Environment Variables for Production
-
-Ensure all production environment variables are set:
-
-- Database credentials
-- Firebase admin credentials
-- Email service credentials
-- API URLs
-- Allowed origins for CORS
-
-### Post-Deployment Checklist
+### Environment Checklist
 
 - [ ] Database migrations applied
 - [ ] Environment variables set
 - [ ] Firebase configuration updated
 - [ ] CORS origins configured
 - [ ] SSL certificate installed
-- [ ] Monitoring set up
+- [ ] Monitoring enabled
 - [ ] Backup strategy implemented
-- [ ] Performance testing completed
-- [ ] Security audit performed
 
 ---
 
-## = Troubleshooting
+## 🐛 Troubleshooting
 
 ### Common Issues
 
-#### "Firebase: Error (auth/...)"
+<details>
+<summary><b>Firebase Authentication Errors</b></summary>
 
-**Problem**: Firebase authentication errors
-
-**Solutions:**
-- Check Firebase configuration in `.env`
-- Verify Firebase project settings
-- Ensure email/password auth is enabled
-- Check browser console for specific error
-- Verify API keys are correct
-
-#### "Network Error" / API Not Responding
-
-**Problem**: Frontend can't connect to backend
+**Symptoms:**
+- "Firebase: Error (auth/...)"
+- Unable to sign in
 
 **Solutions:**
-- Verify backend server is running
-- Check `VITE_API_URL` in frontend `.env`
-- Verify CORS settings in backend
-- Check network tab in browser DevTools
-- Ensure ports 3000 (backend) and 5173 (frontend) are open
+1. Verify `.env` Firebase configuration
+2. Check Firebase Console settings
+3. Ensure Email/Password auth is enabled
+4. Verify API keys are correct
+5. Check browser console for details
 
-#### Database Connection Failed
+</details>
 
-**Problem**: Backend can't connect to database
+<details>
+<summary><b>API Connection Failed</b></summary>
+
+**Symptoms:**
+- "Network Error"
+- API requests timeout
 
 **Solutions:**
-- Verify database is running
-- Check database credentials in `.env`
-- Ensure database exists
-- Test connection: `psql -U username -d dbname`
-- Check firewall settings
+1. Verify backend server is running
+2. Check `VITE_API_URL` in `.env`
+3. Verify CORS settings
+4. Check browser Network tab
+5. Ensure correct ports (3000, 5173)
 
-#### "Module not found"
+</details>
 
-**Problem**: Missing dependencies
+<details>
+<summary><b>Database Connection Issues</b></summary>
+
+**Symptoms:**
+- "Connection refused"
+- Database errors
+
+**Solutions:**
+1. Verify PostgreSQL is running
+2. Check credentials in `backend/.env`
+3. Ensure database exists
+4. Test: `psql -U user -d parentpal`
+5. Check firewall settings
+
+</details>
+
+<details>
+<summary><b>Module Not Found</b></summary>
 
 **Solutions:**
 ```bash
-# Delete node_modules and reinstall
+# Clear and reinstall
 rm -rf node_modules package-lock.json
 npm install
 
-# Or clear npm cache
+# Clear cache
 npm cache clean --force
 npm install
 ```
 
-#### Tests Failing
+</details>
 
-**Problem**: Test suite has errors
-
-**Solutions:**
-- Clear Jest cache: `npm test -- --clearCache`
-- Check mock configurations
-- Verify test environment variables
-- See TESTING_SUMMARY.md for patterns
-
-#### Build Errors
-
-**Problem**: `npm run build` fails
+<details>
+<summary><b>Build Errors</b></summary>
 
 **Solutions:**
-- Check for TypeScript errors
-- Verify all imports are correct
-- Clear build cache: `rm -rf dist node_modules/.vite`
-- Check for circular dependencies
-- Review error messages in terminal
+1. Check for TypeScript errors
+2. Verify all imports
+3. Clear build cache:
+   ```bash
+   rm -rf dist node_modules/.vite
+   npm install
+   ```
+4. Review error messages
+
+</details>
 
 ### Debug Mode
-
-Enable debug logging:
 
 ```javascript
 // Frontend
@@ -1845,71 +1322,107 @@ DEBUG=* npm start
 
 ### Getting Help
 
-1. **Check Documentation**: README.md and TESTING_SUMMARY.md
-2. **Review Issues**: Check GitHub issues
-3. **Contact Support**: [your-email@example.com]
-4. **Community**: [Discord/Slack link if applicable]
+1. Check [Documentation](#-documentation)
+2. Review [GitHub Issues](https://github.com/your-username/ParentPal/issues)
+3. Contact: support@parentpal.com
 
 ---
 
-## =� Performance Optimization
+## 🔒 Security
 
-### Frontend Performance
+### Implemented Security Measures
 
-- **Code Splitting**: Routes are lazy-loaded
-- **Image Optimization**: Compress images before upload
-- **Memoization**: Use React.memo for expensive components
-- **Virtual Scrolling**: For large lists (react-window)
-- **Bundle Analysis**: `npm run build -- --analyze`
+- ✅ Firebase Authentication with secure tokens
+- ✅ Role-based access control
+- ✅ HTTPS in production
+- ✅ Server-side input validation
+- ✅ Parameterized database queries (SQL injection prevention)
+- ✅ XSS prevention (React escapes by default)
+- ✅ CSRF protection with SameSite cookies
+- ✅ Password hashing (handled by Firebase)
+- ✅ Environment variable protection
+- ✅ CORS restricted origins
 
-### Backend Performance
+### Security Best Practices
 
-- **Database Indexing**: Add indexes to frequently queried columns
-- **Query Optimization**: Use EXPLAIN ANALYZE
-- **Connection Pooling**: PostgreSQL connection pool
-- **Caching**: Implement Redis for frequently accessed data
-- **Rate Limiting**: Prevent API abuse
+- Regular dependency updates
+- Security audits performed
+- Rate limiting on API endpoints
+- File upload validation
+- Proper error handling (no info leakage)
+- Regular backups
+- Monitoring and logging
+
+---
+
+## 📊 Performance
+
+### Optimization Strategies
+
+**Frontend:**
+- Code splitting and lazy loading
+- Image optimization
+- React.memo for expensive components
+- Virtual scrolling for large lists
+
+**Backend:**
+- Database indexing
+- Query optimization
+- Connection pooling
+- Caching strategy (Redis for future)
+- Rate limiting
 
 ### Monitoring
 
-- **Frontend**: Google Analytics, Sentry
-- **Backend**: Application logs, database metrics
-- **Uptime**: UptimeRobot or similar
-- **Performance**: Lighthouse scores
+- Frontend: Google Analytics, Sentry
+- Backend: Application logs, metrics
+- Uptime: Monitoring service
+- Performance: Lighthouse scores
 
 ---
 
-## = Security
+## 🗺 Roadmap
 
-### Best Practices Implemented
+### Version 1.1 (Current)
+- [x] Core features implemented
+- [x] Testing framework
+- [ ] Complete test coverage
+- [ ] Performance optimization
+- [ ] Enhanced error handling
 
--  **Authentication**: Firebase Auth with secure tokens
--  **Authorization**: Role-based access control
--  **HTTPS**: SSL certificates in production
--  **Input Validation**: Server-side validation
--  **SQL Injection Prevention**: Parameterized queries
--  **XSS Prevention**: React escapes by default
--  **CSRF Protection**: SameSite cookies
--  **Password Security**: Firebase handles hashing
--  **Environment Variables**: Sensitive data not in code
--  **CORS**: Restricted origins
-
-### Security Checklist
-
-- [ ] All API endpoints validate input
-- [ ] Database queries use parameterized statements
-- [ ] Sensitive data encrypted at rest
-- [ ] HTTPS enforced in production
-- [ ] Security headers configured
-- [ ] Dependencies regularly updated
-- [ ] Security audit performed
-- [ ] Rate limiting implemented
-- [ ] File upload validation
-- [ ] Proper error messages (no info leakage)
+### Version 2.0 (Planned)
+- [ ] Mobile apps (iOS/Android)
+- [ ] Real-time collaboration
+- [ ] Video calling
+- [ ] AI-powered insights
+- [ ] Meal planning
+- [ ] Multi-language support
+- [ ] Dark mode
+- [ ] Offline mode
 
 ---
 
-## =� License
+## 👥 Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'feat: add AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow the code style guidelines
+- Write tests for new features
+- Update documentation
+- Ensure all tests pass
+- Keep commits atomic and well-described
+
+---
+
+## 📝 License
 
 **Private/Proprietary** - All rights reserved
 
@@ -1917,118 +1430,32 @@ This software is private and proprietary. Unauthorized copying, distribution, or
 
 ---
 
-## =e Contributors
-
-- **Braeden Lyman** - Lead Developer
-
----
-
-## =� Support
-
-For support, questions, or feedback:
-
-- **Email**: support@parentpal.com
-- **Website**: https://parentpals.ca
-- **Documentation**: This README.md file
-
----
-
-## =� Roadmap
-
-### Version 2.0 (Planned)
-
-- [ ] Mobile apps (iOS/Android)
-- [ ] Real-time collaboration
-- [ ] Video calling with babysitters
-- [ ] AI-powered insights
-- [ ] Meal planning
-- [ ] Immunization reminders
-- [ ] Multi-language support
-- [ ] Dark mode
-- [ ] Offline mode
-- [ ] Export to pediatrician portal
-
-### Version 1.1 (In Progress)
-
-- [x] Basic features implemented
-- [x] Testing framework
-- [ ] Complete test coverage
-- [ ] Performance optimization
-- [ ] Enhanced error handling
-- [ ] Improved UI/UX
-
----
-
-## =O Acknowledgments
-
-- **React Team** - For the amazing framework
-- **Firebase** - For authentication and hosting
-- **HeroUI** - For beautiful components
-- **PostgreSQL** - For reliable database
-- **All Contributors** - For testing and feedback
-
----
-
-## =� Additional Resources
-
-### External Documentation
-
-- [React Documentation](https://react.dev)
-- [Firebase Documentation](https://firebase.google.com/docs)
-- [Express.js Documentation](https://expressjs.com)
-- [PostgreSQL Documentation](https://www.postgresql.org/docs)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-
-### Internal Documentation
-
-- [TESTING_SUMMARY.md](./TESTING_SUMMARY.md) - Complete testing guide
-- API documentation (above in this file)
-- Database schema (above in this file)
-
----
-
-## <� Quick Reference
-
-### Essential Commands
-
-```bash
-# Development
-npm run dev              # Start frontend dev server
-cd backend && npm start  # Start backend server
-
-# Testing
-npm test                 # Run tests
-npm run test:coverage    # Coverage report
-
-# Building
-npm run build           # Build for production
-npm run preview         # Preview production build
-
-# Deployment
-npm run firebase:deploy  # Deploy frontend
-```
-
-### Important URLs
-
-- **Frontend (Dev)**: http://localhost:5173
-- **Backend (Dev)**: http://localhost:3000
-- **Frontend (Prod)**: https://parent-pal-86b9a.web.app
-- **Backend (Prod)**: https://your-api-domain.com
-
-### Key Files
-
-- `src/App.jsx` - Main app component and routes
-- `src/main.jsx` - Application entry point
-- `backend/server.js` - Express server setup
-- `backend/db.js` - Database configuration
-- `.env` - Environment variables (not in git)
-
----
+## 📞 Contact & Support
 
 <div align="center">
 
-**Made with d for parents and caregivers everywhere**
+**Need Help?**
 
-Version 1.0.0 | Last Updated: October 31, 2025
+📧 Email: support@parentpal.com
+🌐 Website: [https://parentpals.ca](https://parentpals.ca)
+📖 Documentation: This README
+
+---
+
+### Quick Links
+
+[Installation](#-installation) •
+[User Guide](#-user-guide) •
+[API Docs](#-api-reference) •
+[Testing](./TESTING_SUMMARY.md) •
+[Troubleshooting](#-troubleshooting)
+
+---
+
+**Made with ❤️ for parents and caregivers everywhere**
+
+Version 1.0.0 | Last Updated: November 1, 2025
+
+© 2025 ParentPal. All rights reserved.
 
 </div>

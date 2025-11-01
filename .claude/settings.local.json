@@ -11,7 +11,8 @@
       "Bash(find:*)",
       "Bash(npm i:*)",
       "Bash(npm test:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(npx babel:*)"
     ],
     "deny": [],
     "ask": []
