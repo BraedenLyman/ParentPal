@@ -38,6 +38,8 @@ ParentPal is a modern, full-stack web application that helps parents and babysit
 
 ---
 
+<div align="center">
+
 **Made with ❤️ for parents and caregivers everywhere**
 
 © 2025 ParentPal. All rights reserved.
