@@ -257,6 +257,12 @@ export default function AssignedTasks() {
                                             <h4 className="completion-title">Complete this task</h4>
                                             <Textarea
                                                 placeholder="Add completion notes (optional)..."
+                                                maxLength={2000}
+                                                onKeyDown={(e) => {
+                                                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                                    if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                                    e.preventDefault();
+                                                }}
                                                 value={completionNotes[task.task_id] || ""}
                                                 onChange={(e) => updateNotes(task.task_id, e.target.value)}
                                                 minRows={3}

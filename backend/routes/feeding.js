@@ -2,10 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { validateFeedingData } = require('../middleware/validation');
 
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
-    
+
     try {
         let query = 'SELECT * FROM feeding';
         const params = [];
@@ -23,11 +24,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validateFeedingData, async (req, res) => {
     const { baby_id, time_fed, date, fed_from, type_of_food, amount, notes } = req.body;
 
-    if (!baby_id || !time_fed || !date || !fed_from || !type_of_food || !amount || !notes) {
-        return res.status(400).json({ error: 'baby_id, time_fed, date, fed_from, type_of_food, amount and notes are required' });
+    if (!baby_id || !time_fed || !date || !fed_from || !type_of_food) {
+        return res.status(400).json({ error: 'baby_id, time_fed, date, fed_from, and type_of_food are required' });
     }
 
     try {

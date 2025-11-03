@@ -393,15 +393,28 @@ export default function ParentAssignedTasks() {
                         <Input
                             label="Task Title"
                             placeholder="Enter task title"
+                            type="text"
+                            maxLength={200}
                             value={taskTitle}
                             onChange={(e) => setTaskTitle(e.target.value)}
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
+                                e.preventDefault();
+                            }}
                             required
                         />
                         <Textarea
                             label="Description"
                             placeholder="Enter task description (optional)"
+                            maxLength={2000}
                             value={taskDescription}
                             onChange={(e) => setTaskDescription(e.target.value)}
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                e.preventDefault();
+                            }}
                         />
                         <div className="select-field">
                             <label className="select-label">Assign to Babysitter *</label>
@@ -448,6 +461,13 @@ export default function ParentAssignedTasks() {
                         <Input
                             label="Task Title"
                             placeholder="Enter task title"
+                            type="text"
+                            maxLength={200}
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
+                                e.preventDefault();
+                            }}
                             value={taskTitle}
                             onChange={(e) => setTaskTitle(e.target.value)}
                             required
@@ -455,6 +475,12 @@ export default function ParentAssignedTasks() {
                         <Textarea
                             label="Description"
                             placeholder="Enter task description (optional)"
+                            maxLength={2000}
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                e.preventDefault();
+                            }}
                             value={taskDescription}
                             onChange={(e) => setTaskDescription(e.target.value)}
                         />

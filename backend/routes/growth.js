@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { validateGrowthData } = require('../middleware/validation');
 
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
@@ -23,11 +24,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validateGrowthData, async (req, res) => {
     const { baby_id, weight, height, date } = req.body;
 
-    if (!baby_id || !weight || !height || !date) {
-        return res.status(400).json({ error: 'baby_id, weight, height, and date are required' });
+    if (!baby_id || !date) {
+        return res.status(400).json({ error: 'baby_id and date are required' });
     }
 
     try {
@@ -43,12 +44,12 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', validateGrowthData, async (req, res) => {
     const { id } = req.params;
     const { baby_id, weight, height, date } = req.body;
 
-    if (!baby_id || !weight || !height || !date) {
-        return res.status(400).json({ error: 'baby_id, weight, height, and date are required' });
+    if (!baby_id || !date) {
+        return res.status(400).json({ error: 'baby_id and date are required' });
     }
 
     try {

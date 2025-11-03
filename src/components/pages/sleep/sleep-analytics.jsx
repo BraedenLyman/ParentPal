@@ -214,6 +214,14 @@ export default function SleepAnalytics() {
                             step="0.1"
                             min="0.1"
                             max="24"
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', '.'];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) {
+                                if (e.key === '.' && e.target.value.includes('.')) e.preventDefault();
+                                return;
+                                }
+                                e.preventDefault();
+                            }}
                             value={hours}
                             onChange={(e) => setHours(e.target.value)}
                         />

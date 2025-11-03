@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { validateSleepData } = require('../middleware/validation');
 
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
@@ -23,11 +24,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validateSleepData, async (req, res) => {
     const { baby_id, sleep_duration, time_fell_asleep, date } = req.body;
 
-    if (!baby_id || !sleep_duration || !time_fell_asleep || !date) {
-        return res.status(400).json({ error: 'baby_id, sleep_duration, time_fell_asleep, and date are required' });
+    if (!baby_id || !time_fell_asleep || !date) {
+        return res.status(400).json({ error: 'baby_id, time_fell_asleep, and date are required' });
     }
 
     try {

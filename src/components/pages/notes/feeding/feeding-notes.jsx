@@ -277,6 +277,15 @@ export default function FeedingNotes() {
                             type="number"
                             step="0.1"
                             min="0.1"
+                            max="100"
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', '.'];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) {
+                                if (e.key === '.' && e.target.value.includes('.')) e.preventDefault();
+                                return;
+                                }
+                                e.preventDefault();
+                            }}
                             value={feedAmount}
                             onChange={(e) => setFeedAmount(e.target.value)}
                         />
@@ -285,6 +294,13 @@ export default function FeedingNotes() {
                             variant="bordered"
                             label="Notes"
                             placeholder="Add any other important information"
+                            type="text"
+                            maxLength={1000}
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                e.preventDefault();
+                            }}
                             value={feedNotes}
                             onChange={(e) => setFeedNotes(e.target.value)}
                         />

@@ -1,11 +1,12 @@
-// routes/feeding.js
+// routes/observation.js
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { validateObservationData } = require('../middleware/validation');
 
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
-    
+
     try {
         let query = 'SELECT * FROM observation';
         const params = [];
@@ -23,11 +24,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validateObservationData, async (req, res) => {
     const { baby_id, priority_level, notes } = req.body;
 
-    if (!baby_id || !priority_level || !notes) {
-        return res.status(400).json({ error: 'baby_id, priority_level and notes notes are required' });
+    if (!baby_id || !priority_level) {
+        return res.status(400).json({ error: 'baby_id and priority_level are required' });
     }
 
     try {

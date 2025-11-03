@@ -254,8 +254,14 @@ export default function GrowthTracker() {
                                 type="number"
                                 step="1"
                                 min="0"
+                                max="10"
                                 value={heightFeet}
                                 onChange={(e) => setHeightFeet(e.target.value)}
+                                onKeyDown={(e) => {
+                                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+                                    if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) return;
+                                    e.preventDefault();
+                                }}
                                 style={{ flex: 1 }}
                             />
                             <Input
@@ -268,6 +274,14 @@ export default function GrowthTracker() {
                                 max="11.99"
                                 value={heightInches}
                                 onChange={(e) => setHeightInches(e.target.value)}
+                                onKeyDown={(e) => {
+                                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', '.'];
+                                    if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) {
+                                        if (e.key === '.' && e.target.value.includes('.')) e.preventDefault();
+                                        return;
+                                    }
+                                    e.preventDefault();
+                                }}
                                 style={{ flex: 1 }}
                             />
                         </div>
@@ -279,8 +293,17 @@ export default function GrowthTracker() {
                             type="number"
                             step="0.1"
                             min="0.1"
+                            max="500"
                             value={weight}
                             onChange={(e) => setWeight(e.target.value)}
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', '.'];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) {
+                                    if (e.key === '.' && e.target.value.includes('.')) e.preventDefault();
+                                    return;
+                                }
+                                e.preventDefault();
+                            }}
                         />
 
                         <Input

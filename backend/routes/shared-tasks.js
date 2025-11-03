@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { validateTaskData } = require('../middleware/validation');
 
 router.get('/share/:shareId', async (req, res) => {
     const { shareId } = req.params;
@@ -76,11 +77,11 @@ router.get('/babysitter/:babysitterId', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validateTaskData, async (req, res) => {
     const { share_id, parent_id, babysitter_id, baby_id, task_title, task_description, due_date } = req.body;
 
-    if (!share_id || !parent_id || !task_title) {
-        return res.status(400).json({ error: 'Missing required fields: share_id, parent_id, task_title' });
+    if (!share_id || !parent_id) {
+        return res.status(400).json({ error: 'Missing required fields: share_id, parent_id' });
     }
 
     try {
@@ -98,11 +99,11 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.put('/:taskId', async (req, res) => {
+router.put('/:taskId', validateTaskData, async (req, res) => {
     const { taskId } = req.params;
     const { share_id, babysitter_id, baby_id, task_title, task_description, due_date } = req.body;
 
-    try {
+    try{
         const result = await pool.query(
             `UPDATE shared_tasks
              SET share_id = $2,
@@ -128,7 +129,7 @@ router.put('/:taskId', async (req, res) => {
     }
 });
 
-router.patch('/:taskId/complete', async (req, res) => {
+router.patch('/:taskId/complete', validateTaskData, async (req, res) => {
     const { taskId } = req.params;
     const { babysitter_notes } = req.body;
 

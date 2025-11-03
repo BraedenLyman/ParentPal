@@ -534,6 +534,13 @@ export default function HealthJournal() {
                             variant="bordered"
                             label="Medication Name"
                             placeholder="Enter medication name"
+                            type="text"
+                            maxLength={200}
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' ', '-', '(', ')'];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9\-() ]$/.test(e.key)) return;
+                                e.preventDefault();
+                            }}
                             value={medName}
                             onChange={(e) => setMedName(e.target.value)}
                         />
@@ -558,6 +565,14 @@ export default function HealthJournal() {
                             type="number"
                             step="0.01"
                             min="0.01"
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', '.'];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) {
+                                if (e.key === '.' && e.target.value.includes('.')) e.preventDefault();
+                                return;
+                                }
+                                e.preventDefault();
+                            }}
                             value={medDose}
                             onChange={(e) => setMedDose(e.target.value)}
                         />
@@ -566,6 +581,12 @@ export default function HealthJournal() {
                             label="Sicness/Symptoms"
                             placeholder="Describe how they are feeling"
                             type="text"
+                            maxLength={500}
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
+                                e.preventDefault();
+                            }}
                             value={medSympDescription}
                             onChange={(e) => setMedSympDescription(e.target.value)}
                         />
@@ -589,6 +610,13 @@ export default function HealthJournal() {
                                 variant="bordered"
                                 label="Allergy Name"
                                 placeholder="What are they allergic to"
+                                type="text"
+                                maxLength={200}
+                                onKeyDown={(e) => {
+                                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                    if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
+                                    e.preventDefault();
+                                }}
                                 value={allergy}
                                 onChange={(e) => setAllergy(e.target.value)}
                             />
@@ -625,6 +653,13 @@ export default function HealthJournal() {
                                 variant="bordered"
                                 label="Notes"
                                 placeholder="Add any other important info"
+                                type="text"
+                                maxLength={1000}
+                                onKeyDown={(e) => {
+                                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                    if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                    e.preventDefault();
+                                }}
                                 value={allergyNotes}
                                 onChange={(e) => setAllergyNotes(e.target.value)}
                             />
@@ -652,6 +687,13 @@ export default function HealthJournal() {
                                 variant="bordered"
                                 label="Vaccine Name"
                                 placeholder="Vaccination they have"
+                                type="text"
+                                maxLength={200}
+                                onKeyDown={(e) => {
+                                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                    if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                    e.preventDefault();
+                                }}
                                 value={vaccineName}
                                 onChange={(e) => setVaccineName(e.target.value)}
                             />

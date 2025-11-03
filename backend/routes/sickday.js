@@ -1,11 +1,12 @@
-// routes/vaccinations.js
+// routes/sickday.js
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { validateSickDayData } = require('../middleware/validation');
 
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
-    
+
     try {
         let query = 'SELECT * FROM sick_day';
         const params = [];
@@ -23,11 +24,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
-    const { baby_id, date,  meds_taken, temp } = req.body;
+router.post('/', validateSickDayData, async (req, res) => {
+    const { baby_id, date, meds_taken, temp } = req.body;
 
-    if (!baby_id || !date || !meds_taken || !temp) {
-        return res.status(400).json({ error: 'baby_id, date, meds_taken, and temp are required' });
+    if (!baby_id || !date) {
+        return res.status(400).json({ error: 'baby_id and date are required' });
     }
 
     try {

@@ -205,6 +205,13 @@ export default function ObservationNotes() {
                             variant="bordered"
                             label="Notes"
                             placeholder="Describe what you notice"
+                            type="text"
+                            maxLength={2000}
+                            onKeyDown={(e) => {
+                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                e.preventDefault();
+                            }}
                             value={obsNotes}
                             onChange={(e) => setObsNotes(e.target.value)}
                         />

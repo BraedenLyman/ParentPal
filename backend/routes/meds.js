@@ -2,10 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { validateMedicationData } = require('../middleware/validation');
 
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
-    
+
     try {
         let query = 'SELECT * FROM medications';
         const params = [];
@@ -23,10 +24,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validateMedicationData, async (req, res) => {
     const { baby_id, medication_name, time_taken, date, dosage, symptoms } = req.body;
 
-    if (!baby_id || !medication_name || !time_taken || !date, !dosage || !symptoms) {
+    // Fixed syntax error: comma changed to ||
+    if (!baby_id || !medication_name || !time_taken || !date || !dosage || !symptoms) {
         return res.status(400).json({ error: 'baby_id, medication_name, time_taken, date, dosage and symptoms are required' });
     }
 

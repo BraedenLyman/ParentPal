@@ -2,10 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { validateVaccinationData } = require('../middleware/validation');
 
 router.get('/', async (req, res) => {
     const { baby_id } = req.query;
-    
+
     try {
         let query = 'SELECT * FROM vaccinations';
         const params = [];
@@ -23,11 +24,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validateVaccinationData, async (req, res) => {
     const { baby_id, vaccination_name, date_of_vaccine } = req.body;
 
-    if (!baby_id || !vaccination_name || !date_of_vaccine) {
-        return res.status(400).json({ error: 'baby_id, vaccination_name and date_of_vaccine are required' });
+    if (!baby_id || !date_of_vaccine) {
+        return res.status(400).json({ error: 'baby_id and date_of_vaccine are required' });
     }
 
     try {
