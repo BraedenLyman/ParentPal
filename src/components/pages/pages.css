@@ -158,7 +158,6 @@ html, body {
     height: 100px;
 }
 
-/* HeroUI Modal Wrapper - contains both backdrop and modal */
 div[role="dialog"][data-slot="wrapper"],
 div[data-slot="wrapper"],
 [data-slot="wrapper"] {
@@ -166,14 +165,12 @@ div[data-slot="wrapper"],
     position: fixed !important;
 }
 
-/* HeroUI Modal Backdrop */
 div[data-slot="backdrop"],
 [data-slot="backdrop"] {
     z-index: 9998 !important;
     position: fixed !important;
 }
 
-/* HeroUI Modal Base - the dialog element itself */
 section[role="dialog"],
 [role="dialog"] {
     z-index: 9999 !important;
@@ -197,6 +194,12 @@ section[role="dialog"],
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
+}
+
+.errorMessage {
+    color: red;
+    margin-bottom: "10px"; 
+    font-size: "14px";
 }
 
 .modalBody {
@@ -336,4 +339,36 @@ section[role="dialog"],
     flex: 1;
     min-height: 0;
     overflow: hidden;
+}
+
+.allergyFieldsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.severityContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.severity {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+}
+
+.epiPenGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.epiPen {
+    display: flex;
+    flex-direction: row;
 }

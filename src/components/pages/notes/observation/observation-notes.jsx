@@ -23,6 +23,8 @@ export default function ObservationNotes() {
     const [obsNotes, setObsNotes] = useState("");
     const [observationRecords, setObservationRecords] = useState([]);
 
+    const [errorMessage, setErrorMessage] = useState("");
+
     useEffect(() => {
         if (!selectedBaby) return;
 
@@ -42,8 +44,9 @@ export default function ObservationNotes() {
     }, [selectedBaby]);
 
     const handleAddObservation = async () => {
+        setErrorMessage("");
         if (!priorityLevel || !obsNotes) {
-            alert("Please fill out all fields.");
+            setErrorMessage("Please fill out all fields.");
             return;
         }
 
@@ -62,9 +65,11 @@ export default function ObservationNotes() {
 
             setPriorityLevel("");
             setObsNotes("");
+            setErrorMessage("");
             setIsOpen(false);
         } catch (err) {
             console.error("Failed to add observation record: ", err);
+            setErrorMessage("Failed to add observation record: ", err)
         }
     };
 
@@ -157,16 +162,20 @@ export default function ObservationNotes() {
                                 <div className="cardEntryContent">
                                     <div className="cardEntryHeader">
                                         <h3 className="cardEntryTitle">Observation</h3>
-                                        <span className="cardEntryDate" style={{
-                                            backgroundColor: record.priority_level === 'high' ? '#fee' : record.priority_level === 'medium' ? '#ffeaa7' : '#d1f2eb',
-                                            padding: '4px 8px',
-                                            borderRadius: '4px',
-                                            textTransform: 'capitalize',
-                                            fontWeight: '600'
-                                        }}>{record.priority_level}</span>
+                                        <span 
+                                            className="cardEntryDate"
+                                            style={{
+                                                backgroundColor: record.priority_level === 'high' ? '#fee' : record.priority_level === 'medium' ? '#ffeaa7' : '#d1f2eb',
+                                                padding: '4px 8px',
+                                                borderRadius: '6px',
+                                                textTransform: 'capitalize',
+                                                fontWeight: '600'
+                                            }}>
+                                                {record.priority_level}
+                                        </span>
                                     </div>
-                                    <div style={{ marginTop: '8px' }}>
-                                        <p style={{ fontSize: '14px', margin: '0', color: '#333', lineHeight: '1.5' }}>{record.notes}</p>
+                                    <div>
+                                        <p>{record.notes}</p>
                                     </div>
                                 </div>
                             </Card>
@@ -185,38 +194,41 @@ export default function ObservationNotes() {
                     <ModalHeader className="modalHeader">
                         Add Observation
                     </ModalHeader>
-                    <ModalBody className="modalBody">
-                        
-                        <div className="form-field">
-                            <label className="form-label">Priority Level</label>
-                            <Select
-                                options={[
-                                    { value: "low", label: "Low" },
-                                    { value: "medium", label: "Medium" },
-                                    { value: "high", label: "High" }
-                                ]}
-                                value={priorityLevel ? { value: priorityLevel, label: priorityLevel.charAt(0).toUpperCase() + priorityLevel.slice(1) } : null}
-                                onChange={(option) => setPriorityLevel(option ? option.value : "")}
-                                placeholder="Select priority level"
-                            />
-                        </div>
+                        <ModalBody className="modalBody">
+                            {errorMessage && (
+                                <p className="errorMessage">
+                                    {errorMessage}
+                                </p>
+                            )}
+                                <div className="form-field">
+                                    <label className="form-label">Priority Level</label>
+                                    <Select
+                                        options={[
+                                            { value: "low", label: "Low" },
+                                            { value: "medium", label: "Medium" },
+                                            { value: "high", label: "High" }
+                                        ]}
+                                        value={priorityLevel ? { value: priorityLevel, label: priorityLevel.charAt(0).toUpperCase() + priorityLevel.slice(1) } : null}
+                                        onChange={(option) => setPriorityLevel(option ? option.value : "")}
+                                        placeholder="Select priority level"
+                                    />
+                                </div>
 
-                        <Input
-                            variant="bordered"
-                            label="Notes"
-                            placeholder="Describe what you notice"
-                            type="text"
-                            maxLength={2000}
-                            onKeyDown={(e) => {
-                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
-                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
-                                e.preventDefault();
-                            }}
-                            value={obsNotes}
-                            onChange={(e) => setObsNotes(e.target.value)}
-                        />
-                        
-                    </ModalBody>
+                                <Input
+                                    variant="bordered"
+                                    label="Notes"
+                                    placeholder="Describe what you notice"
+                                    type="text"
+                                    maxLength={2000}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
+                                    value={obsNotes}
+                                    onChange={(e) => setObsNotes(e.target.value)}
+                                />
+                        </ModalBody>
                     <ModalFooter className="modalFooter">
                         <Button onPress={() => setIsOpen(false)}>
                             Cancel

@@ -259,8 +259,8 @@ export default function AssignedTasks() {
                                                 placeholder="Add completion notes (optional)..."
                                                 maxLength={2000}
                                                 onKeyDown={(e) => {
-                                                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
-                                                    if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                                    if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
                                                     e.preventDefault();
                                                 }}
                                                 value={completionNotes[task.task_id] || ""}

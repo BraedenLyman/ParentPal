@@ -27,6 +27,8 @@ export default function FeedingNotes() {
     const [feedNotes, setFeedNotes] = useState("");
     const [feedingRecords, setFeedingRecords] = useState([]);
 
+    const [errorMessage, setErrorMessage] = useState("");
+
     const formatTime12Hour = (time24) => {
         if (!time24) return "";
         const [hours, minutes] = time24.split(":");
@@ -55,14 +57,16 @@ export default function FeedingNotes() {
     }, [selectedBaby]);
 
     const handleAddFeeding = async () => {
+        setErrorMessage("");
+
         if (!feedTime || !feedDate || !fedFrom || !feedType || !feedAmount || !feedNotes) {
-            alert("Please fill out all fields.");
+            setErrorMessage("Please fill out all fields.");
             return;
         }
 
         const amountFlOz = parseFloat(feedAmount);
         if (isNaN(amountFlOz) || amountFlOz <= 0) {
-            alert("Feeding amount must be a valid number greater than 0 (in fluid ounces).");
+            setErrorMessage("Feeding amount must be a valid number greater than 0 (in fluid ounces).");
             return;
         }
 
@@ -91,9 +95,11 @@ export default function FeedingNotes() {
             setFeedType("");
             setFeedAmount("");
             setFeedNotes("");
+            setErrorMessage("");
             setIsOpen(false);
         } catch (err) {
             console.error("Failed to add feeding record: ", err);
+            setErrorMessage("Failed to add feeding record: ", err);
         }
     };
 
@@ -202,9 +208,9 @@ export default function FeedingNotes() {
                                         </div>
                                     </div>
                                     {record.notes && (
-                                        <div style={{ marginTop: '8px' }}>
+                                        <div>
                                             <span className="cardEntryDetailLabel">Notes</span>
-                                            <p style={{ fontSize: '13px', margin: '4px 0 0 0', color: '#555' }}>{record.notes}</p>
+                                            <p>{record.notes}</p>
                                         </div>
                                     )}
                                 </div>
@@ -224,88 +230,92 @@ export default function FeedingNotes() {
                     <ModalHeader className="modalHeader">
                         Add Feeding
                     </ModalHeader>
-                    <ModalBody className="modalBody">
-                        <TimeInput
-                            variant="bordered"
-                            label="Feeding TIme" 
-                            value={feedTime}
-                            onChange={(newTime) => setFeedTime(newTime)}
-                        />
+                        <ModalBody className="modalBody">
+                            {errorMessage && (
+                                <p className="errorMessage">
+                                    {errorMessage}
+                                </p>
+                            )}
+                                <TimeInput
+                                    variant="bordered"
+                                    label="Feeding TIme" 
+                                    value={feedTime}
+                                    onChange={(newTime) => setFeedTime(newTime)}
+                                />
 
-                        <Input
-                            variant="bordered"
-                            label="Date"
-                            type="date"
-                            value={feedDate}
-                            onChange={(e) => setFeedDate(e.target.value)}
-                        />
+                                <Input
+                                    variant="bordered"
+                                    label="Date"
+                                    type="date"
+                                    value={feedDate}
+                                    onChange={(e) => setFeedDate(e.target.value)}
+                                />
 
-                        <div className="form-field">
-                            <label className="form-label">Fed From</label>
-                            <Select
-                                options={[
-                                    { value: "bottle", label: "Bottle" },
-                                    { value: "breast", label: "Breast" }
-                                ]}
-                                value={fedFrom ? {
-                                    value: fedFrom,
-                                    label: fedFrom === "bottle" ? "Bottle" : fedFrom === "breast" ? "Breast" : fedFrom
-                                } : null}
-                                onChange={(option) => setFedFrom(option ? option.value : "")}
-                                placeholder="Select where the baby was fed from"
-                            />
-                        </div>
+                                <div className="form-field">
+                                    <label className="form-label">Fed From</label>
+                                    <Select
+                                        options={[
+                                            { value: "bottle", label: "Bottle" },
+                                            { value: "breast", label: "Breast" }
+                                        ]}
+                                        value={fedFrom ? {
+                                            value: fedFrom,
+                                            label: fedFrom === "bottle" ? "Bottle" : fedFrom === "breast" ? "Breast" : fedFrom
+                                        } : null}
+                                        onChange={(option) => setFedFrom(option ? option.value : "")}
+                                        placeholder="Select where the baby was fed from"
+                                    />
+                                </div>
 
-                        <div className="form-field">
-                            <label className="form-label">Type of Food</label>
-                            <Select
-                                options={[
-                                    { value: "milk", label: "Milk" },
-                                    { value: "water", label: "Water" },
-                                    { value: "juice", label: "Juice" }
-                                ]}
-                                value={feedType ? { value: feedType, label: feedType.charAt(0).toUpperCase() + feedType.slice(1) } : null}
-                                onChange={(option) => setFeedType(option ? option.value : "")}
-                                placeholder="Select what type of food they had"
-                            />
-                        </div>
+                                <div className="form-field">
+                                    <label className="form-label">Type of Food</label>
+                                    <Select
+                                        options={[
+                                            { value: "milk", label: "Milk" },
+                                            { value: "water", label: "Water" },
+                                            { value: "juice", label: "Juice" }
+                                        ]}
+                                        value={feedType ? { value: feedType, label: feedType.charAt(0).toUpperCase() + feedType.slice(1) } : null}
+                                        onChange={(option) => setFeedType(option ? option.value : "")}
+                                        placeholder="Select what type of food they had"
+                                    />
+                                </div>
 
-                        <Input
-                            variant="bordered"
-                            label="Amount (fl oz)"
-                            placeholder="Amount in fluid ounces"
-                            type="number"
-                            step="0.1"
-                            min="0.1"
-                            max="100"
-                            onKeyDown={(e) => {
-                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', '.'];
-                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) {
-                                if (e.key === '.' && e.target.value.includes('.')) e.preventDefault();
-                                return;
-                                }
-                                e.preventDefault();
-                            }}
-                            value={feedAmount}
-                            onChange={(e) => setFeedAmount(e.target.value)}
-                        />
+                                <Input
+                                    variant="bordered"
+                                    label="Amount (fl oz)"
+                                    placeholder="Amount in fluid ounces"
+                                    type="number"
+                                    step="0.1"
+                                    min="0.1"
+                                    max="100"
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', '.'];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) {
+                                        if (e.key === '.' && e.target.value.includes('.')) e.preventDefault();
+                                        return;
+                                        }
+                                        e.preventDefault();
+                                    }}
+                                    value={feedAmount}
+                                    onChange={(e) => setFeedAmount(e.target.value)}
+                                />
 
-                        <Input
-                            variant="bordered"
-                            label="Notes"
-                            placeholder="Add any other important information"
-                            type="text"
-                            maxLength={1000}
-                            onKeyDown={(e) => {
-                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
-                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
-                                e.preventDefault();
-                            }}
-                            value={feedNotes}
-                            onChange={(e) => setFeedNotes(e.target.value)}
-                        />
-                        
-                    </ModalBody>
+                                <Input
+                                    variant="bordered"
+                                    label="Notes"
+                                    placeholder="Add any other important information"
+                                    type="text"
+                                    maxLength={1000}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
+                                    value={feedNotes}
+                                    onChange={(e) => setFeedNotes(e.target.value)}
+                                /> 
+                        </ModalBody>
                     <ModalFooter className="modalFooter">
                         <Button onPress={() => setIsOpen(false)}>
                             Cancel

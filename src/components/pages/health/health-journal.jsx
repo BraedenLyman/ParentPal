@@ -50,6 +50,8 @@ export default function HealthJournal() {
     const [vaccineDate, setVaccineDate] = useState("");
     const [vaccinationsRecords, setVaccinationsRecords] = useState([]);
 
+    const [errorMessage, setErrorMessage] = useState("");
+
     useEffect(() => {
         if (!selectedBaby) return;
 
@@ -77,22 +79,24 @@ export default function HealthJournal() {
     }, [selectedBaby]);
     
     const handleAddMeds = async () => {
+        setErrorMessage("");
+
         console.log("handleAddMeds called");
         console.log("Form values:", { medName, medsTimeTaken, medDate, medDose, medSympDescription, selectedBaby });
 
         if (!medName || !medsTimeTaken || !medDate || !medDose || !medSympDescription) {
-            alert("Please fill out all fields.");
+            setErrorMessage("Please fill out all fields.");
             return;
         }
 
         if (!selectedBaby || !selectedBaby.baby_id) {
-            alert("No baby selected. Please select a baby first.");
+            setErrorMessage("No baby selected. Please select a baby first.");
             return;
         }
 
         const dosageFlOz = parseFloat(medDose);
         if (isNaN(dosageFlOz) || dosageFlOz <= 0) {
-            alert("Medication amount must be a valid number greater than 0 (in fluid ounces).");
+            setErrorMessage("Medication amount must be a valid number greater than 0 (in fluid ounces).");
             return;
         }
 
@@ -129,11 +133,12 @@ export default function HealthJournal() {
             setMedDate("");
             setMedDose("");
             setMedSympDescription("");
+            setErrorMessage("");
             setIsMedsOpen(false);
         } catch (err) {
             console.error("Failed to add meds record: ", err);
             console.error("Error response:", err.response?.data);
-            alert(`Failed to add medication: ${err.response?.data?.error || err.message}`);
+            setErrorMessage(`Failed to add medication: ${err.response?.data?.error || err.message}`);
         }
     };
 
@@ -164,16 +169,18 @@ export default function HealthJournal() {
     }, [selectedBaby]);
 
     const handleAddAllergies = async () => {
+        setErrorMessage("");
+
         console.log("handleAddAllergies called");
         console.log("Form values:", { allergy, severity, epiPen, allergyNotes, selectedBaby });
 
         if (!allergy || !severity || !epiPen || !allergyNotes) {
-            alert("Please fill out all fields.");
+            setErrorMessage("Please fill out all fields.");
             return;
         }
 
         if (!selectedBaby || !selectedBaby.baby_id) {
-            alert("No baby selected. Please select a baby first.");
+            setErrorMessage("No baby selected. Please select a baby first.");
             return;
         }
 
@@ -206,11 +213,12 @@ export default function HealthJournal() {
             setSeverity("");
             setEpiPen("");
             setAllergyNotes("");
+            setErrorMessage("");
             setIsAllergiesOpen(false);
         } catch (err) {
             console.error("Failed to add allergy record: ", err);
             console.error("Error response:", err.response?.data);
-            alert(`Failed to add allergy: ${err.response?.data?.error || err.message}`);
+            setErrorMessage(`Failed to add allergy: ${err.response?.data?.error || err.message}`);
         }
     };
 
@@ -241,16 +249,18 @@ export default function HealthJournal() {
     }, [selectedBaby]);
 
     const handleAddVaccinations = async () => {
+        setErrorMessage("");
+
         console.log("handleAddVaccinations called");
         console.log("Form values:", { vaccineName, vaccineDate, selectedBaby });
 
         if (!vaccineName || !vaccineDate) {
-            alert("Please fill out all fields.");
+            setErrorMessage("Please fill out all fields.");
             return;
         }
 
         if (!selectedBaby || !selectedBaby.baby_id) {
-            alert("No baby selected. Please select a baby first.");
+            setErrorMessage("No baby selected. Please select a baby first.");
             return;
         }
 
@@ -279,11 +289,12 @@ export default function HealthJournal() {
 
             setVaccineName("");
             setVaccineDate("");
+            setErrorMessage("");
             setIsVaccinationsOpen(false);
         } catch (err) {
             console.error("Failed to add vaccinations record: ", err);
             console.error("Error response:", err.response?.data);
-            alert(`Failed to add vaccination: ${err.response?.data?.error || err.message}`);
+            setErrorMessage(`Failed to add vaccination: ${err.response?.data?.error || err.message}`);
         }
     };
 
@@ -297,7 +308,6 @@ export default function HealthJournal() {
         { value: "/observation-notes", label: "Observation Notes" }
     ];
 
-    // Filter out Growth Tracker for babysitters
     const logCategories = isBabysitter
         ? allLogCategories.filter(cat => cat.value !== "/growth-tracker")
         : allLogCategories;
@@ -365,7 +375,6 @@ export default function HealthJournal() {
             </div>
 
             {isBabysitter ? (
-                /* Babysitters only see Medications tab */
                 <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column', marginTop: '20px' }}>
                     <Button className="addButton healthButton" onPress={() => setIsMedsOpen(true)}>
                         Add
@@ -406,7 +415,6 @@ export default function HealthJournal() {
                     </Scrollbars>
                 </div>
             ) : (
-                /* Parents see all tabs */
                 <Tabs
                     aria-label="Options"
                     selectedKey={activeTab}
@@ -527,142 +535,156 @@ export default function HealthJournal() {
             <Navbar />
 
             <Modal isOpen={isMedsOpen} onOpenChange={setIsMedsOpen} className="modal">
-            <ModalContent>
-                <ModalHeader>Add Medication</ModalHeader>
-                    <ModalBody>
-                        <Input
-                            variant="bordered"
-                            label="Medication Name"
-                            placeholder="Enter medication name"
-                            type="text"
-                            maxLength={200}
-                            onKeyDown={(e) => {
-                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' ', '-', '(', ')'];
-                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9\-() ]$/.test(e.key)) return;
-                                e.preventDefault();
-                            }}
-                            value={medName}
-                            onChange={(e) => setMedName(e.target.value)}
-                        />
-                        <TimeInput
-                            variant="bordered"
-                            label="Time take at"
-                            value={medsTimeTaken}
-                            onChange={(newTime) => setMedsTimeTaken(newTime)}
-                        />
-                        <Input
-                            variant="bordered"
-                            label="Date"
-                            placeholder="Date"
-                            type="date"
-                            value={medDate}
-                            onChange={(e) => setMedDate(e.target.value)}
-                        />
-                        <Input
-                            variant="bordered"
-                            label="Amount (fl oz)"
-                            placeholder="Amount in fluid ounces"
-                            type="number"
-                            step="0.01"
-                            min="0.01"
-                            onKeyDown={(e) => {
-                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', '.'];
-                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) {
-                                if (e.key === '.' && e.target.value.includes('.')) e.preventDefault();
-                                return;
-                                }
-                                e.preventDefault();
-                            }}
-                            value={medDose}
-                            onChange={(e) => setMedDose(e.target.value)}
-                        />
-                        <Input
-                            variant="bordered"
-                            label="Sicness/Symptoms"
-                            placeholder="Describe how they are feeling"
-                            type="text"
-                            maxLength={500}
-                            onKeyDown={(e) => {
-                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
-                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
-                                e.preventDefault();
-                            }}
-                            value={medSympDescription}
-                            onChange={(e) => setMedSympDescription(e.target.value)}
-                        />
-                    </ModalBody>
-                <ModalFooter className="modalFooter">
-                    <Button onPress={() => setIsMedsOpen(false)}>
-                        Cancel
-                    </Button>
-                    <Button onPress={handleAddMeds}>
-                        Add
-                    </Button>
-                </ModalFooter>
-            </ModalContent>
+                <ModalContent>
+                    <ModalHeader>Add Medication</ModalHeader>
+                        <ModalBody className="modalBody">
+                            {errorMessage && (
+                                <p className="errorMessage">
+                                    {errorMessage}
+                                </p>
+                            )}
+                                <Input
+                                    variant="bordered"
+                                    label="Medication Name"
+                                    placeholder="Enter medication name"
+                                    type="text"
+                                    maxLength={200}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' ', '-', '(', ')'];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9\-() ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
+                                    value={medName}
+                                    onChange={(e) => setMedName(e.target.value)}
+                                />
+                                <TimeInput
+                                    variant="bordered"
+                                    label="Time take at"
+                                    value={medsTimeTaken}
+                                    onChange={(newTime) => setMedsTimeTaken(newTime)}
+                                />
+                                <Input
+                                    variant="bordered"
+                                    label="Date"
+                                    placeholder="Date"
+                                    type="date"
+                                    value={medDate}
+                                    onChange={(e) => setMedDate(e.target.value)}
+                                />
+                                <Input
+                                    variant="bordered"
+                                    label="Amount (fl oz)"
+                                    placeholder="Amount in fluid ounces"
+                                    type="number"
+                                    step="0.01"
+                                    min="0.01"
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', '.'];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) {
+                                        if (e.key === '.' && e.target.value.includes('.')) e.preventDefault();
+                                        return;
+                                        }
+                                        e.preventDefault();
+                                    }}
+                                    value={medDose}
+                                    onChange={(e) => setMedDose(e.target.value)}
+                                />
+                                <Input
+                                    variant="bordered"
+                                    label="Sicness/Symptoms"
+                                    placeholder="Describe how they are feeling"
+                                    type="text"
+                                    maxLength={500}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
+                                    value={medSympDescription}
+                                    onChange={(e) => setMedSympDescription(e.target.value)}
+                                />
+                        </ModalBody>
+                    <ModalFooter className="modalFooter">
+                        <Button onPress={() => setIsMedsOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button onPress={handleAddMeds}>
+                            Add
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
             </Modal>
 
             <Modal isOpen={isAllergiesOpen} onOpenChange={setIsAllergiesOpen} className="modal" >
                 <ModalContent>
                     <ModalHeader>Add Allergy</ModalHeader>
-                        <ModalBody>
-                            <Input
-                                variant="bordered"
-                                label="Allergy Name"
-                                placeholder="What are they allergic to"
-                                type="text"
-                                maxLength={200}
-                                onKeyDown={(e) => {
-                                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
-                                    if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
-                                    e.preventDefault();
-                                }}
-                                value={allergy}
-                                onChange={(e) => setAllergy(e.target.value)}
-                            />
-
-                            <div>
-                                <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '500' }}>Severity</label>
-                                <Select
-                                    options={[
-                                        { value: 'low', label: 'Low' },
-                                        { value: 'medium', label: 'Medium' },
-                                        { value: 'high', label: 'High' }
-                                    ]}
-                                    value={severity ? { value: severity, label: severity.charAt(0).toUpperCase() + severity.slice(1) } : null}
-                                    onChange={(option) => {
-                                        if (option) {
-                                            setSeverity(option.value);
-                                        }
+                        <ModalBody className="modalBody">
+                            {errorMessage && (
+                                <p className="errorMessage">
+                                    {errorMessage}
+                                </p>
+                            )}
+                                <Input
+                                    variant="bordered"
+                                    label="Allergy Name"
+                                    placeholder="What are they allergic to"
+                                    type="text"
+                                    maxLength={200}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
+                                        e.preventDefault();
                                     }}
-                                    placeholder="Select severity"
-                                    isSearchable={false}
+                                    value={allergy}
+                                    onChange={(e) => setAllergy(e.target.value)}
                                 />
-                            </div>
 
-                            <RadioGroup
-                                label="EpiPen"
-                                value={epiPen}
-                                onValueChange={(val) => setEpiPen(val)}
-                            >
-                                <Radio value="yes">Yes</Radio>
-                                <Radio value="no">No</Radio>
-                            </RadioGroup>
+                                <div className="allergyFieldsContainer">
+                                    <div className="severityContainer">
+                                        <label className="severity">Severity</label>
+                                        <Select
+                                            options={[
+                                                { value: 'low', label: 'Low' },
+                                                { value: 'medium', label: 'Medium' },
+                                                { value: 'high', label: 'High' }
+                                            ]}
+                                            value={severity ? { value: severity, label: severity.charAt(0).toUpperCase() + severity.slice(1) } : null}
+                                            onChange={(option) => {
+                                                if (option) {
+                                                    setSeverity(option.value);
+                                                }
+                                            }}
+                                            placeholder="Select severity"
+                                            isSearchable={false}
+                                        />
+                                    </div>
 
-                            <Input
-                                variant="bordered"
-                                label="Notes"
-                                placeholder="Add any other important info"
-                                type="text"
-                                maxLength={1000}
-                                onKeyDown={(e) => {
-                                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
-                                    if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
-                                    e.preventDefault();
-                                }}
-                                value={allergyNotes}
-                                onChange={(e) => setAllergyNotes(e.target.value)}
-                            />
+                                    <div className="epiPenGroup">
+                                        <RadioGroup
+                                            label="EpiPen"
+                                            value={epiPen}
+                                            onValueChange={(val) => setEpiPen(val)}
+                                        >
+                                            <Radio className="epiPen" value="yes">Yes</Radio>
+                                            <Radio className="epiPen" value="no">No</Radio>
+                                        </RadioGroup>
+                                    </div>
+                                </div>
+
+                                <Input
+                                    variant="bordered"
+                                    label="Notes"
+                                    placeholder="Add any other important info"
+                                    type="text"
+                                    maxLength={1000}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
+                                    value={allergyNotes}
+                                    onChange={(e) => setAllergyNotes(e.target.value)}
+                                />
                         </ModalBody>
                     <ModalFooter className="modalFooter">
                         <Button onPress={() => setIsAllergiesOpen(false)}>
@@ -682,37 +704,42 @@ export default function HealthJournal() {
             >
                 <ModalContent>
                     <ModalHeader>Add Vaccination</ModalHeader>
-                        <ModalBody>
-                            <Input
-                                variant="bordered"
-                                label="Vaccine Name"
-                                placeholder="Vaccination they have"
-                                type="text"
-                                maxLength={200}
-                                onKeyDown={(e) => {
-                                    const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
-                                    if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
-                                    e.preventDefault();
-                                }}
-                                value={vaccineName}
-                                onChange={(e) => setVaccineName(e.target.value)}
-                            />
-                            <Input
-                                variant="bordered"
-                                type="date"
-                                label="Date of Vaccine"
-                                value={vaccineDate}
-                                onChange={(e) => setVaccineDate(e.target.value)}
-                            />
+                        <ModalBody className="modalBody">
+                            {errorMessage && (
+                                <p className="errorMessage">
+                                    {errorMessage}
+                                </p>
+                            )}
+                                <Input
+                                    variant="bordered"
+                                    label="Vaccine Name"
+                                    placeholder="Vaccination they have"
+                                    type="text"
+                                    maxLength={200}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
+                                    value={vaccineName}
+                                    onChange={(e) => setVaccineName(e.target.value)}
+                                />
+                                <Input
+                                    variant="bordered"
+                                    type="date"
+                                    label="Date of Vaccine"
+                                    value={vaccineDate}
+                                    onChange={(e) => setVaccineDate(e.target.value)}
+                                />
                         </ModalBody>
-                        <ModalFooter className="modalFooter">
-                            <Button onPress={() => setIsVaccinationsOpen(false)}>
-                                Cancel
-                            </Button>
-                            <Button onPress={handleAddVaccinations}>
-                                Add
-                            </Button>
-                        </ModalFooter>
+                    <ModalFooter className="modalFooter">
+                        <Button onPress={() => setIsVaccinationsOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button onPress={handleAddVaccinations}>
+                            Add
+                        </Button>
+                    </ModalFooter>
                 </ModalContent>
             </Modal>
         </div>

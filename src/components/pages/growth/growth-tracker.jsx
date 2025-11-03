@@ -26,6 +26,7 @@ export default function GrowthTracker() {
     const [babyData, setBabyData] = useState([]);
     const [selectedBaby, setSelectedBaby] = useState(null);
     const [growthRecords, setGrowthRecords] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -78,26 +79,28 @@ export default function GrowthTracker() {
     }, [selectedBaby]);
 
     const handleAddGrowth = async () => {
+        setErrorMessage("");
+
         if (!heightFeet || !heightInches || !weight || !date) {
-            alert("Please fill out all fields.");
+            setErrorMessage("Please fill out all fields.");
             return;
         }
 
         const feet = parseFloat(heightFeet);
         if (isNaN(feet) || feet < 0) {
-            alert("Height (feet) must be a valid number greater than or equal to 0.");
+            setErrorMessage("Height (feet) must be a valid number greater than or equal to 0.");
             return;
         }
 
         const inches = parseFloat(heightInches);
         if (isNaN(inches) || inches < 0 || inches >= 12) {
-            alert("Height (inches) must be a valid number between 0 and 11.99.");
+            setErrorMessage("Height (inches) must be a valid number between 0 and 11.99.");
             return;
         }
 
         const weightLbs = parseFloat(weight);
         if (isNaN(weightLbs) || weightLbs <= 0) {
-            alert("Weight must be a valid number greater than 0 (in lbs).");
+            setErrorMessage("Weight must be a valid number greater than 0 (in lbs).");
             return;
         }
 
@@ -121,9 +124,11 @@ export default function GrowthTracker() {
             setHeightInches("");
             setWeight("");
             setDate("");
+            setErrorMessage("");
             setIsOpen(false);
         } catch (err) {
             console.error("Failed to add growth record: ", err);
+            setErrorMessage("Failed to add growth record. Please try again.");
         }
     };
 
@@ -246,7 +251,11 @@ export default function GrowthTracker() {
                         Add Growth
                     </ModalHeader>
                     <ModalBody className="modalBody">
-                        <div style={{ display: 'flex', gap: '10px' }}>
+                        {errorMessage && (
+                            <p className="errorMessage">
+                                {errorMessage}
+                            </p>
+                        )}
                             <Input
                                 variant="bordered"
                                 label="Height (feet)"
@@ -262,7 +271,7 @@ export default function GrowthTracker() {
                                     if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) return;
                                     e.preventDefault();
                                 }}
-                                style={{ flex: 1 }}
+                               
                             />
                             <Input
                                 variant="bordered"
@@ -282,9 +291,7 @@ export default function GrowthTracker() {
                                     }
                                     e.preventDefault();
                                 }}
-                                style={{ flex: 1 }}
                             />
-                        </div>
 
                         <Input
                             variant="bordered"

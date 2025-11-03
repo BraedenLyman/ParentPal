@@ -24,6 +24,7 @@ export default function SleepAnalytics() {
     const [time, setTime] = useState("");
     const [date, setDate] = useState("");
     const [sleepRecords, setSleepRecords] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const formatTime12Hour = (time24) => {
         if (!time24) return "";
@@ -53,14 +54,16 @@ export default function SleepAnalytics() {
     }, [selectedBaby]);
 
     const handleAddSleep = async () => {
+        setErrorMessage("");
+
         if (!hours || !time || !date) {
-            alert("Please fill out all fields.");
+            setErrorMessage("Please fill out all fields.");
             return;
         }
 
         const sleepHours = parseFloat(hours);
         if (isNaN(sleepHours) || sleepHours <= 0 || sleepHours > 24) {
-            alert("Sleep duration must be a valid number between 0 and 24 hours.");
+            setErrorMessage("Sleep duration must be a valid number between 0 and 24 hours.");
             return;
         }
 
@@ -83,9 +86,11 @@ export default function SleepAnalytics() {
             setHours("");
             setTime("");
             setDate("");
+            setErrorMessage("");
             setIsOpen(false);
         } catch (err) {
             console.error("Failed to add sleep record: ", err);
+            setErrorMessage("Failed to add sleep record. Please try again.")
         }
     };
 
@@ -206,6 +211,11 @@ export default function SleepAnalytics() {
                         Add Sleep
                     </ModalHeader>
                     <ModalBody className="modalBody">
+                        {errorMessage && (
+                            <p className="errorMessage">
+                                {errorMessage}
+                            </p>
+                        )}
                         <Input
                             variant="bordered"
                             label="Sleep Duration (hours)"
