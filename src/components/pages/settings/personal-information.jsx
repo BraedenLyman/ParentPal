@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Avatar, Image, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input } from "@heroui/react";
 import { ArrowLeftIcon, PlusIcon, EyeIcon, EyeSlashIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { FiBell } from "react-icons/fi";
 import { auth } from "../../../firebase/firebaseAuth";
 import { updatePassword } from "firebase/auth";
 import axios from "axios";
@@ -212,7 +211,6 @@ export default function PersonalInformation() {
                             width={80}
                             className="logo"
                         />
-                        <FiBell className="notification" />
                     </div>
                     <div className="headerTitle">
                         <h1>Personal Info</h1>

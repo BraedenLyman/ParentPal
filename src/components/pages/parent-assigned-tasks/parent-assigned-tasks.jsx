@@ -17,7 +17,6 @@ import {
 import CustomSelect from "../../custom-select/CustomSelect";
 import { ArrowLeftIcon, PlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { FiBell } from "react-icons/fi";
 import Navbar from "../nav-bar/navbar";
 import axios from "axios";
 import { auth } from "../../../firebase/firebaseAuth";
@@ -274,7 +273,6 @@ export default function ParentAssignedTasks() {
                         width={80}
                         className="logo"
                     />
-                    <FiBell className="notification" />
                 </div>
                 <div className="headerTitle">
                     <h1>Assigned Tasks</h1>

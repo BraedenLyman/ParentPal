@@ -3,7 +3,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, Card, Image } from "@heroui/react";
-import { FiBell } from "react-icons/fi";
 import Navbar from "../nav-bar/navbar";
 import { auth } from "../../../firebase/firebaseAuth";
 import API_URL from "../../../config/api";
@@ -68,7 +67,6 @@ export default function ParentDashboard() {
               width={80}
               className="logo"
             />
-            <FiBell className="notification" />
           </div>
 
           <div className="userInfoMain">

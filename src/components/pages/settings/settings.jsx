@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Card, Avatar, Image } from "@heroui/react";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import { FiBell } from "react-icons/fi";
 import { auth } from "../../../firebase/firebaseAuth";
 import { deleteUser, signOut } from "firebase/auth";
 import axios from "axios";
@@ -100,7 +99,6 @@ export default function Settings() {
                             width={80}
                             className="logo"
                         />
-                        <FiBell className="notification" />
                     </div>
                     <div className="headerTitle">
                         <h1>Settings</h1>

@@ -16,13 +16,8 @@ const feedingRouter = require("./routes/feeding");
 const observationRouter = require("./routes/observation");
 const userRouter = require("./routes/user");
 const babysitterSharingRouter = require("./routes/babysitter-sharing");
-const notificationPreferencesRouter = require("./routes/notification-preferences");
-const customNotificationsRouter = require("./routes/custom-notifications");
-const fcmTokensRouter = require("./routes/fcm-tokens");
-const sendNotificationRouter = require("./routes/send-notification");
 const photoGalleryRouter = require("./routes/photo-gallery");
 const sharedTasksRouter = require("./routes/shared-tasks");
-const notificationScheduler = require("./scheduler/notificationScheduler");
 const path = require('path');
 
 const app = express();
@@ -92,15 +87,10 @@ app.use("/api/feeding", feedingRouter);
 app.use("/api/observation", observationRouter);
 app.use("/api/user", userRouter);
 app.use("/api/babysitter-sharing", babysitterSharingRouter);
-app.use("/api/notification-preferences", notificationPreferencesRouter);
-app.use("/api/custom-notifications", customNotificationsRouter);
-app.use("/api/fcm-token", fcmTokensRouter);
-app.use("/api/send-notification", sendNotificationRouter);
 app.use("/api/photo-gallery", photoGalleryRouter);
 app.use("/api/shared-tasks", sharedTasksRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
-    notificationScheduler.start();
 });

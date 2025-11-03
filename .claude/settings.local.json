@@ -12,7 +12,8 @@
       "Bash(npm i:*)",
       "Bash(npm test:*)",
       "Bash(tree:*)",
-      "Bash(npx babel:*)"
+      "Bash(npx babel:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []
