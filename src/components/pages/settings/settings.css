@@ -240,7 +240,6 @@
   transform: translateY(0);
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
   .data-export-content {
     padding: var(--spacing-md);
@@ -882,6 +881,12 @@
   display: flex;
   justify-content: center;
   gap: 20px;
+}
+
+.errorMessage {
+    color: red;
+    margin-bottom: "10px"; 
+    font-size: "14px";
 }
 
 @keyframes fadeInUp {

@@ -104,7 +104,6 @@ export default function SleepAnalytics() {
         { value: "/observation-notes", label: "Observation Notes" }
     ];
 
-    // Filter out Growth Tracker for babysitters
     const logCategories = isBabysitter
         ? allLogCategories.filter(cat => cat.value !== "/growth-tracker")
         : allLogCategories;

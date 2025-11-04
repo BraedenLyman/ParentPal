@@ -10,6 +10,7 @@ import Navbar from "../nav-bar/navbar";
 import API_URL from "../../../config/api";
 import "./settings.css";
 import Select from "../../custom-select/CustomSelect";
+import { FiBell } from "react-icons/fi";
 
 export default function PersonalInformation() {
     const navigate = useNavigate();
@@ -38,6 +39,9 @@ export default function PersonalInformation() {
     });
     const [passwordErrors, setPasswordErrors] = useState([]);
     const isBabysitter = userData?.account_type === "babysitter";
+
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -86,13 +90,14 @@ export default function PersonalInformation() {
     }, [passwordData.newPassword, passwordData.confirmPassword, passwordTouched]);
 
     const handleAddBaby = async () => {
+        setErrorMessage("");
         if (!newBaby.firstName || !newBaby.lastName || !newBaby.birthDate || !newBaby.gender || !newBaby.category) {
-            alert("Please fill out all fields.");
+            setErrorMessage("Please fill out all fields.");
             return;
         }
 
         if (newBaby.gender === "other" && !newBaby.customGender.trim()) {
-            alert("Please specify the custom gender.");
+            setErrorMessage("Please specify the custom gender.");
             return;
         }
 
@@ -115,35 +120,37 @@ export default function PersonalInformation() {
 
             setBabyData(prev => [...prev, response.data]);
             setNewBaby({ firstName: "", lastName: "", birthDate: "", gender: "", category: "" });
+            setErrorMessage("");
             setIsAddBabyModalOpen(false);
         } catch (error) {
             console.error("Error adding baby: ", error);
-            alert("Failed to add baby. Please try again.");
+            setErrorMessage("Failed to add baby. Please try again.");
         }
     };
 
     const handleChangePassword = async () => {
+        setErrorMessage("");
         setPasswordTouched({ newPassword: true, confirmPassword: true });
 
         if (!passwordData.newPassword || !passwordData.confirmPassword) {
-            alert("Please fill out both password fields.");
+            setErrorMessage("Please fill out both password fields.");
             return;
         }
 
         if (passwordErrors.length > 0) {
-            alert("Please fix the password validation errors before continuing.");
+            setErrorMessage("Please fix the password validation errors before continuing.");
             return;
         }
 
         if (passwordData.newPassword !== passwordData.confirmPassword) {
-            alert("Passwords do not match. Please try again.");
+            setErrorMessage("Passwords do not match. Please try again.");
             return;
         }
 
         try {
             const user = auth.currentUser;
             if (!user) {
-                alert("No user found. Please log in again.");
+                setErrorMessage("No user found. Please log in again.");
                 return;
             }
 
@@ -152,15 +159,15 @@ export default function PersonalInformation() {
             setPasswordData({ newPassword: "", confirmPassword: "" });
             setPasswordTouched({ newPassword: false, confirmPassword: false });
             setPasswordErrors([]);
-
-            alert("Password updated successfully!");
+            setErrorMessage("");
+            setSuccessMessage("Password updated successfully!");
         } catch (error) {
             console.error("Error updating password: ", error);
 
             if (error.code === 'auth/requires-recent-login') {
-                alert("For security reasons, please log out and log back in before changing your password.");
+                setErrorMessage("For security reasons, please log out and log back in before changing your password.");
             } else {
-                alert("Failed to update password. Please try again.");
+                setErrorMessage("Failed to update password. Please try again.");
             }
         }
     };
@@ -171,6 +178,7 @@ export default function PersonalInformation() {
     };
 
     const confirmDeleteBaby = async () => {
+        setErrorMessage("");
         if (!babyToDelete) return;
 
         try {
@@ -179,18 +187,30 @@ export default function PersonalInformation() {
             });
 
             setBabyData(prev => prev.filter(baby => baby.baby_id !== babyToDelete.baby_id));
+            setErrorMessage("");
             setIsDeleteModalOpen(false);
             setBabyToDelete(null);
         } catch (error) {
             console.error("Error deleting baby: ", error);
-            alert("Failed to delete baby. Please try again.");
+            setErrorMessage("Failed to delete baby. Please try again.");
         }
     };
 
     const cancelDeleteBaby = () => {
+        setErrorMessage("");
         setIsDeleteModalOpen(false);
         setBabyToDelete(null);
     };
+
+    useEffect(() => {
+    if (successMessage) {
+        const timer = setTimeout(() => {
+            setSuccessMessage("");
+        }, 3000);
+
+        return () => clearTimeout(timer);
+    }
+    }, [successMessage]);
 
     return (
         <>
@@ -211,6 +231,7 @@ export default function PersonalInformation() {
                             width={80}
                             className="logo"
                         />
+                        <FiBell className="notification" />
                     </div>
                     <div className="headerTitle">
                         <h1>Personal Info</h1>
@@ -322,7 +343,19 @@ export default function PersonalInformation() {
                                     </button>
                                 }
                             />
+                            <div className="errorSuccessContainer">
+                                {errorMessage && (
+                                    <p className="errorMessage">
+                                        {errorMessage}
+                                    </p> 
+                                )}
 
+                                {successMessage && (
+                                    <p className="successMessage">
+                                        {successMessage}
+                                    </p>
+                                )}
+                            </div>
                             <Button
                                 color="primary"
                                 size="lg"
@@ -342,71 +375,90 @@ export default function PersonalInformation() {
                             Add New Baby
                         </ModalHeader>
 
-                        <ModalBody>
-                            <Input
-                                label="First Name"
-                                placeholder="Enter baby's first name"
-                                value={newBaby.firstName}
-                                onChange={(e) => setNewBaby(prev => ({ ...prev, firstName: e.target.value }))}
-                            />
-
-                            <Input
-                                label="Last Name"
-                                placeholder="Enter baby's last name"
-                                value={newBaby.lastName}
-                                onChange={(e) => setNewBaby(prev => ({ ...prev, lastName: e.target.value }))}
-                            />
-
-                            <Input
-                                type="date"
-                                label="Birth Date"
-                                value={newBaby.birthDate}
-                                onChange={(e) => setNewBaby(prev => ({ ...prev, birthDate: e.target.value }))}
-                            />
-
-                            <div className="form-field">
-                                <label className="form-label">Gender</label>
-                                <Select
-                                    options={[
-                                        { value: "male", label: "Male" },
-                                        { value: "female", label: "Female" },
-                                        { value: "other", label: "Other" }
-                                    ]}
-                                    value={newBaby.gender ? { value: newBaby.gender, label: newBaby.gender.charAt(0).toUpperCase() + newBaby.gender.slice(1) } : null}
-                                    onChange={(option) => setNewBaby(prev => ({ ...prev, gender: option ? option.value : "" }))}
-                                    placeholder="Select gender"
-                                />
-                            </div>
-
-                            {newBaby.gender === "other" && (
-                                <Input
-                                    label="Other Gender"
-                                    placeholder="Enter baby's gender"
-                                    maxLength={10}
-                                    value={newBaby.customGender}
-                                    onChange={(e) => setNewBaby(prev => ({ ...prev, customGender: e.target.value }))}
-                                />
+                        <ModalBody className="modalBody">
+                            {errorMessage && (
+                                <p className="errorMessage">
+                                    {errorMessage}
+                                </p>
                             )}
-
-                            <div className="form-field">
-                                <label className="form-label">Category</label>
-                                <Select
-                                    options={[
-                                        { value: "Baby", label: "Baby (0–12 months old)" },
-                                        { value: "Toddler", label: "Toddler (1–3 years old)" },
-                                        { value: "Pre-Schooler", label: "Pre-Schooler (3–5 years old)" },
-                                        { value: "Grade-Schooler", label: "Grade-Schooler (5–12 years old)" }
-                                    ]}
-                                    value={newBaby.category ? [
-                                        { value: "Baby", label: "Baby (0–12 months old)" },
-                                        { value: "Toddler", label: "Toddler (1–3 years old)" },
-                                        { value: "Pre-Schooler", label: "Pre-Schooler (3–5 years old)" },
-                                        { value: "Grade-Schooler", label: "Grade-Schooler (5–12 years old)" }
-                                    ].find(opt => opt.value === newBaby.category) : null}
-                                    onChange={(option) => setNewBaby(prev => ({ ...prev, category: option ? option.value : "" }))}
-                                    placeholder="Select baby's category"
+                                <Input
+                                    label="First Name"
+                                    isRequired
+                                    placeholder="Enter baby's first name"
+                                    value={newBaby.firstName}
+                                    onChange={(e) => setNewBaby(prev => ({ ...prev, firstName: e.target.value }))}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
                                 />
-                            </div>
+
+                                <Input
+                                    label="Last Name"
+                                    isRequired
+                                    placeholder="Enter baby's last name"
+                                    value={newBaby.lastName}
+                                    onChange={(e) => setNewBaby(prev => ({ ...prev, lastName: e.target.value }))}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
+                                />
+
+                                <Input
+                                    type="date"
+                                    isRequired
+                                    label="Birth Date"
+                                    value={newBaby.birthDate}
+                                    onChange={(e) => setNewBaby(prev => ({ ...prev, birthDate: e.target.value }))}
+                                />
+
+                                <div className="form-field">
+                                    <label className="form-label">Gender</label>
+                                    <Select
+                                        options={[
+                                            { value: "male", label: "Male" },
+                                            { value: "female", label: "Female" },
+                                            { value: "other", label: "Other" }
+                                        ]}
+                                        value={newBaby.gender ? { value: newBaby.gender, label: newBaby.gender.charAt(0).toUpperCase() + newBaby.gender.slice(1) } : null}
+                                        onChange={(option) => setNewBaby(prev => ({ ...prev, gender: option ? option.value : "" }))}
+                                        placeholder="Select gender"
+                                    />
+                                </div>
+
+                                {newBaby.gender === "other" && (
+                                    <Input
+                                        label="Other Gender"
+                                        isRequired
+                                        placeholder="Enter baby's gender"
+                                        maxLength={10}
+                                        value={newBaby.customGender}
+                                        onChange={(e) => setNewBaby(prev => ({ ...prev, customGender: e.target.value }))}
+                                    />
+                                )}
+
+                                <div className="form-field">
+                                    <label className="form-label">Category</label>
+                                    <Select
+                                        options={[
+                                            { value: "Baby", label: "Baby (0–12 months old)" },
+                                            { value: "Toddler", label: "Toddler (1–3 years old)" },
+                                            { value: "Pre-Schooler", label: "Pre-Schooler (3–5 years old)" },
+                                            { value: "Grade-Schooler", label: "Grade-Schooler (5–12 years old)" }
+                                        ]}
+                                        value={newBaby.category ? [
+                                            { value: "Baby", label: "Baby (0–12 months old)" },
+                                            { value: "Toddler", label: "Toddler (1–3 years old)" },
+                                            { value: "Pre-Schooler", label: "Pre-Schooler (3–5 years old)" },
+                                            { value: "Grade-Schooler", label: "Grade-Schooler (5–12 years old)" }
+                                        ].find(opt => opt.value === newBaby.category) : null}
+                                        onChange={(option) => setNewBaby(prev => ({ ...prev, category: option ? option.value : "" }))}
+                                        placeholder="Select baby's category"
+                                    />
+                                </div>
                         </ModalBody>
 
                         <ModalFooter>

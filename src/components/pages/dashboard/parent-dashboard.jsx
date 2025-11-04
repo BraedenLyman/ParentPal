@@ -7,6 +7,7 @@ import Navbar from "../nav-bar/navbar";
 import { auth } from "../../../firebase/firebaseAuth";
 import API_URL from "../../../config/api";
 import "./dashboard-styles.css";
+import { FiBell } from "react-icons/fi";
 
 export default function ParentDashboard() {
   const navigate = useNavigate();
@@ -67,6 +68,7 @@ export default function ParentDashboard() {
               width={80}
               className="logo"
             />
+            <FiBell className="notification" />
           </div>
 
           <div className="userInfoMain">

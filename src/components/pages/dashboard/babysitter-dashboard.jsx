@@ -96,7 +96,6 @@ export default function BabysitterDashboard() {
                     </div>
                 </div>
 
-                {/* Report Sections */}
                 {selectedChild ? (
                     <>
                         <Card className="reportSections">

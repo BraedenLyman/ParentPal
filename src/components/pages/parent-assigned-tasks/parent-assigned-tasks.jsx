@@ -23,6 +23,7 @@ import { auth } from "../../../firebase/firebaseAuth";
 import API_URL from "../../../config/api";
 import "../settings/settings.css";
 import "./parent-assigned-tasks.css";
+import { FiBell } from "react-icons/fi";
 
 export default function ParentAssignedTasks() {
     const navigate = useNavigate();
@@ -281,6 +282,7 @@ export default function ParentAssignedTasks() {
                         width={80}
                         className="logo"
                     />
+                    <FiBell className="notification" />
                 </div>
                 <div className="headerTitle">
                     <h1>Assigned Tasks</h1>

@@ -42,7 +42,6 @@ export default function BabysitterSharedAccounts() {
             const user = response.data.user;
             setUserData(user);
 
-            // Fetch shared accounts (children the babysitter has access to)
             const childrenResponse = await axios.get(
                 `${API_URL}/api/babysitter-sharing/children/${user.account_id}`,
                 { withCredentials: true }
@@ -79,7 +78,6 @@ export default function BabysitterSharedAccounts() {
             setVerifySuccess("Verification successful! You now have access to the child's information.");
             setVerificationCode("");
 
-            // Refresh shared accounts after successful verification
             setTimeout(() => {
                 fetchData();
                 setVerifySuccess("");

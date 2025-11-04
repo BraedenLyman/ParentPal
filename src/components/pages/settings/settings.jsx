@@ -9,6 +9,7 @@ import axios from "axios";
 import Navbar from "../nav-bar/navbar";
 import API_URL from "../../../config/api";
 import "./settings.css";
+import { FiBell } from "react-icons/fi";
 
 export default function Settings() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -99,6 +100,7 @@ export default function Settings() {
                             width={80}
                             className="logo"
                         />
+                        <FiBell className="notification" />
                     </div>
                     <div className="headerTitle">
                         <h1>Settings</h1>

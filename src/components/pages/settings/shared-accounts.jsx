@@ -18,7 +18,7 @@ export default function SharedAccounts() {
     const [loading, setLoading] = useState(false);
     const [babysitters, setBabysitters] = useState([]);
     const [userData, setUserData] = useState(null);
-    const [error, setError] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         fetchUserDataAndBabysitters();
@@ -65,12 +65,12 @@ export default function SharedAccounts() {
 
     const handleSendInvitation = async () => {
         if (!babysitterName || !babysitterEmail || !userData) {
-            setError("Please fill in all fields");
+            setErrorMessage("Please fill in all fields");
             return;
         }
 
         setLoading(true);
-        setError("");
+        setErrorMessage("");
 
         try {
             await axios.post(
@@ -90,7 +90,7 @@ export default function SharedAccounts() {
             // Only fetch updated babysitters list, not all user data
             await fetchBabysitters();
         } catch (error) {
-            setError(error.response?.data?.error || "Failed to send invitation");
+            setErrorMessage(error.response?.data?.error || "Failed to send invitation");
         } finally {
             setLoading(false);
         }
@@ -208,28 +208,37 @@ export default function SharedAccounts() {
                             <ModalHeader className="flex flex-col gap-1">
                                 Add Babysitter
                             </ModalHeader>
-                            <ModalBody>
-                                <Input
-                                    label="Babysitter Name"
-                                    placeholder="Enter babysitter's full name"
-                                    value={babysitterName}
-                                    onChange={(e) => setBabysitterName(e.target.value)}
-                                    variant="bordered"
-                                />
-                                <Input
-                                    label="Email Address"
-                                    placeholder="Enter babysitter's email"
-                                    type="email"
-                                    value={babysitterEmail}
-                                    onChange={(e) => setBabysitterEmail(e.target.value)}
-                                    variant="bordered"
-                                />
-                                {error && (
-                                    <p className="text-danger text-sm">{error}</p>
+                            <ModalBody className="modalBody">
+                                {errorMessage && (
+                                    <p className="errorMessage">{errorMessage}</p>
                                 )}
-                                <p className="text-sm text-gray-600">
-                                    The babysitter will receive an email with a verification code to access your child's information.
-                                </p>
+                                    <Input
+                                        label="Babysitter Name"
+                                        isRequired
+                                        placeholder="Enter babysitter's full name"
+                                        value={babysitterName}
+                                        onChange={(e) => setBabysitterName(e.target.value)}
+                                        variant="bordered"
+                                        onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' ', '-', '(', ')'];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9\-() ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
+
+                                    />
+                                    <Input
+                                        label="Email Address"
+                                        isRequired
+                                        placeholder="Enter babysitter's email"
+                                        type="email"
+                                        value={babysitterEmail}
+                                        onChange={(e) => setBabysitterEmail(e.target.value)}
+                                        variant="bordered"
+                                    />
+                                
+                                    <p className="text-sm text-gray-600">
+                                        The babysitter will receive an email with a verification code to access your child's information.
+                                    </p>
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>
