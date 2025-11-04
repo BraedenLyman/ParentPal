@@ -162,8 +162,6 @@ describe('ObservationNotes Component', () => {
   });
 
   test('validates required fields on form submission', async () => {
-    window.alert = jest.fn();
-
     render(
       <TestWrapper>
         <ObservationNotes />
@@ -179,12 +177,12 @@ describe('ObservationNotes Component', () => {
     const modalAddButton = screen.getAllByText('Add')[1];
     fireEvent.click(modalAddButton);
 
-    expect(window.alert).toHaveBeenCalledWith('Please fill out all fields.');
+    await waitFor(() => {
+      expect(screen.getByText('Please fill out all fields.')).toBeInTheDocument();
+    });
   });
 
   test('validates priority level is required', async () => {
-    window.alert = jest.fn();
-
     render(
       <TestWrapper>
         <ObservationNotes />
@@ -199,12 +197,12 @@ describe('ObservationNotes Component', () => {
     const modalAddButton = screen.getAllByText('Add')[1];
     fireEvent.click(modalAddButton);
 
-    expect(window.alert).toHaveBeenCalledWith('Please fill out all fields.');
+    await waitFor(() => {
+      expect(screen.getByText('Please fill out all fields.')).toBeInTheDocument();
+    });
   });
 
   test('validates notes field is required', async () => {
-    window.alert = jest.fn();
-
     render(
       <TestWrapper>
         <ObservationNotes />
@@ -216,7 +214,9 @@ describe('ObservationNotes Component', () => {
     const modalAddButton = screen.getAllByText('Add')[1];
     fireEvent.click(modalAddButton);
 
-    expect(window.alert).toHaveBeenCalledWith('Please fill out all fields.');
+    await waitFor(() => {
+      expect(screen.getByText('Please fill out all fields.')).toBeInTheDocument();
+    });
   });
 
   test('closes modal when Cancel button is clicked', () => {

@@ -1,0 +1,124 @@
+# OWASP ZAP Alert Filter Rules for ParentPal
+# Format: rule_id	threshold	action
+# threshold: OFF, DEFAULT, LOW, MEDIUM, HIGH
+# action: IGNORE, WARN, FAIL
+
+# SQL Injection - High priority
+40018	LOW	FAIL
+
+# Cross Site Scripting (Reflected)
+40012	LOW	FAIL
+
+# Cross Site Scripting (Stored)
+40014	LOW	FAIL
+
+# Cross Site Scripting (DOM Based)
+40026	LOW	FAIL
+
+# CSRF - Medium priority
+10202	MEDIUM	FAIL
+
+# Authentication Related
+10055	MEDIUM	WARN
+
+# Session Management
+10112	MEDIUM	FAIL
+
+# Insecure HTTP Methods
+90028	MEDIUM	WARN
+
+# Directory Browsing
+0	DEFAULT	FAIL
+
+# Path Traversal
+6	LOW	FAIL
+
+# Remote File Inclusion
+7	LOW	FAIL
+
+# Server Side Include
+40009	LOW	FAIL
+
+# Server Side Template Injection
+90035	LOW	FAIL
+
+# SQL Injection (MySQL)
+40019	LOW	FAIL
+
+# SQL Injection (PostgreSQL)
+40020	LOW	FAIL
+
+# Remote OS Command Injection
+90020	LOW	FAIL
+
+# Format String Error
+30002	LOW	FAIL
+
+# Buffer Overflow
+30001	LOW	FAIL
+
+# XML External Entity Attack
+90023	MEDIUM	FAIL
+
+# External Redirect
+20019	MEDIUM	WARN
+
+# Insufficient Anti-automation
+10202	MEDIUM	WARN
+
+# Weak Authentication Method
+10105	HIGH	WARN
+
+# Secure Pages Include Mixed Content
+10040	MEDIUM	WARN
+
+# Content Security Policy (CSP) Header Not Set
+10038	MEDIUM	WARN
+
+# X-Frame-Options Header Not Set
+10020	MEDIUM	WARN
+
+# X-Content-Type-Options Header Missing
+10021	LOW	WARN
+
+# Strict-Transport-Security Header Not Set
+10035	MEDIUM	WARN
+
+# Cookie Without Secure Flag
+10011	MEDIUM	FAIL
+
+# Cookie Without HttpOnly Flag
+10010	MEDIUM	FAIL
+
+# Cookie Without SameSite Attribute
+10054	LOW	WARN
+
+# Private IP Disclosure
+2	LOW	WARN
+
+# Application Error Disclosure
+90022	LOW	WARN
+
+# Information Disclosure - Suspicious Comments
+10027	LOW	IGNORE
+
+# Information Disclosure - Sensitive Information in URL
+10024	MEDIUM	WARN
+
+# Information Disclosure - Sensitive Information in HTTP Referrer Header
+10025	LOW	WARN
+
+# Timestamp Disclosure
+10096	LOW	IGNORE
+
+# Username Hash Found
+10057	LOW	WARN
+
+# Hash Disclosure
+10097	LOW	IGNORE
+
+# Viewstate without MAC Signature
+90022	MEDIUM	WARN
+
+# Insecure JSF ViewState
+90022	MEDIUM	WARN

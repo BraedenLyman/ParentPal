@@ -29,6 +29,12 @@ ui-debug.log
 # Test coverage reports
 coverage/
 
+# OWASP ZAP security reports
+zap-reports/
+.zap/session/
+.zap/*.db
+.zap/*.log
+
 # Editor directories and files
 !.vscode/extensions.json
 .idea

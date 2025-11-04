@@ -12,7 +12,11 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "firebase:deploy": "npm run build && firebase deploy --only hosting",
-    "firebase:serve": "npm run build && firebase serve --only hosting"
+    "firebase:serve": "npm run build && firebase serve --only hosting",
+    "security:scan": "bash scripts/zap-baseline-scan.sh",
+    "security:scan:full": "bash scripts/zap-full-scan.sh",
+    "security:scan:api": "bash scripts/zap-api-scan.sh",
+    "security:report": "open zap-reports/baseline-report-*.html"
   },
   "dependencies": {
     "@chakra-ui/charts": "^3.28.0",

@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  zap:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    container_name: parentpal-zap
+    user: zap
+    ports:
+      - "8080:8080"
+      - "8090:8090"
+    volumes:
+      - ./.zap:/zap/wrk/:rw
+      - ./zap-reports:/zap/reports/:rw
+    command: zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config api.key=changeme123!
+    networks:
+      - zap-network
+    environment:
+      - ZAP_PORT=8080
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: parentpal-frontend-scan
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - zap-network
+    environment:
+      - VITE_API_URL=http://backend:3000
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: parentpal-backend-scan
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - zap-network
+    environment:
+      - NODE_ENV=test
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=testpassword
+      - DB_NAME=parentpal_test
+
+  db:
+    image: mysql:8.0
+    container_name: parentpal-db-scan
+    ports:
+      - "3307:3306"
+    networks:
+      - zap-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=testpassword
+      - MYSQL_DATABASE=parentpal_test
+    volumes:
+      - zap-db-data:/var/lib/mysql
+
+networks:
+  zap-network:
+    driver: bridge
+
+volumes:
+  zap-db-data:

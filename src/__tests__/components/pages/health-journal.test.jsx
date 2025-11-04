@@ -205,8 +205,6 @@ describe('HealthJournal Component', () => {
   });
 
   test('validates required fields for medication form', async () => {
-    window.alert = jest.fn();
-
     render(
       <TestWrapper>
         <HealthJournal />
@@ -222,12 +220,12 @@ describe('HealthJournal Component', () => {
     const modalAddButton = screen.getAllByText('Add')[1];
     fireEvent.click(modalAddButton);
 
-    expect(window.alert).toHaveBeenCalledWith('Please fill out all fields.');
+    await waitFor(() => {
+      expect(screen.getByText('Please fill out all fields.')).toBeInTheDocument();
+    });
   });
 
   test('validates required fields for allergy form', async () => {
-    window.alert = jest.fn();
-
     render(
       <TestWrapper>
         <HealthJournal />
@@ -240,12 +238,12 @@ describe('HealthJournal Component', () => {
     const modalAddButton = screen.getAllByText('Add')[1];
     fireEvent.click(modalAddButton);
 
-    expect(window.alert).toHaveBeenCalledWith('Please fill out all fields.');
+    await waitFor(() => {
+      expect(screen.getByText('Please fill out all fields.')).toBeInTheDocument();
+    });
   });
 
   test('validates required fields for vaccination form', async () => {
-    window.alert = jest.fn();
-
     render(
       <TestWrapper>
         <HealthJournal />
@@ -258,7 +256,9 @@ describe('HealthJournal Component', () => {
     const modalAddButton = screen.getAllByText('Add')[1];
     fireEvent.click(modalAddButton);
 
-    expect(window.alert).toHaveBeenCalledWith('Please fill out all fields.');
+    await waitFor(() => {
+      expect(screen.getByText('Please fill out all fields.')).toBeInTheDocument();
+    });
   });
 
   test('allows input in medication form fields', () => {
