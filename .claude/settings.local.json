@@ -13,7 +13,11 @@
       "Bash(npm test:*)",
       "Bash(tree:*)",
       "Bash(npx babel:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(curl:*)",
+      "Bash(python -m json.tool:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker ps:*)"
     ],
     "deny": [],
     "ask": []

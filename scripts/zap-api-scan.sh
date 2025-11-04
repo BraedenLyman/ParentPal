@@ -1,24 +1,16 @@
-#!/bin/bash
-
-# OWASP ZAP API Scan Script for ParentPal Backend
-# This script performs security scanning on REST API endpoints
-
 set -e
 
 echo "🔒 Starting OWASP ZAP API Scan for ParentPal Backend..."
 
-# Configuration
-API_URL="${API_URL:-http://localhost:3000}"
+API_URL="${API_URL:-http://localhost:3001}"
 ZAP_PORT="${ZAP_PORT:-8080}"
 REPORT_DIR="./zap-reports"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 ZAP_API_KEY="${ZAP_API_KEY:-changeme123!}"
 OPENAPI_SPEC="${OPENAPI_SPEC:-./backend/openapi.yaml}"
 
-# Create reports directory
 mkdir -p "$REPORT_DIR"
 
-# Function to check if services are ready
 wait_for_service() {
     local url=$1
     local max_attempts=30
@@ -40,61 +32,54 @@ wait_for_service() {
     return 1
 }
 
-# Start backend services
 echo "🚀 Starting backend services..."
 if ! docker ps | grep -q "parentpal-backend-scan"; then
     echo "Starting Docker containers..."
     docker-compose -f docker-compose.zap.yml up -d backend db
 
-    # Wait for backend to be ready
-    wait_for_service "$API_URL/api/health" || echo "⚠️  Backend health check failed, continuing anyway..."
+    echo "⏳ Waiting for backend to initialize..."
+    sleep 10
 fi
 
-# Wait for ZAP to be ready
 echo "⏳ Waiting for ZAP to start..."
 if ! docker ps | grep -q "parentpal-zap"; then
     docker-compose -f docker-compose.zap.yml up -d zap
 fi
 wait_for_service "http://localhost:$ZAP_PORT"
 
-# Run ZAP API Scan
 echo "🔍 Running ZAP API Scan..."
 
-# If OpenAPI spec exists, use it
 if [ -f "$OPENAPI_SPEC" ]; then
     echo "📝 Using OpenAPI specification: $OPENAPI_SPEC"
     docker run --rm \
         --network host \
-        -v "$(pwd)/.zap:/zap/wrk/:rw" \
-        -v "$(pwd)/$REPORT_DIR:/zap/reports/:rw" \
+        -v "$(pwd)/zap-reports:/zap/wrk/:rw" \
         -v "$(pwd)/$OPENAPI_SPEC:/zap/api-spec.yaml:ro" \
         ghcr.io/zaproxy/zaproxy:stable \
         zap-api-scan.py \
         -t /zap/api-spec.yaml \
         -f openapi \
-        -r "api-report-$TIMESTAMP.html" \
-        -J "api-report-$TIMESTAMP.json" \
-        -w "api-report-$TIMESTAMP.md" \
+        -r "/zap/wrk/api-report-$TIMESTAMP.html" \
+        -J "/zap/wrk/api-report-$TIMESTAMP.json" \
+        -w "/zap/wrk/api-report-$TIMESTAMP.md" \
         -z "-config api.key=$ZAP_API_KEY"
 else
     echo "⚠️  No OpenAPI spec found, running generic API scan"
     docker run --rm \
         --network host \
-        -v "$(pwd)/.zap:/zap/wrk/:rw" \
-        -v "$(pwd)/$REPORT_DIR:/zap/reports/:rw" \
+        -v "$(pwd)/zap-reports:/zap/wrk/:rw" \
         ghcr.io/zaproxy/zaproxy:stable \
         zap-api-scan.py \
         -t "$API_URL/api" \
-        -r "api-report-$TIMESTAMP.html" \
-        -J "api-report-$TIMESTAMP.json" \
-        -w "api-report-$TIMESTAMP.md" \
+        -r "/zap/wrk/api-report-$TIMESTAMP.html" \
+        -J "/zap/wrk/api-report-$TIMESTAMP.json" \
+        -w "/zap/wrk/api-report-$TIMESTAMP.md" \
         -z "-config api.key=$ZAP_API_KEY"
 fi
 
 echo "✅ API scan completed!"
 echo "📊 Reports saved to: $REPORT_DIR/api-report-$TIMESTAMP.*"
 
-# Check scan results
 SCAN_RESULT=$?
 
 if [ $SCAN_RESULT -eq 0 ]; then

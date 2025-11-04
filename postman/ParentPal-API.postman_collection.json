@@ -1,0 +1,761 @@
+{
+	"info": {
+		"_postman_id": "parentpal-api-collection",
+		"name": "ParentPal API - Integration Tests",
+		"description": "Complete API test suite for ParentPal application including authentication, CRUD operations, and validation tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{authToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "babyId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "growthId",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Sign In - Parent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test response status",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Test response structure",
+									"pm.test(\"Response has correct structure\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('user');",
+									"    pm.expect(jsonData).to.have.property('babyData');",
+									"});",
+									"",
+									"// Test user data",
+									"pm.test(\"User has correct account type\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.user.account_type).to.equal('parent');",
+									"});",
+									"",
+									"// Save baby ID for later tests",
+									"pm.test(\"Baby data exists\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.babyData && jsonData.babyData.length > 0) {",
+									"        pm.collectionVariables.set('babyId', jsonData.babyData[0].baby_id);",
+									"    }",
+									"});",
+									"",
+									"// Test response time",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idToken\": \"{{firebaseToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sign-in",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sign-in"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In - Babysitter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"User is babysitter\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.user.account_type).to.equal('babysitter');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idToken\": \"{{firebaseTokenBabysitter}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sign-in",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sign-in"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Accounts",
+			"item": [
+				{
+					"name": "Create Account - Parent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Account created successfully\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('accountId');",
+									"});",
+									"",
+									"pm.test(\"Response time is acceptable\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firebaseUid\": \"test-firebase-uid-{{$timestamp}}\",\n    \"accountType\": \"parent\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"Parent\",\n    \"email\": \"testparent{{$timestamp}}@example.com\",\n    \"phoneNumber\": \"1234567890\",\n    \"babyFirstName\": \"Baby\",\n    \"babyLastName\": \"Test\",\n    \"babyDateOfBirth\": \"2023-01-01\",\n    \"babyCategory\": \"infant\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/accounts",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "accounts"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Account - Validation Error",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Error message exists\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('error');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firebaseUid\": \"test-uid\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/accounts",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "accounts"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Babies",
+			"item": [
+				{
+					"name": "Get All Babies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"Each baby has required fields\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.length > 0) {",
+									"        pm.expect(jsonData[0]).to.have.property('baby_id');",
+									"        pm.expect(jsonData[0]).to.have.property('first_name');",
+									"        pm.expect(jsonData[0]).to.have.property('date_of_birth');",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/babies",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "babies"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Growth Tracker",
+			"item": [
+				{
+					"name": "Get Growth Records",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/growth?baby_id={{babyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "growth"],
+							"query": [
+								{
+									"key": "baby_id",
+									"value": "{{babyId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Growth Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Growth record created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('growth_id');",
+									"    pm.collectionVariables.set('growthId', jsonData.growth_id);",
+									"});",
+									"",
+									"pm.test(\"Record has correct data\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.height).to.be.a('number');",
+									"    pm.expect(jsonData.weight).to.be.a('number');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"baby_id\": \"{{babyId}}\",\n    \"height\": 50.5,\n    \"weight\": 15.2,\n    \"date\": \"2024-11-03\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/growth",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "growth"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Growth Record - Validation Error",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Error message for missing fields\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('error');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"baby_id\": \"{{babyId}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/growth",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "growth"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sleep Analytics",
+			"item": [
+				{
+					"name": "Get Sleep Records",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is array\", function () {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/sleep?baby_id={{babyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sleep"],
+							"query": [
+								{
+									"key": "baby_id",
+									"value": "{{babyId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sleep Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Sleep record created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('sleep_id');",
+									"    pm.expect(jsonData.sleep_duration).to.be.a('string');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"baby_id\": \"{{babyId}}\",\n    \"sleep_duration\": \"8.5\",\n    \"time_fell_asleep\": \"20:30\",\n    \"date\": \"2024-11-03\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sleep",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sleep"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Feeding Notes",
+			"item": [
+				{
+					"name": "Get Feeding Records",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is array\", function () {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/feeding?baby_id={{babyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "feeding"],
+							"query": [
+								{
+									"key": "baby_id",
+									"value": "{{babyId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Feeding Record",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Feeding record created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('feeding_id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"baby_id\": \"{{babyId}}\",\n    \"feeding_type\": \"bottle\",\n    \"amount\": \"120\",\n    \"notes\": \"Test feeding record\",\n    \"date\": \"2024-11-03\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/feeding",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "feeding"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health Journal",
+			"item": [
+				{
+					"name": "Medications - Get All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is array\", function () {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/meds?baby_id={{babyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "meds"],
+							"query": [
+								{
+									"key": "baby_id",
+									"value": "{{babyId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Allergies - Get All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/allergies?baby_id={{babyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "allergies"],
+							"query": [
+								{
+									"key": "baby_id",
+									"value": "{{babyId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vaccinations - Get All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/vaccinations?baby_id={{babyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "vaccinations"],
+							"query": [
+								{
+									"key": "baby_id",
+									"value": "{{babyId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Observation Notes",
+			"item": [
+				{
+					"name": "Get Observations",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is array\", function () {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/observation?baby_id={{babyId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "observation"],
+							"query": [
+								{
+									"key": "baby_id",
+									"value": "{{babyId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Observation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Observation created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('observation_id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"baby_id\": \"{{babyId}}\",\n    \"priority_level\": \"medium\",\n    \"notes\": \"Test observation note\",\n    \"date\": \"2024-11-03\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/observation",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "observation"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

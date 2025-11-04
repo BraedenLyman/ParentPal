@@ -1,23 +1,15 @@
-#!/bin/bash
-
-# OWASP ZAP Baseline Scan Script for ParentPal
-# This script performs a quick baseline security scan
-
 set -e
 
 echo "🔒 Starting OWASP ZAP Baseline Scan for ParentPal..."
 
-# Configuration
-TARGET_URL="${TARGET_URL:-http://localhost:5173}"
-API_URL="${API_URL:-http://localhost:3000}"
+TARGET_URL="${TARGET_URL:-http://localhost:5174}"
+API_URL="${API_URL:-http://localhost:3001}"
 ZAP_PORT="${ZAP_PORT:-8080}"
 REPORT_DIR="./zap-reports"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-# Create reports directory
 mkdir -p "$REPORT_DIR"
 
-# Function to check if services are ready
 wait_for_service() {
     local url=$1
     local max_attempts=30
@@ -39,35 +31,31 @@ wait_for_service() {
     return 1
 }
 
-# Start services if not already running
 echo "🚀 Starting application services..."
 if ! docker ps | grep -q "parentpal-frontend-scan"; then
     echo "Starting Docker containers..."
     docker-compose -f docker-compose.zap.yml up -d
 
-    # Wait for services to be ready
     wait_for_service "$TARGET_URL"
-    wait_for_service "$API_URL/api/health" || echo "⚠️  Backend health check failed, continuing anyway..."
+    echo "⏳ Waiting for backend to initialize..."
+    sleep 10
 fi
 
-# Wait for ZAP to be ready
 echo "⏳ Waiting for ZAP to start..."
 wait_for_service "http://localhost:$ZAP_PORT"
 
-# Run ZAP Baseline Scan
 echo "🔍 Running ZAP Baseline Scan..."
 
 docker run --rm \
     --network host \
-    -v "$(pwd)/.zap:/zap/wrk/:rw" \
-    -v "$(pwd)/$REPORT_DIR:/zap/reports/:rw" \
+    -v "$(pwd)/zap-reports:/zap/wrk/:rw" \
     ghcr.io/zaproxy/zaproxy:stable \
     zap-baseline.py \
     -t "$TARGET_URL" \
     -g gen.conf \
-    -r "baseline-report-$TIMESTAMP.html" \
-    -J "baseline-report-$TIMESTAMP.json" \
-    -w "baseline-report-$TIMESTAMP.md" \
+    -r "/zap/wrk/baseline-report-$TIMESTAMP.html" \
+    -J "/zap/wrk/baseline-report-$TIMESTAMP.json" \
+    -w "/zap/wrk/baseline-report-$TIMESTAMP.md" \
     -a \
     -j \
     -l PASS \
@@ -77,7 +65,6 @@ docker run --rm \
 echo "✅ Baseline scan completed!"
 echo "📊 Reports saved to: $REPORT_DIR/baseline-report-$TIMESTAMP.*"
 
-# Check scan results
 if [ $? -eq 0 ]; then
     echo "✅ No high-risk vulnerabilities found!"
     exit 0
