@@ -14,7 +14,7 @@ import {
     Textarea,
     Checkbox
 } from "@heroui/react";
-import CustomSelect from "../../custom-select/CustomSelect";
+import Select from "../../custom-select/CustomSelect";
 import { ArrowLeftIcon, PlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import Navbar from "../nav-bar/navbar";
@@ -40,6 +40,8 @@ export default function ParentAssignedTasks() {
     const [dueDate, setDueDate] = useState("");
     const [selectedBabysitter, setSelectedBabysitter] = useState(null);
     const [selectedBaby, setSelectedBaby] = useState(null);
+
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         fetchData();
@@ -127,8 +129,9 @@ export default function ParentAssignedTasks() {
     };
 
     const handleAddTask = async () => {
+        setErrorMessage("");
         if (!taskTitle.trim() || !selectedBabysitter || !selectedBaby) {
-            alert("Please fill in task title, select a babysitter, and select a baby");
+            setErrorMessage("Please fill in all required fields");
             return;
         }
 
@@ -150,16 +153,18 @@ export default function ParentAssignedTasks() {
             );
 
             await fetchData();
+            setErrorMessage("");
             setIsAddModalOpen(false);
         } catch (error) {
             console.error("Error adding task:", error);
-            alert("Failed to add task");
+            setErrorMessage("Failed to add task");
         }
     };
 
     const handleEditTask = async () => {
+        setErrorMessage("");
         if (!taskTitle.trim() || !selectedBabysitter || !selectedBaby) {
-            alert("Please fill in task title, select a babysitter, and select a baby");
+            setErrorMessage("Please fill in task title, select a babysitter, and select a baby");
             return;
         }
 
@@ -180,14 +185,16 @@ export default function ParentAssignedTasks() {
             );
 
             await fetchData();
+            setErrorMessage("");
             setIsEditModalOpen(false);
         } catch (error) {
             console.error("Error updating task:", error);
-            alert("Failed to update task");
+            setErrorMessage("Failed to update task");
         }
     };
 
     const handleDeleteTask = async () => {
+        setErrorMessage("");
         try {
             await axios.delete(
                 `${API_URL}/api/shared-tasks/${selectedTask.task_id}`,
@@ -195,10 +202,11 @@ export default function ParentAssignedTasks() {
             );
 
             await fetchData();
+            setErrorMessage("");
             setIsDeleteModalOpen(false);
         } catch (error) {
             console.error("Error deleting task:", error);
-            alert("Failed to delete task");
+            setErrorMessage("Failed to delete task");
         }
     };
 
@@ -389,60 +397,73 @@ export default function ParentAssignedTasks() {
             <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} size="2xl">
                 <ModalContent>
                     <ModalHeader>Add New Task</ModalHeader>
-                    <ModalBody>
-                        <Input
-                            label="Task Title"
-                            placeholder="Enter task title"
-                            type="text"
-                            maxLength={200}
-                            value={taskTitle}
-                            onChange={(e) => setTaskTitle(e.target.value)}
-                            onKeyDown={(e) => {
-                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
-                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
-                                e.preventDefault();
-                            }}
-                            required
-                        />
-                        <Textarea
-                            label="Description"
-                            placeholder="Enter task description (optional)"
-                            maxLength={2000}
-                            value={taskDescription}
-                            onChange={(e) => setTaskDescription(e.target.value)}
-                            onKeyDown={(e) => {
-                                const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
-                                if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
-                                e.preventDefault();
-                            }}
-                        />
-                        <div className="select-field">
-                            <label className="select-label">Assign to Babysitter *</label>
-                            <CustomSelect
-                                options={babysitterOptions}
-                                value={selectedBabysitter}
-                                onChange={setSelectedBabysitter}
-                                placeholder="Select a babysitter"
-                                isClearable
-                            />
-                        </div>
-                        <div className="select-field">
-                            <label className="select-label">Related to Baby *</label>
-                            <CustomSelect
-                                options={babyOptions}
-                                value={selectedBaby}
-                                onChange={setSelectedBaby}
-                                placeholder="Select a baby"
-                                isClearable
-                            />
-                        </div>
-                        <Input
-                            type="date"
-                            label="Due Date (Optional)"
-                            value={dueDate}
-                            onChange={(e) => setDueDate(e.target.value)}
-                        />
-                    </ModalBody>
+                        <ModalBody className="modalBody">
+                            {errorMessage && (
+                                <p className="errorMessage">
+                                    {errorMessage}
+                                </p>
+                            )}
+                                <Input
+                                    label="Task Title"
+                                    placeholder="Enter task title"
+                                    type="text"
+                                    isRequired
+                                    maxLength={200}
+                                    value={taskTitle}
+                                    onChange={(e) => setTaskTitle(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
+                                    required
+                                />
+                                <Textarea
+                                    label="Description"
+                                    placeholder="Enter task description (optional)"
+                                    maxLength={2000}
+                                    value={taskDescription}
+                                    onChange={(e) => setTaskDescription(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' '];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'():;" ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
+                                />
+                               
+                                <div className="taskContainer">
+                                    <div className="assignBabysitterContainer">
+                                        <label className="select-label">Assign to Babysitter *</label>
+                                        <Select
+
+                                            options={babysitterOptions}
+                                            value={selectedBabysitter}
+                                            onChange={setSelectedBabysitter}
+                                            placeholder="Select a babysitter"
+                                            isClearable
+                                        />
+                                    </div>
+                               
+                                
+                                    <div className="assignBabyContainer">
+                                        <label className="select-label">Related to Baby *</label>
+                                        <Select
+                                            options={babyOptions}
+                                            value={selectedBaby}
+                                            onChange={setSelectedBaby}
+                                            placeholder="Select a baby"
+                                            isClearable
+                                        />
+                                        
+                                    </div>
+                                    <Input
+                                        type="date"
+                                        label="Due Date (Optional)"
+                                        value={dueDate}
+                                        onChange={(e) => setDueDate(e.target.value)}
+                                    /> 
+                            </div>
+                        </ModalBody>
                     <ModalFooter>
                         <Button variant="light" onPress={() => setIsAddModalOpen(false)}>
                             Cancel
@@ -486,7 +507,7 @@ export default function ParentAssignedTasks() {
                         />
                         <div className="select-field">
                             <label className="select-label">Assign to Babysitter *</label>
-                            <CustomSelect
+                            <Select
                                 options={babysitterOptions}
                                 value={selectedBabysitter}
                                 onChange={setSelectedBabysitter}
@@ -496,7 +517,7 @@ export default function ParentAssignedTasks() {
                         </div>
                         <div className="select-field">
                             <label className="select-label">Related to Baby *</label>
-                            <CustomSelect
+                            <Select
                                 options={babyOptions}
                                 value={selectedBaby}
                                 onChange={setSelectedBaby}

@@ -372,3 +372,24 @@ section[role="dialog"],
     display: flex;
     flex-direction: row;
 }
+
+.assignBabysitterContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;    
+}
+
+.assignBabyContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.taskContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
