@@ -218,6 +218,7 @@ export default function SleepAnalytics() {
                         <Input
                             variant="bordered"
                             label="Sleep Duration (hours)"
+                            isRequired
                             placeholder="Hours slept (e.g., 8.5)"
                             type="number"
                             step="0.1"
@@ -237,6 +238,7 @@ export default function SleepAnalytics() {
                         <TimeInput 
                             variant="bordered"
                             label="Time fell asleep at" 
+                            isRequired
                             value={time}
                             onChange={(newTime) => setTime(newTime)}
                             
@@ -245,6 +247,7 @@ export default function SleepAnalytics() {
                         <Input
                             variant="bordered"
                             label="Date"
+                            isRequired
                             placeholder="Date"
                             type="date"
                             value={date}

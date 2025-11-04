@@ -546,6 +546,7 @@ export default function HealthJournal() {
                                 <Input
                                     variant="bordered"
                                     label="Medication Name"
+                                    isRequired
                                     placeholder="Enter medication name"
                                     type="text"
                                     maxLength={200}
@@ -560,12 +561,14 @@ export default function HealthJournal() {
                                 <TimeInput
                                     variant="bordered"
                                     label="Time take at"
+                                    isRequired
                                     value={medsTimeTaken}
                                     onChange={(newTime) => setMedsTimeTaken(newTime)}
                                 />
                                 <Input
                                     variant="bordered"
                                     label="Date"
+                                    isRequired
                                     placeholder="Date"
                                     type="date"
                                     value={medDate}
@@ -574,6 +577,7 @@ export default function HealthJournal() {
                                 <Input
                                     variant="bordered"
                                     label="Amount (fl oz)"
+                                    isRequired
                                     placeholder="Amount in fluid ounces"
                                     type="number"
                                     step="0.01"
@@ -592,6 +596,7 @@ export default function HealthJournal() {
                                 <Input
                                     variant="bordered"
                                     label="Sicness/Symptoms"
+                                    isRequired
                                     placeholder="Describe how they are feeling"
                                     type="text"
                                     maxLength={500}
@@ -627,6 +632,7 @@ export default function HealthJournal() {
                                 <Input
                                     variant="bordered"
                                     label="Allergy Name"
+                                    isRequired
                                     placeholder="What are they allergic to"
                                     type="text"
                                     maxLength={200}
@@ -662,6 +668,7 @@ export default function HealthJournal() {
                                     <div className="epiPenGroup">
                                         <RadioGroup
                                             label="EpiPen"
+                                            isRequired
                                             value={epiPen}
                                             onValueChange={(val) => setEpiPen(val)}
                                         >
@@ -674,6 +681,7 @@ export default function HealthJournal() {
                                 <Input
                                     variant="bordered"
                                     label="Notes"
+                                    isRequired
                                     placeholder="Add any other important info"
                                     type="text"
                                     maxLength={1000}
@@ -713,6 +721,7 @@ export default function HealthJournal() {
                                 <Input
                                     variant="bordered"
                                     label="Vaccine Name"
+                                    isRequired
                                     placeholder="Vaccination they have"
                                     type="text"
                                     maxLength={200}
@@ -728,6 +737,7 @@ export default function HealthJournal() {
                                     variant="bordered"
                                     type="date"
                                     label="Date of Vaccine"
+                                    isRequired
                                     value={vaccineDate}
                                     onChange={(e) => setVaccineDate(e.target.value)}
                                 />

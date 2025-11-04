@@ -134,13 +134,17 @@ export default function GrowthTracker() {
 
     const isBabysitter = location.state?.isBabysitter;
 
-    const logCategories = [
+    const allLogCategories = [
         { value: "/growth-tracker", label: "Growth Tracker" },
         { value: "/sleep-analytics", label: "Sleep Analytics" },
         { value: "/health-journal", label: "Health Journal" },
         { value: "/feeding-notes", label: "Feeding Notes" },
         { value: "/observation-notes", label: "Observation Notes" }
     ];
+
+    const logCategories = isBabysitter
+        ? allLogCategories.filter(cat => cat.value !== "/growth-tracker")
+        : allLogCategories;
 
     const currentCategory = logCategories.find(cat => cat.value === "/growth-tracker");
 
@@ -259,6 +263,7 @@ export default function GrowthTracker() {
                             <Input
                                 variant="bordered"
                                 label="Height (feet)"
+                                isRequired
                                 placeholder="Feet"
                                 type="number"
                                 step="1"
@@ -276,6 +281,7 @@ export default function GrowthTracker() {
                             <Input
                                 variant="bordered"
                                 label="Height (inches)"
+                                isRequired
                                 placeholder="Inches"
                                 type="number"
                                 step="0.1"
@@ -296,6 +302,7 @@ export default function GrowthTracker() {
                         <Input
                             variant="bordered"
                             label="Weight (lbs)"
+                            isRequired
                             placeholder="Weight in pounds"
                             type="number"
                             step="0.1"
@@ -316,6 +323,7 @@ export default function GrowthTracker() {
                         <Input
                             variant="bordered"
                             label="Date"
+                            isRequired
                             placeholder="Date"
                             type="date"
                             value={date}

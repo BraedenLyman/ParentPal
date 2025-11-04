@@ -435,9 +435,8 @@ export default function ParentAssignedTasks() {
                                
                                 <div className="taskContainer">
                                     <div className="assignBabysitterContainer">
-                                        <label className="select-label">Assign to Babysitter *</label>
+                                        <label className="select-label">Assign to Babysitter</label>
                                         <Select
-
                                             options={babysitterOptions}
                                             value={selectedBabysitter}
                                             onChange={setSelectedBabysitter}
@@ -448,7 +447,7 @@ export default function ParentAssignedTasks() {
                                
                                 
                                     <div className="assignBabyContainer">
-                                        <label className="select-label">Related to Baby *</label>
+                                        <label className="select-label">Related to Baby</label>
                                         <Select
                                             options={babyOptions}
                                             value={selectedBaby}
@@ -518,8 +517,9 @@ export default function ParentAssignedTasks() {
                             />
                         </div>
                         <div className="select-field">
-                            <label className="select-label">Related to Baby *</label>
+                            <label className="select-label">Related to Baby</label>
                             <Select
+                                isRequired
                                 options={babyOptions}
                                 value={selectedBaby}
                                 onChange={setSelectedBaby}

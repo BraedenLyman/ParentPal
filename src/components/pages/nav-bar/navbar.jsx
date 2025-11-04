@@ -53,9 +53,9 @@ export default function Navbar() {
 
   const handleLogsClick = () => {
     if (userType === 'babysitter') {
-      navigate("/sleep-analytics");
+      navigate("/sleep-analytics", { state: { isBabysitter: true } });
     } else {
-      navigate("/growth-tracker");
+      navigate("/growth-tracker", { state: { isBabysitter: false } });
     }
   };
 
