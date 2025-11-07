@@ -2,11 +2,13 @@
 
 <div align="center">
 
+![ParentPal Logo](public/images/ParentPal.png)
+
+### REST API & Database Documentation
+
 [![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-Admin-FFCA28?style=flat&logo=firebase&logoColor=black)](https://firebase.google.com/)
-
-### REST API & Database Documentation
 
 </div>
 
@@ -26,7 +28,7 @@
 The **backend** powers the application’s data and authentication systems. It’s built with a focus on performance, scalability, and security.
 
 ### 🧱 Database Structure
-**Database Type:** PostgreSQL
+**Database Type:** PostgreSQL / MySQL / MongoDB / Firebase / Supabase
 
 #### Example Schema:
 **Users Table**
