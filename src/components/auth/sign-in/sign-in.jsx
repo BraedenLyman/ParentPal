@@ -45,7 +45,20 @@ export default function SignIn() {
 
         } catch (error) {
             console.error("Login error:", error);
-            setLoginError(error.message || "Invalid email or password");
+
+            if (error.code === 'auth/invalid-credential') {
+                setLoginError("Invalid email or password.");
+            } else if (error.code === 'auth/user-not-found') {
+                setLoginError("No account found with this email.");
+            } else if (error.code === 'auth/wrong-password') {
+                setLoginError("Incorrect password.");
+            } else if (error.code === 'auth/too-many-requests') {
+                setLoginError("Too many failed login attempts. Please try again later.");
+            } else if (error.code === 'auth/user-disabled') {
+                setLoginError("This account has been disabled.");
+            } else {
+                setLoginError(error.message || "Invalid email or password");
+            }
         } finally {
             setIsSigningIn(false);
         }

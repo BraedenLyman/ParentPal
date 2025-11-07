@@ -20,7 +20,6 @@ router.post('/', async (req, res) => {
       return res.status(401).json({ error: 'Invalid Firebase token' });
     }
 
-    // Get a dedicated client from the pool for this transaction
     client = await pool.connect();
 
     console.log('Database client connected, querying for user...');
@@ -63,7 +62,6 @@ router.post('/', async (req, res) => {
     });
     res.status(500).json({ error: 'Failed to sign in', details: err.message });
   } finally {
-    // Always release the client back to the pool
     if (client) {
       client.release();
       console.log('Database client released');
