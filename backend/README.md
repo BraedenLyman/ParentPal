@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![ParentPal Logo](public/images/ParentPal.png)
+![ParentPal Logo](../public/images/ParentPal.png)
 
 ### REST API & Database Documentation
 
