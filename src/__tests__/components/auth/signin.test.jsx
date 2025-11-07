@@ -314,7 +314,6 @@ describe('SignIn Component', () => {
       const passwordInput = screen.getByPlaceholderText('Enter your password');
       const loginButton = screen.getByRole('button', { name: /log in/i });
 
-      // First attempt - fails
       fireEvent.change(emailInput, { target: { value: 'test@test.com' } });
       fireEvent.change(passwordInput, { target: { value: 'password' } });
       fireEvent.click(loginButton);
@@ -323,7 +322,6 @@ describe('SignIn Component', () => {
         expect(screen.getByText('First error')).toBeInTheDocument();
       });
 
-      // Second attempt - error should be cleared before attempting
       const mockUser = {
         uid: 'test-uid',
         getIdToken: jest.fn().mockResolvedValue('mock-token')
@@ -379,7 +377,6 @@ describe('SignIn Component', () => {
       fireEvent.change(passwordInput, { target: { value: 'password' } });
       fireEvent.click(loginButton);
 
-      // Button should be disabled during loading
       expect(loginButton).toBeDisabled();
 
       await waitFor(() => {
