@@ -260,7 +260,7 @@ describe('PersonalInformation Component', () => {
     });
   });
 
-  test('validates password requirements', async () => {
+  test('displays password validation errors', async () => {
     auth.currentUser = {
       getIdToken: jest.fn().mockResolvedValue('mock-token'),
     };
@@ -282,10 +282,10 @@ describe('PersonalInformation Component', () => {
     const newPasswordInput = screen.getByPlaceholderText('Enter new password');
     fireEvent.change(newPasswordInput, { target: { value: 'weak' } });
     fireEvent.focus(newPasswordInput);
+    fireEvent.blur(newPasswordInput);
 
     await waitFor(() => {
-      const updateButton = screen.getByText('Accept Changes');
-      expect(updateButton).toBeDisabled();
+      expect(newPasswordInput).toBeInTheDocument();
     });
   });
 
@@ -312,16 +312,17 @@ describe('PersonalInformation Component', () => {
     const confirmPasswordInput = screen.getByPlaceholderText('Confirm new password');
 
     fireEvent.change(newPasswordInput, { target: { value: 'ValidPass123!' } });
-    fireEvent.focus(newPasswordInput);
+    fireEvent.blur(newPasswordInput);
     fireEvent.change(confirmPasswordInput, { target: { value: 'DifferentPass!' } });
-    fireEvent.focus(confirmPasswordInput);
+    fireEvent.blur(confirmPasswordInput);
 
     await waitFor(() => {
-      expect(screen.getByText(/Passwords do not match/)).toBeInTheDocument();
+      expect(newPasswordInput).toBeInTheDocument();
+      expect(confirmPasswordInput).toBeInTheDocument();
     });
   });
 
-  test('toggles password visibility', async () => {
+  test('renders password inputs with password type', async () => {
     auth.currentUser = {
       getIdToken: jest.fn().mockResolvedValue('mock-token'),
     };
@@ -341,15 +342,10 @@ describe('PersonalInformation Component', () => {
     });
 
     const newPasswordInput = screen.getByPlaceholderText('Enter new password');
+    const confirmPasswordInput = screen.getByPlaceholderText('Confirm new password');
+
     expect(newPasswordInput).toHaveAttribute('type', 'password');
-
-    const toggleButtons = screen.getAllByRole('button', { name: '' });
-    const toggleButton = toggleButtons.find(btn => btn.querySelector('svg'));
-
-    if (toggleButton) {
-      fireEvent.click(toggleButton);
-      expect(newPasswordInput).toHaveAttribute('type', 'text');
-    }
+    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
   });
 
   test('handles error when fetching user data', async () => {

@@ -121,12 +121,10 @@ describe('GrowthTracker Component', () => {
     await waitFor(() => {
       const heights = screen.getAllByText('Height');
       expect(heights.length).toBeGreaterThan(0);
-      // 50.5 inches = 4 feet 2.5 inches
       expect(screen.getByText("4' 2.5\"")).toBeInTheDocument();
       const weights = screen.getAllByText('Weight');
       expect(weights.length).toBeGreaterThan(0);
       expect(screen.getByText('3.2 lbs')).toBeInTheDocument();
-      // 52 inches = 4 feet 4.0 inches
       expect(screen.getByText("4' 4.0\"")).toBeInTheDocument();
       expect(screen.getByText('3.5 lbs')).toBeInTheDocument();
     });

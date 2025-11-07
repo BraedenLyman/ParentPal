@@ -316,7 +316,7 @@ describe('HealthJournal Component', () => {
 
     await waitFor(() => {
       expect(axios.get).toHaveBeenCalledWith(
-        expect.stringContaining('/api/health'),
+        expect.stringContaining('/api/meds'),
         expect.objectContaining({
           params: { baby_id: 1 },
         })

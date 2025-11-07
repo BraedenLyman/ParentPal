@@ -486,4 +486,199 @@ describe('ParentAssignedTasks Component', () => {
       });
     });
   });
+
+  describe('Task Filtering', () => {
+    test('filters tasks by status (all)', async () => {
+      auth.currentUser = {
+        getIdToken: jest.fn().mockResolvedValue('mock-token'),
+      };
+
+      axios.post.mockResolvedValue({
+        data: { user: mockUserData, babyData: mockBabies },
+      });
+      axios.get
+        .mockResolvedValueOnce({ data: { babysitters: mockBabysitters } })
+        .mockResolvedValueOnce({ data: { tasks: mockTasks } });
+
+      render(
+        <BrowserRouter>
+          <ParentAssignedTasks />
+        </BrowserRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Feed baby')).toBeInTheDocument();
+        expect(screen.getByText('Change diaper')).toBeInTheDocument();
+      });
+    });
+
+    test('renders task list with filtering options', async () => {
+      auth.currentUser = {
+        getIdToken: jest.fn().mockResolvedValue('mock-token'),
+      };
+
+      axios.post.mockResolvedValue({
+        data: { user: mockUserData, babyData: mockBabies },
+      });
+      axios.get
+        .mockResolvedValueOnce({ data: { babysitters: mockBabysitters } })
+        .mockResolvedValueOnce({ data: { tasks: mockTasks } });
+
+      render(
+        <BrowserRouter>
+          <ParentAssignedTasks />
+        </BrowserRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Assigned Tasks')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Task Assignment', () => {
+    test('renders tasks with assignments', async () => {
+      auth.currentUser = {
+        getIdToken: jest.fn().mockResolvedValue('mock-token'),
+      };
+
+      axios.post.mockResolvedValue({
+        data: { user: mockUserData, babyData: mockBabies },
+      });
+      axios.get
+        .mockResolvedValueOnce({ data: { babysitters: mockBabysitters } })
+        .mockResolvedValueOnce({ data: { tasks: mockTasks } });
+
+      render(
+        <BrowserRouter>
+          <ParentAssignedTasks />
+        </BrowserRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Feed baby')).toBeInTheDocument();
+        expect(screen.getByText('Change diaper')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Empty States', () => {
+    test('handles no tasks', async () => {
+      auth.currentUser = {
+        getIdToken: jest.fn().mockResolvedValue('mock-token'),
+      };
+
+      axios.post.mockResolvedValue({
+        data: { user: mockUserData, babyData: mockBabies },
+      });
+      axios.get
+        .mockResolvedValueOnce({ data: { babysitters: mockBabysitters } })
+        .mockResolvedValueOnce({ data: { tasks: [] } });
+
+      render(
+        <BrowserRouter>
+          <ParentAssignedTasks />
+        </BrowserRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Assigned Tasks')).toBeInTheDocument();
+      });
+    });
+
+    test('handles no babysitters', async () => {
+      auth.currentUser = {
+        getIdToken: jest.fn().mockResolvedValue('mock-token'),
+      };
+
+      axios.post.mockResolvedValue({
+        data: { user: mockUserData, babyData: mockBabies },
+      });
+      axios.get
+        .mockResolvedValueOnce({ data: { babysitters: [] } })
+        .mockResolvedValueOnce({ data: { tasks: [] } });
+
+      render(
+        <BrowserRouter>
+          <ParentAssignedTasks />
+        </BrowserRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Assigned Tasks')).toBeInTheDocument();
+      });
+    });
+
+    test('handles no babies', async () => {
+      auth.currentUser = {
+        getIdToken: jest.fn().mockResolvedValue('mock-token'),
+      };
+
+      axios.post.mockResolvedValue({
+        data: { user: mockUserData, babyData: [] },
+      });
+      axios.get
+        .mockResolvedValueOnce({ data: { babysitters: mockBabysitters } })
+        .mockResolvedValueOnce({ data: { tasks: [] } });
+
+      render(
+        <BrowserRouter>
+          <ParentAssignedTasks />
+        </BrowserRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Assigned Tasks')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Task Details', () => {
+    test('displays task titles', async () => {
+      auth.currentUser = {
+        getIdToken: jest.fn().mockResolvedValue('mock-token'),
+      };
+
+      axios.post.mockResolvedValue({
+        data: { user: mockUserData, babyData: mockBabies },
+      });
+      axios.get
+        .mockResolvedValueOnce({ data: { babysitters: mockBabysitters } })
+        .mockResolvedValueOnce({ data: { tasks: mockTasks } });
+
+      render(
+        <BrowserRouter>
+          <ParentAssignedTasks />
+        </BrowserRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Feed baby')).toBeInTheDocument();
+        expect(screen.getByText('Change diaper')).toBeInTheDocument();
+      });
+    });
+
+    test('renders component with tasks', async () => {
+      auth.currentUser = {
+        getIdToken: jest.fn().mockResolvedValue('mock-token'),
+      };
+
+      axios.post.mockResolvedValue({
+        data: { user: mockUserData, babyData: mockBabies },
+      });
+      axios.get
+        .mockResolvedValueOnce({ data: { babysitters: mockBabysitters } })
+        .mockResolvedValueOnce({ data: { tasks: mockTasks } });
+
+      render(
+        <BrowserRouter>
+          <ParentAssignedTasks />
+        </BrowserRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Assigned Tasks')).toBeInTheDocument();
+      });
+    });
+  });
 });

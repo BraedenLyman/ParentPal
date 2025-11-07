@@ -391,7 +391,6 @@ describe('useBabyData Hook', () => {
         expect(result.current.selectedBaby).toEqual(mockBabyData[0]);
       });
 
-      // Change location state
       rerender({
         locationState: { baby: mockBabyData[1] }
       });
@@ -431,7 +430,6 @@ describe('useBabyData Hook', () => {
         expect(result.current.selectedBaby).toEqual(mockBabyData[0]);
       });
 
-      // Change selected baby
       result.current.setSelectedBaby(mockBabyData[1]);
 
       await waitFor(() => {
@@ -462,7 +460,6 @@ describe('useBabyData Hook', () => {
         expect.any(Error)
       );
 
-      // State should remain at defaults after error
       expect(result.current.userData).toBe(null);
       expect(result.current.babyData).toEqual([]);
     });

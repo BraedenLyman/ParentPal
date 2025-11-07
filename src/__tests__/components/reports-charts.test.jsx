@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ReportsCharts from '../../components/pages/reports/ReportsCharts';
 
-// Mock the @chakra-ui/charts module
 jest.mock('@chakra-ui/charts', () => ({
   Chart: {
     Root: ({ children }) => <div data-testid="chart-root">{children}</div>,
@@ -12,7 +11,6 @@ jest.mock('@chakra-ui/charts', () => ({
   })),
 }));
 
-// Mock recharts components
 jest.mock('recharts', () => ({
   ResponsiveContainer: ({ children }) => <div data-testid="responsive-container">{children}</div>,
   LineChart: ({ children, data }) => <div data-testid="line-chart" data-length={data.length}>{children}</div>,
@@ -162,7 +160,6 @@ describe('ReportsCharts Component', () => {
         />
       );
 
-      // Average of 8.5, 9.0, 7.5 = 8.3
       expect(screen.getByText(/Average: 8.3 hours/)).toBeInTheDocument();
     });
 
@@ -252,7 +249,6 @@ describe('ReportsCharts Component', () => {
     });
 
     test('aggregates feeding records by date', () => {
-      // Two feedings on 2024-01-01, one on 2024-01-02
       render(
         <ReportsCharts
           loading={false}
@@ -264,14 +260,13 @@ describe('ReportsCharts Component', () => {
       );
 
       expect(screen.getByTestId('bar-chart')).toBeInTheDocument();
-      // The chart should show 2 dates (Jan 1 and Jan 2)
       expect(screen.getByTestId('bar-chart')).toHaveAttribute('data-length', '2');
     });
 
     test('handles missing amount values', () => {
       const recordsWithMissingAmount = [
         { date: '2024-01-01', amount: '4' },
-        { date: '2024-01-01' }, // Missing amount
+        { date: '2024-01-01' }, 
       ];
 
       render(
@@ -392,7 +387,6 @@ describe('ReportsCharts Component', () => {
         />
       );
 
-      // Component should not render any chart for invalid selection
       expect(container.querySelector('.chartSection')).not.toBeInTheDocument();
     });
   });

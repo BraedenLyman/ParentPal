@@ -131,7 +131,6 @@ describe('HealthJournal Component', () => {
     await waitFor(() => {
       expect(screen.getByText('Tylenol')).toBeInTheDocument();
       expect(screen.getByText('Time Taken')).toBeInTheDocument();
-      // 14:30 in 24-hour format = 2:30 PM in 12-hour format
       expect(screen.getByText('2:30 PM')).toBeInTheDocument();
       expect(screen.getByText('Dosage')).toBeInTheDocument();
       expect(screen.getByText('5ml fl oz')).toBeInTheDocument();

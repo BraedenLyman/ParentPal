@@ -4,7 +4,6 @@ const signInRouter = require('../../routes/sign-in');
 const pool = require('../../db');
 const admin = require('../../firebase-admin');
 
-// Mock dependencies
 jest.mock('../../db');
 jest.mock('../../firebase-admin', () => ({
   auth: jest.fn(() => ({
@@ -12,7 +11,6 @@ jest.mock('../../firebase-admin', () => ({
   })),
 }));
 
-// Create Express app for testing
 const app = express();
 app.use(express.json());
 app.use('/api/sign-in', signInRouter);
@@ -102,8 +100,8 @@ describe('POST /api/sign-in', () => {
       };
 
       pool.query
-        .mockResolvedValueOnce({ rows: [mockTestUser] }) // First query for test user
-        .mockResolvedValueOnce({ rows: [mockUserData] }); // Second query for user data
+        .mockResolvedValueOnce({ rows: [mockTestUser] }) 
+        .mockResolvedValueOnce({ rows: [mockUserData] });
 
       const response = await request(app)
         .post('/api/sign-in')
@@ -149,8 +147,8 @@ describe('POST /api/sign-in', () => {
       ];
 
       pool.query
-        .mockResolvedValueOnce({ rows: [mockParentData] }) // User query
-        .mockResolvedValueOnce({ rows: mockBabies }); // Baby query
+        .mockResolvedValueOnce({ rows: [mockParentData] })
+        .mockResolvedValueOnce({ rows: mockBabies }); 
 
       const response = await request(app)
         .post('/api/sign-in')
@@ -184,8 +182,8 @@ describe('POST /api/sign-in', () => {
       };
 
       pool.query
-        .mockResolvedValueOnce({ rows: [mockParentData] }) // User query
-        .mockResolvedValueOnce({ rows: [] }); // Empty baby query
+        .mockResolvedValueOnce({ rows: [mockParentData] }) 
+        .mockResolvedValueOnce({ rows: [] });
 
       const response = await request(app)
         .post('/api/sign-in')
@@ -226,8 +224,6 @@ describe('POST /api/sign-in', () => {
       expect(response.status).toBe(200);
       expect(response.body.user).toEqual(mockBabysitterData);
       expect(response.body.babyData).toBe(null);
-
-      // Should only query account table, not baby table
       expect(pool.query).toHaveBeenCalledTimes(1);
       expect(pool.query).toHaveBeenCalledWith(
         'SELECT * FROM account WHERE firebase_uid = $1',
@@ -243,8 +239,8 @@ describe('POST /api/sign-in', () => {
       admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
 
       pool.query
-        .mockResolvedValueOnce({ rows: [] }) // User not found
-        .mockResolvedValueOnce({ // All users query for debugging
+        .mockResolvedValueOnce({ rows: [] })
+        .mockResolvedValueOnce({ 
           rows: [
             { firebase_uid: 'user1', first_name: 'User1', email_address: 'user1@test.com' },
           ],
@@ -412,7 +408,6 @@ describe('POST /api/sign-in', () => {
         .post('/api/sign-in')
         .send({ idToken: 'malformed-token-12345' });
 
-      // Should fall back to test mode and handle appropriately
       expect(response.status).toBeGreaterThanOrEqual(200);
     });
 

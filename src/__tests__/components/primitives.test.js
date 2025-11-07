@@ -183,13 +183,13 @@ describe('Primitives Utilities', () => {
     test('title handles empty object', () => {
       const result = title({});
       expect(result).toContain('tracking-tight');
-      expect(result).toContain('text-[2.3rem]'); // default size
+      expect(result).toContain('text-[2.3rem]'); 
     });
 
     test('subtitle handles empty object', () => {
       const result = subtitle({});
       expect(result).toContain('w-full');
-      expect(result).toContain('!w-full'); // default fullWidth
+      expect(result).toContain('!w-full'); 
     });
 
     test('title returns string type', () => {

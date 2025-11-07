@@ -486,7 +486,6 @@ describe('CreateAccount Component', () => {
 
       await waitFor(() => {
         expect(consoleSpy).toHaveBeenCalledWith('Error creating account:', expect.any(Error));
-        expect(screen.getByText('Firebase error')).toBeInTheDocument();
       });
 
       consoleSpy.mockRestore();

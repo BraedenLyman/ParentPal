@@ -124,10 +124,8 @@ describe('SleepAnalytics Component', () => {
       expect(screen.getByText('8 hrs')).toBeInTheDocument();
       const fellAsleeps = screen.getAllByText('Fell Asleep');
       expect(fellAsleeps.length).toBeGreaterThan(0);
-      // 20:30 in 24-hour format = 8:30 PM in 12-hour format
       expect(screen.getByText('8:30 PM')).toBeInTheDocument();
       expect(screen.getByText('6.5 hrs')).toBeInTheDocument();
-      // 21:00 in 24-hour format = 9:00 PM in 12-hour format
       expect(screen.getByText('9:00 PM')).toBeInTheDocument();
     });
   });

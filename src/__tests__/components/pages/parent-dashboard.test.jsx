@@ -490,7 +490,6 @@ describe('ParentDashboard Component', () => {
         expect(screen.getByText('Welcome Back!')).toBeInTheDocument();
       });
 
-      // Check for notification bell - it's rendered by FiBell icon
       const bellIcon = document.querySelector('.notification');
       expect(bellIcon).toBeInTheDocument();
     });

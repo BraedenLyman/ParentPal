@@ -127,7 +127,6 @@ describe('FeedingNotes Component', () => {
     await waitFor(() => {
       const timeFeds = screen.getAllByText('Time Fed');
       expect(timeFeds.length).toBeGreaterThan(0);
-      // 14:30 in 24-hour format = 2:30 PM in 12-hour format
       expect(screen.getByText('2:30 PM')).toBeInTheDocument();
       const fedFroms = screen.getAllByText('Fed From');
       expect(fedFroms.length).toBeGreaterThan(0);
@@ -136,8 +135,6 @@ describe('FeedingNotes Component', () => {
       expect(amounts.length).toBeGreaterThan(0);
       expect(screen.getByText('120ml fl oz')).toBeInTheDocument();
       expect(screen.getByText('Fed well, no issues')).toBeInTheDocument();
-
-      // 18:00 in 24-hour format = 6:00 PM in 12-hour format
       expect(screen.getByText('6:00 PM')).toBeInTheDocument();
       expect(screen.getByText('left-boob')).toBeInTheDocument();
       expect(screen.getByText('15min fl oz')).toBeInTheDocument();

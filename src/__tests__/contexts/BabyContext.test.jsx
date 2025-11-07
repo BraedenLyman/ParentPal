@@ -304,7 +304,6 @@ describe('BabyContext', () => {
         expect(result.current.selectedBaby).toEqual(mockBabyData[0]);
       });
 
-      // Change selected baby
       result.current.setSelectedBaby(mockBabyData[1]);
 
       await waitFor(() => {
@@ -346,7 +345,6 @@ describe('BabyContext', () => {
         expect(result.current.babies).toEqual(initialBabyData);
       });
 
-      // Mock updated data
       axios.post.mockResolvedValueOnce({
         data: {
           user: { account_type: 'parent' },
@@ -354,7 +352,6 @@ describe('BabyContext', () => {
         },
       });
 
-      // Call refresh
       result.current.refreshBabies();
 
       await waitFor(() => {
@@ -433,7 +430,6 @@ describe('BabyContext', () => {
 
       try {
         renderHook(() => useBabyContext());
-        // If we get here, the hook didn't throw, so fail the test
         expect(true).toBe(false);
       } catch (error) {
         expect(error.message).toContain('useBabyContext must be used within BabyProvider');
