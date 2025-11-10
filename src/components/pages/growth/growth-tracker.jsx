@@ -6,6 +6,7 @@ import { Modal } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
+import { FiFilter } from "react-icons/fi";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import "../pages.css";
 import { auth } from "../../../firebase/firebaseAuth";
@@ -26,7 +27,22 @@ export default function GrowthTracker() {
     const [babyData, setBabyData] = useState([]);
     const [selectedBaby, setSelectedBaby] = useState(null);
     const [growthRecords, setGrowthRecords] = useState([]);
+    const [growthFilter, setGrowthFilter] = useState("date-desc");
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (isFilterOpen && !event.target.closest('.filter-dropdown-container')) {
+                setIsFilterOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isFilterOpen]);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -148,6 +164,26 @@ export default function GrowthTracker() {
 
     const currentCategory = logCategories.find(cat => cat.value === "/growth-tracker");
 
+    const sortGrowthRecords = (records) => {
+        const sorted = [...records];
+        switch (growthFilter) {
+            case "date-desc":
+                return sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+            case "date-asc":
+                return sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+            case "weight-high":
+                return sorted.sort((a, b) => b.weight - a.weight);
+            case "weight-low":
+                return sorted.sort((a, b) => a.weight - b.weight);
+            case "height-high":
+                return sorted.sort((a, b) => b.height - a.height);
+            case "height-low":
+                return sorted.sort((a, b) => a.height - b.height);
+            default:
+                return sorted;
+        }
+    };
+
     return (
         <div className="mainDiv">
             <div className="header growthHeader">
@@ -208,13 +244,74 @@ export default function GrowthTracker() {
                 </div>
             </div>
 
-            
+            <div className="filter-dropdown-container" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '10px 20px', position: 'relative' }}>
+                <Button
+                    isIconOnly
+                    variant="light"
+                    onPress={() => setIsFilterOpen(!isFilterOpen)}
+                    style={{ minWidth: 'auto' }}
+                >
+                    <FiFilter style={{ fontSize: '20px', color: '#666' }} />
+                </Button>
+                {isFilterOpen && (
+                    <div style={{
+                        position: 'absolute',
+                        top: '100%',
+                        right: '20px',
+                        backgroundColor: 'white',
+                        border: '1px solid #e0e0e0',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                        zIndex: 1000,
+                        minWidth: '200px',
+                        marginTop: '5px'
+                    }}>
+                        {[
+                            { value: 'date-desc', label: 'Newest First' },
+                            { value: 'date-asc', label: 'Oldest First' },
+                            { value: 'weight-high', label: 'Weight (High to Low)' },
+                            { value: 'weight-low', label: 'Weight (Low to High)' },
+                            { value: 'height-high', label: 'Height (Tallest to Shortest)' },
+                            { value: 'height-low', label: 'Height (Shortest to Tallest)' }
+                        ].map((option) => (
+                            <div
+                                key={option.value}
+                                onClick={() => {
+                                    setGrowthFilter(option.value);
+                                    setIsFilterOpen(false);
+                                }}
+                                style={{
+                                    padding: '12px 16px',
+                                    cursor: 'pointer',
+                                    backgroundColor: growthFilter === option.value ? '#f0f0f0' : 'transparent',
+                                    fontWeight: growthFilter === option.value ? '600' : '400',
+                                    borderBottom: '1px solid #f0f0f0',
+                                    transition: 'background-color 0.2s'
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (growthFilter !== option.value) {
+                                        e.currentTarget.style.backgroundColor = '#f8f8f8';
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (growthFilter !== option.value) {
+                                        e.currentTarget.style.backgroundColor = 'transparent';
+                                    }
+                                }}
+                            >
+                                {option.label}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
             <Scrollbars className="scrollContainer" >
                 <div className="scrollContent">
                     {growthRecords.length === 0 ? (
                         <h1>No growth records yet</h1>
                     ) : (
-                        growthRecords.map((record) => {
+                        sortGrowthRecords(growthRecords).map((record) => {
                             const totalInches = record.height;
                             const feet = Math.floor(totalInches / 12);
                             const inches = (totalInches % 12).toFixed(1);

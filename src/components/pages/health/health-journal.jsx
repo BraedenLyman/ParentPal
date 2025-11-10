@@ -6,6 +6,7 @@ import { TimeInput, Modal } from "@heroui/react";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
+import { FiFilter } from "react-icons/fi";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import "../pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
@@ -32,6 +33,7 @@ export default function HealthJournal() {
     const [isMedsOpen, setIsMedsOpen] = useState(false);
     const [isAllergiesOpen, setIsAllergiesOpen] = useState(false);
     const [isVaccinationsOpen, setIsVaccinationsOpen] = useState(false);
+    const [isSickDayOpen, setIsSickDayOpen] = useState(false);
 
     const [medName, setMedName] = useState("");
     const [medsTimeTaken, setMedsTimeTaken] = useState("");
@@ -50,7 +52,38 @@ export default function HealthJournal() {
     const [vaccineDate, setVaccineDate] = useState("");
     const [vaccinationsRecords, setVaccinationsRecords] = useState([]);
 
+    const [sickDate, setSickDate] = useState("");
+    const [medsTaken, setMedsTaken] = useState("");
+    const [sickTemp, setSickTemp] = useState("");
+    const [sickDayRecords, setSickRecords] = useState([]);
+
+    const [medsFilter, setMedsFilter] = useState("date-desc");
+    const [allergiesFilter, setAllergiesFilter] = useState("name-asc");
+    const [vaccinationsFilter, setVaccinationsFilter] = useState("date-desc");
+    const [sickDayFilter, setSickDayFilter] = useState("date-desc");
+
+    const [isMedsFilterOpen, setIsMedsFilterOpen] = useState(false);
+    const [isAllergiesFilterOpen, setIsAllergiesFilterOpen] = useState(false);
+    const [isVaccinationsFilterOpen, setIsVaccinationsFilterOpen] = useState(false);
+    const [isSickDayFilterOpen, setIsSickDayFilterOpen] = useState(false);
+
     const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.filter-dropdown-container')) {
+                setIsMedsFilterOpen(false);
+                setIsAllergiesFilterOpen(false);
+                setIsVaccinationsFilterOpen(false);
+                setIsSickDayFilterOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     useEffect(() => {
         if (!selectedBaby) return;
@@ -298,6 +331,166 @@ export default function HealthJournal() {
         }
     };
 
+    useEffect(() => {
+        if (!selectedBaby) return;
+
+        const fetchSickDayRecords = async () => {
+            try {
+                const { data } = await axios.get(`${API_URL}/api/sickday`, {
+                    params: { baby_id: selectedBaby.baby_id },
+                    withCredentials: true,
+                });
+
+                const normalizedData = data.map(record => ({
+                    ...record,
+                    sick_id: typeof record.sick_id === 'object'
+                        ? record.sick_id.sick_id
+                        : record.sick_id
+                }));
+
+                setSickRecords(normalizedData);
+            } catch (err) {
+                console.error("Failed to fetch sick day records: ", err)
+            }
+        };
+
+        fetchSickDayRecords();
+    }, [selectedBaby]);
+
+    const handleAddSickDay = async () => {
+        setErrorMessage("");
+
+        console.log("handleAddSickDay called");
+        console.log("Form values:", { sickDate, medsTaken, sickTemp, selectedBaby });
+
+        if (!sickDate) {
+            setErrorMessage("Please fill out the date field.");
+            return;
+        }
+
+        if (!selectedBaby || !selectedBaby.baby_id) {
+            setErrorMessage("No baby selected. Please select a baby first.");
+            return;
+        }
+
+        if (sickTemp) {
+            const temp = parseFloat(sickTemp);
+            if (isNaN(temp)) {
+                setErrorMessage("Temperature must be a valid number.");
+                return;
+            }
+            if (temp < 90 || temp > 110) {
+                setErrorMessage("Please enter a valid temperature (90°F - 110°F).");
+                return;
+            }
+        }
+
+        try {
+            console.log("Sending sick day data to API...");
+            const { data: newRecord } = await axios.post(
+                `${API_URL}/api/sickday`,
+                {
+                    baby_id: selectedBaby.baby_id,
+                    date: sickDate,
+                    meds_taken: medsTaken || null,
+                    temp: sickTemp ? parseFloat(sickTemp) : null,
+                },
+                { withCredentials: true }
+            );
+
+            console.log("Sick day record added successfully:", newRecord);
+
+            const normalizedRecord = {
+                ...newRecord,
+                sick_id: typeof newRecord.sick_id === 'object'
+                    ? newRecord.sick_id.sick_id
+                    : newRecord.sick_id
+            };
+
+            setSickRecords((prev) => [...prev, normalizedRecord]);
+
+            setSickDate("");
+            setMedsTaken("");
+            setSickTemp("");
+            setErrorMessage("");
+            setIsSickDayOpen(false);
+        } catch (err) {
+            console.error("Failed to add sick day record: ", err);
+            console.error("Error response:", err.response?.data);
+            setErrorMessage(`Failed to add sick day: ${err.response?.data?.error || err.message}`);
+        }
+    };
+
+    const sortMedsRecords = (records) => {
+        const sorted = [...records];
+        switch (medsFilter) {
+            case "date-desc":
+                return sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+            case "date-asc":
+                return sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+            case "name-asc":
+                return sorted.sort((a, b) => a.medication_name.localeCompare(b.medication_name));
+            case "name-desc":
+                return sorted.sort((a, b) => b.medication_name.localeCompare(a.medication_name));
+            default:
+                return sorted;
+        }
+    };
+
+    const sortAllergiesRecords = (records) => {
+        const sorted = [...records];
+        switch (allergiesFilter) {
+            case "name-asc":
+                return sorted.sort((a, b) => a.allergy_name.localeCompare(b.allergy_name));
+            case "name-desc":
+                return sorted.sort((a, b) => b.allergy_name.localeCompare(a.allergy_name));
+            case "severity-high":
+                return sorted.sort((a, b) => {
+                    const severityOrder = { high: 3, medium: 2, low: 1 };
+                    return severityOrder[b.severity] - severityOrder[a.severity];
+                });
+            case "severity-low":
+                return sorted.sort((a, b) => {
+                    const severityOrder = { high: 3, medium: 2, low: 1 };
+                    return severityOrder[a.severity] - severityOrder[b.severity];
+                });
+            default:
+                return sorted;
+        }
+    };
+
+    const sortVaccinationsRecords = (records) => {
+        const sorted = [...records];
+        switch (vaccinationsFilter) {
+            case "date-desc":
+                return sorted.sort((a, b) => new Date(b.date_of_vaccine) - new Date(a.date_of_vaccine));
+            case "date-asc":
+                return sorted.sort((a, b) => new Date(a.date_of_vaccine) - new Date(b.date_of_vaccine));
+            case "name-asc":
+                return sorted.sort((a, b) => a.vaccination_name.localeCompare(b.vaccination_name));
+            case "name-desc":
+                return sorted.sort((a, b) => b.vaccination_name.localeCompare(a.vaccination_name));
+            default:
+                return sorted;
+        }
+    };
+
+    const sortSickDayRecords = (records) => {
+        const sorted = [...records];
+        switch (sickDayFilter) {
+            case "date-desc":
+                return sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+            case "date-asc":
+                return sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+            case "temp-high":
+                return sorted.sort((a, b) => (b.temp || 0) - (a.temp || 0));
+            case "temp-low":
+                return sorted.sort((a, b) => (a.temp || 0) - (b.temp || 0));
+            default:
+                return sorted;
+        }
+    };
+
     const isBabysitter = location.state?.isBabysitter;
 
     const allLogCategories = [
@@ -375,16 +568,60 @@ export default function HealthJournal() {
             </div>
 
             {isBabysitter ? (
-                <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column', marginTop: '20px' }}>
+                <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column', marginTop: '20px', position: 'relative' }}>
+                    <div className="filterContainer">
+                        <div className="filter-dropdown-container">
+                            <Button
+                                isIconOnly
+                                className="healthButton"
+                                onPress={() => setIsMedsFilterOpen(!isMedsFilterOpen)}
+                            >
+                                <FiFilter className="filterIcon" />
+                            </Button>
+                            {isMedsFilterOpen && (
+                                <div className="filterDropdown">
+                                    {[
+                                        { value: 'date-desc', label: 'Newest First' },
+                                        { value: 'date-asc', label: 'Oldest First' },
+                                        { value: 'name-asc', label: 'Name (A-Z)' },
+                                        { value: 'name-desc', label: 'Name (Z-A)' }
+                                    ].map((option) => (
+                                        <div
+                                            key={option.value}
+                                            onClick={() => {
+                                                setMedsFilter(option.value);
+                                                setIsMedsFilterOpen(false);
+                                            }}
+                                            className="filterOption"
+                                            onMouseEnter={(e) => {
+                                                if (medsFilter !== option.value) {
+                                                    e.currentTarget.style.backgroundColor = '#f8f8f8';
+                                                }
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                if (medsFilter !== option.value) {
+                                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                                }
+                                            }}
+                                        >
+                                            {option.label}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    
                     <Button className="addButton healthButton" onPress={() => setIsMedsOpen(true)}>
                         Add
                     </Button>
+        
                     <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
                         <div className="scrollContent" style={{ minHeight: '100%' }}>
                             {medsRecords.length === 0 ? (
                                 <h1>No med records yet</h1>
                             ) : (
-                                medsRecords.map((record, index) => (
+                                sortMedsRecords(medsRecords).map((record, index) => (
                                     <Card className="cardEntry" key={record.meds_id || `med-${index}`} shadow="sm">
                                         <div className="cardEntryContent">
                                             <div className="cardEntryHeader">
@@ -422,16 +659,56 @@ export default function HealthJournal() {
                     className="tabs"
                 >
                     <Tab key="meds" title="Medications">
-                        <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
-                            <Button className="addButton healthButton" onPress={() => setIsMedsOpen(true)}>
-                                Add
-                            </Button>
+                        <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                            <div className="filterContainer">
+                                <div className="filter-dropdown-container">
+                                    <Button
+                                        isIconOnly
+                                        className="healthButton"
+                                        onPress={() => setIsMedsFilterOpen(!isMedsFilterOpen)}
+                                    >
+                                        <FiFilter className="filterIcon" />
+                                    </Button>
+                                    {isMedsFilterOpen && (
+                                        <div className="filterDropdown">
+                                            {[
+                                                { value: 'date-desc', label: 'Newest First' },
+                                                { value: 'date-asc', label: 'Oldest First' },
+                                                { value: 'name-asc', label: 'Name (A-Z)' },
+                                                { value: 'name-desc', label: 'Name (Z-A)' }
+                                            ].map((option) => (
+                                                <div
+                                                    key={option.value}
+                                                    onClick={() => {
+                                                        setMedsFilter(option.value);
+                                                        setIsMedsFilterOpen(false);
+                                                    }}
+                                                    className="filterOption"
+                                                    onMouseEnter={(e) => {
+                                                        if (medsFilter !== option.value) {
+                                                            e.currentTarget.style.backgroundColor = '#f8f8f8';
+                                                        }
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        if (medsFilter !== option.value) {
+                                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                                        }
+                                                    }}
+                                                >
+                                                    {option.label}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            
                             <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
                                 <div className="scrollContent" style={{ minHeight: '100%' }}>
                                     {medsRecords.length === 0 ? (
                                         <h1>No med records yet</h1>
                                     ) : (
-                                        medsRecords.map((record, index) => (
+                                        sortMedsRecords(medsRecords).map((record, index) => (
                                             <Card className="cardEntry" key={record.meds_id || `med-${index}`} shadow="sm">
                                                 <div className="cardEntryContent">
                                                     <div className="cardEntryHeader">
@@ -460,20 +737,68 @@ export default function HealthJournal() {
                                     )}
                                 </div>
                             </Scrollbars>
+    
+                            <Button className="addButton healthButton" onPress={() => setIsMedsOpen(true)}>
+                                Add
+                            </Button>
                         </div>
                     </Tab>
 
                     <Tab key="allergies" title="Allergies">
-                        <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                            <div className="filterContainer">
+                                <div className="filter-dropdown-container">
+                                    <Button
+                                        isIconOnly
+                                        className="healthButton"
+                                        onPress={() => setIsAllergiesFilterOpen(!isAllergiesFilterOpen)}
+                                    >
+                                        <FiFilter className="filterIcon" />
+                                    </Button>
+                                    {isAllergiesFilterOpen && (
+                                        <div className="filterDropdown">
+                                            {[
+                                                { value: 'name-asc', label: 'Name (A-Z)' },
+                                                { value: 'name-desc', label: 'Name (Z-A)' },
+                                                { value: 'severity-high', label: 'Severity (High to Low)' },
+                                                { value: 'severity-low', label: 'Severity (Low to High)' }
+                                            ].map((option) => (
+                                                <div
+                                                    key={option.value}
+                                                    onClick={() => {
+                                                        setAllergiesFilter(option.value);
+                                                        setIsAllergiesFilterOpen(false);
+                                                    }}
+                                                    className="filterOption"
+                                                    onMouseEnter={(e) => {
+                                                        if (allergiesFilter !== option.value) {
+                                                            e.currentTarget.style.backgroundColor = '#f8f8f8';
+                                                        }
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        if (allergiesFilter !== option.value) {
+                                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                                        }
+                                                    }}
+                                                >
+                                                    {option.label}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
                             <Button className="addButton healthButton" onPress={() => setIsAllergiesOpen(true)}>
                                 Add
                             </Button>
+                          
                             <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
                                 <div className="scrollContent" style={{ minHeight: '100%' }}>
                                     {allergiesRecords.length === 0 ? (
                                         <h1>No allergy records yet</h1>
                                     ) : (
-                                        allergiesRecords.map((record, index) => (
+                                        sortAllergiesRecords(allergiesRecords).map((record, index) => (
                                             <Card className="cardEntry" key={record.allergy_id || `allergy-${index}`} shadow="sm">
                                                 <div className="cardEntryContent">
                                                     <div className="cardEntryHeader">
@@ -505,21 +830,150 @@ export default function HealthJournal() {
                     </Tab>
 
                     <Tab key="vaccinations" title="Vaccinations">
-                        <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                            <div className="filterContainer">
+                                <div className="filter-dropdown-container">
+                                    <Button
+                                        isIconOnly
+                                        className="healthButton"
+                                        onPress={() => setIsVaccinationsFilterOpen(!isVaccinationsFilterOpen)}
+                                    >
+                                        <FiFilter className="filterIcon" />
+                                    </Button>
+                                    {isVaccinationsFilterOpen && (
+                                        <div className="filterDropdown">
+                                            {[
+                                                { value: 'date-desc', label: 'Newest First' },
+                                                { value: 'date-asc', label: 'Oldest First' },
+                                                { value: 'name-asc', label: 'Name (A-Z)' },
+                                                { value: 'name-desc', label: 'Name (Z-A)' }
+                                            ].map((option) => (
+                                                <div
+                                                    key={option.value}
+                                                    onClick={() => {
+                                                        setVaccinationsFilter(option.value);
+                                                        setIsVaccinationsFilterOpen(false);
+                                                    }}
+                                                    className="filterOption"
+                                                    onMouseEnter={(e) => {
+                                                        if (vaccinationsFilter !== option.value) {
+                                                            e.currentTarget.style.backgroundColor = '#f8f8f8';
+                                                        }
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        if (vaccinationsFilter !== option.value) {
+                                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                                        }
+                                                    }}
+                                                >
+                                                    {option.label}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>   
+                            
                             <Button className="addButton healthButton" onPress={() => setIsVaccinationsOpen(true)}>
                                 Add
                             </Button>
+                           
                             <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
                                 <div className="scrollContent" style={{ minHeight: '100%' }}>
                                     {vaccinationsRecords.length === 0 ? (
                                         <h1>No vaccinations records yet</h1>
                                     ) : (
-                                        vaccinationsRecords.map((record, index) => (
+                                        sortVaccinationsRecords(vaccinationsRecords).map((record, index) => (
                                             <Card className="cardEntry" key={record.vaccine_id || `vaccine-${index}`} shadow="sm">
                                                 <div className="cardEntryContent">
                                                     <div className="cardEntryHeader">
                                                         <h3 className="cardEntryTitle">{record.vaccination_name}</h3>
                                                         <span className="cardEntryDate">{typeof record.date_of_vaccine === 'string' ? new Date(record.date_of_vaccine).toLocaleDateString() : new Date(record.date_of_vaccine).toLocaleDateString()}</span>
+                                                    </div>
+                                                </div>
+                                            </Card>
+                                        ))
+                                    )}
+                                </div>
+                            </Scrollbars>
+                        </div>
+                    </Tab>
+
+                    <Tab key="sickdays" title="Sick Days">
+                        <div style={{ width: '100%', height: 'calc(100vh - 300px)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                            <div className="filterContainer">
+                                <div className="filter-dropdown-container">
+                                    <Button
+                                        isIconOnly
+                                        className="healthButton"
+                                        onPress={() => setIsSickDayFilterOpen(!isSickDayFilterOpen)}
+
+                                    >
+                                        <FiFilter className="filterIcon" />
+                                    </Button>
+                                    {isSickDayFilterOpen && (
+                                        <div className="filterDropdown">
+                                            {[
+                                                { value: 'date-desc', label: 'Newest First' },
+                                                { value: 'date-asc', label: 'Oldest First' },
+                                                { value: 'temp-high', label: 'Temp (High to Low)' },
+                                                { value: 'temp-low', label: 'Temp (Low to High)' }
+                                            ].map((option) => (
+                                                <div
+                                                    key={option.value}
+                                                    onClick={() => {
+                                                        setSickDayFilter(option.value);
+                                                        setIsSickDayFilterOpen(false);
+                                                    }}
+                                                    className="filterOption"
+                                                    onMouseEnter={(e) => {
+                                                        if (sickDayFilter !== option.value) {
+                                                            e.currentTarget.style.backgroundColor = '#f8f8f8';
+                                                        }
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        if (sickDayFilter !== option.value) {
+                                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                                        }
+                                                    }}
+                                                >
+                                                    {option.label}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            
+                            <Button className="addButton healthButton" onPress={() => setIsSickDayOpen(true)}>
+                                Add
+                            </Button>
+
+                            <Scrollbars className="scrollContainer" style={{ flex: 1, minHeight: 0 }}>
+                                <div className="scrollContent" style={{ minHeight: '100%' }}>
+                                    {sickDayRecords.length === 0 ? (
+                                        <h1>No sick day records yet</h1>
+                                    ) : (
+                                        sortSickDayRecords(sickDayRecords).map((record, index) => (
+                                            <Card className="cardEntry" key={record.sick_id || `sick-${index}`} shadow="sm">
+                                                <div className="cardEntryContent">
+                                                    <div className="cardEntryHeader">
+                                                        <h3 className="cardEntryTitle">Sick Day</h3>
+                                                        <span className="cardEntryDate">{typeof record.date === 'string' ? new Date(record.date).toLocaleDateString() : new Date(record.date).toLocaleDateString()}</span>
+                                                    </div>
+                                                    <div className="cardEntryDetails">
+                                                        {record.temp && (
+                                                            <div className="cardEntryDetail">
+                                                                <span className="cardEntryDetailLabel">Temperature</span>
+                                                                <span className="cardEntryDetailValue">{record.temp}°F</span>
+                                                            </div>
+                                                        )}
+                                                        {record.meds_taken && (
+                                                            <div className="cardEntryDetail">
+                                                                <span className="cardEntryDetailLabel">Meds Taken</span>
+                                                                <span className="cardEntryDetailValue">{record.meds_taken}</span>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </Card>
@@ -747,6 +1201,71 @@ export default function HealthJournal() {
                             Cancel
                         </Button>
                         <Button onPress={handleAddVaccinations}>
+                            Add
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+            <Modal
+                isOpen={isSickDayOpen}
+                onOpenChange={setIsSickDayOpen}
+                className="modal"
+            >
+                <ModalContent>
+                    <ModalHeader>Add Sick Day</ModalHeader>
+                        <ModalBody className="modalBody">
+                            {errorMessage && (
+                                <p className="errorMessage">
+                                    {errorMessage}
+                                </p>
+                            )}
+                                <Input
+                                    variant="bordered"
+                                    type="date"
+                                    label="Date"
+                                    isRequired
+                                    value={sickDate}
+                                    onChange={(e) => setSickDate(e.target.value)}
+                                />
+                                <Input
+                                    variant="bordered"
+                                    label="Medications Taken"
+                                    placeholder="Enter medications taken"
+                                    type="text"
+                                    maxLength={500}
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', ' ', ','];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^[a-zA-Z0-9.,!?\-'() ]$/.test(e.key)) return;
+                                        e.preventDefault();
+                                    }}
+                                    value={medsTaken}
+                                    onChange={(e) => setMedsTaken(e.target.value)}
+                                />
+                                <Input
+                                    variant="bordered"
+                                    label="Temperature (°F)"
+                                    placeholder="Enter temperature"
+                                    type="number"
+                                    step="0.1"
+                                    min="0"
+                                    onKeyDown={(e) => {
+                                        const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End', '.'];
+                                        if ((e.ctrlKey || e.metaKey) || allowedKeys.includes(e.key) || /^\d$/.test(e.key)) {
+                                            if (e.key === '.' && e.target.value.includes('.')) e.preventDefault();
+                                            return;
+                                        }
+                                        e.preventDefault();
+                                    }}
+                                    value={sickTemp}
+                                    onChange={(e) => setSickTemp(e.target.value)}
+                                />
+                        </ModalBody>
+                    <ModalFooter className="modalFooter">
+                        <Button onPress={() => setIsSickDayOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button onPress={handleAddSickDay}>
                             Add
                         </Button>
                     </ModalFooter>

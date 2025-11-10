@@ -1,8 +1,3 @@
-/* ========================================
-   Modern Dashboard Styles
-   Uses Design System Variables
-   ======================================== */
-
 html, body {
     height: 100%;
     margin: 0;
@@ -17,10 +12,6 @@ html, body {
     flex-direction: column;
     padding-bottom: 80px;
 }
-
-/* ========================================
-   Header Section
-   ======================================== */
 
 .header {
     width: 100%;
@@ -73,10 +64,6 @@ html, body {
     transform: scale(1.1);
 }
 
-/* ========================================
-   User Info Section
-   ======================================== */
-
 .userInfoMain {
     padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm) var(--spacing-md);
     max-width: 1400px;
@@ -107,10 +94,6 @@ html, body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
-
-/* ========================================
-   Baby/Child Cards
-   ======================================== */
 
 .cardContainer {
     display: flex;
@@ -205,10 +188,6 @@ html, body {
     margin: var(--spacing-xs) 0 0 0;
 }
 
-/* ========================================
-   Selected Child Section
-   ======================================== */
-
 .userTitle {
     display: flex;
     flex-direction: column;
@@ -237,10 +216,6 @@ html, body {
     color: var(--text-primary);
     margin: var(--spacing-md) 0 0 0;
 }
-
-/* ========================================
-   Report Sections
-   ======================================== */
 
 .reportSections {
     margin: var(--spacing-md);
@@ -317,7 +292,6 @@ html, body {
     transform: translateY(-2px);
 }
 
-/* Category Colors with Gradients */
 .growthCard {
     background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
 }
@@ -345,10 +319,6 @@ html, body {
 .photoGalleryCard {
     background: linear-gradient(135deg, #f687b3 0%, #ed64a6 100%);
 }
-
-/* ========================================
-   Empty States
-   ======================================== */
 
 .no-access-card {
     text-align: center;
@@ -388,10 +358,6 @@ html, body {
     font-size: var(--text-base);
     margin: 0;
 }
-
-/* ========================================
-   Responsive Design
-   ======================================== */
 
 @media (max-width: 768px) {
     .welcomeMessage {
@@ -436,10 +402,6 @@ html, body {
         grid-template-columns: 1fr;
     }
 }
-
-/* ========================================
-   Animations
-   ======================================== */
 
 .cardInfo,
 .cardReports,

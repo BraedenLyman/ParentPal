@@ -6,6 +6,7 @@ import { Modal } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
+import { FiFilter } from "react-icons/fi";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import "../../pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
@@ -26,6 +27,8 @@ export default function FeedingNotes() {
     const [feedAmount, setFeedAmount] = useState("");
     const [feedNotes, setFeedNotes] = useState("");
     const [feedingRecords, setFeedingRecords] = useState([]);
+    const [feedingFilter, setFeedingFilter] = useState("date-desc");
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -37,6 +40,19 @@ export default function FeedingNotes() {
         const hour12 = hour % 12 || 12;
         return `${hour12}:${minutes} ${ampm}`;
     };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (isFilterOpen && !event.target.closest('.filter-dropdown-container')) {
+                setIsFilterOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isFilterOpen]);
 
     useEffect(() => {
         if (!selectedBaby) return;
@@ -113,12 +129,31 @@ export default function FeedingNotes() {
         { value: "/observation-notes", label: "Observation Notes" }
     ];
 
-    // Filter out Growth Tracker for babysitters
     const logCategories = isBabysitter
         ? allLogCategories.filter(cat => cat.value !== "/growth-tracker")
         : allLogCategories;
 
     const currentCategory = logCategories.find(cat => cat.value === "/feeding-notes");
+
+    const sortFeedingRecords = (records) => {
+        const sorted = [...records];
+        switch (feedingFilter) {
+            case "date-desc":
+                return sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+            case "date-asc":
+                return sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+            case "amount-high":
+                return sorted.sort((a, b) => b.amount - a.amount);
+            case "amount-low":
+                return sorted.sort((a, b) => a.amount - b.amount);
+            case "type-asc":
+                return sorted.sort((a, b) => a.feed_type.localeCompare(b.feed_type));
+            case "type-desc":
+                return sorted.sort((a, b) => b.feed_type.localeCompare(a.feed_type));
+            default:
+                return sorted;
+        }
+    };
 
     return (
         <div className="mainDiv">
@@ -180,13 +215,12 @@ export default function FeedingNotes() {
                 </div>
             </div>
 
-            
             <Scrollbars className="scrollContainer" >
                 <div className="scrollContent">
                     {feedingRecords.length === 0 ? (
                         <h1>No feeding records yet</h1>
                     ) : (
-                        feedingRecords.map((record) => (
+                        sortFeedingRecords(feedingRecords).map((record) => (
                             <Card className="cardEntry" key={record.feeding_id} shadow="sm">
                                 <div className="cardEntryContent">
                                     <div className="cardEntryHeader">
@@ -219,11 +253,76 @@ export default function FeedingNotes() {
                     )}
                 </div>
             </Scrollbars>
-          
+
             <Navbar />
-            <Button className="addButton feedingButton" onPress={() => setIsOpen(true)}>
-                Add
-            </Button >
+            <div style={{ position: 'fixed', top: '120px', right: '20px', zIndex: 999 }}>
+                <div className="filter-dropdown-container" style={{ position: 'relative' }}>
+                    <Button
+                        isIconOnly
+                        variant="light"
+                        onPress={() => setIsFilterOpen(!isFilterOpen)}
+                        className="feedingButton"
+                        style={{ minWidth: '50px', height: '50px', borderRadius: '50%', backgroundColor: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
+                    >
+                        <FiFilter style={{ fontSize: '20px', color: '#666' }} />
+                    </Button>
+                    {isFilterOpen && (
+                        <div style={{
+                            position: 'absolute',
+                            top: '60px',
+                            right: '0',
+                            backgroundColor: 'white',
+                            border: '1px solid #e0e0e0',
+                            borderRadius: '8px',
+                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                            zIndex: 1000,
+                            minWidth: '220px'
+                        }}>
+                            {[
+                                { value: 'date-desc', label: 'Newest First' },
+                                { value: 'date-asc', label: 'Oldest First' },
+                                { value: 'amount-high', label: 'Amount (High to Low)' },
+                                { value: 'amount-low', label: 'Amount (Low to High)' },
+                                { value: 'type-asc', label: 'Type (A-Z)' },
+                                { value: 'type-desc', label: 'Type (Z-A)' }
+                            ].map((option) => (
+                                <div
+                                    key={option.value}
+                                    onClick={() => {
+                                        setFeedingFilter(option.value);
+                                        setIsFilterOpen(false);
+                                    }}
+                                    style={{
+                                        padding: '12px 16px',
+                                        cursor: 'pointer',
+                                        backgroundColor: feedingFilter === option.value ? '#f0f0f0' : 'transparent',
+                                        fontWeight: feedingFilter === option.value ? '600' : '400',
+                                        borderBottom: '1px solid #f0f0f0',
+                                        transition: 'background-color 0.2s'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        if (feedingFilter !== option.value) {
+                                            e.currentTarget.style.backgroundColor = '#f8f8f8';
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (feedingFilter !== option.value) {
+                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                        }
+                                    }}
+                                >
+                                    {option.label}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+            <div style={{ position: 'fixed', bottom: '90px', right: '20px', zIndex: 999 }}>
+                <Button className="addButton feedingButton" onPress={() => setIsOpen(true)}>
+                    Add
+                </Button>
+            </div>
 
             <Modal isOpen={isOpen} onOpenChange={setIsOpen} className="modal">
                 <ModalContent >

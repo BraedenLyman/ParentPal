@@ -7,6 +7,7 @@ import { Modal } from "@heroui/react";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
+import { FiFilter } from "react-icons/fi";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import "../pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
@@ -24,6 +25,8 @@ export default function SleepAnalytics() {
     const [time, setTime] = useState("");
     const [date, setDate] = useState("");
     const [sleepRecords, setSleepRecords] = useState([]);
+    const [sleepFilter, setSleepFilter] = useState("date-desc");
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     const formatTime12Hour = (time24) => {
@@ -34,6 +37,19 @@ export default function SleepAnalytics() {
         const hour12 = hour % 12 || 12;
         return `${hour12}:${minutes} ${ampm}`;
     };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (isFilterOpen && !event.target.closest('.filter-dropdown-container')) {
+                setIsFilterOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isFilterOpen]);
 
     useEffect(() => {
         if (!selectedBaby) return;
@@ -110,6 +126,22 @@ export default function SleepAnalytics() {
 
     const currentCategory = logCategories.find(cat => cat.value === "/sleep-analytics");
 
+    const sortSleepRecords = (records) => {
+        const sorted = [...records];
+        switch (sleepFilter) {
+            case "date-desc":
+                return sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+            case "date-asc":
+                return sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+            case "duration-high":
+                return sorted.sort((a, b) => b.sleep_duration - a.sleep_duration);
+            case "duration-low":
+                return sorted.sort((a, b) => a.sleep_duration - b.sleep_duration);
+            default:
+                return sorted;
+        }
+    };
+
     return (
         <div className="mainDiv">
            <div className="header sleepHeader">
@@ -170,12 +202,53 @@ export default function SleepAnalytics() {
             </div>
         </div>
 
+        <div className="filterContainer">
+            <Button
+                isIconOnly
+                onPress={() => setIsFilterOpen(!isFilterOpen)}
+                className="sleepButton"
+            >
+                <FiFilter className="filterIcon"/>
+            </Button>
+            {isFilterOpen && (
+                <div className="filterDropdown">
+                    {[
+                        { value: 'date-desc', label: 'Newest First' },
+                        { value: 'date-asc', label: 'Oldest First' },
+                        { value: 'duration-high', label: 'Duration (Longest to Shortest)' },
+                        { value: 'duration-low', label: 'Duration (Shortest to Longest)' }
+                    ].map((option) => (
+                        <div
+                            key={option.value}
+                            onClick={() => {
+                                setSleepFilter(option.value);
+                                setIsFilterOpen(false);
+                            }}
+                            className="filterOption"
+                            onMouseEnter={(e) => {
+                                if (sleepFilter !== option.value) {
+                                    e.currentTarget.style.backgroundColor = '#f8f8f8';
+                                }
+                            }}
+                            onMouseLeave={(e) => {
+                                if (sleepFilter !== option.value) {
+                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                }
+                            }}
+                        >
+                            {option.label}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+
         <Scrollbars className="scrollContainer" >
             <div className="scrollContent">
                 {sleepRecords.length === 0 ? (
                     <h1>No sleep records yet</h1>
                 ) : (
-                    sleepRecords.map((record) => (
+                    sortSleepRecords(sleepRecords).map((record) => (
                         <Card className="cardEntry" key={record.sleep_id} shadow="sm">
                             <div className="cardEntryContent">
                                 <div className="cardEntryHeader">
@@ -198,11 +271,14 @@ export default function SleepAnalytics() {
                 )}
             </div>
         </Scrollbars>
+       
+        <div style={{ position: 'fixed', bottom: '90px', right: '20px', zIndex: 999 }}>
+            <Button className="addButton sleepButton" onPress={() => setIsOpen(true)}>
+                Add
+            </Button>
+        </div>
 
         <Navbar />
-        <Button className="addButton sleepButton" onPress={() => setIsOpen(true)}>
-            Add
-        </Button >
 
             <Modal isOpen={isOpen} onOpenChange={setIsOpen} className="modal">
                 <ModalContent >
