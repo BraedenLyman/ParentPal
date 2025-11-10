@@ -1,4 +1,4 @@
-# ParentPal Backend API Documentation
+# ParentPal Backend
 
 <div align="center">
 
