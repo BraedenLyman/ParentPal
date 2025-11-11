@@ -151,7 +151,7 @@ describe('GrowthTracker Component', () => {
       expect(screen.getByText('Growth Tracker')).toBeInTheDocument();
     });
 
-    const backButton = screen.getByRole('button', { name: '' });
+    const backButton = document.querySelector('.back-button-header');
     fireEvent.click(backButton);
 
     expect(mockNavigate).toHaveBeenCalledWith('/parent-dashboard');

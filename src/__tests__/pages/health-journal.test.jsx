@@ -203,7 +203,7 @@ describe('HealthJournal Component', () => {
       expect(screen.getByText('Health Journal')).toBeInTheDocument();
     });
 
-    const backButton = screen.getByRole('button', { name: '' });
+    const backButton = document.querySelector('.back-button-header');
     fireEvent.click(backButton);
 
     expect(mockNavigate).toHaveBeenCalledWith('/parent-dashboard');

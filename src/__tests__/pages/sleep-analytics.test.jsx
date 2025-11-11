@@ -151,7 +151,7 @@ describe('SleepAnalytics Component', () => {
       expect(screen.getByText('Sleep Analytics')).toBeInTheDocument();
     });
 
-    const backButton = screen.getByRole('button', { name: '' });
+    const backButton = document.querySelector('.back-button-header');
     fireEvent.click(backButton);
 
     expect(mockNavigate).toHaveBeenCalledWith('/parent-dashboard');

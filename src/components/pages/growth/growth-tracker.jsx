@@ -244,66 +244,49 @@ export default function GrowthTracker() {
                 </div>
             </div>
 
-            <div className="filter-dropdown-container" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '10px 20px', position: 'relative' }}>
-                <Button
-                    isIconOnly
-                    variant="light"
-                    onPress={() => setIsFilterOpen(!isFilterOpen)}
-                    style={{ minWidth: 'auto' }}
-                >
-                    <FiFilter style={{ fontSize: '20px', color: '#666' }} />
-                </Button>
-                {isFilterOpen && (
-                    <div style={{
-                        position: 'absolute',
-                        top: '100%',
-                        right: '20px',
-                        backgroundColor: 'white',
-                        border: '1px solid #e0e0e0',
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                        zIndex: 1000,
-                        minWidth: '200px',
-                        marginTop: '5px'
-                    }}>
-                        {[
-                            { value: 'date-desc', label: 'Newest First' },
-                            { value: 'date-asc', label: 'Oldest First' },
-                            { value: 'weight-high', label: 'Weight (High to Low)' },
-                            { value: 'weight-low', label: 'Weight (Low to High)' },
-                            { value: 'height-high', label: 'Height (Tallest to Shortest)' },
-                            { value: 'height-low', label: 'Height (Shortest to Tallest)' }
-                        ].map((option) => (
-                            <div
-                                key={option.value}
-                                onClick={() => {
-                                    setGrowthFilter(option.value);
-                                    setIsFilterOpen(false);
-                                }}
-                                style={{
-                                    padding: '12px 16px',
-                                    cursor: 'pointer',
-                                    backgroundColor: growthFilter === option.value ? '#f0f0f0' : 'transparent',
-                                    fontWeight: growthFilter === option.value ? '600' : '400',
-                                    borderBottom: '1px solid #f0f0f0',
-                                    transition: 'background-color 0.2s'
-                                }}
-                                onMouseEnter={(e) => {
-                                    if (growthFilter !== option.value) {
-                                        e.currentTarget.style.backgroundColor = '#f8f8f8';
-                                    }
-                                }}
-                                onMouseLeave={(e) => {
-                                    if (growthFilter !== option.value) {
-                                        e.currentTarget.style.backgroundColor = 'transparent';
-                                    }
-                                }}
-                            >
-                                {option.label}
-                            </div>
-                        ))}
-                    </div>
-                )}
+            <div className="filterContainer">
+                <div className="filter-dropdown-container">
+                    <Button
+                        isIconOnly
+                        onPress={() => setIsFilterOpen(!isFilterOpen)}
+                        className="growthButton"
+                    >
+                        <FiFilter className="filterIcon" />
+                    </Button>
+                    {isFilterOpen && (
+                        <div className="filterDropdown">
+                            {[
+                                { value: 'date-desc', label: 'Newest First' },
+                                { value: 'date-asc', label: 'Oldest First' },
+                                { value: 'weight-high', label: 'Weight (High to Low)' },
+                                { value: 'weight-low', label: 'Weight (Low to High)' },
+                                { value: 'height-high', label: 'Height (Tallest to Shortest)' },
+                                { value: 'height-low', label: 'Height (Shortest to Tallest)' }
+                            ].map((option) => (
+                                <div
+                                    key={option.value}
+                                    onClick={() => {
+                                        setGrowthFilter(option.value);
+                                        setIsFilterOpen(false);
+                                    }}
+                                    className="filterOption"
+                                    onMouseEnter={(e) => {
+                                        if (growthFilter !== option.value) {
+                                            e.currentTarget.style.backgroundColor = '#f8f8f8';
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (growthFilter !== option.value) {
+                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                        }
+                                    }}
+                                >
+                                    {option.label}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
 
             <Scrollbars className="scrollContainer" >
@@ -341,10 +324,11 @@ export default function GrowthTracker() {
                 </div>
             </Scrollbars>
           
-            <Navbar />
             <Button className="addButton growthButton" onPress={() => setIsOpen(true)}>
                 Add
             </Button >
+
+            <Navbar />
 
             <Modal isOpen={isOpen} onOpenChange={setIsOpen} className="modal">
                 <ModalContent >

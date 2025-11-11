@@ -150,7 +150,7 @@ describe('ObservationNotes Component', () => {
       expect(screen.getByText('Observation Notes')).toBeInTheDocument();
     });
 
-    const backButton = screen.getByRole('button', { name: '' });
+    const backButton = document.querySelector('.back-button-header');
     fireEvent.click(backButton);
 
     expect(mockNavigate).toHaveBeenCalledWith('/parent-dashboard');
