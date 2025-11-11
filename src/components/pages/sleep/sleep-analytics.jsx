@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
 import { FiFilter } from "react-icons/fi";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import "../pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
@@ -27,6 +28,9 @@ export default function SleepAnalytics() {
     const [sleepRecords, setSleepRecords] = useState([]);
     const [sleepFilter, setSleepFilter] = useState("date-desc");
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [editingRecord, setEditingRecord] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [recordToDelete, setRecordToDelete] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
 
     const formatTime12Hour = (time24) => {
@@ -86,28 +90,86 @@ export default function SleepAnalytics() {
         const formattedTime = `${String(time.hour).padStart(2, "0")}:${String(time.minute).padStart(2, "0")}`;
 
         try {
-            const { data: newRecord } = await axios.post(
-                `${API_URL}/api/sleep`,
-                {
-                    baby_id: selectedBaby.baby_id,
-                    sleep_duration: sleepHours,
-                    time_fell_asleep: formattedTime,
-                    date,
-                },
-                { withCredentials: true }
-            );
+            if (editingRecord) {
+                // Update existing record
+                const { data: updatedRecord } = await axios.put(
+                    `${API_URL}/api/sleep/${editingRecord.sleep_id}`,
+                    {
+                        baby_id: selectedBaby.baby_id,
+                        sleep_duration: sleepHours,
+                        time_fell_asleep: formattedTime,
+                        date,
+                    },
+                    { withCredentials: true }
+                );
 
-            setSleepRecords((prev) => [...prev, newRecord]);
+                setSleepRecords((prev) =>
+                    prev.map((record) =>
+                        record.sleep_id === editingRecord.sleep_id
+                            ? updatedRecord
+                            : record
+                    )
+                );
+            } else {
+                // Add new record
+                const { data: newRecord } = await axios.post(
+                    `${API_URL}/api/sleep`,
+                    {
+                        baby_id: selectedBaby.baby_id,
+                        sleep_duration: sleepHours,
+                        time_fell_asleep: formattedTime,
+                        date,
+                    },
+                    { withCredentials: true }
+                );
+
+                setSleepRecords((prev) => [...prev, newRecord]);
+            }
 
             setHours("");
             setTime("");
             setDate("");
             setErrorMessage("");
+            setEditingRecord(null);
             setIsOpen(false);
         } catch (err) {
-            console.error("Failed to add sleep record: ", err);
-            setErrorMessage("Failed to add sleep record. Please try again.")
+            console.error("Failed to save sleep record: ", err);
+            setErrorMessage("Failed to save sleep record. Please try again.")
         }
+    };
+
+    const handleEditSleep = (record) => {
+        setEditingRecord(record);
+        setHours(record.sleep_duration.toString());
+        const [hour, minute] = record.time_fell_asleep.split(":");
+        setTime({ hour: parseInt(hour), minute: parseInt(minute) });
+        setDate(record.date);
+        setIsOpen(true);
+    };
+
+    const handleDeleteSleep = async () => {
+        if (!recordToDelete) return;
+
+        try {
+            await axios.delete(
+                `${API_URL}/api/sleep/${recordToDelete.sleep_id}`,
+                { withCredentials: true }
+            );
+
+            setSleepRecords((prev) =>
+                prev.filter((record) => record.sleep_id !== recordToDelete.sleep_id)
+            );
+
+            setIsDeleteModalOpen(false);
+            setRecordToDelete(null);
+        } catch (err) {
+            console.error("Failed to delete sleep record: ", err);
+        }
+    };
+
+    const openDeleteModal = (record) => {
+        setRecordToDelete(record);
+        setIsDeleteModalOpen(true);
     };
 
     const isBabysitter = location.state?.isBabysitter;
@@ -267,6 +329,25 @@ export default function SleepAnalytics() {
                                             <span className="cardEntryDetailValue">{formatTime12Hour(record.time_fell_asleep)}</span>
                                         </div>
                                     </div>
+                                    <div className="editDeleteButtonContainer">
+                                        <Button
+                                            isIconOnly
+                                            size="sm"
+                                            variant="light"
+                                            onPress={() => handleEditSleep(record)}
+                                        >
+                                            <FiEdit2 size={16} />
+                                        </Button>
+                                        <Button
+                                            isIconOnly
+                                            size="sm"
+                                            variant="light"
+                                            color="danger"
+                                            onPress={() => openDeleteModal(record)}
+                                        >
+                                            <FiTrash2 size={16} />
+                                        </Button>
+                                    </div>
                                 </div>
                             </Card>
                         ))
@@ -274,7 +355,14 @@ export default function SleepAnalytics() {
                 </div>
             </Scrollbars>
        
-            <Button className="addButton sleepButton" onPress={() => setIsOpen(true)}>
+            <Button className="addButton sleepButton" onPress={() => {
+                setEditingRecord(null);
+                setHours("");
+                setTime("");
+                setDate("");
+                setErrorMessage("");
+                setIsOpen(true);
+            }}>
                 Add
             </Button>
 
@@ -283,7 +371,7 @@ export default function SleepAnalytics() {
             <Modal isOpen={isOpen} onOpenChange={setIsOpen} className="modal">
                 <ModalContent >
                     <ModalHeader className="modalHeader">
-                        Add Sleep
+                        {editingRecord ? "Edit Sleep" : "Add Sleep"}
                     </ModalHeader>
                     <ModalBody className="modalBody">
                         {errorMessage && (
@@ -332,12 +420,41 @@ export default function SleepAnalytics() {
                         
                     </ModalBody>
                     <ModalFooter className="modalFooter">
-                        <Button onPress={() => setIsOpen(false)}>
+                        <Button onPress={() => {
+                            setIsOpen(false);
+                            setEditingRecord(null);
+                            setHours("");
+                            setTime("");
+                            setDate("");
+                            setErrorMessage("");
+                        }}>
                             Cancel
                         </Button>
 
                         <Button onPress={handleAddSleep}>
-                            Add
+                            {editingRecord ? "Save" : "Add"}
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+            <Modal isOpen={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen} className="modal">
+                <ModalContent>
+                    <ModalHeader className="modalHeader">
+                        Delete Sleep Record
+                    </ModalHeader>
+                    <ModalBody className="modalBody">
+                        <p>Are you sure you want to delete this sleep record? This action cannot be undone.</p>
+                    </ModalBody>
+                    <ModalFooter className="modalFooter">
+                        <Button onPress={() => {
+                            setIsDeleteModalOpen(false);
+                            setRecordToDelete(null);
+                        }}>
+                            Cancel
+                        </Button>
+                        <Button color="danger" onPress={handleDeleteSleep}>
+                            Delete
                         </Button>
                     </ModalFooter>
                 </ModalContent>

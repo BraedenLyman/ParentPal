@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
 import { FiFilter } from "react-icons/fi";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import "../../pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
@@ -25,6 +26,9 @@ export default function ObservationNotes() {
     const [observationRecords, setObservationRecords] = useState([]);
     const [observationFilter, setObservationFilter] = useState("date-desc");
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [editingRecord, setEditingRecord] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [recordToDelete, setRecordToDelete] = useState(null);
 
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -67,26 +71,79 @@ export default function ObservationNotes() {
         }
 
         try {
-            const { data: newRecord } = await axios.post(
-                `${API_URL}/api/observation`,
-                {
-                    baby_id: selectedBaby.baby_id,
-                    priority_level: priorityLevel,
-                    notes: obsNotes,
-                },
-                { withCredentials: true }
-            );
+            if (editingRecord) {
+                const { data: updatedRecord } = await axios.put(
+                    `${API_URL}/api/observation/${editingRecord.observation_id}`,
+                    {
+                        baby_id: selectedBaby.baby_id,
+                        priority_level: priorityLevel,
+                        notes: obsNotes,
+                    },
+                    { withCredentials: true }
+                );
 
-            setObservationRecords((prev) => [...prev, newRecord]);
+                setObservationRecords((prev) =>
+                    prev.map((record) =>
+                        record.observation_id === editingRecord.observation_id
+                            ? updatedRecord
+                            : record
+                    )
+                );
+            } else {
+                const { data: newRecord } = await axios.post(
+                    `${API_URL}/api/observation`,
+                    {
+                        baby_id: selectedBaby.baby_id,
+                        priority_level: priorityLevel,
+                        notes: obsNotes,
+                    },
+                    { withCredentials: true }
+                );
+
+                setObservationRecords((prev) => [...prev, newRecord]);
+            }
 
             setPriorityLevel("");
             setObsNotes("");
             setErrorMessage("");
+            setEditingRecord(null);
             setIsOpen(false);
         } catch (err) {
-            console.error("Failed to add observation record: ", err);
-            setErrorMessage("Failed to add observation record: ", err)
+            console.error("Failed to save observation record: ", err);
+            setErrorMessage("Failed to save observation record")
         }
+    };
+
+    const handleEditObservation = (record) => {
+        setEditingRecord(record);
+        setPriorityLevel(record.priority_level);
+        setObsNotes(record.notes);
+        setIsOpen(true);
+    };
+
+    const handleDeleteObservation = async () => {
+        if (!recordToDelete) return;
+
+        try {
+            await axios.delete(
+                `${API_URL}/api/observation/${recordToDelete.observation_id}`,
+                { withCredentials: true }
+            );
+
+            setObservationRecords((prev) =>
+                prev.filter((record) => record.observation_id !== recordToDelete.observation_id)
+            );
+
+            setIsDeleteModalOpen(false);
+            setRecordToDelete(null);
+        } catch (err) {
+            console.error("Failed to delete observation record: ", err);
+        }
+    };
+
+    const openDeleteModal = (record) => {
+        setRecordToDelete(record);
+        setIsDeleteModalOpen(true);
     };
 
 
@@ -241,7 +298,7 @@ export default function ObservationNotes() {
                                 <div className="cardEntryContent">
                                     <div className="cardEntryHeader">
                                         <h3 className="cardEntryTitle">Observation</h3>
-                                        <span 
+                                        <span
                                             className="cardEntryDate"
                                             style={{
                                                 backgroundColor: record.priority_level === 'high' ? '#fee' : record.priority_level === 'medium' ? '#ffeaa7' : '#d1f2eb',
@@ -256,6 +313,25 @@ export default function ObservationNotes() {
                                     <div>
                                         <p>{record.notes}</p>
                                     </div>
+                                    <div className="editDeleteButtonContainer">
+                                        <Button
+                                            isIconOnly
+                                            size="sm"
+                                            variant="light"
+                                            onPress={() => handleEditObservation(record)}
+                                        >
+                                            <FiEdit2 size={16} />
+                                        </Button>
+                                        <Button
+                                            isIconOnly
+                                            size="sm"
+                                            variant="light"
+                                            color="danger"
+                                            onPress={() => openDeleteModal(record)}
+                                        >
+                                            <FiTrash2 size={16} />
+                                        </Button>
+                                    </div>
                                 </div>
                             </Card>
                         ))
@@ -263,7 +339,13 @@ export default function ObservationNotes() {
                 </div>
             </Scrollbars>
             
-            <Button className="addButton observationButton" onPress={() => setIsOpen(true)}>
+            <Button className="addButton observationButton" onPress={() => {
+                setEditingRecord(null);
+                setPriorityLevel("");
+                setObsNotes("");
+                setErrorMessage("");
+                setIsOpen(true);
+            }}>
                 Add
             </Button>
 
@@ -272,7 +354,7 @@ export default function ObservationNotes() {
             <Modal isOpen={isOpen} onOpenChange={setIsOpen} className="modal">
                 <ModalContent >
                     <ModalHeader className="modalHeader">
-                        Add Observation
+                        {editingRecord ? "Edit Observation" : "Add Observation"}
                     </ModalHeader>
                         <ModalBody className="modalBody">
                             {errorMessage && (
@@ -310,12 +392,40 @@ export default function ObservationNotes() {
                                 />
                         </ModalBody>
                     <ModalFooter className="modalFooter">
-                        <Button onPress={() => setIsOpen(false)}>
+                        <Button onPress={() => {
+                            setIsOpen(false);
+                            setEditingRecord(null);
+                            setPriorityLevel("");
+                            setObsNotes("");
+                            setErrorMessage("");
+                        }}>
                             Cancel
                         </Button>
 
                         <Button onPress={handleAddObservation}>
-                            Add
+                            {editingRecord ? "Save" : "Add"}
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+            <Modal isOpen={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen} className="modal">
+                <ModalContent>
+                    <ModalHeader className="modalHeader">
+                        Delete Observation
+                    </ModalHeader>
+                    <ModalBody className="modalBody">
+                        <p>Are you sure you want to delete this observation? This action cannot be undone.</p>
+                    </ModalBody>
+                    <ModalFooter className="modalFooter">
+                        <Button onPress={() => {
+                            setIsDeleteModalOpen(false);
+                            setRecordToDelete(null);
+                        }}>
+                            Cancel
+                        </Button>
+                        <Button color="danger" onPress={handleDeleteObservation}>
+                            Delete
                         </Button>
                     </ModalFooter>
                 </ModalContent>

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiBell } from "react-icons/fi";
 import { FiFilter } from "react-icons/fi";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import "../pages.css";
 import { auth } from "../../../firebase/firebaseAuth";
@@ -29,6 +30,9 @@ export default function GrowthTracker() {
     const [growthRecords, setGrowthRecords] = useState([]);
     const [growthFilter, setGrowthFilter] = useState("date-desc");
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [editingRecord, setEditingRecord] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [recordToDelete, setRecordToDelete] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
@@ -123,29 +127,88 @@ export default function GrowthTracker() {
         const totalInches = feet * 12 + inches;
 
         try {
-            const { data: newRecord } = await axios.post(
-                `${API_URL}/api/growth`,
-                {
-                    baby_id: selectedBaby.baby_id,
-                    height: totalInches,
-                    weight: weightLbs,
-                    date,
-                },
-                { withCredentials: true }
-            );
+            if (editingRecord) {
+                const { data: updatedRecord } = await axios.put(
+                    `${API_URL}/api/growth/${editingRecord.growth_id}`,
+                    {
+                        baby_id: selectedBaby.baby_id,
+                        height: totalInches,
+                        weight: weightLbs,
+                        date,
+                    },
+                    { withCredentials: true }
+                );
 
-            setGrowthRecords((prev) => [...prev, newRecord]);
+                setGrowthRecords((prev) =>
+                    prev.map((record) =>
+                        record.growth_id === editingRecord.growth_id
+                            ? updatedRecord
+                            : record
+                    )
+                );
+            } else {
+                const { data: newRecord } = await axios.post(
+                    `${API_URL}/api/growth`,
+                    {
+                        baby_id: selectedBaby.baby_id,
+                        height: totalInches,
+                        weight: weightLbs,
+                        date,
+                    },
+                    { withCredentials: true }
+                );
+
+                setGrowthRecords((prev) => [...prev, newRecord]);
+            }
 
             setHeightFeet("");
             setHeightInches("");
             setWeight("");
             setDate("");
             setErrorMessage("");
+            setEditingRecord(null);
             setIsOpen(false);
         } catch (err) {
-            console.error("Failed to add growth record: ", err);
-            setErrorMessage("Failed to add growth record. Please try again.");
+            console.error("Failed to save growth record: ", err);
+            setErrorMessage("Failed to save growth record. Please try again.");
         }
+    };
+
+    const handleEditGrowth = (record) => {
+        setEditingRecord(record);
+        const totalInches = record.height;
+        const feet = Math.floor(totalInches / 12);
+        const inches = (totalInches % 12).toFixed(1);
+        setHeightFeet(feet.toString());
+        setHeightInches(inches);
+        setWeight(record.weight.toString());
+        setDate(record.date);
+        setIsOpen(true);
+    };
+
+    const handleDeleteGrowth = async () => {
+        if (!recordToDelete) return;
+
+        try {
+            await axios.delete(
+                `${API_URL}/api/growth/${recordToDelete.growth_id}`,
+                { withCredentials: true }
+            );
+
+            setGrowthRecords((prev) =>
+                prev.filter((record) => record.growth_id !== recordToDelete.growth_id)
+            );
+
+            setIsDeleteModalOpen(false);
+            setRecordToDelete(null);
+        } catch (err) {
+            console.error("Failed to delete growth record: ", err);
+        }
+    };
+
+    const openDeleteModal = (record) => {
+        setRecordToDelete(record);
+        setIsDeleteModalOpen(true);
     };
 
     const isBabysitter = location.state?.isBabysitter;
@@ -316,6 +379,26 @@ export default function GrowthTracker() {
                                                 <span className="cardEntryDetailValue">{record.weight} lbs</span>
                                             </div>
                                         </div>
+                                        <div className="editDeleteButtonContainer">
+                                            <Button
+                                                isIconOnly
+                                                size="sm"
+                                                variant="light"
+                                                onPress={() => handleEditGrowth(record)}
+                                            >
+                                                <FiEdit2 size={16} />
+                                            </Button>
+                                            <Button
+                                                isIconOnly
+                                                size="sm"
+                                                variant="light"
+                                                color="danger"
+                                                onPress={() => openDeleteModal(record)}
+                                                
+                                            >
+                                                <FiTrash2 size={16} />
+                                            </Button>
+                                        </div>
                                     </div>
                                 </Card>
                             );
@@ -324,7 +407,15 @@ export default function GrowthTracker() {
                 </div>
             </Scrollbars>
           
-            <Button className="addButton growthButton" onPress={() => setIsOpen(true)}>
+            <Button className="addButton growthButton" onPress={() => {
+                setEditingRecord(null);
+                setHeightFeet("");
+                setHeightInches("");
+                setWeight("");
+                setDate("");
+                setErrorMessage("");
+                setIsOpen(true);
+            }}>
                 Add
             </Button >
 
@@ -333,7 +424,7 @@ export default function GrowthTracker() {
             <Modal isOpen={isOpen} onOpenChange={setIsOpen} className="modal">
                 <ModalContent >
                     <ModalHeader className="modalHeader">
-                        Add Growth
+                        {editingRecord ? "Edit Growth" : "Add Growth"}
                     </ModalHeader>
                     <ModalBody className="modalBody">
                         {errorMessage && (
@@ -413,12 +504,42 @@ export default function GrowthTracker() {
                       
                     </ModalBody>
                     <ModalFooter className="modalFooter">
-                        <Button onPress={() => setIsOpen(false)}>
+                        <Button onPress={() => {
+                            setIsOpen(false);
+                            setEditingRecord(null);
+                            setHeightFeet("");
+                            setHeightInches("");
+                            setWeight("");
+                            setDate("");
+                            setErrorMessage("");
+                        }}>
                             Cancel
                         </Button>
 
                         <Button onPress={handleAddGrowth}>
-                            Add
+                            {editingRecord ? "Save" : "Add"}
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+            <Modal isOpen={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen} className="modal">
+                <ModalContent>
+                    <ModalHeader className="modalHeader">
+                        Delete Growth Record
+                    </ModalHeader>
+                    <ModalBody className="modalBody">
+                        <p>Are you sure you want to delete this growth record? This action cannot be undone.</p>
+                    </ModalBody>
+                    <ModalFooter className="modalFooter">
+                        <Button onPress={() => {
+                            setIsDeleteModalOpen(false);
+                            setRecordToDelete(null);
+                        }}>
+                            Cancel
+                        </Button>
+                        <Button color="danger" onPress={handleDeleteGrowth}>
+                            Delete
                         </Button>
                     </ModalFooter>
                 </ModalContent>

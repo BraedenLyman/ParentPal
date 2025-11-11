@@ -33,14 +33,59 @@ router.post('/', validateFeedingData, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO feeding (baby_id, time_fed, date, fed_from, type_of_food, amount, notes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING feeding_id',
+            'INSERT INTO feeding (baby_id, time_fed, date, fed_from, type_of_food, amount, notes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
             [baby_id, time_fed, date, fed_from, type_of_food, amount, notes]
         );
 
-        res.status(201).json({ feeding_id: result.rows[0].feeding_id, baby_id, time_fed, date, fed_from, type_of_food, amount, notes });
+        res.status(201).json(result.rows[0]);
     } catch (err) {
         console.error('Error adding feeding record:', err);
         res.status(500).json({ error: 'Failed to add feeding record' });
+    }
+});
+
+router.put('/:feeding_id', validateFeedingData, async (req, res) => {
+    const { feeding_id } = req.params;
+    const { baby_id, time_fed, date, fed_from, type_of_food, amount, notes } = req.body;
+
+    if (!baby_id || !time_fed || !date || !fed_from || !type_of_food) {
+        return res.status(400).json({ error: 'baby_id, time_fed, date, fed_from, and type_of_food are required' });
+    }
+
+    try {
+        const result = await pool.query(
+            'UPDATE feeding SET baby_id = $1, time_fed = $2, date = $3, fed_from = $4, type_of_food = $5, amount = $6, notes = $7 WHERE feeding_id = $8 RETURNING *',
+            [baby_id, time_fed, date, fed_from, type_of_food, amount, notes, feeding_id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Feeding record not found' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error updating feeding record:', err);
+        res.status(500).json({ error: 'Failed to update feeding record' });
+    }
+});
+
+router.delete('/:feeding_id', async (req, res) => {
+    const { feeding_id } = req.params;
+
+    try {
+        const result = await pool.query(
+            'DELETE FROM feeding WHERE feeding_id = $1 RETURNING feeding_id',
+            [feeding_id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Feeding record not found' });
+        }
+
+        res.json({ message: 'Feeding record deleted successfully', feeding_id: result.rows[0].feeding_id });
+    } catch (err) {
+        console.error('Error deleting feeding record:', err);
+        res.status(500).json({ error: 'Failed to delete feeding record' });
     }
 });
 

@@ -22,14 +22,17 @@ const validateNumeric = (value, fieldName, min = null, max = null) => {
 };
 
 const validateAlphanumericText = (value, fieldName, maxLength = 500, required = true) => {
-  if (!value || value.trim() === '') {
+  // Convert to string if it's a number
+  const stringValue = typeof value === 'number' ? value.toString() : value;
+
+  if (!stringValue || stringValue.trim() === '') {
     if (required) {
       return { valid: false, message: `${fieldName} is required` };
     }
     return { valid: true, value: '' };
   }
 
-  const trimmed = value.trim();
+  const trimmed = stringValue.trim();
 
   if (trimmed.length > maxLength) {
     return { valid: false, message: `${fieldName} must not exceed ${maxLength} characters` };
@@ -103,7 +106,7 @@ const validateGrowthData = (req, res, next) => {
   }
 
   if (req.body.height !== undefined) {
-    const heightValidation = validateNumeric(req.body.height, 0, 100);
+    const heightValidation = validateNumeric(req.body.height, 'Height', 0, 100);
     if (!heightValidation.valid) {
       errors.push(heightValidation.message);
     } else {

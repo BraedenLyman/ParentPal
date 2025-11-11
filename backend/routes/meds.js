@@ -27,21 +27,65 @@ router.get('/', async (req, res) => {
 router.post('/', validateMedicationData, async (req, res) => {
     const { baby_id, medication_name, time_taken, date, dosage, symptoms } = req.body;
 
-    // Fixed syntax error: comma changed to ||
     if (!baby_id || !medication_name || !time_taken || !date || !dosage || !symptoms) {
         return res.status(400).json({ error: 'baby_id, medication_name, time_taken, date, dosage and symptoms are required' });
     }
 
     try {
         const result = await pool.query(
-            'INSERT INTO medications (baby_id, medication_name, time_taken, date, dosage, symptoms) VALUES ($1, $2, $3, $4, $5, $6) RETURNING med_id',
+            'INSERT INTO medications (baby_id, medication_name, time_taken, date, dosage, symptoms) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
             [baby_id, medication_name, time_taken, date, dosage, symptoms]
         );
 
-        res.status(201).json({ meds_id: result.rows[0].med_id, baby_id, medication_name, time_taken, date, dosage, symptoms });
+        res.status(201).json(result.rows[0]);
     } catch (err) {
         console.error('Error adding meds record:', err);
         res.status(500).json({ error: 'Failed to add meds record' });
+    }
+});
+
+router.put('/:med_id', validateMedicationData, async (req, res) => {
+    const { med_id } = req.params;
+    const { baby_id, medication_name, time_taken, date, dosage, symptoms } = req.body;
+
+    if (!baby_id || !medication_name || !time_taken || !date || !dosage || !symptoms) {
+        return res.status(400).json({ error: 'baby_id, medication_name, time_taken, date, dosage and symptoms are required' });
+    }
+
+    try {
+        const result = await pool.query(
+            'UPDATE medications SET baby_id = $1, medication_name = $2, time_taken = $3, date = $4, dosage = $5, symptoms = $6 WHERE med_id = $7 RETURNING *',
+            [baby_id, medication_name, time_taken, date, dosage, symptoms, med_id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Medication record not found' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error updating meds record:', err);
+        res.status(500).json({ error: 'Failed to update meds record' });
+    }
+});
+
+router.delete('/:med_id', async (req, res) => {
+    const { med_id } = req.params;
+
+    try {
+        const result = await pool.query(
+            'DELETE FROM medications WHERE med_id = $1 RETURNING med_id',
+            [med_id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Medication record not found' });
+        }
+
+        res.json({ message: 'Medication record deleted successfully', med_id: result.rows[0].med_id });
+    } catch (err) {
+        console.error('Error deleting meds record:', err);
+        res.status(500).json({ error: 'Failed to delete meds record' });
     }
 });
 

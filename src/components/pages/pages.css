@@ -447,3 +447,16 @@ section[role="dialog"],
     cursor: pointer;
     border-bottom: 1px solid #f0f0f0;
 }
+
+.editDeleteButtonContainer {
+    display: 'flex';
+    justify-content: 'flex-end';
+    margin-left: auto;
+    gap: '8px';
+    margin-Top: '12px' 
+}
+
+.editDeleteButtonIcon {
+    min-width: '32px';
+    height: '32px';
+}

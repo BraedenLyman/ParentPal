@@ -33,14 +33,59 @@ router.post('/', validateObservationData, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO observation (baby_id, priority_level, notes) VALUES ($1, $2, $3) RETURNING observation_id',
+            'INSERT INTO observation (baby_id, priority_level, notes) VALUES ($1, $2, $3) RETURNING *',
             [baby_id, priority_level, notes]
         );
 
-        res.status(201).json({ observation_id: result.rows[0], baby_id, priority_level, notes });
+        res.status(201).json(result.rows[0]);
     } catch (err) {
         console.error('Error adding observation record:', err);
         res.status(500).json({ error: 'Failed to add observation record' });
+    }
+});
+
+router.put('/:observation_id', validateObservationData, async (req, res) => {
+    const { observation_id } = req.params;
+    const { baby_id, priority_level, notes } = req.body;
+
+    if (!baby_id || !priority_level) {
+        return res.status(400).json({ error: 'baby_id and priority_level are required' });
+    }
+
+    try {
+        const result = await pool.query(
+            'UPDATE observation SET baby_id = $1, priority_level = $2, notes = $3 WHERE observation_id = $4 RETURNING *',
+            [baby_id, priority_level, notes, observation_id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Observation record not found' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error updating observation record:', err);
+        res.status(500).json({ error: 'Failed to update observation record' });
+    }
+});
+
+router.delete('/:observation_id', async (req, res) => {
+    const { observation_id } = req.params;
+
+    try {
+        const result = await pool.query(
+            'DELETE FROM observation WHERE observation_id = $1 RETURNING observation_id',
+            [observation_id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Observation record not found' });
+        }
+
+        res.json({ message: 'Observation record deleted successfully', observation_id: result.rows[0].observation_id });
+    } catch (err) {
+        console.error('Error deleting observation record:', err);
+        res.status(500).json({ error: 'Failed to delete observation record' });
     }
 });
 
