@@ -215,6 +215,51 @@ export default function FeedingNotes() {
                 </div>
             </div>
 
+            <div className="filterContainer">
+                <div className="filter-dropdown-container">
+                    <Button
+                        isIconOnly
+                        onPress={() => setIsFilterOpen(!isFilterOpen)}
+                        className="feedingButton"
+                    >
+                        <FiFilter className="filterIcon" />
+                    </Button>
+                    {isFilterOpen && (
+                        <div className="filterDropdown">
+                            {[
+                                { value: 'date-desc', label: 'Newest First' },
+                                { value: 'date-asc', label: 'Oldest First' },
+                                { value: 'amount-high', label: 'Amount (High to Low)' },
+                                { value: 'amount-low', label: 'Amount (Low to High)' },
+                                { value: 'type-asc', label: 'Type (A-Z)' },
+                                { value: 'type-desc', label: 'Type (Z-A)' }
+                            ].map((option) => (
+                                <div
+                                    key={option.value}
+                                    onClick={() => {
+                                        setFeedingFilter(option.value);
+                                        setIsFilterOpen(false);
+                                    }}
+                                    className="filterOption"
+                                    onMouseEnter={(e) => {
+                                        if (feedingFilter !== option.value) {
+                                            e.currentTarget.style.backgroundColor = '#f8f8f8';
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (feedingFilter !== option.value) {
+                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                        }
+                                    }}
+                                >
+                                    {option.label}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+            
             <Scrollbars className="scrollContainer" >
                 <div className="scrollContent">
                     {feedingRecords.length === 0 ? (
@@ -254,75 +299,11 @@ export default function FeedingNotes() {
                 </div>
             </Scrollbars>
 
+            <Button className="addButton feedingButton" onPress={() => setIsOpen(true)}>
+                Add
+            </Button>
+            
             <Navbar />
-            <div style={{ position: 'fixed', top: '120px', right: '20px', zIndex: 999 }}>
-                <div className="filter-dropdown-container" style={{ position: 'relative' }}>
-                    <Button
-                        isIconOnly
-                        variant="light"
-                        onPress={() => setIsFilterOpen(!isFilterOpen)}
-                        className="feedingButton"
-                        style={{ minWidth: '50px', height: '50px', borderRadius: '50%', backgroundColor: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
-                    >
-                        <FiFilter style={{ fontSize: '20px', color: '#666' }} />
-                    </Button>
-                    {isFilterOpen && (
-                        <div style={{
-                            position: 'absolute',
-                            top: '60px',
-                            right: '0',
-                            backgroundColor: 'white',
-                            border: '1px solid #e0e0e0',
-                            borderRadius: '8px',
-                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                            zIndex: 1000,
-                            minWidth: '220px'
-                        }}>
-                            {[
-                                { value: 'date-desc', label: 'Newest First' },
-                                { value: 'date-asc', label: 'Oldest First' },
-                                { value: 'amount-high', label: 'Amount (High to Low)' },
-                                { value: 'amount-low', label: 'Amount (Low to High)' },
-                                { value: 'type-asc', label: 'Type (A-Z)' },
-                                { value: 'type-desc', label: 'Type (Z-A)' }
-                            ].map((option) => (
-                                <div
-                                    key={option.value}
-                                    onClick={() => {
-                                        setFeedingFilter(option.value);
-                                        setIsFilterOpen(false);
-                                    }}
-                                    style={{
-                                        padding: '12px 16px',
-                                        cursor: 'pointer',
-                                        backgroundColor: feedingFilter === option.value ? '#f0f0f0' : 'transparent',
-                                        fontWeight: feedingFilter === option.value ? '600' : '400',
-                                        borderBottom: '1px solid #f0f0f0',
-                                        transition: 'background-color 0.2s'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        if (feedingFilter !== option.value) {
-                                            e.currentTarget.style.backgroundColor = '#f8f8f8';
-                                        }
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        if (feedingFilter !== option.value) {
-                                            e.currentTarget.style.backgroundColor = 'transparent';
-                                        }
-                                    }}
-                                >
-                                    {option.label}
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </div>
-            <div style={{ position: 'fixed', bottom: '90px', right: '20px', zIndex: 999 }}>
-                <Button className="addButton feedingButton" onPress={() => setIsOpen(true)}>
-                    Add
-                </Button>
-            </div>
 
             <Modal isOpen={isOpen} onOpenChange={setIsOpen} className="modal">
                 <ModalContent >

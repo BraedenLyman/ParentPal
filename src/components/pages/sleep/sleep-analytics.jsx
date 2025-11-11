@@ -145,140 +145,140 @@ export default function SleepAnalytics() {
     return (
         <div className="mainDiv">
            <div className="header sleepHeader">
-            <div className="headerContainer">
-                <Button
-                    isIconOnly
-                    variant="light"
-                    onPress={() => navigate(isBabysitter ? "/babysitter-dashboard" : "/parent-dashboard")}
-                    className="back-button-header"
-                >
-                    <ArrowLeftIcon className="w-6 h-6" />
-                </Button>
-                <Image
-                    alt="Parent Pal Logo"
-                    src="/images/ParentPal.png"
-                    width={80}
-                    className="logo"
-                />
-                <FiBell className="notification"/>
-            </div>
-            <div className="headerTitle">
-                <h1>{selectedBaby?.first_name || "Baby"}'s Sleep</h1>
-            </div>
-            <div className="userInfo">
-                <div className="logCategorySelect">
-                    <Select
-                        options={logCategories}
-                        value={currentCategory}
-                        onChange={(option) => {
-                            if (option) {
-                                navigate(option.value, { state: { baby: selectedBaby, user: userData, isBabysitter } });
-                            }
-                        }}
-                        placeholder="Select Log"
-                        isSearchable={false}
+                <div className="headerContainer">
+                    <Button
+                        isIconOnly
+                        variant="light"
+                        onPress={() => navigate(isBabysitter ? "/babysitter-dashboard" : "/parent-dashboard")}
+                        className="back-button-header"
+                    >
+                        <ArrowLeftIcon className="w-6 h-6" />
+                    </Button>
+                    <Image
+                        alt="Parent Pal Logo"
+                        src="/images/ParentPal.png"
+                        width={80}
+                        className="logo"
                     />
+                    <FiBell className="notification"/>
                 </div>
-                <div className="babySelect">
-                    <Select
-                        options={babyData.map(baby => ({
-                            value: baby.baby_id,
-                            label: baby.first_name
-                        }))}
-                        value={selectedBaby ? {
-                            value: selectedBaby.baby_id,
-                            label: selectedBaby.first_name
-                        } : null}
-                        onChange={(option) => {
-                            if (option) {
-                                const baby = babyData.find(b => b.baby_id === option.value);
-                                setSelectedBaby(baby);
-                            }
-                        }}
-                        placeholder="Select Baby"
-                        isSearchable={false}
-                    />
+                <div className="headerTitle">
+                    <h1>{selectedBaby?.first_name || "Baby"}'s Sleep</h1>
+                </div>
+                <div className="userInfo">
+                    <div className="logCategorySelect">
+                        <Select
+                            options={logCategories}
+                            value={currentCategory}
+                            onChange={(option) => {
+                                if (option) {
+                                    navigate(option.value, { state: { baby: selectedBaby, user: userData, isBabysitter } });
+                                }
+                            }}
+                            placeholder="Select Log"
+                            isSearchable={false}
+                        />
+                    </div>
+                    <div className="babySelect">
+                        <Select
+                            options={babyData.map(baby => ({
+                                value: baby.baby_id,
+                                label: baby.first_name
+                            }))}
+                            value={selectedBaby ? {
+                                value: selectedBaby.baby_id,
+                                label: selectedBaby.first_name
+                            } : null}
+                            onChange={(option) => {
+                                if (option) {
+                                    const baby = babyData.find(b => b.baby_id === option.value);
+                                    setSelectedBaby(baby);
+                                }
+                            }}
+                            placeholder="Select Baby"
+                            isSearchable={false}
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div className="filterContainer">
-            <Button
-                isIconOnly
-                onPress={() => setIsFilterOpen(!isFilterOpen)}
-                className="sleepButton"
-            >
-                <FiFilter className="filterIcon"/>
-            </Button>
-            {isFilterOpen && (
-                <div className="filterDropdown">
-                    {[
-                        { value: 'date-desc', label: 'Newest First' },
-                        { value: 'date-asc', label: 'Oldest First' },
-                        { value: 'duration-high', label: 'Duration (Longest to Shortest)' },
-                        { value: 'duration-low', label: 'Duration (Shortest to Longest)' }
-                    ].map((option) => (
-                        <div
-                            key={option.value}
-                            onClick={() => {
-                                setSleepFilter(option.value);
-                                setIsFilterOpen(false);
-                            }}
-                            className="filterOption"
-                            onMouseEnter={(e) => {
-                                if (sleepFilter !== option.value) {
-                                    e.currentTarget.style.backgroundColor = '#f8f8f8';
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                if (sleepFilter !== option.value) {
-                                    e.currentTarget.style.backgroundColor = 'transparent';
-                                }
-                            }}
-                        >
-                            {option.label}
+            <div className="filterContainer">
+                <div className="filter-dropdown-container">
+                    <Button
+                        isIconOnly
+                        onPress={() => setIsFilterOpen(!isFilterOpen)}
+                        className="sleepButton"
+                    >
+                        <FiFilter className="filterIcon"/>
+                    </Button>
+                    {isFilterOpen && (
+                        <div className="filterDropdown">
+                            {[
+                                { value: 'date-desc', label: 'Newest First' },
+                                { value: 'date-asc', label: 'Oldest First' },
+                                { value: 'duration-high', label: 'Duration (Longest to Shortest)' },
+                                { value: 'duration-low', label: 'Duration (Shortest to Longest)' }
+                            ].map((option) => (
+                                <div
+                                    key={option.value}
+                                    onClick={() => {
+                                        setSleepFilter(option.value);
+                                        setIsFilterOpen(false);
+                                    }}
+                                    className="filterOption"
+                                    onMouseEnter={(e) => {
+                                        if (sleepFilter !== option.value) {
+                                            e.currentTarget.style.backgroundColor = '#f8f8f8';
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (sleepFilter !== option.value) {
+                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                        }
+                                    }}
+                                >
+                                    {option.label}
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    )}
                 </div>
-            )}
-        </div>
-
-        <Scrollbars className="scrollContainer" >
-            <div className="scrollContent">
-                {sleepRecords.length === 0 ? (
-                    <h1>No sleep records yet</h1>
-                ) : (
-                    sortSleepRecords(sleepRecords).map((record) => (
-                        <Card className="cardEntry" key={record.sleep_id} shadow="sm">
-                            <div className="cardEntryContent">
-                                <div className="cardEntryHeader">
-                                    <h3 className="cardEntryTitle">Sleep Record</h3>
-                                    <span className="cardEntryDate">{new Date(record.date).toLocaleDateString()}</span>
-                                </div>
-                                <div className="cardEntryDetails">
-                                    <div className="cardEntryDetail">
-                                        <span className="cardEntryDetailLabel">Duration</span>
-                                        <span className="cardEntryDetailValue">{record.sleep_duration} hrs</span>
-                                    </div>
-                                    <div className="cardEntryDetail">
-                                        <span className="cardEntryDetailLabel">Fell Asleep</span>
-                                        <span className="cardEntryDetailValue">{formatTime12Hour(record.time_fell_asleep)}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </Card>
-                    ))
-                )}
             </div>
-        </Scrollbars>
+
+            <Scrollbars className="scrollContainer" >
+                <div className="scrollContent">
+                    {sleepRecords.length === 0 ? (
+                        <h1>No sleep records yet</h1>
+                    ) : (
+                        sortSleepRecords(sleepRecords).map((record) => (
+                            <Card className="cardEntry" key={record.sleep_id} shadow="sm">
+                                <div className="cardEntryContent">
+                                    <div className="cardEntryHeader">
+                                        <h3 className="cardEntryTitle">Sleep Record</h3>
+                                        <span className="cardEntryDate">{new Date(record.date).toLocaleDateString()}</span>
+                                    </div>
+                                    <div className="cardEntryDetails">
+                                        <div className="cardEntryDetail">
+                                            <span className="cardEntryDetailLabel">Duration</span>
+                                            <span className="cardEntryDetailValue">{record.sleep_duration} hrs</span>
+                                        </div>
+                                        <div className="cardEntryDetail">
+                                            <span className="cardEntryDetailLabel">Fell Asleep</span>
+                                            <span className="cardEntryDetailValue">{formatTime12Hour(record.time_fell_asleep)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))
+                    )}
+                </div>
+            </Scrollbars>
        
-        <div style={{ position: 'fixed', bottom: '90px', right: '20px', zIndex: 999 }}>
             <Button className="addButton sleepButton" onPress={() => setIsOpen(true)}>
                 Add
             </Button>
-        </div>
 
-        <Navbar />
+            <Navbar />
 
             <Modal isOpen={isOpen} onOpenChange={setIsOpen} className="modal">
                 <ModalContent >
@@ -329,7 +329,7 @@ export default function SleepAnalytics() {
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
                         />
-                      
+                        
                     </ModalBody>
                     <ModalFooter className="modalFooter">
                         <Button onPress={() => setIsOpen(false)}>
