@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', validateSleepData, async (req, res) => {
-    const { baby_id, sleep_duration, time_fell_asleep, date } = req.body;
+    const { baby_id, sleep_duration, time_fell_asleep, date, created_by_account_id, created_by_first_name, created_by_last_name } = req.body;
 
     if (!baby_id || !time_fell_asleep || !date) {
         return res.status(400).json({ error: 'baby_id, time_fell_asleep, and date are required' });
@@ -33,8 +33,8 @@ router.post('/', validateSleepData, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO sleep (baby_id, sleep_duration, time_fell_asleep, date) VALUES ($1, $2, $3, $4) RETURNING *',
-            [baby_id, sleep_duration, time_fell_asleep, date]
+            'INSERT INTO sleep (baby_id, sleep_duration, time_fell_asleep, date, created_by_account_id, created_by_first_name, created_by_last_name) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [baby_id, sleep_duration, time_fell_asleep, date, created_by_account_id, created_by_first_name, created_by_last_name]
         );
 
         res.status(201).json(result.rows[0]);

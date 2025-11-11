@@ -101,7 +101,7 @@ router.get('/babysitter/:babysitterId', async (req, res) => {
 });
 
 router.post('/upload', upload.single('photo'), async (req, res) => {
-    const { baby_id, parent_id, caption } = req.body;
+    const { baby_id, parent_id, caption, created_by_account_id, created_by_first_name, created_by_last_name } = req.body;
 
     if (!req.file) {
         return res.status(400).json({ error: 'No photo file uploaded' });
@@ -115,10 +115,10 @@ router.post('/upload', upload.single('photo'), async (req, res) => {
         const photoUrl = `/uploads/photos/${req.file.filename}`;
 
         const result = await pool.query(
-            `INSERT INTO photo_gallery (baby_id, parent_id, photo_url, caption)
-             VALUES ($1, $2, $3, $4)
+            `INSERT INTO photo_gallery (baby_id, parent_id, photo_url, caption, created_by_account_id, created_by_first_name, created_by_last_name)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)
              RETURNING *`,
-            [baby_id, parent_id, photoUrl, caption || null]
+            [baby_id, parent_id, photoUrl, caption || null, created_by_account_id, created_by_first_name, created_by_last_name]
         );
 
         res.status(201).json(result.rows[0]);

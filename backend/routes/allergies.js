@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', validateAllergyData, async (req, res) => {
-    const { baby_id, allergy_name, severity, epi_pen, notes } = req.body;
+    const { baby_id, allergy_name, severity, epi_pen, notes, created_by_account_id, created_by_first_name, created_by_last_name } = req.body;
 
     if (!baby_id || !allergy_name || !severity || !epi_pen) {
         return res.status(400).json({ error: 'baby_id, allergy_name, severity, and epi_pen are required' });
@@ -33,8 +33,8 @@ router.post('/', validateAllergyData, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO allergies (baby_id, allergy_name, severity, epi_pen, notes) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [baby_id, allergy_name, severity, epi_pen, notes]
+            'INSERT INTO allergies (baby_id, allergy_name, severity, epi_pen, notes, created_by_account_id, created_by_first_name, created_by_last_name) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+            [baby_id, allergy_name, severity, epi_pen, notes, created_by_account_id, created_by_first_name, created_by_last_name]
         );
 
         res.status(201).json(result.rows[0]);

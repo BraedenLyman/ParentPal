@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', validateSickDayData, async (req, res) => {
-    const { baby_id, date, meds_taken, temp } = req.body;
+    const { baby_id, date, meds_taken, temp, created_by_account_id, created_by_first_name, created_by_last_name } = req.body;
 
     if (!baby_id || !date) {
         return res.status(400).json({ error: 'baby_id and date are required' });
@@ -33,8 +33,8 @@ router.post('/', validateSickDayData, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO sick_day (baby_id, date, meds_taken, temp) VALUES ($1, $2, $3, $4) RETURNING *',
-            [baby_id, date, meds_taken, temp]
+            'INSERT INTO sick_day (baby_id, date, meds_taken, temp, created_by_account_id, created_by_first_name, created_by_last_name) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [baby_id, date, meds_taken, temp, created_by_account_id, created_by_first_name, created_by_last_name]
         );
 
         res.status(201).json(result.rows[0]);

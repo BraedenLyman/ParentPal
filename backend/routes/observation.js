@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', validateObservationData, async (req, res) => {
-    const { baby_id, priority_level, notes } = req.body;
+    const { baby_id, priority_level, notes, created_by_account_id, created_by_first_name, created_by_last_name } = req.body;
 
     if (!baby_id || !priority_level) {
         return res.status(400).json({ error: 'baby_id and priority_level are required' });
@@ -33,8 +33,8 @@ router.post('/', validateObservationData, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO observation (baby_id, priority_level, notes) VALUES ($1, $2, $3) RETURNING *',
-            [baby_id, priority_level, notes]
+            'INSERT INTO observation (baby_id, priority_level, notes, created_by_account_id, created_by_first_name, created_by_last_name) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [baby_id, priority_level, notes, created_by_account_id, created_by_first_name, created_by_last_name]
         );
 
         res.status(201).json(result.rows[0]);

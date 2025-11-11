@@ -31,6 +31,11 @@ export default function HealthJournal() {
         return `${hour12}:${minutes} ${ampm}`;
     };
 
+    const getInitials = (firstName, lastName) => {
+        if (!firstName || !lastName) return null;
+        return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    };
+
     const [isMedsOpen, setIsMedsOpen] = useState(false);
     const [isAllergiesOpen, setIsAllergiesOpen] = useState(false);
     const [isVaccinationsOpen, setIsVaccinationsOpen] = useState(false);
@@ -181,6 +186,9 @@ export default function HealthJournal() {
                         date: medDate,
                         dosage: dosageFlOz,
                         symptoms: medSympDescription,
+                        created_by_account_id: userData?.account_id,
+                        created_by_first_name: userData?.first_name,
+                        created_by_last_name: userData?.last_name,
                     },
                     { withCredentials: true }
                 );
@@ -320,6 +328,9 @@ export default function HealthJournal() {
                         severity: severity,
                         epi_pen: epiPen,
                         notes: allergyNotes,
+                        created_by_account_id: userData?.account_id,
+                        created_by_first_name: userData?.first_name,
+                        created_by_last_name: userData?.last_name,
                     },
                     { withCredentials: true }
                 );
@@ -459,6 +470,9 @@ export default function HealthJournal() {
                         baby_id: selectedBaby.baby_id,
                         vaccination_name: vaccineName,
                         date_of_vaccine: vaccineDate,
+                        created_by_account_id: userData?.account_id,
+                        created_by_first_name: userData?.first_name,
+                        created_by_last_name: userData?.last_name,
                     },
                     { withCredentials: true }
                 );
@@ -608,6 +622,9 @@ export default function HealthJournal() {
                         date: sickDate,
                         meds_taken: medsTaken || null,
                         temp: sickTemp ? parseFloat(sickTemp) : null,
+                        created_by_account_id: userData?.account_id,
+                        created_by_first_name: userData?.first_name,
+                        created_by_last_name: userData?.last_name,
                     },
                     { withCredentials: true }
                 );
@@ -870,7 +887,22 @@ export default function HealthJournal() {
                                     <Card className="cardEntry" key={record.med_id || `med-${index}`} shadow="sm">
                                         <div className="cardEntryContent">
                                             <div className="cardEntryHeader">
-                                                <h3 className="cardEntryTitle">{record.medication_name}</h3>
+                                                <h3 className="cardEntryTitle">
+                                                    {record.medication_name}
+                                                    {record.created_by_first_name && record.created_by_last_name && (
+                                                        <span style={{
+                                                            marginLeft: '8px',
+                                                            backgroundColor: '#4CAF50',
+                                                            color: 'white',
+                                                            padding: '2px 8px',
+                                                            borderRadius: '12px',
+                                                            fontSize: '11px',
+                                                            fontWeight: 'bold',
+                                                        }}>
+                                                            {getInitials(record.created_by_first_name, record.created_by_last_name)}
+                                                        </span>
+                                                    )}
+                                                </h3>
                                                 <span className="cardEntryDate">{typeof record.date === 'string' ? new Date(record.date).toLocaleDateString() : new Date(record.date).toLocaleDateString()}</span>
                                             </div>
                                             <div className="cardEntryDetails">
@@ -889,25 +921,27 @@ export default function HealthJournal() {
                                                     <p style={{ fontSize: '13px', margin: '4px 0 0 0', color: '#555' }}>{record.symptoms}</p>
                                                 </div>
                                             )}
-                                            <div className="editDeleteButtonContainer">
-                                                <Button
-                                                    isIconOnly
-                                                    size="sm"
-                                                    variant="light"
-                                                    onPress={() => handleEditMed(record)}
-                                                >
-                                                    <FiEdit2 />
-                                                </Button>
-                                                <Button
-                                                    isIconOnly
-                                                    size="sm"
-                                                    variant="light"
-                                                    color="danger"
-                                                    onPress={() => openDeleteMedModal(record)}
-                                                >
-                                                    <FiTrash2 />
-                                                </Button>
-                                            </div>
+                                            {!isBabysitter && (
+                                                <div className="editDeleteButtonContainer">
+                                                    <Button
+                                                        isIconOnly
+                                                        size="sm"
+                                                        variant="light"
+                                                        onPress={() => handleEditMed(record)}
+                                                    >
+                                                        <FiEdit2 />
+                                                    </Button>
+                                                    <Button
+                                                        isIconOnly
+                                                        size="sm"
+                                                        variant="light"
+                                                        color="danger"
+                                                        onPress={() => openDeleteMedModal(record)}
+                                                    >
+                                                        <FiTrash2 />
+                                                    </Button>
+                                                </div>
+                                            )}
                                         </div>
                                     </Card>
                                 ))
@@ -976,7 +1010,22 @@ export default function HealthJournal() {
                                             <Card className="cardEntry" key={record.med_id || `med-${index}`} shadow="sm">
                                                 <div className="cardEntryContent">
                                                     <div className="cardEntryHeader">
-                                                        <h3 className="cardEntryTitle">{record.medication_name}</h3>
+                                                        <h3 className="cardEntryTitle">
+                                                            {record.medication_name}
+                                                            {record.created_by_first_name && record.created_by_last_name && (
+                                                                <span style={{
+                                                                    marginLeft: '8px',
+                                                                    backgroundColor: '#4CAF50',
+                                                                    color: 'white',
+                                                                    padding: '2px 8px',
+                                                                    borderRadius: '12px',
+                                                                    fontSize: '11px',
+                                                                    fontWeight: 'bold',
+                                                                }}>
+                                                                    {getInitials(record.created_by_first_name, record.created_by_last_name)}
+                                                                </span>
+                                                            )}
+                                                        </h3>
                                                         <span className="cardEntryDate">{typeof record.date === 'string' ? new Date(record.date).toLocaleDateString() : new Date(record.date).toLocaleDateString()}</span>
                                                     </div>
                                                     <div className="cardEntryDetails">
@@ -995,25 +1044,27 @@ export default function HealthJournal() {
                                                             <p style={{ fontSize: '13px', margin: '4px 0 0 0', color: '#555' }}>{record.symptoms}</p>
                                                         </div>
                                                     )}
-                                                    <div className="editDeleteButtonContainer">    
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            onPress={() => handleEditMed(record)}
-                                                        >
-                                                            <FiEdit2 />
-                                                        </Button>
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            color="danger"
-                                                            onPress={() => openDeleteMedModal(record)}
-                                                        >
-                                                            <FiTrash2 />
-                                                        </Button>
-                                                    </div>
+                                                    {!isBabysitter && (
+                                                        <div className="editDeleteButtonContainer">
+                                                            <Button
+                                                                isIconOnly
+                                                                size="sm"
+                                                                variant="light"
+                                                                onPress={() => handleEditMed(record)}
+                                                            >
+                                                                <FiEdit2 />
+                                                            </Button>
+                                                            <Button
+                                                                isIconOnly
+                                                                size="sm"
+                                                                variant="light"
+                                                                color="danger"
+                                                                onPress={() => openDeleteMedModal(record)}
+                                                            >
+                                                                <FiTrash2 />
+                                                            </Button>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </Card>
                                         ))
@@ -1085,7 +1136,22 @@ export default function HealthJournal() {
                                             <Card className="cardEntry" key={record.allergy_id || `allergy-${index}`} shadow="sm">
                                                 <div className="cardEntryContent">
                                                     <div className="cardEntryHeader">
-                                                        <h3 className="cardEntryTitle">{record.allergy_name}</h3>
+                                                        <h3 className="cardEntryTitle">
+                                                            {record.allergy_name}
+                                                            {record.created_by_first_name && record.created_by_last_name && (
+                                                                <span style={{
+                                                                    marginLeft: '8px',
+                                                                    backgroundColor: '#4CAF50',
+                                                                    color: 'white',
+                                                                    padding: '2px 8px',
+                                                                    borderRadius: '12px',
+                                                                    fontSize: '11px',
+                                                                    fontWeight: 'bold',
+                                                                }}>
+                                                                    {getInitials(record.created_by_first_name, record.created_by_last_name)}
+                                                                </span>
+                                                            )}
+                                                        </h3>
                                                     </div>
                                                     <div className="cardEntryDetails">
                                                         <div className="cardEntryDetail">
@@ -1103,25 +1169,27 @@ export default function HealthJournal() {
                                                             <p style={{ fontSize: '13px', margin: '4px 0 0 0', color: '#555' }}>{record.notes}</p>
                                                         </div>
                                                     )}
-                                                    <div className="editDeleteButtonContainer">
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            onPress={() => handleEditAllergy(record)}
-                                                        >
-                                                            <FiEdit2 />
-                                                        </Button>
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            color="danger"
-                                                            onPress={() => openDeleteAllergyModal(record)}
-                                                        >
-                                                            <FiTrash2 />
-                                                        </Button>
-                                                    </div>
+                                                    {!isBabysitter && (
+                                                        <div className="editDeleteButtonContainer">
+                                                            <Button
+                                                                isIconOnly
+                                                                size="sm"
+                                                                variant="light"
+                                                                onPress={() => handleEditAllergy(record)}
+                                                            >
+                                                                <FiEdit2 />
+                                                            </Button>
+                                                            <Button
+                                                                isIconOnly
+                                                                size="sm"
+                                                                variant="light"
+                                                                color="danger"
+                                                                onPress={() => openDeleteAllergyModal(record)}
+                                                            >
+                                                                <FiTrash2 />
+                                                            </Button>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </Card>
                                         ))
@@ -1189,28 +1257,45 @@ export default function HealthJournal() {
                                             <Card className="cardEntry" key={record.vaccine_id || `vaccine-${index}`} shadow="sm">
                                                 <div className="cardEntryContent">
                                                     <div className="cardEntryHeader">
-                                                        <h3 className="cardEntryTitle">{record.vaccination_name}</h3>
+                                                        <h3 className="cardEntryTitle">
+                                                            {record.vaccination_name}
+                                                            {record.created_by_first_name && record.created_by_last_name && (
+                                                                <span style={{
+                                                                    marginLeft: '8px',
+                                                                    backgroundColor: '#4CAF50',
+                                                                    color: 'white',
+                                                                    padding: '2px 8px',
+                                                                    borderRadius: '12px',
+                                                                    fontSize: '11px',
+                                                                    fontWeight: 'bold',
+                                                                }}>
+                                                                    {getInitials(record.created_by_first_name, record.created_by_last_name)}
+                                                                </span>
+                                                            )}
+                                                        </h3>
                                                         <span className="cardEntryDate">{typeof record.date_of_vaccine === 'string' ? new Date(record.date_of_vaccine).toLocaleDateString() : new Date(record.date_of_vaccine).toLocaleDateString()}</span>
                                                     </div>
-                                                    <div className="editDeleteButtonContainer">
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            onPress={() => handleEditVaccination(record)}
-                                                        >
-                                                            <FiEdit2 />
-                                                        </Button>
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            color="danger"
-                                                            onPress={() => openDeleteVaccineModal(record)}
-                                                        >
-                                                            <FiTrash2 />
-                                                        </Button>
-                                                    </div>
+                                                    {!isBabysitter && (
+                                                        <div className="editDeleteButtonContainer">
+                                                            <Button
+                                                                isIconOnly
+                                                                size="sm"
+                                                                variant="light"
+                                                                onPress={() => handleEditVaccination(record)}
+                                                            >
+                                                                <FiEdit2 />
+                                                            </Button>
+                                                            <Button
+                                                                isIconOnly
+                                                                size="sm"
+                                                                variant="light"
+                                                                color="danger"
+                                                                onPress={() => openDeleteVaccineModal(record)}
+                                                            >
+                                                                <FiTrash2 />
+                                                            </Button>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </Card>
                                         ))
@@ -1279,7 +1364,22 @@ export default function HealthJournal() {
                                             <Card className="cardEntry" key={record.sick_id || `sick-${index}`} shadow="sm">
                                                 <div className="cardEntryContent">
                                                     <div className="cardEntryHeader">
-                                                        <h3 className="cardEntryTitle">Sick Day</h3>
+                                                        <h3 className="cardEntryTitle">
+                                                            Sick Day
+                                                            {record.created_by_first_name && record.created_by_last_name && (
+                                                                <span style={{
+                                                                    marginLeft: '8px',
+                                                                    backgroundColor: '#4CAF50',
+                                                                    color: 'white',
+                                                                    padding: '2px 8px',
+                                                                    borderRadius: '12px',
+                                                                    fontSize: '11px',
+                                                                    fontWeight: 'bold',
+                                                                }}>
+                                                                    {getInitials(record.created_by_first_name, record.created_by_last_name)}
+                                                                </span>
+                                                            )}
+                                                        </h3>
                                                         <span className="cardEntryDate">{typeof record.date === 'string' ? new Date(record.date).toLocaleDateString() : new Date(record.date).toLocaleDateString()}</span>
                                                     </div>
                                                     <div className="cardEntryDetails">
@@ -1296,25 +1396,27 @@ export default function HealthJournal() {
                                                             </div>
                                                         )}
                                                     </div>
-                                                    <div className="editDeleteButtonContainer">
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            onPress={() => handleEditSickDay(record)}
-                                                        >
-                                                            <FiEdit2 />
-                                                        </Button>
-                                                        <Button
-                                                            isIconOnly
-                                                            size="sm"
-                                                            variant="light"
-                                                            color="danger"
-                                                            onPress={() => openDeleteSickDayModal(record)}
-                                                        >
-                                                            <FiTrash2 />
-                                                        </Button>
-                                                    </div>
+                                                    {!isBabysitter && (
+                                                        <div className="editDeleteButtonContainer">
+                                                            <Button
+                                                                isIconOnly
+                                                                size="sm"
+                                                                variant="light"
+                                                                onPress={() => handleEditSickDay(record)}
+                                                            >
+                                                                <FiEdit2 />
+                                                            </Button>
+                                                            <Button
+                                                                isIconOnly
+                                                                size="sm"
+                                                                variant="light"
+                                                                color="danger"
+                                                                onPress={() => openDeleteSickDayModal(record)}
+                                                            >
+                                                                <FiTrash2 />
+                                                            </Button>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </Card>
                                         ))

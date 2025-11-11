@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', validateFeedingData, async (req, res) => {
-    const { baby_id, time_fed, date, fed_from, type_of_food, amount, notes } = req.body;
+    const { baby_id, time_fed, date, fed_from, type_of_food, amount, notes, created_by_account_id, created_by_first_name, created_by_last_name } = req.body;
 
     if (!baby_id || !time_fed || !date || !fed_from || !type_of_food) {
         return res.status(400).json({ error: 'baby_id, time_fed, date, fed_from, and type_of_food are required' });
@@ -33,8 +33,8 @@ router.post('/', validateFeedingData, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO feeding (baby_id, time_fed, date, fed_from, type_of_food, amount, notes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-            [baby_id, time_fed, date, fed_from, type_of_food, amount, notes]
+            'INSERT INTO feeding (baby_id, time_fed, date, fed_from, type_of_food, amount, notes, created_by_account_id, created_by_first_name, created_by_last_name) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
+            [baby_id, time_fed, date, fed_from, type_of_food, amount, notes, created_by_account_id, created_by_first_name, created_by_last_name]
         );
 
         res.status(201).json(result.rows[0]);

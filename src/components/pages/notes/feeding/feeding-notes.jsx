@@ -45,6 +45,11 @@ export default function FeedingNotes() {
         return `${hour12}:${minutes} ${ampm}`;
     };
 
+    const getInitials = (firstName, lastName) => {
+        if (!firstName || !lastName) return null;
+        return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    };
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (isFilterOpen && !event.target.closest('.filter-dropdown-container')) {
@@ -126,6 +131,9 @@ export default function FeedingNotes() {
                         type_of_food: feedType,
                         amount: amountFlOz,
                         notes: feedNotes,
+                        created_by_account_id: userData?.account_id,
+                        created_by_first_name: userData?.first_name,
+                        created_by_last_name: userData?.last_name,
                     },
                     { withCredentials: true }
                 );
@@ -335,7 +343,22 @@ export default function FeedingNotes() {
                             <Card className="cardEntry" key={record.feeding_id} shadow="sm">
                                 <div className="cardEntryContent">
                                     <div className="cardEntryHeader">
-                                        <h3 className="cardEntryTitle">{record.type_of_food}</h3>
+                                        <h3 className="cardEntryTitle">
+                                            {record.type_of_food}
+                                            {record.created_by_first_name && record.created_by_last_name && (
+                                                <span style={{
+                                                    marginLeft: '8px',
+                                                    backgroundColor: '#4CAF50',
+                                                    color: 'white',
+                                                    padding: '2px 8px',
+                                                    borderRadius: '12px',
+                                                    fontSize: '11px',
+                                                    fontWeight: 'bold',
+                                                }}>
+                                                    {getInitials(record.created_by_first_name, record.created_by_last_name)}
+                                                </span>
+                                            )}
+                                        </h3>
                                         <span className="cardEntryDate">{new Date(record.date).toLocaleDateString()}</span>
                                     </div>
                                     <div className="cardEntryDetails">
@@ -358,25 +381,27 @@ export default function FeedingNotes() {
                                             <p>{record.notes}</p>
                                         </div>
                                     )}
-                                    <div className="editDeleteButtonContainer">
-                                        <Button
-                                            isIconOnly
-                                            size="sm"
-                                            variant="light"
-                                            onPress={() => handleEditFeeding(record)}
-                                        >
-                                            <FiEdit2 size={16} />
-                                        </Button>
-                                        <Button
-                                            isIconOnly
-                                            size="sm"
-                                            variant="light"
-                                            color="danger"
-                                            onPress={() => openDeleteModal(record)}
-                                        >
-                                            <FiTrash2 size={16} />
-                                        </Button>
-                                    </div>
+                                    {!isBabysitter && (
+                                        <div className="editDeleteButtonContainer">
+                                            <Button
+                                                isIconOnly
+                                                size="sm"
+                                                variant="light"
+                                                onPress={() => handleEditFeeding(record)}
+                                            >
+                                                <FiEdit2 size={16} />
+                                            </Button>
+                                            <Button
+                                                isIconOnly
+                                                size="sm"
+                                                variant="light"
+                                                color="danger"
+                                                onPress={() => openDeleteModal(record)}
+                                            >
+                                                <FiTrash2 size={16} />
+                                            </Button>
+                                        </div>
+                                    )}
                                 </div>
                             </Card>
                         ))

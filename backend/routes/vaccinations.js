@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', validateVaccinationData, async (req, res) => {
-    const { baby_id, vaccination_name, date_of_vaccine } = req.body;
+    const { baby_id, vaccination_name, date_of_vaccine, created_by_account_id, created_by_first_name, created_by_last_name } = req.body;
 
     if (!baby_id || !date_of_vaccine) {
         return res.status(400).json({ error: 'baby_id and date_of_vaccine are required' });
@@ -33,8 +33,8 @@ router.post('/', validateVaccinationData, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO vaccinations (baby_id, vaccination_name, date_of_vaccine) VALUES ($1, $2, $3) RETURNING *',
-            [baby_id, vaccination_name, date_of_vaccine]
+            'INSERT INTO vaccinations (baby_id, vaccination_name, date_of_vaccine, created_by_account_id, created_by_first_name, created_by_last_name) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [baby_id, vaccination_name, date_of_vaccine, created_by_account_id, created_by_first_name, created_by_last_name]
         );
 
         res.status(201).json(result.rows[0]);

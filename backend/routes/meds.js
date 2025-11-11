@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', validateMedicationData, async (req, res) => {
-    const { baby_id, medication_name, time_taken, date, dosage, symptoms } = req.body;
+    const { baby_id, medication_name, time_taken, date, dosage, symptoms, created_by_account_id, created_by_first_name, created_by_last_name } = req.body;
 
     if (!baby_id || !medication_name || !time_taken || !date || !dosage || !symptoms) {
         return res.status(400).json({ error: 'baby_id, medication_name, time_taken, date, dosage and symptoms are required' });
@@ -33,8 +33,8 @@ router.post('/', validateMedicationData, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO medications (baby_id, medication_name, time_taken, date, dosage, symptoms) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-            [baby_id, medication_name, time_taken, date, dosage, symptoms]
+            'INSERT INTO medications (baby_id, medication_name, time_taken, date, dosage, symptoms, created_by_account_id, created_by_first_name, created_by_last_name) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+            [baby_id, medication_name, time_taken, date, dosage, symptoms, created_by_account_id, created_by_first_name, created_by_last_name]
         );
 
         res.status(201).json(result.rows[0]);
