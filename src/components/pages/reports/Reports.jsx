@@ -96,7 +96,7 @@ export default function Reports() {
     const isBabysitter = location.state?.isBabysitter;
 
     const chartCategories = [
-        { value: "growth", label: "Growth Over Time" },
+        { value: "growth", label: "Growth Patterns" },
         { value: "sleep", label: "Sleep Patterns" },
         { value: "feeding", label: "Feeding Patterns" }
     ];
@@ -172,6 +172,7 @@ export default function Reports() {
                             growthRecords={growthRecords}
                             sleepRecords={sleepRecords}
                             feedingRecords={feedingRecords}
+                            selectedBaby={selectedBaby}
                         />
                     </ChakraProvider>
                 </div>

@@ -30,18 +30,15 @@ export default function ReportsCharts({ loading, selectedChart, growthRecords, s
         data: sleepChartData,
     });
 
-    const feedingByDate = feedingRecords.reduce((acc, record) => {
-        const date = new Date(record.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        if (!acc[date]) {
-            acc[date] = { date, count: 0, totalAmount: 0 };
-        }
-        acc[date].count += 1;
-        acc[date].totalAmount += parseFloat(record.amount) || 0;
-        return acc;
-    }, {});
-
-    const feedingChartData = Object.values(feedingByDate)
-        .sort((a, b) => new Date(a.date) - new Date(b.date));
+    const feedingChartData = feedingRecords
+        .sort((a, b) => new Date(a.date) - new Date(b.date) || a.time_fed.localeCompare(b.time_fed))
+        .map((record, index) => ({
+            id: record.feeding_id || index,
+            label: new Date(record.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            foodType: record.type_of_food,
+            amount: parseFloat(record.amount) || 0,
+            fedFrom: record.fed_from,
+        }));
 
     const feedingChart = useChart({
         data: feedingChartData,
@@ -53,66 +50,111 @@ export default function ReportsCharts({ loading, selectedChart, growthRecords, s
 
     if (selectedChart === "growth") {
         return (
-            <div className="chartSection">
-                <h2 className="chartTitle">Growth Over Time</h2>
-                {growthChartData.length === 0 ? (
-                    <p className="noDataMessage">No growth records available</p>
-                ) : (
-                    <div className="chartContainer">
-                        <Chart.Root chart={growthChart}>
-                            <ResponsiveContainer width="100%" height={300}>
-                                <LineChart data={growthChartData}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                                    <XAxis
-                                        dataKey="date"
-                                        stroke="#666"
-                                        style={{ fontSize: '12px' }}
-                                    />
-                                    <YAxis
-                                        stroke="#666"
-                                        style={{ fontSize: '12px' }}
-                                    />
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                                            border: '1px solid rgba(102, 126, 234, 0.3)',
-                                            borderRadius: '12px',
-                                            padding: '12px',
-                                            boxShadow: '0 8px 20px rgba(102, 126, 234, 0.2)'
-                                        }}
-                                        labelStyle={{
-                                            fontWeight: 'bold',
-                                            color: '#667eea',
-                                            marginBottom: '5px'
-                                        }}
-                                    />
-                                    <Legend />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="height"
-                                        stroke={growthChart.color("primary")}
-                                        strokeWidth={3}
-                                        name="Height"
-                                        dot={{ fill: growthChart.color("primary"), r: 5, strokeWidth: 2, stroke: '#fff' }}
-                                        activeDot={{ r: 7, strokeWidth: 2 }}
-                                        connectNulls={true}
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="weight"
-                                        stroke={growthChart.color("secondary")}
-                                        strokeWidth={3}
-                                        name="Weight"
-                                        dot={{ fill: growthChart.color("secondary"), r: 5, strokeWidth: 2, stroke: '#fff' }}
-                                        activeDot={{ r: 7, strokeWidth: 2 }}
-                                        connectNulls={true}
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </Chart.Root>
-                    </div>
-                )}
-            </div>
+            <>
+                <div className="chartSection">
+                    <h2 className="chartTitle">Height Over Time</h2>
+                    {growthChartData.length === 0 ? (
+                        <p className="noDataMessage">No growth records available</p>
+                    ) : (
+                        <div className="chartContainer">
+                            <Chart.Root chart={growthChart}>
+                                <ResponsiveContainer width="100%" height={220}>
+                                    <LineChart data={growthChartData}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                                        <XAxis
+                                            dataKey="date"
+                                            stroke="#666"
+                                            style={{ fontSize: '12px' }}
+                                        />
+                                        <YAxis
+                                            stroke="#666"
+                                            style={{ fontSize: '12px' }}
+                                            label={{ value: 'Height (in)', angle: -90 }}
+                                        />
+                                        <Tooltip
+                                            contentStyle={{
+                                                backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                                                border: '1px solid rgba(102, 126, 234, 0.3)',
+                                                borderRadius: '12px',
+                                                padding: '12px',
+                                                boxShadow: '0 8px 20px rgba(102, 126, 234, 0.2)'
+                                            }}
+                                            labelStyle={{
+                                                fontWeight: 'bold',
+                                                color: '#667eea',
+                                                marginBottom: '5px'
+                                            }}
+                                        />
+                                        <Legend />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="height"
+                                            stroke={growthChart.color("primary")}
+                                            strokeWidth={3}
+                                            name="Height (in)"
+                                            dot={{ fill: growthChart.color("primary"), r: 5, strokeWidth: 2, stroke: '#fff' }}
+                                            activeDot={{ r: 7, strokeWidth: 2 }}
+                                            connectNulls={true}
+                                        />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            </Chart.Root>
+                        </div>
+                    )}
+                </div>
+
+                <div className="chartSection">
+                    <h2 className="chartTitle">Weight Over Time</h2>
+                    {growthChartData.length === 0 ? (
+                        <p className="noDataMessage">No growth records available</p>
+                    ) : (
+                        <div className="chartContainer">
+                            <Chart.Root chart={growthChart}>
+                                <ResponsiveContainer width="100%" height={220}>
+                                    <LineChart data={growthChartData}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                                        <XAxis
+                                            dataKey="date"
+                                            stroke="#666"
+                                            style={{ fontSize: '12px' }}
+                                        />
+                                        <YAxis
+                                            stroke="#666"
+                                            style={{ fontSize: '12px' }}
+                                            label={{ value: 'Weight (lbs)', angle: -90 }}
+                                        />
+                                        <Tooltip
+                                            contentStyle={{
+                                                backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                                                border: '1px solid rgba(102, 126, 234, 0.3)',
+                                                borderRadius: '12px',
+                                                padding: '12px',
+                                                boxShadow: '0 8px 20px rgba(102, 126, 234, 0.2)'
+                                            }}
+                                            labelStyle={{
+                                                fontWeight: 'bold',
+                                                color: '#667eea',
+                                                marginBottom: '5px'
+                                            }}
+                                        />
+                                        <Legend />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="weight"
+                                            stroke={growthChart.color("secondary")}
+                                            strokeWidth={3}
+                                            name="Weight (lbs)"
+                                            dot={{ fill: growthChart.color("secondary"), r: 5, strokeWidth: 2, stroke: '#fff' }}
+                                            activeDot={{ r: 7, strokeWidth: 2 }}
+                                            connectNulls={true}
+                                        />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            </Chart.Root>
+                        </div>
+                    )}
+                </div>
+            </>
         );
     }
 
@@ -128,18 +170,21 @@ export default function ReportsCharts({ loading, selectedChart, growthRecords, s
                 ) : (
                     <div className="chartContainer">
                         <Chart.Root chart={sleepChart}>
-                            <ResponsiveContainer width="100%" height={300}>
+                            <ResponsiveContainer width="100%" height={220}>
                                 <BarChart data={sleepChartData}>
                                     <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
                                     <XAxis
                                         dataKey="date"
                                         stroke="#666"
                                         style={{ fontSize: '12px' }}
+                                        angle={-30}
+                                        textAnchor="end"
+                                        height={60}
                                     />
                                     <YAxis
                                         stroke="#666"
                                         style={{ fontSize: '12px' }}
-                                        label={{ value: 'Hours', angle: -90, position: 'insideLeft' }}
+                                        label={{ value: 'Hours', angle: -90}}
                                     />
                                     <Tooltip
                                         contentStyle={{
@@ -155,12 +200,12 @@ export default function ReportsCharts({ loading, selectedChart, growthRecords, s
                                             marginBottom: '5px'
                                         }}
                                     />
-                                    <Legend />
+                                    
                                     <Bar
                                         dataKey="hours"
                                         fill={sleepChart.color("primary")}
                                         name="Sleep Hours"
-                                        radius={[10, 10, 0, 0]}
+                                        radius={[5, 5, 0, 0]}
                                         maxBarSize={60}
                                     />
                                 </BarChart>
@@ -173,6 +218,35 @@ export default function ReportsCharts({ loading, selectedChart, growthRecords, s
     }
 
     if (selectedChart === "feeding") {
+        const CustomTooltip = ({ active, payload }) => {
+            if (active && payload && payload.length) {
+                const data = payload[0].payload;
+                return (
+                    <div style={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                        border: '1px solid rgba(102, 126, 234, 0.3)',
+                        borderRadius: '12px',
+                        padding: '12px',
+                        boxShadow: '0 8px 20px rgba(102, 126, 234, 0.2)'
+                    }}>
+                        <p style={{ fontWeight: 'bold', color: '#667eea', marginBottom: '5px' }}>
+                            {data.label}
+                        </p>
+                        <p style={{ margin: '4px 0', color: '#333' }}>
+                            <strong>Food Type:</strong> {data.foodType}
+                        </p>
+                        <p style={{ margin: '4px 0', color: '#333' }}>
+                            <strong>Amount:</strong> {data.amount} fl oz
+                        </p>
+                        <p style={{ margin: '4px 0', color: '#333', fontSize: '12px' }}>
+                            <strong>Fed from:</strong> {data.fedFrom}
+                        </p>
+                    </div>
+                );
+            }
+            return null;
+        };
+
         return (
             <div className="chartSection">
                 <h2 className="chartTitle">Feeding Patterns</h2>
@@ -185,43 +259,26 @@ export default function ReportsCharts({ loading, selectedChart, growthRecords, s
                                 <BarChart data={feedingChartData}>
                                     <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
                                     <XAxis
-                                        dataKey="date"
+                                        dataKey="label"
                                         stroke="#666"
-                                        style={{ fontSize: '12px' }}
+                                        style={{ fontSize: '11px' }}
+                                        angle={-30}
+                                        textAnchor="end"
+                                        height={60}
                                     />
                                     <YAxis
                                         stroke="#666"
                                         style={{ fontSize: '12px' }}
-                                        label={{ value: 'Count', angle: -90, position: 'insideLeft' }}
+                                        label={{ value: 'Amount (fl oz)', angle: -90}}
                                     />
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                                            border: '1px solid rgba(102, 126, 234, 0.3)',
-                                            borderRadius: '12px',
-                                            padding: '12px',
-                                            boxShadow: '0 8px 20px rgba(102, 126, 234, 0.2)'
-                                        }}
-                                        labelStyle={{
-                                            fontWeight: 'bold',
-                                            color: '#667eea',
-                                            marginBottom: '5px'
-                                        }}
-                                    />
-                                    <Legend />
+                                    <Tooltip content={<CustomTooltip />} />
+                                
                                     <Bar
-                                        dataKey="count"
+                                        dataKey="amount"
                                         fill={feedingChart.color("primary")}
-                                        name="Feeding Count"
-                                        radius={[10, 10, 0, 0]}
-                                        maxBarSize={50}
-                                    />
-                                    <Bar
-                                        dataKey="totalAmount"
-                                        fill={feedingChart.color("secondary")}
-                                        name="Total Amount (oz)"
-                                        radius={[10, 10, 0, 0]}
-                                        maxBarSize={50}
+                                        name="Amount (fl oz)"
+                                        radius={[5, 5, 0, 0]}
+                                        maxBarSize={60}
                                     />
                                 </BarChart>
                             </ResponsiveContainer>
