@@ -31,7 +31,12 @@ export default function ReportsCharts({ loading, selectedChart, growthRecords, s
     });
 
     const feedingChartData = feedingRecords
-        .sort((a, b) => new Date(a.date) - new Date(b.date) || a.time_fed.localeCompare(b.time_fed))
+        .sort((a, b) => {
+            const dateDiff = new Date(a.date) - new Date(b.date);
+            if (dateDiff !== 0) return dateDiff;
+            if (a.time_fed && b.time_fed) return a.time_fed.localeCompare(b.time_fed);
+            return 0;
+        })
         .map((record, index) => ({
             id: record.feeding_id || index,
             label: new Date(record.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),

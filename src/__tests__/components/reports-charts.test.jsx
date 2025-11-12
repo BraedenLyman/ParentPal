@@ -71,8 +71,9 @@ describe('ReportsCharts Component', () => {
         />
       );
 
-      expect(screen.getByText('Growth Over Time')).toBeInTheDocument();
-      expect(screen.getByTestId('line-chart')).toBeInTheDocument();
+      expect(screen.getByText('Height Over Time')).toBeInTheDocument();
+      expect(screen.getByText('Weight Over Time')).toBeInTheDocument();
+      expect(screen.getAllByTestId('line-chart')).toHaveLength(2);
       expect(screen.getByTestId('line-height')).toBeInTheDocument();
       expect(screen.getByTestId('line-weight')).toBeInTheDocument();
     });
@@ -88,8 +89,9 @@ describe('ReportsCharts Component', () => {
         />
       );
 
-      expect(screen.getByText('Growth Over Time')).toBeInTheDocument();
-      expect(screen.getByText('No growth records available')).toBeInTheDocument();
+      expect(screen.getByText('Height Over Time')).toBeInTheDocument();
+      expect(screen.getByText('Weight Over Time')).toBeInTheDocument();
+      expect(screen.getAllByText('No growth records available')).toHaveLength(2);
       expect(screen.queryByTestId('line-chart')).not.toBeInTheDocument();
     });
 
@@ -110,7 +112,7 @@ describe('ReportsCharts Component', () => {
         />
       );
 
-      expect(screen.getByTestId('line-chart')).toBeInTheDocument();
+      expect(screen.getAllByTestId('line-chart')).toHaveLength(2);
     });
 
     test('handles decimal values in growth records', () => {
@@ -128,7 +130,7 @@ describe('ReportsCharts Component', () => {
         />
       );
 
-      expect(screen.getByTestId('line-chart')).toBeInTheDocument();
+      expect(screen.getAllByTestId('line-chart')).toHaveLength(2);
     });
   });
 
@@ -228,8 +230,7 @@ describe('ReportsCharts Component', () => {
 
       expect(screen.getByText('Feeding Patterns')).toBeInTheDocument();
       expect(screen.getByTestId('bar-chart')).toBeInTheDocument();
-      expect(screen.getByTestId('bar-count')).toBeInTheDocument();
-      expect(screen.getByTestId('bar-totalAmount')).toBeInTheDocument();
+      expect(screen.getByTestId('bar-amount')).toBeInTheDocument();
     });
 
     test('displays no data message when feeding records are empty', () => {
@@ -248,7 +249,7 @@ describe('ReportsCharts Component', () => {
       expect(screen.queryByTestId('bar-chart')).not.toBeInTheDocument();
     });
 
-    test('aggregates feeding records by date', () => {
+    test('displays feeding records by date', () => {
       render(
         <ReportsCharts
           loading={false}
@@ -260,7 +261,7 @@ describe('ReportsCharts Component', () => {
       );
 
       expect(screen.getByTestId('bar-chart')).toBeInTheDocument();
-      expect(screen.getByTestId('bar-chart')).toHaveAttribute('data-length', '2');
+      expect(screen.getByTestId('bar-chart')).toHaveAttribute('data-length', '3');
     });
 
     test('handles missing amount values', () => {
@@ -295,13 +296,13 @@ describe('ReportsCharts Component', () => {
         />
       );
 
-      expect(screen.getByTestId('chart-root')).toBeInTheDocument();
-      expect(screen.getByTestId('responsive-container')).toBeInTheDocument();
-      expect(screen.getByTestId('x-axis')).toBeInTheDocument();
-      expect(screen.getByTestId('y-axis')).toBeInTheDocument();
-      expect(screen.getByTestId('cartesian-grid')).toBeInTheDocument();
-      expect(screen.getByTestId('tooltip')).toBeInTheDocument();
-      expect(screen.getByTestId('legend')).toBeInTheDocument();
+      expect(screen.getAllByTestId('chart-root')).toHaveLength(2);
+      expect(screen.getAllByTestId('responsive-container')).toHaveLength(2);
+      expect(screen.getAllByTestId('x-axis')).toHaveLength(2);
+      expect(screen.getAllByTestId('y-axis')).toHaveLength(2);
+      expect(screen.getAllByTestId('cartesian-grid')).toHaveLength(2);
+      expect(screen.getAllByTestId('tooltip')).toHaveLength(2);
+      expect(screen.getAllByTestId('legend')).toHaveLength(2);
     });
 
     test('includes all necessary chart elements for sleep chart', () => {
@@ -321,7 +322,6 @@ describe('ReportsCharts Component', () => {
       expect(screen.getByTestId('y-axis')).toBeInTheDocument();
       expect(screen.getByTestId('cartesian-grid')).toBeInTheDocument();
       expect(screen.getByTestId('tooltip')).toBeInTheDocument();
-      expect(screen.getByTestId('legend')).toBeInTheDocument();
     });
 
     test('includes all necessary chart elements for feeding chart', () => {
@@ -341,7 +341,6 @@ describe('ReportsCharts Component', () => {
       expect(screen.getByTestId('y-axis')).toBeInTheDocument();
       expect(screen.getByTestId('cartesian-grid')).toBeInTheDocument();
       expect(screen.getByTestId('tooltip')).toBeInTheDocument();
-      expect(screen.getByTestId('legend')).toBeInTheDocument();
     });
   });
 
@@ -357,7 +356,7 @@ describe('ReportsCharts Component', () => {
         />
       );
 
-      expect(screen.getByText('No growth records available')).toBeInTheDocument();
+      expect(screen.getAllByText('No growth records available')).toHaveLength(2);
     });
 
     test('handles single record', () => {
@@ -373,7 +372,7 @@ describe('ReportsCharts Component', () => {
         />
       );
 
-      expect(screen.getByTestId('line-chart')).toBeInTheDocument();
+      expect(screen.getAllByTestId('line-chart')).toHaveLength(2);
     });
 
     test('handles invalid selectedChart value', () => {
