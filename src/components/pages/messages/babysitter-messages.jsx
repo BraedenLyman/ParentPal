@@ -7,9 +7,11 @@ import Navbar from '../nav-bar/navbar';
 import {
   EnvelopeIcon,
   PaperAirplaneIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  ArrowLeftIcon
 } from '@heroicons/react/24/outline';
 import './messages.css';
+import { Button } from '@heroui/react';
 
 export default function BabysitterMessages() {
   const { currentUser } = useAuth();
@@ -129,6 +131,10 @@ export default function BabysitterMessages() {
     fetchMessages(conversation.conversation_id);
   };
 
+  const handleBackToConversations = () => {
+    setSelectedConversation(null);
+  };
+
   useEffect(() => {
     if (currentUser && userData?.account_id) {
       fetchConversations();
@@ -193,7 +199,6 @@ export default function BabysitterMessages() {
     <>
       <Navbar />
       <div className="messages-container">
-      {/* Conversations Sidebar */}
       <div className="conversations-sidebar">
         <div className="sidebar-header">
           <h2>Messages</h2>
@@ -243,7 +248,6 @@ export default function BabysitterMessages() {
         </div>
       </div>
 
-      {/* Messages Main Area */}
       <div className="messages-main">
         {!selectedConversation ? (
           <div className="messages-empty-state">
@@ -253,8 +257,15 @@ export default function BabysitterMessages() {
           </div>
         ) : (
           <>
-            {/* Conversation Header */}
             <div className="conversation-header-bar">
+              <Button
+                isIconOnly
+                variant="light"
+                className="back-button-mobile"
+                onPress={handleBackToConversations}
+              >
+                <ArrowLeftIcon />
+              </Button>
               <div className="conversation-avatar">
                 {getInitials(selectedConversation.other_user_name)}
               </div>
@@ -262,7 +273,6 @@ export default function BabysitterMessages() {
               <span className="conversation-user-type">Parent</span>
             </div>
 
-            {/* Messages Thread */}
             <div className="messages-thread">
               {messages.map((message) => (
                 <div
@@ -283,7 +293,6 @@ export default function BabysitterMessages() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Message Input */}
             <div className="message-input-container">
               <form onSubmit={handleSendMessage} className="message-input-form">
                 <div className="message-input-wrapper">

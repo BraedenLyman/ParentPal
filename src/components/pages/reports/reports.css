@@ -154,7 +154,6 @@
     z-index: 1000;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .reportsContent {
         padding: 15px;
