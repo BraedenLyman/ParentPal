@@ -54,6 +54,13 @@
   border-radius: 0 0 3px 3px;
 }
 
+.nav-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .nav-icon {
   width: 24px;
   height: 24px;
@@ -68,6 +75,35 @@
 
 .navSection.active .nav-icon {
   color: #4CAF50;
+}
+
+.unread-badge-nav {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  box-shadow: 0 2px 4px rgba(255, 0, 0, 0.3);
+  border: 2px solid white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 .nav-label {
@@ -87,7 +123,6 @@
   font-weight: 600;
 }
 
-/* Mobile responsiveness */
 @media (max-width: 480px) {
   .navBarContainer {
     height: 65px;

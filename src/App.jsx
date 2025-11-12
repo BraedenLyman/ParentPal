@@ -23,6 +23,8 @@ import BabysitterSharedAccounts from "./components/pages/settings/babysitter-sha
 import DataExport from "./components/pages/settings/data-export";
 import PhotoGallery from "./components/pages/photo-gallery/photo-gallery";
 import Reports from "./components/pages/reports/Reports";
+import ParentMessages from "./components/pages/messages/parent-messages";
+import BabysitterMessages from "./components/pages/messages/babysitter-messages";
 
 function App() {
 
@@ -128,6 +130,22 @@ function App() {
         element={
           <ProtectedRoute>
             <Reports />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/parent-messages"
+        element={
+          <ProtectedRoute>
+            <ParentMessages />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/babysitter-messages"
+        element={
+          <ProtectedRoute>
+            <BabysitterMessages />
           </ProtectedRoute>
         }
       />
