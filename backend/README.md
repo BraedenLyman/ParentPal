@@ -59,6 +59,69 @@ Security:             CORS, Input Validation
 
 ## 🔌 API Endpoints
 
+# 🧾 Accounts API Documentation
+
+This document describes the `/accounts` endpoint used for creating user accounts (and optionally, their associated baby profiles).
+
+---
+
+## **POST /accounts**
+
+### 📘 Description
+Creates a new user account in the database.  
+Optionally creates an associated baby record if baby information is provided.
+
+---
+
+### 🧩 Request Body
+
+| Field | Type | Required | Description |
+|-------|------|-----------|-------------|
+| `firebaseUid` | `string` | ✅ | The Firebase UID of the user. |
+| `fName` | `string` | ✅ | User's first name. |
+| `lName` | `string` | ✅ | User's last name. |
+| `email` | `string` | ✅ | User's email address. |
+| `accountType` | `string` | ✅ | Type of account (e.g., `"parent"`, `"admin"`). |
+| `dob` | `string (YYYY-MM-DD)` | ❌ | User's date of birth. |
+| `gender` | `string` | ❌ | User's gender (max 7 characters stored). |
+| `baby` | `object` | ❌ | Optional baby object with details below. |
+
+---
+
+### 👶 Baby Object (optional)
+
+| Field | Type | Required | Description |
+|-------|------|-----------|-------------|
+| `bFName` | `string` | ✅ | Baby's first name. |
+| `bLName` | `string` | ✅ | Baby's last name. |
+| `bDob` | `string (YYYY-MM-DD)` | ❌ | Baby's date of birth. |
+| `bGender` | `string` | ❌ | Baby's gender (max 7 characters stored). |
+
+---
+
+### 📨 Example Request
+
+```json
+POST /accounts
+Content-Type: application/json
+
+{
+  "firebaseUid": "abcd1234",
+  "fName": "Alex",
+  "lName": "Johnson",
+  "email": "alex.johnson@example.com",
+  "accountType": "parent",
+  "dob": "1990-06-15",
+  "gender": "female",
+  "baby": {
+    "bFName": "Charlie",
+    "bLName": "Johnson",
+    "bDob": "2022-01-10",
+    "bGender": "male"
+  }
+}
+
+
 ### 🔐 Authentication
 
 #### POST `/api/sign-in`
