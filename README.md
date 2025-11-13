@@ -364,17 +364,7 @@ ParentPal takes your family's data security seriously. We implement industry-sta
 
 <br/>
 
----
-
-<div align="center">
-
-### 📬 Need Help?
-
-For support, feature requests, or bug reports, please contact us at **support@parentpal.com**
-
-<br/>
-
----
+--- 
 
 **© 2025 ParentPal. All rights reserved.**
 
