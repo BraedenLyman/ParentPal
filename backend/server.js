@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 
 const accountsRouter = require("./routes/accounts");
 const signinRouter = require("./routes/sign-in");
@@ -22,6 +23,43 @@ const messagingRouter = require("./routes/messaging");
 const path = require('path');
 
 const app = express();
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://www.gstatic.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
+      imgSrc: ["'self'", "data:", "https:", "blob:"],
+      connectSrc: ["'self'", "https://*.googleapis.com", "https://*.firebaseio.com", "https://*.cloudfunctions.net"],
+      frameSrc: ["'none'"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  },
+  crossOriginEmbedderPolicy: false, 
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  },
+}));
+
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  
+  if (req.path.startsWith('/uploads/')) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  } else {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, private');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+
+  next();
+});
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -61,16 +99,6 @@ app.get("/", (req, res) => {
 
 app.get("/api/test", (req, res) => {
     res.json({ message: "Server is running!" });
-});
-
-// Diagnostic endpoint - remove after debugging email issue
-app.get("/api/email-config-check", (req, res) => {
-    res.json({
-        emailUserConfigured: !!process.env.EMAIL_USER,
-        emailPasswordConfigured: !!process.env.EMAIL_PASSWORD,
-        emailUser: process.env.EMAIL_USER ? `${process.env.EMAIL_USER.substring(0, 3)}...@${process.env.EMAIL_USER.split('@')[1]}` : 'NOT SET',
-        nodeEnv: process.env.NODE_ENV || 'not set'
-    });
 });
 
 app.get("/favicon.ico", (req, res) => res.status(204).end());
