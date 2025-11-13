@@ -37,6 +37,39 @@ jobs:
         flags: frontend
         name: frontend-coverage
 
+  test-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install backend dependencies
+      run: |
+        cd backend
+        if [ -f package-lock.json ]; then
+          npm ci
+        else
+          npm install
+        fi
+
+    - name: Run backend tests
+      run: |
+        cd backend
+        npm test -- --coverage --watchAll=false
+
+    - name: Upload backend coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./backend/coverage/lcov.info
+        flags: backend
+        name: backend-coverage
+
   lint:
     runs-on: ubuntu-latest
 
