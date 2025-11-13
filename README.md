@@ -1,622 +1,385 @@
-# ParentPal
-
 <div align="center">
 
-![ParentPal Logo](public/images/ParentPal.png)
+# 👶 ParentPal
 
-### A comprehensive childcare management platform for parents and babysitters
+<img src="public/images/ParentPal.png" alt="ParentPal Logo" width="240"/>
 
-[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat&logo=react&logoColor=white)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28?style=flat&logo=firebase&logoColor=black)](https://firebase.google.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![License](https://img.shields.io/badge/License-Private-red.svg)]()
+### 🌟 A comprehensive childcare management platform for parents and babysitters
+
+[![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+
+[🌐 Visit ParentPal](https://parentpal.com) • [📚 Documentation](#-user-manual-parent-user) • [🔒 Security](#-security)
 
 </div>
+
+<br/>
 
 ---
 
 ## 📑 Table of Contents
-1. [Overview](#-overview)
-2. [Features](#-features)
-3. [User Manual](#-user-manual)
-4. [Security](#-security)
-5. [Support](#-support)
+
+- [🧭 Overview](#-overview)
+- [✨ Key Features](#-key-features)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [📘 User Manual (Parent)](#-user-manual-parent-user)
+- [📗 User Manual (Babysitter)](#-user-manual-babysitter-user)
+- [🔐 Security](#-security)
 
 ---
+
+<br/>
 
 ## 🧭 Overview
-**ParentPal** is a comprehensive childcare management platform for parents and babysitters. It offers a user-friendly interface to track and manage daily tasks, monitor growth and sleep patterns, and access personalized health and wellness insights of your child.
 
-### 🔗 Accessing ParentPal - [https://parentpal.com](https://parentpal.com)
+**ParentPal** is a comprehensive childcare management platform designed to simplify parenting and babysitting tasks. Track your child's growth, monitor sleep patterns, manage health records, coordinate with babysitters, and access personalized insights—all in one intuitive application.
 
-### 🧰 Front-End Stack
+### 🎯 Who is ParentPal for?
 
-```
-Framework: React 18.3.1
-Build Tool: Vite 6.3.5
-Languages: JavaScript (JSX)
-UI Components: Chakra UI, HeroUI, TailwindCSS 4.1.11
-Routing: React Router DOM 6.23.0
-API Communication: Axios 1.12.2
-Animation: Framer Motion 11.18.2
-Charts: Recharts 3.3.0
-Hosting: Firebase Hosting
-```  
+- **👨‍👩‍👧‍👦 Parents** - Track and manage every aspect of your child's development
+- **👤 Babysitters** - Access necessary child information and collaborate with parents
+- **👥 Families** - Seamlessly share and coordinate childcare responsibilities
+
+<br/>
 
 ---
 
-## 🔑 Key Features 
-- 🧑‍💻 **User Authentication:** Secure login and registration using JWT / Firebase Auth.  
-- 📊 **Dashboard:** View and manage all tracked data in one place.  
-- 🧠 **Smart Insights:** Visualize growth trends and analytics over time.
-- 📝 **Records / History:** Review previously submitted data and make edits or deletions as needed.
-- 📱 **Responsive Design:** Works seamlessly on mobile and desktop devices.
+## ✨ Key Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🔐 For Everyone
+- **Secure Authentication** - JWT & Firebase Auth
+- **Real-time Messaging** - Chat with shared accounts
+- **Responsive Design** - Works on all devices
+- **Photo Gallery** - Share precious moments
+
+</td>
+<td width="50%">
+
+### 👨‍👩‍👧 For Parents
+- **Growth Tracking** - Height, weight over time
+- **Sleep Analytics** - Monitor sleep patterns
+- **Health Records** - Medications, allergies, vaccines and sick days
+- **Task Assignment** - Assign tasks to babysitters
+- **Reports & Charts** - Visualize development trends
+- **Data Export** - Generate PDF reports
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+```javascript
+Framework:        React 18.3.1
+Build Tool:       Vite 6.3.5
+Language:         JavaScript (JSX)
+UI Libraries:     HeroUI, TailwindCSS 4.1.11
+Routing:          React Router DOM 6.23.0
+HTTP Client:      Axios 1.12.2
+Animation:        Framer Motion 11.18.2
+Charts:           Recharts 3.3.0
+```
+
+### Backend & Infrastructure
+```javascript
+Runtime:          Node.js with Express
+Database:         PostgreSQL
+Authentication:   Firebase Auth + JWT
+Hosting:          Firebase Hosting
+Security:         HTTPS/TLS Encryption
+Testing:          Cypress E2E Testing
+```
+
+<br/>
 
 ---
 
 ## 📘 User Manual (Parent User)
 
-### Home Page
-- Displays the key featured sections of the app, such as the log types, assigned tasks, and photo gallery.
+> **Quick Navigation**: [Home](#-home-page) • [Logs](#-logs) • [Tasks](#-assigned-tasks) • [Messages](#-messages) • [Reports](#-reports) • [Settings](#-settings) • [Photos](#-photo-gallery)
 
-- To view the history of a specific log type, click on the corresponding log card.
-- To view the Assigned Tasks section, click on the Assigned Tasks card.
-- To view the Photo Gallery section, click on the Photo Gallery card.
+### 🏠 Home Page
 
-### Logs
+Your dashboard provides quick access to all major features:
+- **Log Cards** - Click any card to view/add records (Growth, Sleep, Health, Feeding, Observations)
+- **Assigned Tasks** - Manage tasks for babysitters
+- **Photo Gallery** - View and upload photos
 
-#### Growth Records
+<details>
+<summary><h3>📝 Logs - Click to expand</h3></summary>
 
-##### Viewing Growth Records
-1. Select the "Growth Tracker" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
+#### 📈 Growth Tracker
+**Viewing Records**
+1. Select "Growth Tracker" from the first dropdown
+2. Select your child from the second dropdown
 
-- This will display all the growth records for the selected child.
+**Adding Records**
+1. Click the **"Add"** button (bottom right)
+2. Enter: Height (ft/in), Weight (lbs), Date
+3. Click **"Add"** to save
 
-##### Adding Growth Records
-1. Make sure the child you want to add the record to is selected from the second dropdown menu.
-2. Click on the "Add" button in the bottom right corner of the pgae to add a new record.
-3. A modal will appear where you can then enter the details for growth.
-  1. Enter the height (feet and inches).
-  2. Enter the weight (pounds)
-  3. Enter the date of the record.
-4. Click on the "Add" button to save the record, or click on the "Cancel" button to cancel adding the record.
+#### 😴 Sleep Analytics
+**Viewing Records**
+1. Select "Sleep Analytics" from dropdown
+2. Select your child
 
-- The record will be saved onced the "Add" button is clicked.
-- The record will then be displayed on the growth tracker page for that child the record was added to.
+**Adding Records**
+1. Click **"Add"** button
+2. Enter: Duration (hours), Time fell asleep, Date
+3. Click **"Add"** to save
 
+#### 🏥 Health Journal
+**Medications** - Track medications with dosage and symptoms
+**Allergies** - Record allergies with severity levels
+**Vaccinations** - Log vaccine history
+**Sick Days** - Document illness with temperature and medications
 
-#### Sleep Records
+#### 🍼 Feeding Notes
+**Adding Records**
+1. Click **"Add"** button
+2. Enter: Time, Date, Fed from (Bottle/Breast), Food type, Amount (fl oz), Notes
+3. Click **"Add"** to save
 
-##### Viewing Sleep Records
-1. Select the "Sleep Analytics" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
+#### 📋 Observation Notes
+**Adding Records**
+1. Click **"Add"** button
+2. Select: Priority level (Low/Medium/High)
+3. Enter: Observation notes
+4. Click **"Add"** to save
 
-- This will display all the sleep records for the selected child.
+</details>
 
-##### Adding Sleep Records
-1. Make sure the child you want to add the record to is selected from the second dropdown menu.
-2. Click on the "Add" button in the bottom right corner of the pgae to add a new record.
-3. A modal will appear where you can then enter the details for sleep.
-  1. Enter the sleep duration (hours).
-  2. Enter the time rhe child fell asleep.
-  3. Enter the date of the record.
-4. Click on the "Add" button to save the record, or click on the "Cancel" button to cancel adding the record.
-
-- The record will be saved onced the "Add" button is clicked.
-- The record will then be displayed on the sleep analytics page for that child the record was added to.
-
-
-#### Health Records
-
-##### Medications
-
-##### Viewing Medication Records
-1. Select the "Health Journal" item from the first dropdown menu. 
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
-3. Select Medications from the tab menu below the dropdown menus.
-
-- This will display all the medication records for the selected child.
-
-##### Adding Medication Records
-1. Make sure the child you want to add the record to is selected from the second dropdown menu.
-2. Click on the "Add" button in the bottom right corner of the page to add a new record.
-3. A modal will appear where you can then enter the details for medication.
-  1. Enter the medication name.
-  2. Enter time taken
-  3. Enter date of the record.
-  4. Enter amount (fl oz).
-  5. Enter Sickness/symptoms notes of how the child is feeling.
-4. Click on the "Add" button to save the record, or click on the "Cancel" button to cancel adding the record.
-
-- The record will be saved onced the "Add" button is clicked.
-- The record will then be displayed on the health journal page under the medications tab for that child the record was added to.
-
-##### Allergies
-
-##### Viewing Allergy Records
-1. Select the "Health Journal" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
-3. Select Allergies from the tab menu below the dropdown menus.
-
-- This will display all the allergy records for the selected child.
-
-##### Adding Allergy Records
-1. Make sure the child you want to add the record to is selected from the second dropdown menu.
-2. Click on the "Add" button in the bottom right corner of the page to add a new record.
-3. A modal will appear where you can then enter the details for allergy.
-  1. Enter the allergy name.
-  2. Select severity from the dropdown menu (Low, Medium, High).
-  3. Select epi-pen from the dropdown menu (Yes, No).
-  4. Enter notes about the allergy.
-4. Click on the "Add" button to save the record, or click on the "Cancel" button to cancel adding the record.
-
-- The record will be saved onced the "Add" button is clicked.
-- The record will then be displayed on the health journal page under the allergies tab for that child the record was added to.
-
-##### Vaccinations
-
-##### Viewing Vaccination Records
-1. Select the "Health Journal" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
-3. Select Vaccinations from the tab menu below the dropdown menus.
-
-- This will display all the vaccination records for the selected child.
-
-##### Adding Vaccination Records
-1. Make sure the child you want to add the record to is selected from the second dropdown menu.
-2. Click on the "Add" button in the bottom right corner of the page to add a new record.
-3. A modal will appear where you can then enter the details for vaccination.
-  1. Enter the vaccine name.
-  2. Enter date of the record.  
-4. Click on the "Add" button to save the record, or click on the "Cancel" button to cancel adding the record.
-
-- The record will be saved onced the "Add" button is clicked.
-- The record will then be displayed on the health journal page under the vaccinations tab for that child the record was added to.
-
-
-#### Feeding Records
-
-##### Viewing Feeding Records
-1. Select the "Feeding Notes" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
-
-- This will display all the feeding records for the selected child.
-
-##### Adding Feeding Records
-1. Make sure the child you want to add the record to is selected from the second dropdown menu.
-2. Click on the "Add" button in the bottom right corner of the page to add a new record.
-3. A modal will appear where you can then enter the details for feeding.
-  1. Enter the feeding time.
-  2. Enter the date of the record.
-  3. Select Fed from from the dropdown menu (Bottle, Breast).
-  4. Select type of food from the dropdown menu (Milk, Water, Juice).
-  5. Enter the amount of food (fl oz).
-  6. Enter Notes about the feeding.
-4. Click on the "Add" button to save the record, or click on the "Cancel" button to cancel adding the record.
-
-- The record will be saved onced the "Add" button is clicked.
-- The record will then be displayed on the feeding notes page for that child the record was added to.
-
-
-#### Observation Records
-
-##### Viewing Observation Records
-1. Select the "Observation Notes" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
-
-- This will display all the observation records for the selected child.
-
-##### Adding Observation Records
-1. Make sure the child you want to add the record to is selected from the second dropdown menu.
-2. Click on the "Add" button in the bottom right corner of the page to add a new record.
-3. A modal will appear where you can then enter the details for observation.
-  1. ENter priority level from the dropdown menu (Low, Medium, High).
-  2. Enter Notes about the observation.
-4. Click on the "Add" button to save the record, or click on the "Cancel" button to cancel adding the record.
-
-- The record will be saved onced the "Add" button is clicked.
-- The record will then be displayed on the observation notes page for that child the record was added to.
-
-
-### Assigned Tasks
-
-#### Viewing Tasks
-1. Tasks will be displayed on the main page of the Assigned Tasks page. (If there is no shared account, the assignted tasks page will be empty and promt the user to add a shared account)
+<details>
+<summary><h3>✅ Assigned Tasks - Click to expand</h3></summary>
 
 #### Adding Tasks
-1. Click on the "+ Add Task" button in the center of the page at the top.
-2. A modal will appear where you can then enter the details for the task.
-  1. Enter the task title.
-  2. Enter the task description (optional).
-  3. Assign the task to a specific babysitter from the dropdown menu.
-  4. Assign the task to a specific baby from the dropdown menu.
-  5. Enter the due date (optional).
-3. Click on the "Add Task" button to save the task, or click on the "Cancel" button to cancel adding the task.
-
-- The task will be saved onced the "Add Task" button is clicked.
-- The task will then be displayed on the assigned tasks page with all of the information entered. The shared account (selected babysitter) will recieve this task and will be able to view the information on their account and complete the task as required.
+1. Click **"+ Add Task"**
+2. Enter: Title, Description (optional), Assign to babysitter, Assign to baby, Due date (optional)
+3. Click **"Add Task"**
 
 #### Editing Tasks
-1. Click on the "Edit Task" icon on the far right of the task card.
-2. A modal will appear where you can then edit the details for the task.
-  1. Change the task title.
-  2. Change the task description (optional).
-  3. Chnage the assigned babysitter from the dropdown menu.
-  4. Change the assigned baby from the dropdown menu.
-  5. Change the due date (optional).
-3. Click on the "Save Changed" button to save the changes, or click on the "Cancel" button to cancel editing the task.
-
-- The changes will be saved onced the "Save Changed" button is clicked.
-- The changes will then be displayed on the assigned tasks page with all of the information entered. The shared account (selected babysitter) will recieve the changes to the task and will be able to view the information on their account and complete the task as required.
+1. Click the **Edit** icon on task card
+2. Update information
+3. Click **"Save Changes"**
 
 #### Deleting Tasks
-1. Click on the "Delete Task" icon on the far right of the task card.
-2. A modal will appear where you can then confirm the deletion of the task.
-3. Click on the "Delete" button to delete the task, or click on the "Cancel" button to cancel deleting the task.
+1. Click the **Delete** icon
+2. Confirm deletion
 
-- The task will be deleted onced the "Delete" button is clicked.
-- The task will then be removed from the assigned tasks page. The deletetion will also be reflected on the shared account (selected babysitter) account.
+</details>
 
-#### Completed Tasks
-1. Once a task is completed, the task will be marked as completed and show any notes entered by the assigned babysitter along with the date of the completion.
+<details>
+<summary><h3>💬 Messages - Click to expand</h3></summary>
 
-- The task will show as completed.
+1. View conversations on the left sidebar
+2. Click a conversation to view messages
+3. Type message at bottom
+4. Click **"Send"**
 
+</details>
 
-### Reports
+<details>
+<summary><h3>📊 Reports - Click to expand</h3></summary>
 
-#### Viewing Growth Reports
-1. Select the "Growth Over Time" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
+**Available Reports:**
+- **Growth Over Time** - Height/weight charts
+- **Sleep Patterns** - Sleep duration trends
+- **Feeding Patterns** - Feeding frequency analysis
 
-- This will display all the growth records for the selected child in a graph format.
+Select report type and child from dropdowns to view visualizations.
 
-#### Viewing Sleep Reports
-1. Select the "Sleep Patterns" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
+</details>
 
-- This will display all the sleep records for the selected child in a graph format. 
+<details>
+<summary><h3>⚙️ Settings - Click to expand</h3></summary>
 
-#### Viewing Feeding Reports
-1. Select the "Feeding Patterns" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
+#### Personal Information
+- **Add Baby**: Enter name, DOB, gender, category
+- **Delete Baby**: Click trash icon, confirm deletion
+- **Change Password**: Enter new password (min 8 chars, 1 uppercase, 1 number, 1 special char)
 
-- This will display all the feeding records for the selected child in a graph format.
+#### Shared Accounts
+- **Add Babysitter**: Click "+ Add Babysitter", enter name and email, send invitation
+- **Delete Access**: Click trash icon to revoke access
 
+#### Data Export
+1. Select child from dropdown
+2. Check data types to include
+3. Click **"Generate PDF"**
 
-### Settings
+#### Delete Account
+Click **"Delete"** button, confirm to permanently delete account.
 
-### Personal Information
-1. Select the "Personal Information" card in the settings page.
+</details>
 
-- The personal information page displays the user's email address, Your Little Ones (all the parents children) and a change password secction. 
-
-#### Adding a Baby
-1. Click on the "Add Baby" button in the "Your Little Ones" section.
-2. A modal will appear where you can then enter the details for the baby.
-  1. Enter the baby's first name.
-  2. Enter the baby's last name.
-  3. Enter the baby's date of birth.
-  4. Enter the baby's gender (Male, Female, Other).
-  5. Enter the baby's category (Baby, Toddler, Pre-Schooler, Grade-Scooler).
-3. Click on the "Add Baby" button to save the baby, or click on the "Cancel" button to cancel adding the baby. 
-
-- The baby will be saved onced the "Add Baby" button is clicked.
-- The baby will then be displayed on the "Your Little Ones" section of the personal information page.
-- The baby will then be able to be used for adding, editing, and deleting records.
-
-#### Deleting a Baby
-1. Click on the garbage can icon in the top right corner of each baby card.
-2. A modal will appear where you can then confirm the deletion of the baby.
-3. Click on the "Delete" button to delete the baby, or click on the "Cancel" button to cancel deleting the baby.
-
-- The baby will be deleted onced the "Delete" button is clicked.
-- The baby will then be removed from the "Your Little Ones" section of the personal information page.
-
-#### Chnaging Password
-1. Under the "Change Password" section, in the first text field, enter a new password. (Min 8 characters long, 1 upper case, 1 number and 1 special character)
-2. In the second text field, confirm the new password by entering it again.
-3. Click on the "Accept Changes" button to save the changes
-
-- If successful, the user will see a success message, and the password will be updated. 
-- If unsuccessful, the user will see an error message, and the password will not be updated.
-- Once the password is updated, the user will be able to log in with the new password.
-
-### Shared Accounts
-1. Select the "Shared Accounts" card in the settings page.
-
-- The shared accounts page displays all the shared babysitter accounts associated with the user.
-
-#### Adding a Shared Account
-1. Click on the "+ Add Babysitter" button at the top of the Shared Accounts page.
-2. A modal will appear where you can then enter the details for the shared account.
-  1. Enter the shared account's first name.
-  2. Enter the shared account's email address.
-3. Click on the "Send Share Link" button to send the shared account a link to join the app and share limited account data with them.
-
-- The shared account will be saved onced the "Send Share Link" button is clicked.
-- The shared account will then be displayed on the Shared Accounts page (Pending Status, until the shared account accepts the invitation).
-- Once the shared account accepts the invitation, the status will change to "Accepted" and the shared account will be able to view the limited account data for that user's children.
-
-#### Deleting a Shared Account
-1. Click on the garbage can icon on the far right of the shared account card. (Wheather the status is "Pending" or "Accepted", it will delete the shared account).
-
-- The shared account will be deleted onced the garbage can icon is clicked.
-- The shared account will then be removed from the Shared Accounts page.
-
-### Data Export
-1. Select the "Data Export" card in the settings page.
-
-- The data export page displays all the data that can be exported as a PDF file.
-
-#### Exporting Data
-1. Select the child from the dropdown menu whos data you'd like to export. (By default, the first child is selected)
-2. Check off the checkboxes for the data you want to export and show in the PDF file.
-3. Click on the "Generate PDF" button to export the data.
-
-- The data will be exported onced the "Generate PDF" button is clicked.
-- The data will then be displayed in a PDF file where the user can save it or download it.
-
-### Delete Account
-1. Select the "Delete" button in the settings page.
-2. A modal will appear where you can then confirm the deletion of the account.
-3. Click on the "Yes, Delete Account" button to delete the account, or click on the "Cancel" button to cancel deleting the account.
-
-- The account will be deleted onced the "Yes, Delete Account" button is clicked.
-- The account will then be removed from the app.    
-
-### Log Out
-1. Select the "Log Out" button in the settings page.
-
-- The user will be automatically logged out onced the "Log Out" button is clicked.
-- The user will then be redirected to the sign-in page.
-
-
-### Photo Gallery
-1. Select the "Photo Gallery" card from the Home page.
-
-- The photo gallery page displays all the photos that the user has uploaded to the app.
+<details>
+<summary><h3>📸 Photo Gallery - Click to expand</h3></summary>
 
 #### Uploading Photos
-1. Click on the "Upload Photo" button at the top of the Photo Gallery page.
-2. A modal will appear where you can then enter the details for the photo you want to upload.
-  1. Select the baby from the dropdown menu. (By default, the first baby is selected)
-  2. Click on the "Browse" button to select the photo from your device.
-  3. Once a photo is selected, a preview of the photo will appear in the modal.
-  4. Enter a caption for the photo (optional).
-3. Click on the "Upload" button to upload the photo, or click on the "Cancel" button to cancel uploading the photo.
-
-- The photo will be uploaded onced the "Upload" button is clicked.
-- The photo will then be displayed on the Photo Gallery page.
+1. Click **"Upload Photo"**
+2. Select baby from dropdown
+3. Choose photo (max 5MB)
+4. Add caption (optional)
+5. Click **"Upload"**
 
 #### Deleting Photos
-1. Click on the garbage can icon in the top right corner of each photo card.
-2. A modal will appear where you can then confirm the deletion of the photo.
-3. Click on the "Delete" button to delete the photo, or click on the "Cancel" button to cancel deleting the photo.
+1. Click trash icon on photo
+2. Confirm deletion
 
-- The photo will be deleted onced the "Delete" button is clicked.
-- The photo will then be removed from the Photo Gallery page.
+</details>
+
+<br/>
 
 ---
 
-## 📘 User Manual (Babysitter User)
+## 📗 User Manual (Babysitter User)
 
-### Home Page
-- Until a parent account has sent a shared link to the babysitter, the babysitter will see a "No Access Yet" message.
-- Once a parent account has sent a shared link to the babysitter, and the babysitter has accepted the invitation (By entering the valid 4 digit code), the babysitter will then see the key featured sections of the app, such as the log types, assigned tasks, and photo gallery.
+> **Quick Navigation**: [Home](#-home-page-1) • [Logs](#-logs-1) • [Tasks](#-assigned-tasks-1) • [Messages](#-messages-1) • [Settings](#-settings-1) • [Photos](#-photo-gallery-1)
 
-- To view the history of a specific log type, click on the corresponding log card.
-- To view the Assigned Tasks section, click on the Assigned Tasks card.
-- To view the Photo Gallery section, click on the Photo Gallery card.
+### 🏠 Home Page
 
-### Logs
+- **No Access Yet** - Wait for parent invitation
+- **After Access** - View log cards, assigned tasks, photo gallery
 
-#### Sleep Records
+<details>
+<summary><h3>📝 Logs - Click to expand</h3></summary>
 
-##### Viewing Sleep Records
-1. Select the "Sleep Analytics" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
+Babysitters can view and add records for:
+- **Sleep Analytics** - View/add sleep records
+- **Health Journal** - View/add medication records
+- **Feeding Notes** - View/add feeding records
+- **Observation Notes** - View/add observations
 
-- This will display all the sleep records for the selected child.
+*Same process as parent users for adding records.*
 
-##### Adding Sleep Records
-1. Make sure the child you want to add the record to is selected from the second dropdown menu.
-2. Click on the "Add" button in the bottom right corner of the pgae to add a new record.
-3. A modal will appear where you can then enter the details for sleep.
-  1. Enter the sleep duration (hours).
-  2. Enter the time rhe child fell asleep.
-  3. Enter the date of the record.
-4. Click on the "Add" button to save the record, or click on the "Cancel" button to cancel adding the record.
+</details>
 
-- The record will be saved onced the "Add" button is clicked.
-- The record will then be displayed on the sleep analytics page for that child the record was added to.
-
-
-#### Health Records
-
-##### Medications
-
-##### Viewing Medication Records
-1. Select the "Health Journal" item from the first dropdown menu. 
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
-3. Select Medications from the tab menu below the dropdown menus.
-
-- This will display all the medication records for the selected child.
-
-##### Adding Medication Records
-1. Make sure the child you want to add the record to is selected from the second dropdown menu.
-2. Click on the "Add" button in the bottom right corner of the page to add a new record.
-3. A modal will appear where you can then enter the details for medication.
-  1. Enter the medication name.
-  2. Enter time taken
-  3. Enter date of the record.
-  4. Enter amount (fl oz).
-  5. Enter Sickness/symptoms notes of how the child is feeling.
-4. Click on the "Add" button to save the record, or click on the "Cancel" button to cancel adding the record.
-
-- The record will be saved onced the "Add" button is clicked.
-- The record will then be displayed on the health journal page under the medications tab for that child the record was added to.
-
-
-#### Feeding Records
-
-##### Viewing Feeding Records
-1. Select the "Feeding Notes" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
-
-- This will display all the feeding records for the selected child.
-
-##### Adding Feeding Records
-1. Make sure the child you want to add the record to is selected from the second dropdown menu.
-2. Click on the "Add" button in the bottom right corner of the page to add a new record.
-3. A modal will appear where you can then enter the details for feeding.
-  1. Enter the feeding time.
-  2. Enter the date of the record.
-  3. Select Fed from from the dropdown menu (Bottle, Breast).
-  4. Select type of food from the dropdown menu (Milk, Water, Juice).
-  5. Enter the amount of food (fl oz).
-  6. Enter Notes about the feeding.
-4. Click on the "Add" button to save the record, or click on the "Cancel" button to cancel adding the record.
-
-- The record will be saved onced the "Add" button is clicked.
-- The record will then be displayed on the feeding notes page for that child the record was added to.
-
-
-#### Observation Records
-
-##### Viewing Observation Records
-1. Select the "Observation Notes" item from the first dropdown menu.
-2. Select the child from the second dropdown menu. (By default, the first child is selected)
-
-- This will display all the observation records for the selected child.
-
-##### Adding Observation Records
-1. Make sure the child you want to add the record to is selected from the second dropdown menu.
-2. Click on the "Add" button in the bottom right corner of the page to add a new record.
-3. A modal will appear where you can then enter the details for observation.
-  1. ENter priority level from the dropdown menu (Low, Medium, High).
-  2. Enter Notes about the observation.
-4. Click on the "Add" button to save the record, or click on the "Cancel" button to cancel adding the record.
-
-- The record will be saved onced the "Add" button is clicked.
-- The record will then be displayed on the observation notes page for that child the record was added to.
-
-
-### Assigned Tasks
-
-#### Viewing Tasks
-- Tasks will be displayed on the main page of the Assigned Tasks page. (If the parent account has not assigned any tasks for the babysitteer, the babysitter's Assgined Task page will be empty and display a "No Tasks Yet" message)
+<details>
+<summary><h3>✅ Assigned Tasks - Click to expand</h3></summary>
 
 #### Completing Tasks
-1. After a task has been assigned to a babysitter, the assigned tasks page will display the assigned task with any helpful information for completing the task in the Pending Tasks section.
-2. Click on the Task card to complete the task.
-3. The task card will expand and show a "Complete this task" section
-4. Enter comments about the task completion in the text field. (Optional)
-5. Click on the "Mark as Complete" button to complete the task.
+1. View tasks in **Pending Tasks** section
+2. Click task card to expand
+3. Enter completion comments (optional)
+4. Click **"Mark as Complete"**
+5. Task moves to **Completed Tasks**
 
-- The task will be marked as complete onced the "Mark as Complete" button is clicked.
-- The task will then be moved from the Pending Tasks section to the Completed Tasks section.
-- The parent account will then recieve the compelted task with any comments entered.
+</details>
 
+<details>
+<summary><h3>💬 Messages - Click to expand</h3></summary>
 
-### Settings
+Same as parent users - view conversations, send messages to parents.
 
-### Personal Information
-1. Select the "Personal Information" card in the settings page.
+</details>
 
-- The personal information page displays the user's email address and a change password secction. 
+<details>
+<summary><h3>⚙️ Settings - Click to expand</h3></summary>
 
-#### Chnaging Password
-1. Under the "Change Password" section, in the first text field, enter a new password. (Min 8 characters long, 1 upper case, 1 number and 1 special character)
-2. In the second text field, confirm the new password by entering it again.
-3. Click on the "Accept Changes" button to save the changes
+#### Personal Information
+- View email
+- Change password
 
-- If successful, the user will see a success message, and the password will be updated. 
-- If unsuccessful, the user will see an error message, and the password will not be updated.
-- Once the password is updated, the user will be able to log in with the new password.
+#### Shared Accounts
+1. Check email for 4-digit access code (check spam folder)
+2. Navigate to Settings > Shared Accounts
+3. Enter 4-digit code
+4. Click **"Verify Code"**
+5. Access granted to view children's data
 
-### Shared Accounts
-1. Select the "Shared Accounts" card in the settings page.
+#### Delete Account
+Click **"Delete"** button, confirm to permanently delete account.
 
-- The shared accounts page displays a section to enter in the 4 digit share account access code, and a section that displays all of the parents and children the babysitter has approved access to.
+</details>
 
-#### Accessing Shared Accounts From Shared Link
-1. Check your email inbox (sometimes in the spam folder) for a message from ParentPal that says "ParentPal - Babysitter Access Invitation".
-2. Click on the email and you will see a 4 digit code with more details about the application and signing up if you haven't already.
-3. Sign up as a babysitter account (If you haven't already), navigate to the Shared Account Card under Settings and enter the 4 digit code in the "Add Shared Account" section.
-4. Click on the "verifiy Code" button to verify the code.
-4. If successful, you will see a success message and the shared account will be added to your account. If unsuccessful, you will see an error message.
+<details>
+<summary><h3>📸 Photo Gallery - Click to expand</h3></summary>
 
-- The shared account will be added to your account once the "Verifiy Code" button is clicked.
-- The shared accounts page will display all of the parents and children the babysitter has approved access to.
+- **View Photos** - See photos uploaded by parents and yourself
+- **Upload Photos** - Same process as parents (cannot delete parent photos)
 
-#### Viewing Shared Accounts
-1. Select the "Shared Accounts" card in the settings page.
-2. The shared accounts page displays all of the parents and children the babysitter has approved access to.
+</details>
 
-- If a parent revkokes a babysitter's access by deleting the shared account, the babysitter will then not be able to access the parent's children's data and any tasks they have assigned will be removed from the babysitter's account.
-
-### Delete Account
-1. Select the "Delete" button in the settings page.
-2. A modal will appear where you can then confirm the deletion of the account.
-3. Click on the "Yes, Delete Account" button to delete the account, or click on the "Cancel" button to cancel deleting the account.
-
-- The account will be deleted onced the "Yes, Delete Account" button is clicked.
-- The account will then be removed from the app.    
-
-### Log Out
-1. Select the "Log Out" button in the settings page.
-
-- The user will be automatically logged out onced the "Log Out" button is clicked.
-- The user will then be redirected to the sign-in page.
-
-
-### Photo Gallery
-1. Select the "Photo Gallery" card from the Home page.
-
-- The photo gallery page displays all the photos that the parent account and babysitter account have uploaded to the app.
-
-#### Uploading Photos
-1. Click on the "Upload Photo" button at the top of the Photo Gallery page.
-2. A modal will appear where you can then enter the details for the photo you want to upload.
-  1. Select the baby from the dropdown menu. (By default, the first baby is selected)
-  2. Click on the "Browse" button to select the photo from your device.
-  3. Once a photo is selected, a preview of the photo will appear in the modal.
-  4. Enter a caption for the photo (optional).
-3. Click on the "Upload" button to upload the photo, or click on the "Cancel" button to cancel uploading the photo.
-
-- The photo will be uploaded onced the "Upload" button is clicked.
-- The photo will then be displayed on the Photo Gallery page for the parent account and babysitter account.
+<br/>
 
 ---
 
 ## 🔐 Security
-Your data is protected with modern security practices, including:
-- **JWT Authentication** for session handling.  
-- **HTTPS/TLS Encryption** for all data transmission.  
-- **Secure Storage** of user credentials.  
-- **Input Validation** to prevent XSS and SQL injection.
 
-### 🛡️ Security Badges
-![Security](https://img.shields.io/badge/Secure%20Connection-HTTPS-brightgreen)
-![Auth](https://img.shields.io/badge/Auth-JWT%20Protected-blue)
-![Privacy](https://img.shields.io/badge/Data%20Privacy-GDPR%20Compliant-orange)
+<div align="center">
+
+![Security](https://img.shields.io/badge/Secure%20Connection-HTTPS%2FTLS-brightgreen?style=for-the-badge)
+![Auth](https://img.shields.io/badge/Auth-JWT%20%2B%20Firebase-blue?style=for-the-badge)
+![Privacy](https://img.shields.io/badge/Data%20Privacy-Protected-orange?style=for-the-badge)
+
+</div>
+
+<br/>
+
+### 🛡️ Security Measures
+
+ParentPal takes your family's data security seriously. We implement industry-standard security practices:
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+#### 🔒 Authentication & Access
+- **Firebase Authentication** for secure user management
+- **JWT Tokens** for session handling
+- **Role-based Access Control** (Parent vs Babysitter)
+- **Secure Password Requirements** (min 8 chars, uppercase, number, special char)
+- **Access Code System** for babysitter invitations
+
+</td>
+<td width="50%" valign="top">
+
+#### 🔐 Data Protection
+- **HTTPS/TLS Encryption** for all data transmission
+- **Secure Storage** of credentials and sensitive data
+- **Input Validation** to prevent XSS and SQL injection
+- **CORS Protection** for API endpoints
+- **Regular Security Audits** and updates
+
+</td>
+</tr>
+</table>
+
+### 🔏 Privacy Features
+
+- **Data Isolation** - Parents and babysitters only see authorized data
+- **Granular Sharing** - Parents control what babysitters can access
+- **Account Deletion** - Full data removal upon account deletion
+- **Data Export** - Download your data anytime as PDF
+- **No Third-party Sharing** - Your data stays with ParentPal
+
+<br/>
 
 ---
 
-## 💬 Support
-### Frequently Asked Questions
+<div align="center">
 
-**Q1: How do I reset my password?**  
-A: Navigate to the login page and click “Forgot Password.” Follow the email link to reset it.
+### 📬 Need Help?
 
-**Q2: Is my data stored securely?**  
-A: Yes, all data is encrypted and securely stored in the database.
+For support, feature requests, or bug reports, please contact us at **support@parentpal.com**
 
-**Q3: Can I access the app on mobile?**  
-A: Absolutely! The app is fully responsive and optimized for mobile browsers.
+<br/>
+
 ---
 
-© 2025 ParentPal. All rights reserved.
+**© 2025 ParentPal. All rights reserved.**
+
+Built with ❤️ for parents and babysitters everywhere
+
+</div>
