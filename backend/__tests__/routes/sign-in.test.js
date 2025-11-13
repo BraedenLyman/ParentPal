@@ -5,9 +5,12 @@ const pool = require('../../db');
 const admin = require('../../firebase-admin');
 
 jest.mock('../../db');
+
+// Create a persistent mock for verifyIdToken
+const mockVerifyIdToken = jest.fn();
 jest.mock('../../firebase-admin', () => ({
   auth: jest.fn(() => ({
-    verifyIdToken: jest.fn(),
+    verifyIdToken: mockVerifyIdToken,
   })),
 }));
 
@@ -63,7 +66,7 @@ describe('POST /api/sign-in', () => {
         email: 'test@example.com',
       };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
       const mockUserData = {
         account_id: 'account-123',
@@ -74,43 +77,37 @@ describe('POST /api/sign-in', () => {
         email_address: 'test@example.com',
       };
 
-      pool.query.mockResolvedValueOnce({ rows: [mockUserData] });
+      const mockQuery = jest.fn()
+        .mockResolvedValueOnce({ rows: [mockUserData] })
+        .mockResolvedValueOnce({ rows: [] });
+
+      pool.connect = jest.fn().mockResolvedValue({
+        query: mockQuery,
+        release: jest.fn(),
+      });
 
       const response = await request(app)
         .post('/api/sign-in')
         .send({ idToken: 'valid-token' });
 
-      expect(admin.auth().verifyIdToken).toHaveBeenCalledWith('valid-token');
+      expect(mockVerifyIdToken).toHaveBeenCalledWith('valid-token');
       expect(response.status).toBe(200);
       expect(response.body.user).toEqual(mockUserData);
     });
 
-    test('falls back to test mode when Firebase verification fails', async () => {
-      admin.auth().verifyIdToken.mockRejectedValue(new Error('Invalid token'));
-
-      const mockTestUser = {
-        firebase_uid: 'test-uid-fallback',
-      };
-
-      const mockUserData = {
-        account_id: 'test-account',
-        firebase_uid: 'test-uid-fallback',
-        account_type: 'parent',
-        first_name: 'Test',
-      };
-
-      pool.query
-        .mockResolvedValueOnce({ rows: [mockTestUser] }) 
-        .mockResolvedValueOnce({ rows: [mockUserData] });
+    test('returns 401 when Firebase verification fails', async () => {
+      mockVerifyIdToken.mockRejectedValue(new Error('Invalid token'));
 
       const response = await request(app)
         .post('/api/sign-in')
         .send({ idToken: 'invalid-token' });
 
       expect(console.log).toHaveBeenCalledWith(
-        expect.stringContaining('Firebase verification failed, using test mode')
+        'Firebase verification failed:',
+        'Invalid token'
       );
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(401);
+      expect(response.body).toEqual({ error: 'Invalid Firebase token' });
     });
   });
 
@@ -118,7 +115,7 @@ describe('POST /api/sign-in', () => {
     test('returns parent user data with babies', async () => {
       const mockDecodedToken = { uid: 'parent-uid-123' };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
       const mockParentData = {
         account_id: 'parent-123',
@@ -146,9 +143,14 @@ describe('POST /api/sign-in', () => {
         },
       ];
 
-      pool.query
+      const mockQuery = jest.fn()
         .mockResolvedValueOnce({ rows: [mockParentData] })
-        .mockResolvedValueOnce({ rows: mockBabies }); 
+        .mockResolvedValueOnce({ rows: mockBabies });
+
+      pool.connect = jest.fn().mockResolvedValue({
+        query: mockQuery,
+        release: jest.fn(),
+      });
 
       const response = await request(app)
         .post('/api/sign-in')
@@ -158,12 +160,12 @@ describe('POST /api/sign-in', () => {
       expect(response.body.user).toEqual(mockParentData);
       expect(response.body.babyData).toEqual(mockBabies);
 
-      expect(pool.query).toHaveBeenCalledWith(
+      expect(mockQuery).toHaveBeenCalledWith(
         'SELECT * FROM account WHERE firebase_uid = $1',
         ['parent-uid-123']
       );
 
-      expect(pool.query).toHaveBeenCalledWith(
+      expect(mockQuery).toHaveBeenCalledWith(
         'SELECT baby_id, first_name, last_name, birth_date, gender FROM baby WHERE parent_id = $1',
         ['parent-123']
       );
@@ -172,7 +174,7 @@ describe('POST /api/sign-in', () => {
     test('returns parent user data with no babies', async () => {
       const mockDecodedToken = { uid: 'parent-no-babies-uid' };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
       const mockParentData = {
         account_id: 'parent-456',
@@ -181,9 +183,14 @@ describe('POST /api/sign-in', () => {
         first_name: 'NoKids',
       };
 
-      pool.query
-        .mockResolvedValueOnce({ rows: [mockParentData] }) 
+      const mockQuery = jest.fn()
+        .mockResolvedValueOnce({ rows: [mockParentData] })
         .mockResolvedValueOnce({ rows: [] });
+
+      pool.connect = jest.fn().mockResolvedValue({
+        query: mockQuery,
+        release: jest.fn(),
+      });
 
       const response = await request(app)
         .post('/api/sign-in')
@@ -204,7 +211,7 @@ describe('POST /api/sign-in', () => {
     test('returns babysitter user data without baby query', async () => {
       const mockDecodedToken = { uid: 'babysitter-uid-123' };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
       const mockBabysitterData = {
         account_id: 'babysitter-123',
@@ -215,7 +222,12 @@ describe('POST /api/sign-in', () => {
         email_address: 'mary@example.com',
       };
 
-      pool.query.mockResolvedValueOnce({ rows: [mockBabysitterData] });
+      const mockQuery = jest.fn().mockResolvedValueOnce({ rows: [mockBabysitterData] });
+
+      pool.connect = jest.fn().mockResolvedValue({
+        query: mockQuery,
+        release: jest.fn(),
+      });
 
       const response = await request(app)
         .post('/api/sign-in')
@@ -224,8 +236,8 @@ describe('POST /api/sign-in', () => {
       expect(response.status).toBe(200);
       expect(response.body.user).toEqual(mockBabysitterData);
       expect(response.body.babyData).toBe(null);
-      expect(pool.query).toHaveBeenCalledTimes(1);
-      expect(pool.query).toHaveBeenCalledWith(
+      expect(mockQuery).toHaveBeenCalledTimes(1);
+      expect(mockQuery).toHaveBeenCalledWith(
         'SELECT * FROM account WHERE firebase_uid = $1',
         ['babysitter-uid-123']
       );
@@ -236,15 +248,14 @@ describe('POST /api/sign-in', () => {
     test('returns 404 when user not found in database', async () => {
       const mockDecodedToken = { uid: 'nonexistent-uid' };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
-      pool.query
-        .mockResolvedValueOnce({ rows: [] })
-        .mockResolvedValueOnce({ 
-          rows: [
-            { firebase_uid: 'user1', first_name: 'User1', email_address: 'user1@test.com' },
-          ],
-        });
+      const mockQuery = jest.fn().mockResolvedValueOnce({ rows: [] });
+
+      pool.connect = jest.fn().mockResolvedValue({
+        query: mockQuery,
+        release: jest.fn(),
+      });
 
       const response = await request(app)
         .post('/api/sign-in')
@@ -256,23 +267,24 @@ describe('POST /api/sign-in', () => {
       });
 
       expect(console.log).toHaveBeenCalledWith(
-        'User not found in database, checking all users...'
+        'User not found in database'
       );
     });
 
     test('returns 500 on database query error', async () => {
       const mockDecodedToken = { uid: 'test-uid' };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
-      pool.query.mockRejectedValue(new Error('Database connection failed'));
+      const mockRelease = jest.fn();
+      pool.connect = jest.fn().mockRejectedValue(new Error('Database connection failed'));
 
       const response = await request(app)
         .post('/api/sign-in')
         .send({ idToken: 'valid-token' });
 
       expect(response.status).toBe(500);
-      expect(response.body).toEqual({ error: 'Failed to sign in' });
+      expect(response.body.error).toEqual('Failed to sign in');
 
       expect(console.error).toHaveBeenCalledWith(
         'Signin error:',
@@ -283,23 +295,28 @@ describe('POST /api/sign-in', () => {
     test('returns 500 when baby query fails for parent', async () => {
       const mockDecodedToken = { uid: 'parent-uid' };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
       const mockParentData = {
         account_id: 'parent-789',
         account_type: 'parent',
       };
 
-      pool.query
+      const mockQuery = jest.fn()
         .mockResolvedValueOnce({ rows: [mockParentData] })
         .mockRejectedValueOnce(new Error('Baby query failed'));
+
+      pool.connect = jest.fn().mockResolvedValue({
+        query: mockQuery,
+        release: jest.fn(),
+      });
 
       const response = await request(app)
         .post('/api/sign-in')
         .send({ idToken: 'valid-token' });
 
       expect(response.status).toBe(500);
-      expect(response.body).toEqual({ error: 'Failed to sign in' });
+      expect(response.body.error).toEqual('Failed to sign in');
     });
   });
 
@@ -307,16 +324,21 @@ describe('POST /api/sign-in', () => {
     test('logs successful Firebase verification', async () => {
       const mockDecodedToken = { uid: 'test-uid-log' };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
       const mockUserData = {
         firebase_uid: 'test-uid-log',
         account_type: 'parent',
       };
 
-      pool.query
+      const mockQuery = jest.fn()
         .mockResolvedValueOnce({ rows: [mockUserData] })
         .mockResolvedValueOnce({ rows: [] });
+
+      pool.connect = jest.fn().mockResolvedValue({
+        query: mockQuery,
+        release: jest.fn(),
+      });
 
       await request(app)
         .post('/api/sign-in')
@@ -331,11 +353,16 @@ describe('POST /api/sign-in', () => {
     test('logs user count found', async () => {
       const mockDecodedToken = { uid: 'test-uid' };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
       const mockUserData = { firebase_uid: 'test-uid', account_type: 'babysitter' };
 
-      pool.query.mockResolvedValueOnce({ rows: [mockUserData] });
+      const mockQuery = jest.fn().mockResolvedValueOnce({ rows: [mockUserData] });
+
+      pool.connect = jest.fn().mockResolvedValue({
+        query: mockQuery,
+        release: jest.fn(),
+      });
 
       await request(app)
         .post('/api/sign-in')
@@ -349,7 +376,7 @@ describe('POST /api/sign-in', () => {
     test('logs baby data found for parent', async () => {
       const mockDecodedToken = { uid: 'parent-uid' };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
       const mockParentData = {
         account_id: 'parent-999',
@@ -358,9 +385,14 @@ describe('POST /api/sign-in', () => {
 
       const mockBabies = [{ baby_id: 'baby-1', first_name: 'Test' }];
 
-      pool.query
+      const mockQuery = jest.fn()
         .mockResolvedValueOnce({ rows: [mockParentData] })
         .mockResolvedValueOnce({ rows: mockBabies });
+
+      pool.connect = jest.fn().mockResolvedValue({
+        query: mockQuery,
+        release: jest.fn(),
+      });
 
       await request(app)
         .post('/api/sign-in')
@@ -377,7 +409,7 @@ describe('POST /api/sign-in', () => {
     test('returns correct response structure', async () => {
       const mockDecodedToken = { uid: 'test-uid' };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
       const mockUserData = {
         account_id: 'account-123',
@@ -385,7 +417,12 @@ describe('POST /api/sign-in', () => {
         account_type: 'babysitter',
       };
 
-      pool.query.mockResolvedValueOnce({ rows: [mockUserData] });
+      const mockQuery = jest.fn().mockResolvedValueOnce({ rows: [mockUserData] });
+
+      pool.connect = jest.fn().mockResolvedValue({
+        query: mockQuery,
+        release: jest.fn(),
+      });
 
       const response = await request(app)
         .post('/api/sign-in')
@@ -400,35 +437,31 @@ describe('POST /api/sign-in', () => {
 
   describe('Edge Cases', () => {
     test('handles malformed idToken gracefully', async () => {
-      admin.auth().verifyIdToken.mockRejectedValue(new Error('Malformed token'));
-
-      pool.query.mockResolvedValueOnce({ rows: [] });
+      mockVerifyIdToken.mockRejectedValue(new Error('Malformed token'));
 
       const response = await request(app)
         .post('/api/sign-in')
         .send({ idToken: 'malformed-token-12345' });
 
-      expect(response.status).toBeGreaterThanOrEqual(200);
+      expect(response.status).toBe(401);
     });
 
     test('handles very long idToken', async () => {
       const longToken = 'a'.repeat(10000);
 
-      admin.auth().verifyIdToken.mockRejectedValue(new Error('Token too long'));
-
-      pool.query.mockResolvedValueOnce({ rows: [] });
+      mockVerifyIdToken.mockRejectedValue(new Error('Token too long'));
 
       const response = await request(app)
         .post('/api/sign-in')
         .send({ idToken: longToken });
 
-      expect(response.status).toBeGreaterThanOrEqual(200);
+      expect(response.status).toBe(401);
     });
 
     test('handles null values in user data', async () => {
       const mockDecodedToken = { uid: 'test-uid' };
 
-      admin.auth().verifyIdToken.mockResolvedValue(mockDecodedToken);
+      mockVerifyIdToken.mockResolvedValue(mockDecodedToken);
 
       const mockUserData = {
         account_id: 'account-123',
@@ -438,9 +471,14 @@ describe('POST /api/sign-in', () => {
         last_name: null,
       };
 
-      pool.query
+      const mockQuery = jest.fn()
         .mockResolvedValueOnce({ rows: [mockUserData] })
         .mockResolvedValueOnce({ rows: [] });
+
+      pool.connect = jest.fn().mockResolvedValue({
+        query: mockQuery,
+        release: jest.fn(),
+      });
 
       const response = await request(app)
         .post('/api/sign-in')

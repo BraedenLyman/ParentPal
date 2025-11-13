@@ -48,6 +48,7 @@ router.post('/', async (req, res) => {
         babyData = babyResult.rows;
         console.log('Backend found baby data:', babyData);
       } else {
+        babyData = [];
         console.log('Backend: No baby data found for parent_id:', accountData.account_id);
       }
     }
