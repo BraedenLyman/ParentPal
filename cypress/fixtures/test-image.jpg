@@ -1,0 +1,3 @@
+This is a placeholder file for test images.
+In actual testing, you should add a real test image file here.
+Cypress uses fixtures for uploading files in tests.

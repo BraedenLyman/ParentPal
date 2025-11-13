@@ -29,6 +29,12 @@ ui-debug.log
 # Test coverage reports
 coverage/
 
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+cypress.env.json
+
 # OWASP ZAP security reports
 zap-reports/
 .zap/session/

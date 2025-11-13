@@ -36,7 +36,6 @@ export default function SignUp() {
                     Let’s embark on this exciting journey together!
                 </p>
                 
-                {/* Router Link wrapping the button */}
                 <div className="buttonContainer">
                     <Button 
                         color="primary" 
