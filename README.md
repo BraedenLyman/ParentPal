@@ -364,8 +364,6 @@ ParentPal takes your family's data security seriously. We implement industry-sta
 
 <br/>
 
----
-
 <div align="center">
 
 ---
