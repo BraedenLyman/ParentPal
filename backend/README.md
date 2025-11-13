@@ -1256,7 +1256,9 @@ const deleteTask = async (taskId) => {
 {
   "error": "Failed to delete task"
 }
-```# Health Monitoring
+```
+
+# Health Monitoring
 
 ## Growth
 
@@ -3024,7 +3026,9 @@ const deleteSickDayRecord = async (sickId) => {
 {
   "error": "Failed to delete sick day record"
 }
-```## Feeding
+```
+
+## Feeding
 
 ### Get Feeding Records
 
@@ -3341,7 +3345,9 @@ const deleteFeedingRecord = async (feedingId) => {
 {
   "error": "Failed to delete feeding record"
 }
-```## Observations
+```
+
+## Observations
 
 ### Get Observation Records
 
@@ -3626,7 +3632,9 @@ const deleteObservationRecord = async (observationId) => {
 {
   "error": "Failed to delete observation record"
 }
-```# Messaging
+```
+
+# Messaging
 
 ## Get User Conversations
 
@@ -4463,47 +4471,6 @@ const deletePhoto = async (photoId) => {
 - **Role-based Access** - Parent vs Babysitter permissions
 - **Verification System** - 4-digit codes with 7-day expiry
 - **Share Relationships** - Babysitters can only access authorized children
-
----
-
-## 🧠 Developer Notes
-
-### Environment Variables
-Create a `.env` file with the following:
-```env
-PORT=3000
-DATABASE_URL=postgresql://user:password@localhost:5432/parentpal
-FIREBASE_PROJECT_ID=your-project-id
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-password
-```
-
-### Running the Server
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Start production server
-npm start
-```
-
-### Database Migrations
-```bash
-# Run migrations
-npx prisma migrate deploy
-
-# Generate Prisma client
-npx prisma generate
-```
-
-### API Testing
-All endpoints can be tested using:
-- **Postman** - Import collection from `/docs/postman_collection.json`
-- **cURL** - Example commands in `/docs/api-examples.sh`
-- **Thunder Client** - VS Code extension for API testing
 
 ---
 
