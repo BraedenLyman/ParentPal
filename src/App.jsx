@@ -27,7 +27,6 @@ import ParentMessages from "./components/pages/messages/parent-messages";
 import BabysitterMessages from "./components/pages/messages/babysitter-messages";
 
 function App() {
-
   return (
     <Routes>
       {/** Public Routes  */}
