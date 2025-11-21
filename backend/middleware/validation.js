@@ -96,7 +96,7 @@ const validateNotes = (value, fieldName, maxLength = 1000, required = false) => 
 const validateGrowthData = (req, res, next) => {
   const errors = [];
 
-  if (req.body.weight !== undefined) {
+  if (req.body.weight !== undefined && req.body.weight !== null && req.body.weight !== '') {
     const weightValidation = validateNumeric(req.body.weight, 'Weight', 0, 500);
     if (!weightValidation.valid) {
       errors.push(weightValidation.message);
@@ -105,7 +105,7 @@ const validateGrowthData = (req, res, next) => {
     }
   }
 
-  if (req.body.height !== undefined) {
+  if (req.body.height !== undefined && req.body.height !== null && req.body.height !== '') {
     const heightValidation = validateNumeric(req.body.height, 'Height', 0, 100);
     if (!heightValidation.valid) {
       errors.push(heightValidation.message);
@@ -124,7 +124,7 @@ const validateGrowthData = (req, res, next) => {
 const validateSleepData = (req, res, next) => {
   const errors = [];
 
-  if (req.body.sleep_duration !== undefined) {
+  if (req.body.sleep_duration !== undefined && req.body.sleep_duration !== null && req.body.sleep_duration !== '') {
     const durationValidation = validateNumeric(req.body.sleep_duration, 'Sleep Duration', 0, 24);
     if (!durationValidation.valid) {
       errors.push(durationValidation.message);
@@ -283,8 +283,8 @@ const validateSickDayData = (req, res, next) => {
 const validateObservationData = (req, res, next) => {
   const errors = [];
 
-  if (req.body.notes) {
-    const notesValidation = validateNotes(req.body.notes, 'Notes', 2000, true);
+  if (req.body.notes && req.body.notes !== '') {
+    const notesValidation = validateNotes(req.body.notes, 'Notes', 2000, false);
     if (!notesValidation.valid) {
       errors.push(notesValidation.message);
     } else {

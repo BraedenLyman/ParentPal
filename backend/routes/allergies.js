@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
 router.post('/', validateAllergyData, async (req, res) => {
     const { baby_id, allergy_name, severity, epi_pen, notes, created_by_account_id, created_by_first_name, created_by_last_name } = req.body;
 
-    if (!baby_id || !allergy_name || !severity || !epi_pen) {
+    if (!baby_id || !allergy_name || !severity || epi_pen === undefined || epi_pen === null) {
         return res.status(400).json({ error: 'baby_id, allergy_name, severity, and epi_pen are required' });
     }
 
@@ -48,7 +48,7 @@ router.put('/:allergy_id', validateAllergyData, async (req, res) => {
     const { allergy_id } = req.params;
     const { baby_id, allergy_name, severity, epi_pen, notes } = req.body;
 
-    if (!baby_id || !allergy_name || !severity || !epi_pen) {
+    if (!baby_id || !allergy_name || !severity || epi_pen === undefined || epi_pen === null) {
         return res.status(400).json({ error: 'baby_id, allergy_name, severity, and epi_pen are required' });
     }
 
