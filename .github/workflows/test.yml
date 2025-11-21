@@ -259,3 +259,235 @@ jobs:
           kill $SERVER_PID 2>/dev/null || true
         fi
         pkill -f "node.*server.js" || true
+
+  performance-test:
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-frontend]
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: parentpal_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install backend dependencies
+      run: |
+        cd backend
+        if [ -f package-lock.json ]; then
+          npm ci
+        else
+          npm install
+        fi
+
+    - name: Create test environment file
+      run: |
+        cd backend
+        cat > .env << EOF
+        PORT=3000
+        DATABASE_URL=postgresql://test:test@localhost:5432/parentpal_test
+        NODE_ENV=test
+        EOF
+
+    - name: Start backend server
+      run: |
+        cd backend
+        npm start > server.log 2>&1 &
+        SERVER_PID=$!
+        echo "Server PID: $SERVER_PID"
+        echo $SERVER_PID > server.pid
+
+        # Wait for server to start
+        for i in {1..30}; do
+          if curl -f http://localhost:3000/api/test 2>/dev/null; then
+            echo "Server is ready!"
+            break
+          fi
+          echo "Waiting for server... attempt $i/30"
+          sleep 2
+        done
+
+        curl -f http://localhost:3000/api/test || (cat server.log && exit 1)
+
+    - name: Run Performance Tests - Read Operations
+      run: |
+        cd backend
+        npm run perf:read
+      continue-on-error: true
+
+    - name: Generate Performance Report
+      if: always()
+      run: |
+        cd backend
+        npm run perf:report || true
+
+    - name: Parse Performance Results
+      if: always()
+      run: |
+        cd backend
+        if [ -f performance/results.json ]; then
+          echo "## ⚡ Performance Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Extract key metrics using node
+          node -e "
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('performance/results.json', 'utf8'));
+            const summary = results.aggregate;
+
+            console.log('### 📊 Response Time Metrics');
+            console.log('');
+            console.log('| Metric | Value |');
+            console.log('|--------|-------|');
+            console.log('| Min | ' + (summary.latency?.min || 'N/A') + 'ms |');
+            console.log('| Max | ' + (summary.latency?.max || 'N/A') + 'ms |');
+            console.log('| Median | ' + (summary.latency?.median || 'N/A') + 'ms |');
+            console.log('| p95 | ' + (summary.latency?.p95 || 'N/A') + 'ms |');
+            console.log('| p99 | ' + (summary.latency?.p99 || 'N/A') + 'ms |');
+            console.log('');
+            console.log('### 🎯 Request Metrics');
+            console.log('');
+            console.log('| Metric | Value |');
+            console.log('|--------|-------|');
+            console.log('| Total Requests | ' + (summary.counters?.['http.requests'] || 'N/A') + ' |');
+            console.log('| Successful (2xx) | ' + (summary.counters?.['http.codes.200'] || 'N/A') + ' |');
+            console.log('| Errors | ' + (summary.counters?.['errors.total'] || 0) + ' |');
+            console.log('| Requests/sec | ' + (summary.rates?.['http.request_rate'] || 'N/A') + ' |');
+          " >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ No performance results file found" >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Check Performance Thresholds
+      if: always()
+      run: |
+        cd backend
+        if [ -f performance/results.json ]; then
+          node -e "
+            const fs = require('fs');
+            const results = JSON.parse(fs.readFileSync('performance/results.json', 'utf8'));
+            const summary = results.aggregate;
+
+            const p95 = summary.latency?.p95 || 0;
+            const p99 = summary.latency?.p99 || 0;
+            const errorRate = (summary.counters?.['errors.total'] || 0) / (summary.counters?.['http.requests'] || 1) * 100;
+
+            console.log('Performance Thresholds:');
+            console.log('  p95: ' + p95 + 'ms (threshold: 500ms)');
+            console.log('  p99: ' + p99 + 'ms (threshold: 1000ms)');
+            console.log('  Error Rate: ' + errorRate.toFixed(2) + '% (threshold: 1%)');
+
+            let failed = false;
+            if (p95 > 500) {
+              console.log('❌ FAIL: p95 latency exceeds 500ms');
+              failed = true;
+            }
+            if (p99 > 1000) {
+              console.log('❌ FAIL: p99 latency exceeds 1000ms');
+              failed = true;
+            }
+            if (errorRate > 1) {
+              console.log('❌ FAIL: Error rate exceeds 1%');
+              failed = true;
+            }
+
+            if (!failed) {
+              console.log('✅ All performance thresholds passed!');
+            }
+
+            process.exit(failed ? 1 : 0);
+          " || echo "⚠️ Performance thresholds exceeded (non-blocking)"
+        fi
+
+    - name: Upload Performance Reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: performance-reports
+        path: |
+          backend/performance/results.json
+          backend/performance/report.html
+          backend/server.log
+
+    - name: Comment PR with Performance Results
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      continue-on-error: true
+      with:
+        script: |
+          const fs = require('fs');
+          let comment = '## ⚡ Performance Test Results\n\n';
+
+          try {
+            const resultsPath = 'backend/performance/results.json';
+            if (fs.existsSync(resultsPath)) {
+              const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
+              const summary = results.aggregate;
+
+              comment += '### 📊 Response Time Metrics\n\n';
+              comment += '| Metric | Value |\n';
+              comment += '|--------|-------|\n';
+              comment += `| Min | ${summary.latency?.min || 'N/A'}ms |\n`;
+              comment += `| Max | ${summary.latency?.max || 'N/A'}ms |\n`;
+              comment += `| Median | ${summary.latency?.median || 'N/A'}ms |\n`;
+              comment += `| p95 | ${summary.latency?.p95 || 'N/A'}ms |\n`;
+              comment += `| p99 | ${summary.latency?.p99 || 'N/A'}ms |\n\n`;
+
+              comment += '### 🎯 Request Metrics\n\n';
+              comment += '| Metric | Value |\n';
+              comment += '|--------|-------|\n';
+              comment += `| Total Requests | ${summary.counters?.['http.requests'] || 'N/A'} |\n`;
+              comment += `| Successful (2xx) | ${summary.counters?.['http.codes.200'] || 'N/A'} |\n`;
+              comment += `| Errors | ${summary.counters?.['errors.total'] || 0} |\n`;
+              comment += `| Requests/sec | ${summary.rates?.['http.request_rate'] || 'N/A'} |\n\n`;
+
+              const p95 = summary.latency?.p95 || 0;
+              const p99 = summary.latency?.p99 || 0;
+              const errorRate = (summary.counters?.['errors.total'] || 0) / (summary.counters?.['http.requests'] || 1) * 100;
+
+              comment += '### ✅ Threshold Status\n\n';
+              comment += `- p95 < 500ms: ${p95 <= 500 ? '✅ PASS' : '❌ FAIL'} (${p95}ms)\n`;
+              comment += `- p99 < 1000ms: ${p99 <= 1000 ? '✅ PASS' : '❌ FAIL'} (${p99}ms)\n`;
+              comment += `- Error rate < 1%: ${errorRate <= 1 ? '✅ PASS' : '❌ FAIL'} (${errorRate.toFixed(2)}%)\n`;
+            } else {
+              comment += '⚠️ Performance test completed but no results file was generated.\n';
+            }
+          } catch (error) {
+            comment += `⚠️ Error parsing performance results: ${error.message}\n`;
+          }
+
+          comment += '\n📊 **Full performance reports available in artifacts**';
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+    - name: Cleanup
+      if: always()
+      run: |
+        if [ -f backend/server.pid ]; then
+          SERVER_PID=$(cat backend/server.pid)
+          echo "Stopping server with PID: $SERVER_PID"
+          kill $SERVER_PID 2>/dev/null || true
+        fi
+        pkill -f "node.*server.js" || true

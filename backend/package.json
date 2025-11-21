@@ -7,7 +7,11 @@
     "start": "node server.js",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "perf:read": "artillery run performance/artillery-config.yml",
+    "perf:write": "artillery run performance/artillery-write-ops.yml",
+    "perf:quick": "artillery quick --count 100 --num 10 http://localhost:3000/api/test",
+    "perf:report": "artillery run performance/artillery-config.yml --output performance/results.json && artillery report performance/results.json --output performance/report.html"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +31,9 @@
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/supertest": "^6.0.3",
+    "artillery": "^2.0.27",
+    "autocannon": "^8.0.0",
+    "clinic": "^13.0.0",
     "jest": "^30.2.0",
     "supertest": "^7.1.4"
   }
