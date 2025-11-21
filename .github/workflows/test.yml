@@ -92,3 +92,170 @@ jobs:
 
     - name: Run linter
       run: npm run lint
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-frontend]
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: parentpal_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install backend dependencies
+      run: |
+        cd backend
+        if [ -f package-lock.json ]; then
+          npm ci
+        else
+          npm install
+        fi
+
+    - name: Create test environment file
+      run: |
+        cd backend
+        cat > .env << EOF
+        PORT=3000
+        DATABASE_URL=postgresql://test:test@localhost:5432/parentpal_test
+        NODE_ENV=test
+        EOF
+
+    - name: Start backend server
+      run: |
+        cd backend
+        npm start > server.log 2>&1 &
+        SERVER_PID=$!
+        echo "Server PID: $SERVER_PID"
+        echo $SERVER_PID > server.pid
+
+        # Wait for server to start with retries
+        for i in {1..30}; do
+          if curl -f http://localhost:3000/api/test 2>/dev/null; then
+            echo "Server is ready!"
+            break
+          fi
+          echo "Waiting for server... attempt $i/30"
+          sleep 2
+        done
+
+        # Final check
+        curl -f http://localhost:3000/api/test || (cat server.log && exit 1)
+
+    - name: OWASP ZAP Baseline Scan
+      uses: zaproxy/action-baseline@v0.12.0
+      with:
+        target: 'http://localhost:3000'
+        rules_file_name: '.zap/rules.tsv'
+        cmd_options: '-a -j'
+        fail_action: false
+        allow_issue_writing: false
+      continue-on-error: true
+
+    - name: OWASP ZAP Full Scan
+      uses: zaproxy/action-full-scan@v0.10.0
+      with:
+        target: 'http://localhost:3000'
+        rules_file_name: '.zap/rules.tsv'
+        cmd_options: '-a -j'
+        fail_action: false
+        allow_issue_writing: false
+      continue-on-error: true
+
+    - name: Display ZAP Scan Summary
+      if: always()
+      run: |
+        echo "=== OWASP ZAP Security Scan Summary ==="
+        if [ -f report_md.md ]; then
+          echo "Markdown report found:"
+          head -50 report_md.md
+        else
+          echo "No markdown report generated"
+        fi
+
+        if [ -f report_json.json ]; then
+          echo "JSON report found"
+        fi
+
+        if [ -f report_html.html ]; then
+          echo "HTML report found"
+        fi
+
+    - name: Upload ZAP Scan Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: zap-scan-results
+        path: |
+          report_html.html
+          report_json.json
+          report_md.md
+          backend/server.log
+
+    - name: Create Security Report Summary
+      if: always()
+      run: |
+        echo "## 🔒 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        if [ -f report_md.md ]; then
+          echo "### OWASP ZAP Findings" >> $GITHUB_STEP_SUMMARY
+          cat report_md.md >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ No ZAP report was generated. Check the scan logs for errors." >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "📊 **Full reports available in artifacts**" >> $GITHUB_STEP_SUMMARY
+
+    - name: Comment PR with Security Results
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      continue-on-error: true
+      with:
+        script: |
+          const fs = require('fs');
+          let comment = '## 🔒 OWASP ZAP Security Scan Results\n\n';
+
+          if (fs.existsSync('report_md.md')) {
+            const report = fs.readFileSync('report_md.md', 'utf8');
+            comment += report;
+          } else {
+            comment += '⚠️ Security scan completed but no issues were found or report generation failed.\n\n';
+            comment += 'Check the [workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.';
+          }
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+    - name: Cleanup
+      if: always()
+      run: |
+        if [ -f backend/server.pid ]; then
+          SERVER_PID=$(cat backend/server.pid)
+          echo "Stopping server with PID: $SERVER_PID"
+          kill $SERVER_PID 2>/dev/null || true
+        fi
+        pkill -f "node.*server.js" || true
