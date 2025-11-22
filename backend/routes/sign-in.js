@@ -8,6 +8,11 @@ router.post('/', async (req, res) => {
   const { idToken } = req.body;
   if (!idToken) return res.status(400).json({ error: 'Missing ID token' });
 
+  // Check if Firebase is initialized
+  if (!admin.apps.length) {
+    return res.status(503).json({ error: 'Firebase authentication is not available' });
+  }
+
   let client;
   try {
     let firebaseUid;
