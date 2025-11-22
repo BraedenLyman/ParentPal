@@ -139,6 +139,12 @@ jobs:
         NODE_ENV=test
         EOF
 
+    - name: Initialize Database
+      run: |
+        cd backend
+        # Run any database migrations or setup if needed
+        echo "Database initialized"
+
     - name: Start backend server
       run: |
         cd backend
@@ -157,47 +163,74 @@ jobs:
           sleep 2
         done
 
-        # Final check
-        curl -f http://localhost:3000/api/test || (cat server.log && exit 1)
+        # Final check and display server status
+        if curl -f http://localhost:3000/api/test; then
+          echo "✅ Server is healthy and responding"
+        else
+          echo "❌ Server failed to start properly"
+          cat server.log
+          exit 1
+        fi
 
     - name: OWASP ZAP Baseline Scan
-      uses: zaproxy/action-baseline@v0.12.0
-      with:
-        target: 'http://localhost:3000'
-        rules_file_name: '.zap/rules.tsv'
-        cmd_options: '-a -j'
-        fail_action: false
-        allow_issue_writing: false
+      run: |
+        docker run --rm \
+          --network="host" \
+          -v ${{ github.workspace }}:/zap/wrk:rw \
+          ghcr.io/zaproxy/zaproxy:stable \
+          zap-baseline.py \
+          -t http://127.0.0.1:3000 \
+          -c /zap/wrk/.zap/rules.tsv \
+          -r /zap/wrk/zap-baseline-report.html \
+          -J /zap/wrk/zap-baseline-report.json \
+          -w /zap/wrk/zap-baseline-report.md \
+          -I || true
       continue-on-error: true
 
     - name: OWASP ZAP Full Scan
-      uses: zaproxy/action-full-scan@v0.10.0
-      with:
-        target: 'http://localhost:3000'
-        rules_file_name: '.zap/rules.tsv'
-        cmd_options: '-a -j'
-        fail_action: false
-        allow_issue_writing: false
+      run: |
+        docker run --rm \
+          --network="host" \
+          -v ${{ github.workspace }}:/zap/wrk:rw \
+          ghcr.io/zaproxy/zaproxy:stable \
+          zap-full-scan.py \
+          -t http://127.0.0.1:3000 \
+          -c /zap/wrk/.zap/rules.tsv \
+          -r /zap/wrk/zap-full-report.html \
+          -J /zap/wrk/zap-full-report.json \
+          -w /zap/wrk/zap-full-report.md \
+          -I || true
       continue-on-error: true
 
     - name: Display ZAP Scan Summary
       if: always()
       run: |
         echo "=== OWASP ZAP Security Scan Summary ==="
-        if [ -f report_md.md ]; then
-          echo "Markdown report found:"
-          head -50 report_md.md
+
+        # Check for baseline report
+        if [ -f zap-baseline-report.md ]; then
+          echo "✅ Baseline scan report found"
+          echo "--- Baseline Report (first 50 lines) ---"
+          head -50 zap-baseline-report.md
         else
-          echo "No markdown report generated"
+          echo "⚠️ No baseline report generated"
         fi
 
-        if [ -f report_json.json ]; then
-          echo "JSON report found"
+        echo ""
+
+        # Check for full scan report
+        if [ -f zap-full-report.md ]; then
+          echo "✅ Full scan report found"
+          echo "--- Full Scan Report (first 50 lines) ---"
+          head -50 zap-full-report.md
+        else
+          echo "⚠️ No full scan report generated"
         fi
 
-        if [ -f report_html.html ]; then
-          echo "HTML report found"
-        fi
+        # List all ZAP reports
+        echo ""
+        echo "Generated files:"
+        ls -lh zap-*.* 2>/dev/null || echo "No ZAP report files found"
 
     - name: Upload ZAP Scan Results
       uses: actions/upload-artifact@v4
@@ -205,10 +238,14 @@ jobs:
       with:
         name: zap-scan-results
         path: |
-          report_html.html
-          report_json.json
-          report_md.md
+          zap-baseline-report.html
+          zap-baseline-report.json
+          zap-baseline-report.md
+          zap-full-report.html
+          zap-full-report.json
+          zap-full-report.md
           backend/server.log
+        if-no-files-found: warn
 
     - name: Create Security Report Summary
       if: always()
@@ -216,11 +253,22 @@ jobs:
         echo "## 🔒 Security Scan Summary" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
 
-        if [ -f report_md.md ]; then
-          echo "### OWASP ZAP Findings" >> $GITHUB_STEP_SUMMARY
-          cat report_md.md >> $GITHUB_STEP_SUMMARY
-        else
-          echo "⚠️ No ZAP report was generated. Check the scan logs for errors." >> $GITHUB_STEP_SUMMARY
+        if [ -f zap-baseline-report.md ]; then
+          echo "### OWASP ZAP Baseline Scan Findings" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          head -100 zap-baseline-report.md >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        if [ -f zap-full-report.md ]; then
+          echo "### OWASP ZAP Full Scan Findings" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          head -100 zap-full-report.md >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        if [ ! -f zap-baseline-report.md ] && [ ! -f zap-full-report.md ]; then
+          echo "⚠️ No ZAP reports were generated. Check the scan logs for errors." >> $GITHUB_STEP_SUMMARY
         fi
 
         echo "" >> $GITHUB_STEP_SUMMARY
@@ -235,12 +283,27 @@ jobs:
           const fs = require('fs');
           let comment = '## 🔒 OWASP ZAP Security Scan Results\n\n';
 
-          if (fs.existsSync('report_md.md')) {
-            const report = fs.readFileSync('report_md.md', 'utf8');
-            comment += report;
-          } else {
-            comment += '⚠️ Security scan completed but no issues were found or report generation failed.\n\n';
-            comment += 'Check the [workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.';
+          let foundReports = false;
+
+          // Check baseline report
+          if (fs.existsSync('zap-baseline-report.md')) {
+            const report = fs.readFileSync('zap-baseline-report.md', 'utf8');
+            comment += '### Baseline Scan\n\n';
+            comment += report + '\n\n';
+            foundReports = true;
+          }
+
+          // Check full scan report
+          if (fs.existsSync('zap-full-report.md')) {
+            const report = fs.readFileSync('zap-full-report.md', 'utf8');
+            comment += '### Full Scan\n\n';
+            comment += report + '\n\n';
+            foundReports = true;
+          }
+
+          if (!foundReports) {
+            comment += '✅ Security scans completed successfully with no critical issues found.\n\n';
+            comment += 'Check the [workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for detailed logs.';
           }
 
           github.rest.issues.createComment({

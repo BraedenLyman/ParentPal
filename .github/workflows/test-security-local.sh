@@ -51,28 +51,31 @@ echo "This may take a few minutes..."
 docker run --rm \
     --network="host" \
     -v "$(pwd)/..:/zap/wrk:rw" \
-    owasp/zap2docker-stable \
+    ghcr.io/zaproxy/zaproxy:stable \
     zap-baseline.py \
-    -t http://localhost:3000 \
-    -c ../.zap/rules.tsv \
-    -r zap-baseline-report.html \
-    -J zap-baseline-report.json \
-    -w zap-baseline-report.md \
-    -a || true
+    -t http://127.0.0.1:3000 \
+    -c /zap/wrk/.zap/rules.tsv \
+    -r /zap/wrk/zap-baseline-report.html \
+    -J /zap/wrk/zap-baseline-report.json \
+    -w /zap/wrk/zap-baseline-report.md \
+    -I || true
 
 echo ""
 echo "📊 Scan complete!"
 
 # Display summary
+cd ..
 if [ -f zap-baseline-report.md ]; then
     echo ""
     echo "=== ZAP Scan Summary ==="
     head -50 zap-baseline-report.md
     echo ""
     echo "Full reports generated:"
-    echo "  - HTML: backend/zap-baseline-report.html"
-    echo "  - JSON: backend/zap-baseline-report.json"
-    echo "  - Markdown: backend/zap-baseline-report.md"
+    echo "  - HTML: zap-baseline-report.html"
+    echo "  - JSON: zap-baseline-report.json"
+    echo "  - Markdown: zap-baseline-report.md"
+else
+    echo "⚠️ No report was generated. Check Docker logs above for errors."
 fi
 
 # Cleanup
