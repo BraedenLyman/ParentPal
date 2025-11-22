@@ -9,7 +9,7 @@ import { FiBell } from "react-icons/fi";
 import { FiFilter } from "react-icons/fi";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import "../pages.css";
+import "../../../styles/pages.css";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useBabyData } from "../../../hooks/useBabyData";
 import API_URL from "../../../config/api";

@@ -12,7 +12,7 @@ import Select from "../../custom-select/CustomSelect";
 import { auth } from "../../../firebase/firebaseAuth";
 import API_URL from "../../../config/api";
 import ReportsCharts from "./ReportsCharts";
-import "../pages.css";
+import "../../../styles/pages.css";
 import "./reports.css";
 
 export default function Reports() {
