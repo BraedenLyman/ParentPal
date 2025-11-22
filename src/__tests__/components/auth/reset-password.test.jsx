@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import ResetPassword from '../../components/auth/sign-in/forgot-password/reset-password';
+import ResetPassword from '../../../components/auth/sign-in/forgot-password/reset-password';
 import { verifyPasswordResetCode, confirmPasswordReset } from 'firebase/auth';
 
 jest.mock('firebase/auth', () => ({
@@ -12,7 +12,7 @@ jest.mock('firebase/auth', () => ({
   browserSessionPersistence: 'SESSION',
 }));
 
-jest.mock('../../firebase/firebase', () => ({
+jest.mock('../../../firebase/firebase', () => ({
   app: { name: 'mock-app' },
 }));
 

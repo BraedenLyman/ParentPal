@@ -1,6 +1,6 @@
 const request = require('supertest');
 const express = require('express');
-const medsRouter = require('../../routes/meds');
+const medsRouter = require('../../routes/medications');
 const pool = require('../../db');
 
 jest.mock('../../db');

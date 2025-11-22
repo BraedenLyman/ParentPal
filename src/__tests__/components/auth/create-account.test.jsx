@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import CreateAccount, { genders } from '../../components/auth/register/create-account';
+import CreateAccount, { genders } from '../../../components/auth/register/create-account';
 import axios from 'axios';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
@@ -13,7 +13,7 @@ jest.mock('firebase/auth', () => ({
   browserSessionPersistence: 'SESSION',
 }));
 
-jest.mock('../../firebase/firebase', () => ({
+jest.mock('../../../firebase/firebase', () => ({
   app: { name: 'mock-app' },
 }));
 
@@ -22,7 +22,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
 }));
 
-jest.mock('../../components/custom-select/CustomSelect', () => {
+jest.mock('../../../components/custom-select/CustomSelect', () => {
   return function MockSelect({ options, value, onChange, placeholder }) {
     return (
       <select

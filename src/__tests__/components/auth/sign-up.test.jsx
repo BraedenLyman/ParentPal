@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import SignUp from '../../components/auth/register/sign-up';
+import SignUp from '../../../components/auth/register/sign-up';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

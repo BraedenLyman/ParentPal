@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import AccountComplete from '../../components/auth/register/account-complete';
+import AccountComplete from '../../../components/auth/register/account-complete';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
