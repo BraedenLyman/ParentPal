@@ -9,6 +9,7 @@ jest.mock('../../db');
 // Create a persistent mock for verifyIdToken
 const mockVerifyIdToken = jest.fn();
 jest.mock('../../firebase-admin', () => ({
+  apps: [{ name: 'mock-app' }], // Mock apps array to indicate Firebase is initialized
   auth: jest.fn(() => ({
     verifyIdToken: mockVerifyIdToken,
   })),
