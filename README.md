@@ -17,10 +17,9 @@
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
 - [Overview](#-overview)
-- [Key Features](#-key-features)
 - [Tech Stack](#️-tech-stack)
 - [User Manual (Parent)](#-user-manual-parent-user)
 - [User Manual (Babysitter)](#-user-manual-babysitter-user)
@@ -45,7 +44,6 @@
 
 ## Tech Stack
 
-### Frontend
 ```javascript
 Framework:        React 18.3.1
 Build Tool:       Vite 6.3.5
@@ -64,92 +62,224 @@ Hosting:          Firebase Hosting
 
 ---
 
-## 📘 User Manual (Parent User)
+## User Manual (Parent User)
 
-> **Quick Navigation**: [Home](#-home-page) • [Logs](#-logs) • [Tasks](#-assigned-tasks) • [Messages](#-messages) • [Reports](#-reports) • [Settings](#-settings) • [Photos](#-photo-gallery)
+###  Home Page
 
-### 🏠 Home Page
-
-Your dashboard provides quick access to all major features:
+The main dashboard provides quick access to all major features:
 - **Log Cards** - Click any card to view/add records (Growth, Sleep, Health, Feeding, Observations)
 - **Assigned Tasks** - Manage tasks for babysitters
 - **Photo Gallery** - View and upload photos
 
 <details>
-<summary><h3>📝 Logs - Click to expand</h3></summary>
+<summary><h3>Logs</h3></summary>
 
-#### 📈 Growth Tracker
-**Viewing Records**
+#### Growth Tracker
+**Viewing Growth Records**
 1. Select "Growth Tracker" from the first dropdown
-2. Select your child from the second dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A list of all growth records for that child will then appear
 
-**Adding Records**
+**Adding Grwoth Records**
 1. Click the **"Add"** button (bottom right)
-2. Enter: Height (ft/in), Weight (lbs), Date
-3. Click **"Add"** to save
+2. Enter the corresponding growth record details
+3. Click **"Add"** to save or **"Cancel"** to cancel
+4. The new record will be saved to the list of growth records for that child
 
-#### 😴 Sleep Analytics
-**Viewing Records**
-1. Select "Sleep Analytics" from dropdown
-2. Select your child
+**Filtering Growth Records**
+1. Click the **Filter** icon (top right)
+2. Select a filter option
+3. The list of growth records will be filtered accordingly
 
-**Adding Records**
-1. Click **"Add"** button
-2. Enter: Duration (hours), Time fell asleep, Date
-3. Click **"Add"** to save
+**Editing GrowthRecords**
+1. Click the **Edit** icon (The pencial icon on the growth record card)
+2. A modal will appear with the current growth record details
+3. Update the details as needed
+4. Click **"Save"** to save changes or **"Cancel"** to cancel
 
-#### 🏥 Health Journal
-**Medications** - Track medications with dosage and symptoms
-**Allergies** - Record allergies with severity levels
-**Vaccinations** - Log vaccine history
-**Sick Days** - Document illness with temperature and medications
+**Deleting Growth Records**
+1. Click the **Delete** icon (The trash icon on the growth record card)
+2. A modal will appear with a delete growth record confirmation
+3. Click **"Delete"** to delete the record or **"Cancel"** to cancel
 
-#### 🍼 Feeding Notes
-**Adding Records**
-1. Click **"Add"** button
-2. Enter: Time, Date, Fed from (Bottle/Breast), Food type, Amount (fl oz), Notes
-3. Click **"Add"** to save
 
-#### 📋 Observation Notes
-**Adding Records**
-1. Click **"Add"** button
-2. Select: Priority level (Low/Medium/High)
-3. Enter: Observation notes
-4. Click **"Add"** to save
+#### Sleep Analytics
+**Viewing sleep Records**
+1. Select "Sleep Analytics" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A list of all sleep records for that child will then appear
+
+**Adding Sleep Records**
+1. Click the **"Add"** button (bottom right)
+2. Enter the corresponding sleep record details
+3. Click **"Add"** to save or **"Cancel"** to cancel
+4. The new record will be saved to the list of sleep records for that child
+
+**Filtering Sleep Records**
+1. Click the **Filter** icon (top right)
+2. Select a filter option
+3. The list of sleep records will be filtered accordingly
+
+**Editing Sleep Records**
+1. Click the **Edit** icon (The pencial icon on the sleep record card)
+2. A modal will appear with the current sleep record details
+3. Update the details as needed
+4. Click **"Save"** to save changes or **"Cancel"** to cancel
+
+**Deleting Sleep Records**
+1. Click the **Delete** icon (The trash icon on the sleep record card)
+2. A modal will appear with a delete sleep record confirmation
+3. Click **"Delete"** to delete the record or **"Cancel"** to cancel
+
+
+#### Health Journal
+**Viewing Health Records**
+1. Select "Health Journal" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. Select the type of Health Records you want to view from the navigation bar (e.g., "Medications", "Allergies", "Vaccinations" or "Sick Days")
+3. A list of all selected Health records types for that child will then appear
+
+**Adding Health Records**
+(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are adding)
+
+1. Click the **"Add"** button (bottom right)
+2. Enter the corresponding health record details
+3. Click **"Add"** to save or **"Cancel"** to cancel
+4. The new record will be saved to the selected type of Health Records list for that child
+
+**Filtering Health Records**
+(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are filtering)
+
+1. Click the **Filter** icon (top right)
+2. Select a filter option
+3. The list of the selected Health Record type will be filtered accordingly
+
+**Editing Health Records**
+(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are editing)
+
+1. Click the **Edit** icon (The pencial icon on the health record card)
+2. A modal will appear with the current health record details
+3. Update the details as needed
+4. Click **"Save"** to save changes or **"Cancel"** to cancel
+
+**Deleting Health Records**
+(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are deleting)
+
+1. Click the **Delete** icon (The trash icon on the health record card)
+2. A modal will appear with a delete health record confirmation
+3. Click **"Delete"** to delete the record or **"Cancel"** to cancel
+
+
+#### Feeding Notes
+**Viewing feeding Records**
+1. Select "Feeding Notes" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A list of all feeding records for that child will then appear
+
+**Adding Feeding Records**
+1. Click the **"Add"** button (bottom right)
+2. Enter the corresponding feeding record details
+3. Click **"Add"** to save or **"Cancel"** to cancel
+4. The new record will be saved to the list of feeding records for that child
+
+**Filtering Feeding Records**
+1. Click the **Filter** icon (top right)
+2. Select a filter option
+3. The list of feeding records will be filtered accordingly
+
+**Editing Records**
+1. Click the **Edit** icon (The pencial icon on the feeding record card)
+2. A modal will appear with the current feeding record details
+3. Update the details as needed
+4. Click **"Save"** to save changes or **"Cancel"** to cancel
+
+**Deleting Growth Records**
+1. Click the **Delete** icon (The trash icon on the feeding record card)
+2. A modal will appear with a delete feeding record confirmation
+3. Click **"Delete"** to delete the record or **"Cancel"** to cancel
+
+
+#### Observation Notes
+**Viewing Observation Records**
+1. Select "Observation Notes" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A list of all observation records for that child will then appear
+
+**Adding Observation Records**
+1. Click the **"Add"** button (bottom right)
+2. Enterr the corresponding observation record details
+3. Click **"Add"** to save or **"Cancel"** to cancel
+4. The new record will be saved to the list of observation records for that child
+
+**Filtering Observation Records**
+1. Click the **Filter** icon (top right)
+2. Select a filter option
+3. The list of observation records will be filtered accordingly
+
+**Editing Records**
+1. Click the **Edit** icon (The pencial icon on the observation record card)
+2. A modal will appear with the current observation record details
+3. Update the details as needed
+4. Click **"Save"** to save changes or **"Cancel"** to cancel
+
+**Deleting Growth Records**
+1. Click the **Delete** icon (The trash icon on the observation record card)
+2. A modal will appear with a delete observation record confirmation
+3. Click **"Delete"** to delete the record or **"Cancel"** to cancel
 
 </details>
 
 <details>
-<summary><h3>✅ Assigned Tasks - Click to expand</h3></summary>
+<summary><h3>Assigned Tasks</h3></summary>
+
+#### Viewing Tasks
+1. All tasks will be displayed on the main tasks page showing the task title, assigned baby and assigned babysitter.
 
 #### Adding Tasks
 1. Click **"+ Add Task"**
-2. Enter: Title, Description (optional), Assign to babysitter, Assign to baby, Due date (optional)
-3. Click **"Add Task"**
+2. Enter the required corresponding task details (along with optional details if applicable)
+3. Click **"Add Task"** to save or **"Cancel"** to cancel
 
 #### Editing Tasks
-1. Click the **Edit** icon on task card
-2. Update information
-3. Click **"Save Changes"**
+1. Click the **Edit** icon (The pencial icon on the task card)
+2. Update the details as needed
+3. Click **"Save Changes"** to save changes or **"Cancel"** to cancel
 
 #### Deleting Tasks
-1. Click the **Delete** icon
-2. Confirm deletion
+1. Click the **Delete** icon (The trash icon on the task card)
+2. A modal will appear with a delete task confirmation
+3. Click **"Delete"** to delete the task or **"Cancel"** to cancel
 
 </details>
 
 <details>
-<summary><h3>💬 Messages - Click to expand</h3></summary>
+<summary><h3>Messages</h3></summary>
 
-1. View conversations on the left sidebar
-2. Click a conversation to view messages
-3. Type message at bottom
-4. Click **"Send"**
+(Note: In order to view messages, you must have a shared account set up with a babysitter)
+
+#### Unread Messages
+1. There will be a red circle badge in the top right corner of the messages navigation tab (At the bottom of the applicaton) with a number indicating the number of unread messages
+2. The unread messages will be in a bolded font and have a green circle bage indicating the number of unread messages in the corrisponding conversation with a babysitter
+2. Once you have read the messages, the badges will disappear
+
+#### Viewing Conversations 
+1. All conversations will be displayed on the main messages page (As conversation cards) showing the babysitter's name, the most recent message and the date/time of the most recent message.
+
+#### Viewing Conversation Messages
+1. Click the conversation card to view the messages for that conversation
+2. A page will appear with a history of all messages from that conversation with the most recent message at the bottom
+3. As a parent, your messages are in a green text bubble, while the babysitter's messages are in a white text bubble
+4. You will see the time of each message underneath the message bubbles
+
+#### Sending Messages
+1. Type your message in the text box at the bottom of the page in the corresponding conversation with the babysitter
+2. Click **"Send"** to send the message
+3. The message will be sent to the babysitter and will appear in the conversation with the babysitter
 
 </details>
 
 <details>
-<summary><h3>📊 Reports - Click to expand</h3></summary>
+<summary><h3>Reports</h3></summary>
 
 **Available Reports:**
 - **Growth Over Time** - Height/weight charts
