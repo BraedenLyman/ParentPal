@@ -1,10 +1,8 @@
-# ParentPal Backend
-
 <div align="center">
 
 <img src="../public/images/ParentPal.png" alt="ParentPal Logo" width="200"/>
 
-### 🔌 REST API & Database Documentation
+### REST API & Database Documentation
 
 [![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
@@ -15,27 +13,88 @@
 ---
 
 ## 📑 Table of Contents
-- [🧭 Overview](#-overview)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [🔌 API Endpoints](#-api-endpoints)
-  - [Authentication](#-authentication)
-  - [User Management](#-user-management)
-  - [Baby Management](#-baby-management)
-  - [Health Records](#-health-records)
-  - [Photo Gallery](#-photo-gallery)
-  - [Babysitter Sharing](#-babysitter-sharing)
-  - [Shared Tasks](#-shared-tasks)
-  - [Messaging](#-messaging)
-- [🔐 Security](#-security)
-- [🧠 Developer Notes](#-developer-notes)
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [API Endpoints](#api-endpoints)
+  - [Create Account](#create-account)
+  - [Sign In](#sign-in)
+  - [Delete User](#delete-user)
+  - [Baby Management](#baby-management)
+    - [Get Babies by Account ID](#get-babies-by-account-id)
+    - [Get Baby by Firebase UID](#get-baby-by-firebase-uid)
+    - [Add Baby](#add-baby)
+    - [Delete Baby](#delete-baby)
+  - [Shared Tasks](#shared-tasks)
+    - [Get Tasks by Share ID](#get-tasks-by-share-id)
+    - [Get Tasks by Parent ID](#get-tasks-by-parent-id)
+    - [Get Tasks by Babysitter ID](#get-tasks-by-babysitter-id)
+    - [Create Task](#create-task)
+    - [Update Task](#update-task)
+    - [Mark Task as Complete](#mark-task-as-complete)
+    - [Mark Task as Incomplete](#mark-task-as-incomplete)
+    - [Delete Task](#delete-task)
+  - [Growth](#growth)
+    - [Get Growth Records](#get-growth-records)
+    - [Add Growth Record](#add-growth-record)
+    - [Update Growth Record](#update-growth-record)
+    - [Delete Growth Record](#delete-growth-record)
+  - [Sleep](#sleep)
+    - [Get Sleep Records](#get-sleep-records)
+    - [Add Sleep Record](#add-sleep-record)
+    - [Update Sleep Record](#update-sleep-record)
+    - [Delete Sleep Record](#delete-sleep-record)
+  - [Medications](#medications)
+    - [Get Medication Records](#get-medication-records)
+    - [Add Medication Record](#add-medication-record)
+    - [Update Medication Record](#update-medication-record)
+    - [Delete Medication Record](#delete-medication-record)
+  - [Allergies](#allergies)
+    - [Get Allergy Records](#get-allergy-records)
+    - [Add Allergy Record](#add-allergy-record)
+    - [Update Allergy Record](#update-allergy-record)
+    - [Delete Allergy Record](#delete-allergy-record)
+  - [Vaccinations](#vaccinations)
+    - [Get Vaccination Records](#get-vaccination-records)
+    - [Add Vaccination Record](#add-vaccination-record)
+    - [Update Vaccination Record](#update-vaccination-record)
+    - [Delete Vaccination Record](#delete-vaccination-record)
+  - [Sick Days](#sick-days)
+    - [Get Sick Day Records](#get-sick-day-records)
+    - [Add Sick Day Record](#add-sick-day-record)
+    - [Update Sick Day Record](#update-sick-day-record)
+    - [Delete Sick Day Record](#delete-sick-day-record)
+  - [Feeding](#feeding)
+    - [Get Feeding Records](#get-feeding-records)
+    - [Add Feeding Record](#add-feeding-record)
+    - [Update Feeding Record](#update-feeding-record)
+    - [Delete Feeding Record](#delete-feeding-record)
+  - [Observations](#observations)
+    - [Get Observation Records](#get-observation-records)
+    - [Add Observation Record](#add-observation-record)
+    - [Update Observation Record](#update-observation-record)
+    - [Delete Observation Record](#delete-observation-record)
+  - [Messaging](#messaging)
+    - [Get User Conversations](#get-user-conversations)
+    - [Get Conversation Messages](#get-conversation-messages)
+    - [Send Message](#send-message)
+    - [Get Available Recipients](#get-available-recipients)
+    - [Mark Messages as Read](#mark-messages-as-read)
+    - [Get Unread Messages Count](#get-unread-messages-count)
+  - [Photo Gallery](#photo-gallery)
+    - [Get Photos by Baby ID](#get-photos-by-baby-id)
+    - [Get Photos by Parent ID](#get-photos-by-parent-id)
+    - [Get Photos by Babysitter ID](#get-photos-by-babysitter-id)
+    - [Upload Photo](#upload-photo)
+    - [Delete Photo](#delete-photo)
+- [Security](#security)
 
 ---
 
-## 🧭 Overview
+## Overview
 
 The **ParentPal backend** powers the application's data management and authentication systems. Built with Node.js and Express, it provides a comprehensive REST API for managing childcare data, babysitter coordination, and real-time messaging.
 
-### 📊 API Statistics
+### API Statistics
 - **Total Endpoints**: 72
 - **Authentication**: Firebase Auth + JWT
 - **Database**: PostgreSQL
@@ -43,7 +102,7 @@ The **ParentPal backend** powers the application's data management and authentic
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ```javascript
 Runtime:              Node.js
@@ -57,51 +116,9 @@ Security:             CORS, Input Validation
 
 ---
 
-# ParentPal Backend API Documentation
+## API Endpoints
 
-This document provides comprehensive documentation for the ParentPal backend API endpoints, including request parameters, example API calls, and expected responses.
-
-## Table of Contents
-
-- [Create Account](#create-account)
-- [Sign In](#sign-in)
-- [Delete User](#delete-user)
-- [Baby Management](#baby-management)
-  - [Get Babies by Account ID](#get-babies-by-account-id)
-  - [Get Baby by Firebase UID](#get-baby-by-firebase-uid)
-  - [Add Baby](#add-baby)
-  - [Delete Baby](#delete-baby)
-- [Shared Tasks](#shared-tasks)
-  - [Get Tasks by Share ID](#get-tasks-by-share-id)
-  - [Get Tasks by Parent ID](#get-tasks-by-parent-id)
-  - [Get Tasks by Babysitter ID](#get-tasks-by-babysitter-id)
-  - [Create Task](#create-task)
-  - [Update Task](#update-task)
-  - [Mark Task as Complete](#mark-task-as-complete)
-  - [Mark Task as Incomplete](#mark-task-as-incomplete)
-  - [Delete Task](#delete-task)
-- [Health Monitoring](#health-monitoring)
-  - [Growth](#growth)
-  - [Sleep](#sleep)
-  - [Medications](#medications)
-  - [Allergies](#allergies)
-  - [Vaccinations](#vaccinations)
-  - [Sick Days](#sick-days)
-  - [Feeding](#feeding)
-  - [Observations](#observations)
-- [Messaging](#messaging)
-  - [Get User Conversations](#get-user-conversations)
-  - [Get Conversation Messages](#get-conversation-messages)
-  - [Send Message](#send-message)
-  - [Get Available Recipients](#get-available-recipients)
-  - [Mark Messages as Read](#mark-messages-as-read)
-  - [Get Unread Messages Count](#get-unread-messages-count)
-- [Photo Gallery](#photo-gallery)
-  - [Get Photos by Baby ID](#get-photos-by-baby-id)
-  - [Get Photos by Parent ID](#get-photos-by-parent-id)
-  - [Get Photos by Babysitter ID](#get-photos-by-babysitter-id)
-  - [Upload Photo](#upload-photo)
-  - [Delete Photo](#delete-photo)
+This section provides comprehensive documentation for the ParentPal backend API endpoints, including request parameters, example API calls, and expected responses.
 
 ## Create Account
 
@@ -1258,7 +1275,7 @@ const deleteTask = async (taskId) => {
 }
 ```
 
-# Health Monitoring
+# Log Reports
 
 ## Growth
 
@@ -3634,11 +3651,13 @@ const deleteObservationRecord = async (observationId) => {
 }
 ```
 
-# Messaging
+---
 
-## Get User Conversations
+## Messaging
 
-### Endpoint: `/conversations/:account_id`
+### Get User Conversations
+
+#### Endpoint: `/conversations/:account_id`
 
 **Method:** GET
 
@@ -3712,9 +3731,9 @@ const getUserConversations = async (accountId) => {
 }
 ```
 
-## Get Conversation Messages
+### Get Conversation Messages
 
-### Endpoint: `/messages/:conversation_id`
+#### Endpoint: `/messages/:conversation_id`
 
 **Method:** GET
 
@@ -3804,9 +3823,9 @@ const getConversationMessages = async (conversationId, accountId) => {
 }
 ```
 
-## Send Message
+### Send Message
 
-### Endpoint: `/send`
+#### Endpoint: `/send`
 
 **Method:** POST
 
@@ -3882,9 +3901,9 @@ const sendMessage = async () => {
 }
 ```
 
-## Get Available Recipients
+### Get Available Recipients
 
-### Endpoint: `/recipients/:account_id`
+#### Endpoint: `/recipients/:account_id`
 
 **Method:** GET
 
@@ -3973,9 +3992,9 @@ For a babysitter account:
 }
 ```
 
-## Mark Messages as Read
+### Mark Messages as Read
 
-### Endpoint: `/read/:conversation_id`
+#### Endpoint: `/read/:conversation_id`
 
 **Method:** PUT
 
@@ -4033,9 +4052,9 @@ const markMessagesAsRead = async (conversationId, accountId) => {
 }
 ```
 
-## Get Unread Messages Count
+### Get Unread Messages Count
 
-### Endpoint: `/unread-count/:account_id`
+#### Endpoint: `/unread-count/:account_id`
 
 **Method:** GET
 
@@ -4082,11 +4101,15 @@ const getUnreadMessagesCount = async (accountId) => {
 {
   "error": "Failed to fetch unread count"
 }
-```# Photo Gallery
+```
 
-## Get Photos by Baby ID
+---
 
-### Endpoint: `/photo-gallery/baby/:babyId`
+## Photo Gallery
+
+### Get Photos by Baby ID
+
+#### Endpoint: `/photo-gallery/baby/:babyId`
 
 **Method:** GET
 
@@ -4160,9 +4183,9 @@ const getPhotosByBabyId = async (babyId) => {
 }
 ```
 
-## Get Photos by Parent ID
+### Get Photos by Parent ID
 
-### Endpoint: `/photo-gallery/parent/:parentId`
+#### Endpoint: `/photo-gallery/parent/:parentId`
 
 **Method:** GET
 
@@ -4236,9 +4259,9 @@ const getPhotosByParentId = async (parentId) => {
 }
 ```
 
-## Get Photos by Babysitter ID
+### Get Photos by Babysitter ID
 
-### Endpoint: `/photo-gallery/babysitter/:babysitterId`
+#### Endpoint: `/photo-gallery/babysitter/:babysitterId`
 
 **Method:** GET
 
@@ -4312,9 +4335,9 @@ const getPhotosByBabysitterId = async (babysitterId) => {
 }
 ```
 
-## Upload Photo
+### Upload Photo
 
-### Endpoint: `/photo-gallery/upload`
+#### Endpoint: `/photo-gallery/upload`
 
 **Method:** POST
 
@@ -4397,9 +4420,9 @@ const uploadPhoto = async (formData) => {
 }
 ```
 
-## Delete Photo
+### Delete Photo
 
-### Endpoint: `/photo-gallery/:photoId`
+#### Endpoint: `/photo-gallery/:photoId`
 
 **Method:** DELETE
 
@@ -4453,7 +4476,7 @@ const deletePhoto = async (photoId) => {
 }
 ```
 
-## 🔐 Security
+## Security
 
 ### Authentication
 - **Firebase Authentication** - User identity verification
