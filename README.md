@@ -2,14 +2,14 @@
 
 <img src="public/images/ParentPal.png" alt="ParentPal Logo" width="240"/>
 
-### 🌟 A comprehensive childcare management platform for parents and babysitters
+### A comprehensive childcare management platform for parents and babysitters
 
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
-[🌐 Visit ParentPal](https://parentpals.ca) • [📚 Documentation](#-user-manual-parent-user) • [🔒 Security](#-security)
+[Visit ParentPal](https://parentpals.ca) • [Documentation](#-user-manual-parent-user) • [Security](#-security)
 
 </div>
 
@@ -19,84 +19,45 @@
 
 ## 📑 Table of Contents
 
-- [🧭 Overview](#-overview)
-- [✨ Key Features](#-key-features)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [📘 User Manual (Parent)](#-user-manual-parent-user)
-- [📗 User Manual (Babysitter)](#-user-manual-babysitter-user)
-- [🔐 Security](#-security)
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Tech Stack](#️-tech-stack)
+- [User Manual (Parent)](#-user-manual-parent-user)
+- [User Manual (Babysitter)](#-user-manual-babysitter-user)
+- [Security](#-security)
 
 ---
 
 <br/>
 
-## 🧭 Overview
+## Overview
 
 **ParentPal** is a comprehensive childcare management platform designed to simplify parenting and babysitting tasks. Track your child's growth, monitor sleep patterns, manage health records, coordinate with babysitters, and access personalized insights—all in one intuitive application.
 
-### 🎯 Who is ParentPal for?
+### Who is ParentPal for?
 
-- **👨‍👩‍👧‍👦 Parents** - Track and manage every aspect of your child's development
-- **👤 Babysitters** - Access necessary child information and collaborate with parents
-- **👥 Families** - Seamlessly share and coordinate childcare responsibilities
-
-<br/>
-
----
-
-## ✨ Key Features
-
-<table>
-<tr>
-<td width="50%">
-
-### 🔐 For Everyone
-- **Secure Authentication** - JWT & Firebase Auth
-- **Real-time Messaging** - Chat with shared accounts
-- **Responsive Design** - Works on all devices
-- **Photo Gallery** - Share precious moments
-
-</td>
-<td width="50%">
-
-### 👨‍👩‍👧 For Parents
-- **Growth Tracking** - Height, weight over time
-- **Sleep Analytics** - Monitor sleep patterns
-- **Health Records** - Medications, allergies, vaccines and sick days
-- **Task Assignment** - Assign tasks to babysitters
-- **Reports & Charts** - Visualize development trends
-- **Data Export** - Generate PDF reports
-
-</td>
-</tr>
-</table>
+- **Parents** - Track and manage every aspect of your child's development
+- **Babysitters** - Access necessary child information and collaborate with parents
 
 <br/>
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 ```javascript
 Framework:        React 18.3.1
 Build Tool:       Vite 6.3.5
-Language:         JavaScript (JSX)
-UI Libraries:     HeroUI, TailwindCSS 4.1.11
+Language:         JavaScript (JSX) + TypeScript 5.6.3
+UI Libraries:     HeroUI 2.8.3, Chakra UI 3.28.0, TailwindCSS 4.1.11
 Routing:          React Router DOM 6.23.0
 HTTP Client:      Axios 1.12.2
+Authentication:   Firebase 12.2.1
 Animation:        Framer Motion 11.18.2
 Charts:           Recharts 3.3.0
-```
-
-### Backend & Infrastructure
-```javascript
-Runtime:          Node.js with Express
-Database:         PostgreSQL
-Authentication:   Firebase Auth + JWT
+Testing:          Jest 30.2.0, Cypress 15.3.0, React Testing Library 16.3.0
 Hosting:          Firebase Hosting
-Security:         HTTPS/TLS Encryption
-Testing:          Cypress E2E Testing
 ```
 
 <br/>

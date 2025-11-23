@@ -94,24 +94,21 @@
 
 The **ParentPal backend** powers the application's data management and authentication systems. Built with Node.js and Express, it provides a comprehensive REST API for managing childcare data, babysitter coordination, and real-time messaging.
 
-### API Statistics
-- **Total Endpoints**: 72
-- **Authentication**: Firebase Auth + JWT
-- **Database**: PostgreSQL
-- **File Storage**: Local filesystem for photos
-
 ---
 
 ## Tech Stack
 
 ```javascript
 Runtime:              Node.js
-Framework:            Express.js
-Database:             PostgreSQL
-Authentication:       Firebase Admin SDK
-File Upload:          Multer
-Email Service:        Nodemailer
-Security:             CORS, Input Validation
+Framework:            Express 5.1.0
+Database:             PostgreSQL (pg 8.16.3)
+Database Hosting:     Render
+Authentication:       Firebase Admin SDK 13.5.0
+File Upload:          Multer 2.0.2
+Email Services:       SendGrid 8.1.6, Nodemailer 7.0.6
+Environment Config:   dotenv 17.2.2
+Security:             Helmet 8.1.0, CORS 2.8.5, Input Validation
+Testing:              Jest 30.2.0, Supertest 7.1.4, Artillery 2.0.27
 ```
 
 ---
