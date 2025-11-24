@@ -232,20 +232,20 @@ The main dashboard provides quick access to all major features:
 <details>
 <summary><h3>Assigned Tasks</h3></summary>
 
-#### Viewing Tasks
+**Viewing Tasks**
 1. All tasks will be displayed on the main tasks page showing the task title, assigned baby and assigned babysitter.
 
-#### Adding Tasks
+**Adding Tasks**
 1. Click **"+ Add Task"**
 2. Enter the required corresponding task details (along with optional details if applicable)
 3. Click **"Add Task"** to save or **"Cancel"** to cancel
 
-#### Editing Tasks
+**Editing Tasks**
 1. Click the **Edit** icon (The pencial icon on the task card)
 2. Update the details as needed
 3. Click **"Save Changes"** to save changes or **"Cancel"** to cancel
 
-#### Deleting Tasks
+**Deleting Tasks**
 1. Click the **Delete** icon (The trash icon on the task card)
 2. A modal will appear with a delete task confirmation
 3. Click **"Delete"** to delete the task or **"Cancel"** to cancel
@@ -257,21 +257,21 @@ The main dashboard provides quick access to all major features:
 
 (Note: In order to view messages, you must have a shared account set up with a babysitter)
 
-#### Unread Messages
+**Unread Messages**
 1. There will be a red circle badge in the top right corner of the messages navigation tab (At the bottom of the applicaton) with a number indicating the number of unread messages
 2. The unread messages will be in a bolded font and have a green circle bage indicating the number of unread messages in the corrisponding conversation with a babysitter
 2. Once you have read the messages, the badges will disappear
 
-#### Viewing Conversations 
+**Viewing Conversations**
 1. All conversations will be displayed on the main messages page (As conversation cards) showing the babysitter's name, the most recent message and the date/time of the most recent message.
 
-#### Viewing Conversation Messages
+**Viewing Conversation Messages**
 1. Click the conversation card to view the messages for that conversation
 2. A page will appear with a history of all messages from that conversation with the most recent message at the bottom
 3. As a parent, your messages are in a green text bubble, while the babysitter's messages are in a white text bubble
 4. You will see the time of each message underneath the message bubbles
 
-#### Sending Messages
+**Sending Messages**
 1. Type your message in the text box at the bottom of the page in the corresponding conversation with the babysitter
 2. Click **"Send"** to send the message
 3. The message will be sent to the babysitter and will appear in the conversation with the babysitter
@@ -281,39 +281,101 @@ The main dashboard provides quick access to all major features:
 <details>
 <summary><h3>Reports</h3></summary>
 
-**Available Reports:**
-- **Growth Over Time** - Height/weight charts
-- **Sleep Patterns** - Sleep duration trends
-- **Feeding Patterns** - Feeding frequency analysis
+**Viewing Growth Reports**
+1. Select "Growth Reports" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. Two graphs will appear, one for height and one for weight over time showing the growth data for that child
 
-Select report type and child from dropdowns to view visualizations.
+**Viewing Sleep Patterns**
+1. Select "Sleep Patterns" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A graph will appear showing the amount of hours slept per day for that child
+4. It will also show the average sleep duration for that child
+
+**Viewing Feeding Patterns**
+1. Select "Feeding Patterns" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A graph will appear showing the amount (fl oz) of food consumed per day for that child
+4. When clicking on the bar in the graph, it will show the Food type, amount, and what it was fed from
 
 </details>
 
 <details>
-<summary><h3>⚙️ Settings - Click to expand</h3></summary>
+<summary><h3>Settings</h3></summary>
 
 #### Personal Information
-- **Add Baby**: Enter name, DOB, gender, category
-- **Delete Baby**: Click trash icon, confirm deletion
-- **Change Password**: Enter new password (min 8 chars, 1 uppercase, 1 number, 1 special char)
+
+**Viewing Personal Information**
+1. Click on the Personal Information card and it will bring you to the Personal Information page
+2. You can view your email address, all children assigned to your account, and change your password
+
+**Adding a Child**
+1. Under the "Your Little Ones" section, click on the "+ Add Baby" button
+2. A modal will appear where you can enter all the details for your new child
+3. Entet the corrisponding details
+4. Click **"Add Baby"** to save or **"Cancel"** to cancel
+5. The new child will be added to your account and you will see the child card under the "Your Little Ones" section
+
+**Deleting a Child**
+1. Click on the garage icon (Top right corner) of the child card
+2. A modal will appear with a delete child confirmation
+3. Click **"Delete"** to delete the child or **"Cancel"** to cancel
+
+**Changing Password**
+1. In the first text input, enter a new password (min 8 chars, 1 uppercase, 1 number, 1 special char)
+2. In the second text input, confirm the new password
+3. Click **"Accept Changes"** button to save the new password
+4. If the password is succfull a success message will appear below the text inputs, otherwise an error message will appear
+
 
 #### Shared Accounts
-- **Add Babysitter**: Click "+ Add Babysitter", enter name and email, send invitation
-- **Delete Access**: Click trash icon to revoke access
+
+**Viewing Shared Accounts**
+1. Click on the Shared Accounts card and it will bring you to the Shared Accounts page
+2. Every shared account will be listed with the account name (the name entered when adding the shared account), their email address, and when they were verified
+3. If a babysitter has not yet been verified, they will be listed as "Pending Verification"
+
+**Adding a Shared Account**
+1.On the Shared Accounts page, click on the "+ Add Babysitter" button
+2. A modal will appear where you can enter all the details for your new shared account
+3. Enter the corrisponding details
+4. Click **"Send Share Link"** to send the shared account link to the corrisponding email address entered in step 3 or **"Cancel"** to cancel
+5. This will send an email to the corrisponding email address with a link to the shared account
+6. Once the babysitter has received the emailed link, they will be able to create an account (if not already created) and verify the shared account via a 4-digit code
+
+**Deleting a Shared Account**
+1. Click on the garage icon in the shared account card
+2. This will delete the shared account and all associated data imediately
+
 
 #### Data Export
-1. Select child from dropdown
-2. Check data types to include
-3. Click **"Generate PDF"**
+
+**Choosing Data to Export**
+1. Select the child from the dropdown (if you have more than one child)
+2. Under the "Select Data to Export" section, check off the information you'd like to include in the exported data
+3. Click **"Generate PDF"** to download the exported data as a PDF
+4. This will download a PDF file with all the data you've selected
+
+**Viewing PDF**
+1. Find where the PDF file is saved on your device
+2. Open the PDF file
+3. The PDF will contain the child's name, date of birth, gender, the date the report was generated and all the data you've selected to export in a table format
 
 #### Delete Account
-Click **"Delete"** button, confirm to permanently delete account.
+1. Click the red **"Delete"** button
+2. A modal will appear with a delete account confirmation
+3. Click **"Yes, Delete Account"** to delete the account or **"Cancel"** to cancel
+4. Your account will be deleted and all associated data will be permanently deleted
+5. You will then be redirected to the login page
+
+#### Log Out
+1. Click the blue **"Log Out"** button
+2. This will log you our of the application and redirect you to the login page
 
 </details>
 
 <details>
-<summary><h3>📸 Photo Gallery - Click to expand</h3></summary>
+<summary><h3> Photo Gallery</h3></summary>
 
 #### Uploading Photos
 1. Click **"Upload Photo"**
