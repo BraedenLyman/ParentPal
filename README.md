@@ -9,7 +9,7 @@
 [![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
-[Visit ParentPal](https://parentpals.ca) • [Documentation](#-user-manual-parent-user) • [Security](#-security)
+[Visit ParentPal](https://parentpals.ca) • [Documentation](#user-manual-parent-user)
 
 </div>
 
