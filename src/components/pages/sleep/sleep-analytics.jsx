@@ -42,6 +42,14 @@ export default function SleepAnalytics() {
         return `${hour12}:${minutes} ${ampm}`;
     };
 
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+        // Handle ISO timestamp format (e.g., "2024-01-15T00:00:00.000Z")
+        const dateOnly = dateString.split("T")[0];
+        const [year, month, day] = dateOnly.split("-");
+        return new Date(year, month - 1, day).toLocaleDateString();
+    };
+
     const getInitials = (firstName, lastName) => {
         if (!firstName || !lastName) return null;
         return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
@@ -340,7 +348,7 @@ export default function SleepAnalytics() {
                                                 </span>
                                             )}
                                         </h3>
-                                        <span className="cardEntryDate">{new Date(record.date).toLocaleDateString()}</span>
+                                        <span className="cardEntryDate">{formatDate(record.date)}</span>
                                     </div>
                                     <div className="cardEntryDetails">
                                         <div className="cardEntryDetail">

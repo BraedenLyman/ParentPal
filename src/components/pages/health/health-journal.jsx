@@ -31,6 +31,14 @@ export default function HealthJournal() {
         return `${hour12}:${minutes} ${ampm}`;
     };
 
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+        // Handle ISO timestamp format (e.g., "2024-01-15T00:00:00.000Z")
+        const dateOnly = dateString.split("T")[0];
+        const [year, month, day] = dateOnly.split("-");
+        return new Date(year, month - 1, day).toLocaleDateString();
+    };
+
     const getInitials = (firstName, lastName) => {
         if (!firstName || !lastName) return null;
         return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
@@ -903,7 +911,7 @@ export default function HealthJournal() {
                                                         </span>
                                                     )}
                                                 </h3>
-                                                <span className="cardEntryDate">{typeof record.date === 'string' ? new Date(record.date).toLocaleDateString() : new Date(record.date).toLocaleDateString()}</span>
+                                                <span className="cardEntryDate">{formatDate(record.date)}</span>
                                             </div>
                                             <div className="cardEntryDetails">
                                                 <div className="cardEntryDetail">
@@ -1026,7 +1034,7 @@ export default function HealthJournal() {
                                                                 </span>
                                                             )}
                                                         </h3>
-                                                        <span className="cardEntryDate">{typeof record.date === 'string' ? new Date(record.date).toLocaleDateString() : new Date(record.date).toLocaleDateString()}</span>
+                                                        <span className="cardEntryDate">{formatDate(record.date)}</span>
                                                     </div>
                                                     <div className="cardEntryDetails">
                                                         <div className="cardEntryDetail">
@@ -1273,7 +1281,7 @@ export default function HealthJournal() {
                                                                 </span>
                                                             )}
                                                         </h3>
-                                                        <span className="cardEntryDate">{typeof record.date_of_vaccine === 'string' ? new Date(record.date_of_vaccine).toLocaleDateString() : new Date(record.date_of_vaccine).toLocaleDateString()}</span>
+                                                        <span className="cardEntryDate">{formatDate(record.date_of_vaccine)}</span>
                                                     </div>
                                                     {!isBabysitter && (
                                                         <div className="editDeleteButtonContainer">
@@ -1380,7 +1388,7 @@ export default function HealthJournal() {
                                                                 </span>
                                                             )}
                                                         </h3>
-                                                        <span className="cardEntryDate">{typeof record.date === 'string' ? new Date(record.date).toLocaleDateString() : new Date(record.date).toLocaleDateString()}</span>
+                                                        <span className="cardEntryDate">{formatDate(record.date)}</span>
                                                     </div>
                                                     <div className="cardEntryDetails">
                                                         {record.temp && (
@@ -1858,7 +1866,7 @@ export default function HealthJournal() {
                         <p>Are you sure you want to delete this sick day record?</p>
                         {sickDayRecordToDelete && (
                             <p style={{ fontWeight: 'bold', marginTop: '10px' }}>
-                                {new Date(sickDayRecordToDelete.date).toLocaleDateString()}
+                                {formatDate(sickDayRecordToDelete.date)}
                             </p>
                         )}
                     </ModalBody>

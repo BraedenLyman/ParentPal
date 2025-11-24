@@ -35,6 +35,14 @@ export default function GrowthTracker() {
     const [recordToDelete, setRecordToDelete] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
 
+    const formatDate = (dateString) => {
+        if (!dateString) return "";
+        // Handle ISO timestamp format (e.g., "2024-01-15T00:00:00.000Z")
+        const dateOnly = dateString.split("T")[0];
+        const [year, month, day] = dateOnly.split("-");
+        return new Date(year, month - 1, day).toLocaleDateString();
+    };
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (isFilterOpen && !event.target.closest('.filter-dropdown-container')) {
@@ -367,7 +375,7 @@ export default function GrowthTracker() {
                                     <div className="cardEntryContent">
                                         <div className="cardEntryHeader">
                                             <h3 className="cardEntryTitle">Growth Record</h3>
-                                            <span className="cardEntryDate">{new Date(record.date).toLocaleDateString()}</span>
+                                            <span className="cardEntryDate">{formatDate(record.date)}</span>
                                         </div>
                                         <div className="cardEntryDetails">
                                             <div className="cardEntryDetail">
