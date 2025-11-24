@@ -606,6 +606,8 @@ Hosting:          Firebase Hosting
 
 <br/>
 
+<div align="center">
+
 ---
 
 **© 2025 ParentPal. All rights reserved.**
