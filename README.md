@@ -412,10 +412,20 @@ Hosting:          Firebase Hosting
 
 ###  Home Page
 
-The main dashboard provides quick access to all major features:
-- **Log Cards** - Click any card to view/add records (Growth, Sleep, Health, Feeding, Observations)
-- **Assigned Tasks** - Manage tasks for babysitters
-- **Photo Gallery** - View and upload photos
+<details>
+<summary><h3>Home Page</h3></summary>
+
+#### Log Section
+**Viewing Logs**
+1. Click on the corrisponding log card to view, add, edit and delete log records for that log type
+
+#### Assigned Tasks Section
+1. Click on the assigned task card to view, add, edit and delete assigned tasks for a shared babysitter account
+
+#### Photo Gallery Section
+1. Click on the photo gallery card to view, add and delete photos
+
+</details>
 
 <details>
 <summary><h3>Logs</h3></summary>
