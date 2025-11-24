@@ -377,16 +377,22 @@ The main dashboard provides quick access to all major features:
 <details>
 <summary><h3> Photo Gallery</h3></summary>
 
+#### Viewing Photos
+1. From the main dashboard, click the **"Photo Gallery"** card under the "Photo Gallery" section
+2. The photo gallery page will appear with a grid of photos that have been uploaded by a parent account (your account) or a verified shared babysitter account
+
 #### Uploading Photos
-1. Click **"Upload Photo"**
-2. Select baby from dropdown
-3. Choose photo (max 5MB)
-4. Add caption (optional)
-5. Click **"Upload"**
+1. Click the **"Upload Photo"** button
+2. A modal will appear where you can enter all the details for uploading a new photo
+3. Enter in the corrisponding details
+4. Click **"Upload"** to save or **"Cancel"** to cancel
+5. The new photo will be uploaded to the photo gallery and will appear in the grid of photos with which baby the photo is associated with, and who uploaded it
 
 #### Deleting Photos
-1. Click trash icon on photo
-2. Confirm deletion
+1. Click on the garage icon in the photo gallery card
+2. A modal will appear with a delete photo confirmation
+3. Click **"Delete"** to delete the photo or **"Cancel"** to cancel
+4. The photo will be deleted from the photo gallery and all associated data will be permanently deleted
 
 </details>
 
