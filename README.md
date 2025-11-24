@@ -64,6 +64,352 @@ Hosting:          Firebase Hosting
 
 ## User Manual (Parent User)
 
+<details>
+<summary><h3>Home Page</h3></summary>
+
+#### Log Section
+**Viewing Logs**
+1. Click on the corrisponding log card to view, add, edit and delete log records for that log type
+
+#### Assigned Tasks Section
+1. Click on the assigned task card to view, add, edit and delete assigned tasks for a shared babysitter account
+
+#### Photo Gallery Section
+1. Click on the photo gallery card to view, add and delete photos
+
+</details>
+
+<details>
+<summary><h3>Logs</h3></summary>
+
+#### Growth Tracker
+**Viewing Growth Records**
+1. Select "Growth Tracker" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A list of all growth records for that child will then appear
+
+**Adding Grwoth Records**
+1. Click the **"Add"** button (bottom right)
+2. Enter the corresponding growth record details
+3. Click **"Add"** to save or **"Cancel"** to cancel
+4. The new record will be saved to the list of growth records for that child
+
+**Filtering Growth Records**
+1. Click the **Filter** icon (top right)
+2. Select a filter option
+3. The list of growth records will be filtered accordingly
+
+**Editing GrowthRecords**
+1. Click the **Edit** icon (The pencial icon on the growth record card)
+2. A modal will appear with the current growth record details
+3. Update the details as needed
+4. Click **"Save"** to save changes or **"Cancel"** to cancel
+
+**Deleting Growth Records**
+1. Click the **Delete** icon (The trash icon on the growth record card)
+2. A modal will appear with a delete growth record confirmation
+3. Click **"Delete"** to delete the record or **"Cancel"** to cancel
+
+
+#### Sleep Analytics
+**Viewing sleep Records**
+1. Select "Sleep Analytics" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A list of all sleep records for that child will then appear
+
+**Adding Sleep Records**
+1. Click the **"Add"** button (bottom right)
+2. Enter the corresponding sleep record details
+3. Click **"Add"** to save or **"Cancel"** to cancel
+4. The new record will be saved to the list of sleep records for that child
+
+**Filtering Sleep Records**
+1. Click the **Filter** icon (top right)
+2. Select a filter option
+3. The list of sleep records will be filtered accordingly
+
+**Editing Sleep Records**
+1. Click the **Edit** icon (The pencial icon on the sleep record card)
+2. A modal will appear with the current sleep record details
+3. Update the details as needed
+4. Click **"Save"** to save changes or **"Cancel"** to cancel
+
+**Deleting Sleep Records**
+1. Click the **Delete** icon (The trash icon on the sleep record card)
+2. A modal will appear with a delete sleep record confirmation
+3. Click **"Delete"** to delete the record or **"Cancel"** to cancel
+
+
+#### Health Journal
+**Viewing Health Records**
+1. Select "Health Journal" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. Select the type of Health Records you want to view from the navigation bar (e.g., "Medications", "Allergies", "Vaccinations" or "Sick Days")
+3. A list of all selected Health records types for that child will then appear
+
+**Adding Health Records**
+</br>(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are adding)
+
+1. Click the **"Add"** button (bottom right)
+2. Enter the corresponding health record details
+3. Click **"Add"** to save or **"Cancel"** to cancel
+4. The new record will be saved to the selected type of Health Records list for that child
+
+**Filtering Health Records**
+</br>(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are filtering)
+
+1. Click the **Filter** icon (top right)
+2. Select a filter option
+3. The list of the selected Health Record type will be filtered accordingly
+
+**Editing Health Records**
+</br> (Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are editing)
+
+1. Click the **Edit** icon (The pencial icon on the health record card)
+2. A modal will appear with the current health record details
+3. Update the details as needed
+4. Click **"Save"** to save changes or **"Cancel"** to cancel
+
+**Deleting Health Records**
+</br>(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are deleting)
+
+1. Click the **Delete** icon (The trash icon on the health record card)
+2. A modal will appear with a delete health record confirmation
+3. Click **"Delete"** to delete the record or **"Cancel"** to cancel
+
+
+#### Feeding Notes
+**Viewing feeding Records**
+1. Select "Feeding Notes" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A list of all feeding records for that child will then appear
+
+**Adding Feeding Records**
+1. Click the **"Add"** button (bottom right)
+2. Enter the corresponding feeding record details
+3. Click **"Add"** to save or **"Cancel"** to cancel
+4. The new record will be saved to the list of feeding records for that child
+
+**Filtering Feeding Records**
+1. Click the **Filter** icon (top right)
+2. Select a filter option
+3. The list of feeding records will be filtered accordingly
+
+**Editing Records**
+1. Click the **Edit** icon (The pencial icon on the feeding record card)
+2. A modal will appear with the current feeding record details
+3. Update the details as needed
+4. Click **"Save"** to save changes or **"Cancel"** to cancel
+
+**Deleting Growth Records**
+1. Click the **Delete** icon (The trash icon on the feeding record card)
+2. A modal will appear with a delete feeding record confirmation
+3. Click **"Delete"** to delete the record or **"Cancel"** to cancel
+
+
+#### Observation Notes
+**Viewing Observation Records**
+1. Select "Observation Notes" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A list of all observation records for that child will then appear
+
+**Adding Observation Records**
+1. Click the **"Add"** button (bottom right)
+2. Enterr the corresponding observation record details
+3. Click **"Add"** to save or **"Cancel"** to cancel
+4. The new record will be saved to the list of observation records for that child
+
+**Filtering Observation Records**
+1. Click the **Filter** icon (top right)
+2. Select a filter option
+3. The list of observation records will be filtered accordingly
+
+**Editing Records**
+1. Click the **Edit** icon (The pencial icon on the observation record card)
+2. A modal will appear with the current observation record details
+3. Update the details as needed
+4. Click **"Save"** to save changes or **"Cancel"** to cancel
+
+**Deleting Growth Records**
+1. Click the **Delete** icon (The trash icon on the observation record card)
+2. A modal will appear with a delete observation record confirmation
+3. Click **"Delete"** to delete the record or **"Cancel"** to cancel
+
+</details>
+
+<details>
+<summary><h3>Assigned Tasks</h3></summary>
+
+**Viewing Tasks**
+1. All tasks will be displayed on the main tasks page showing the task title, assigned baby and assigned babysitter.
+
+**Adding Tasks**
+1. Click **"+ Add Task"**
+2. Enter the required corresponding task details (along with optional details if applicable)
+3. Click **"Add Task"** to save or **"Cancel"** to cancel
+
+**Editing Tasks**
+1. Click the **Edit** icon (The pencial icon on the task card)
+2. Update the details as needed
+3. Click **"Save Changes"** to save changes or **"Cancel"** to cancel
+
+**Deleting Tasks**
+1. Click the **Delete** icon (The trash icon on the task card)
+2. A modal will appear with a delete task confirmation
+3. Click **"Delete"** to delete the task or **"Cancel"** to cancel
+
+</details>
+
+<details>
+<summary><h3>Messages</h3></summary>
+
+(Note: In order to view messages, you must have a shared account set up with a babysitter)
+
+**Unread Messages**
+1. There will be a red circle badge in the top right corner of the messages navigation tab (At the bottom of the applicaton) with a number indicating the number of unread messages
+2. The unread messages will be in a bolded font and have a green circle bage indicating the number of unread messages in the corrisponding conversation with a babysitter
+2. Once you have read the messages, the badges will disappear
+
+**Viewing Conversations**
+1. All conversations will be displayed on the main messages page (As conversation cards) showing the babysitter's name, the most recent message and the date/time of the most recent message.
+
+**Viewing Conversation Messages**
+1. Click the conversation card to view the messages for that conversation
+2. A page will appear with a history of all messages from that conversation with the most recent message at the bottom
+3. As a parent, your messages are in a green text bubble, while the babysitter's messages are in a white text bubble
+4. You will see the time of each message underneath the message bubbles
+
+**Sending Messages**
+1. Type your message in the text box at the bottom of the page in the corresponding conversation with the babysitter
+2. Click **"Send"** to send the message
+3. The message will be sent to the babysitter and will appear in the conversation with the babysitter
+
+</details>
+
+<details>
+<summary><h3>Reports</h3></summary>
+
+**Viewing Growth Reports**
+1. Select "Growth Reports" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. Two graphs will appear, one for height and one for weight over time showing the growth data for that child
+
+**Viewing Sleep Patterns**
+1. Select "Sleep Patterns" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A graph will appear showing the amount of hours slept per day for that child
+4. It will also show the average sleep duration for that child
+
+**Viewing Feeding Patterns**
+1. Select "Feeding Patterns" from the first dropdown
+2. Select one of your children from the second dropdown (if you have more than one child)
+3. A graph will appear showing the amount (fl oz) of food consumed per day for that child
+4. When clicking on the bar in the graph, it will show the Food type, amount, and what it was fed from
+
+</details>
+
+<details>
+<summary><h3>Settings</h3></summary>
+
+#### Personal Information
+
+**Viewing Personal Information**
+1. Click on the Personal Information card and it will bring you to the Personal Information page
+2. You can view your email address, all children assigned to your account, and change your password
+
+**Adding a Child**
+1. Under the "Your Little Ones" section, click on the "+ Add Baby" button
+2. A modal will appear where you can enter all the details for your new child
+3. Entet the corrisponding details
+4. Click **"Add Baby"** to save or **"Cancel"** to cancel
+5. The new child will be added to your account and you will see the child card under the "Your Little Ones" section
+
+**Deleting a Child**
+1. Click on the garage icon (Top right corner) of the child card
+2. A modal will appear with a delete child confirmation
+3. Click **"Delete"** to delete the child or **"Cancel"** to cancel
+
+**Changing Password**
+1. In the first text input, enter a new password (min 8 chars, 1 uppercase, 1 number, 1 special char)
+2. In the second text input, confirm the new password
+3. Click **"Accept Changes"** button to save the new password
+4. If the password is succfull a success message will appear below the text inputs, otherwise an error message will appear
+
+
+#### Shared Accounts
+
+**Viewing Shared Accounts**
+1. Click on the Shared Accounts card and it will bring you to the Shared Accounts page
+2. Every shared account will be listed with the account name (the name entered when adding the shared account), their email address, and when they were verified
+3. If a babysitter has not yet been verified, they will be listed as "Pending Verification"
+
+**Adding a Shared Account**
+1.On the Shared Accounts page, click on the "+ Add Babysitter" button
+2. A modal will appear where you can enter all the details for your new shared account
+3. Enter the corrisponding details
+4. Click **"Send Share Link"** to send the shared account link to the corrisponding email address entered in step 3 or **"Cancel"** to cancel
+5. This will send an email to the corrisponding email address with a link to the shared account
+6. Once the babysitter has received the emailed link, they will be able to create an account (if not already created) and verify the shared account via a 4-digit code
+
+**Deleting a Shared Account**
+1. Click on the garage icon in the shared account card
+2. This will delete the shared account and all associated data imediately
+
+
+#### Data Export
+
+**Choosing Data to Export**
+1. Select the child from the dropdown (if you have more than one child)
+2. Under the "Select Data to Export" section, check off the information you'd like to include in the exported data
+3. Click **"Generate PDF"** to download the exported data as a PDF
+4. This will download a PDF file with all the data you've selected
+
+**Viewing PDF**
+1. Find where the PDF file is saved on your device
+2. Open the PDF file
+3. The PDF will contain the child's name, date of birth, gender, the date the report was generated and all the data you've selected to export in a table format
+
+#### Delete Account
+1. Click the red **"Delete"** button
+2. A modal will appear with a delete account confirmation
+3. Click **"Yes, Delete Account"** to delete the account or **"Cancel"** to cancel
+4. Your account will be deleted and all associated data will be permanently deleted
+5. You will then be redirected to the login page
+
+#### Log Out
+1. Click the blue **"Log Out"** button
+2. This will log you our of the application and redirect you to the login page
+
+</details>
+
+<details>
+<summary><h3> Photo Gallery</h3></summary>
+
+#### Viewing Photos
+1. From the main dashboard, click the **"Photo Gallery"** card under the "Photo Gallery" section
+2. The photo gallery page will appear with a grid of photos that have been uploaded by a parent account (your account) or a verified shared babysitter account
+
+#### Uploading Photos
+1. Click the **"Upload Photo"** button
+2. A modal will appear where you can enter all the details for uploading a new photo
+3. Enter in the corrisponding details
+4. Click **"Upload"** to save or **"Cancel"** to cancel
+5. The new photo will be uploaded to the photo gallery and will appear in the grid of photos with which baby the photo is associated with, and who uploaded it
+
+#### Deleting Photos
+1. Click on the garage icon in the photo gallery card
+2. A modal will appear with a delete photo confirmation
+3. Click **"Delete"** to delete the photo or **"Cancel"** to cancel
+4. The photo will be deleted from the photo gallery and all associated data will be permanently deleted
+
+</details>
+
+<br/>
+
+---
+
+## User Manual (Babysitter User)
+
 ###  Home Page
 
 The main dashboard provides quick access to all major features:
@@ -400,78 +746,6 @@ The main dashboard provides quick access to all major features:
 
 ---
 
-## 📗 User Manual (Babysitter User)
-
-> **Quick Navigation**: [Home](#-home-page-1) • [Logs](#-logs-1) • [Tasks](#-assigned-tasks-1) • [Messages](#-messages-1) • [Settings](#-settings-1) • [Photos](#-photo-gallery-1)
-
-### 🏠 Home Page
-
-- **No Access Yet** - Wait for parent invitation
-- **After Access** - View log cards, assigned tasks, photo gallery
-
-<details>
-<summary><h3>📝 Logs - Click to expand</h3></summary>
-
-Babysitters can view and add records for:
-- **Sleep Analytics** - View/add sleep records
-- **Health Journal** - View/add medication records
-- **Feeding Notes** - View/add feeding records
-- **Observation Notes** - View/add observations
-
-*Same process as parent users for adding records.*
-
-</details>
-
-<details>
-<summary><h3>✅ Assigned Tasks - Click to expand</h3></summary>
-
-#### Completing Tasks
-1. View tasks in **Pending Tasks** section
-2. Click task card to expand
-3. Enter completion comments (optional)
-4. Click **"Mark as Complete"**
-5. Task moves to **Completed Tasks**
-
-</details>
-
-<details>
-<summary><h3>💬 Messages - Click to expand</h3></summary>
-
-Same as parent users - view conversations, send messages to parents.
-
-</details>
-
-<details>
-<summary><h3>⚙️ Settings - Click to expand</h3></summary>
-
-#### Personal Information
-- View email
-- Change password
-
-#### Shared Accounts
-1. Check email for 4-digit access code (check spam folder)
-2. Navigate to Settings > Shared Accounts
-3. Enter 4-digit code
-4. Click **"Verify Code"**
-5. Access granted to view children's data
-
-#### Delete Account
-Click **"Delete"** button, confirm to permanently delete account.
-
-</details>
-
-<details>
-<summary><h3>📸 Photo Gallery - Click to expand</h3></summary>
-
-- **View Photos** - See photos uploaded by parents and yourself
-- **Upload Photos** - Same process as parents (cannot delete parent photos)
-
-</details>
-
-<br/>
-
----
-
 ## 🔐 Security
 
 <div align="center">
@@ -529,6 +803,6 @@ ParentPal takes your family's data security seriously. We implement industry-sta
 
 **© 2025 ParentPal. All rights reserved.**
 
-Built with ❤️ for parents and babysitters everywhere
+Built with love for parents and babysitters everywhere
 
 </div>
