@@ -5,9 +5,11 @@
 ### A comprehensive childcare management platform for parents and babysitters
 
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Firebase](https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind-4.1.11-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Firebase](https://img.shields.io/badge/Firebase-12.2.1-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.18.2-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
 
 [Visit ParentPal](https://parentpals.ca) • [Documentation](#user-manual-parent-user)
 
@@ -603,20 +605,6 @@ Hosting:          Firebase Hosting
 </details>
 
 <br/>
-
----
-
-<div align="center">
-
-![Security](https://img.shields.io/badge/Secure%20Connection-HTTPS%2FTLS-brightgreen?style=for-the-badge)
-![Auth](https://img.shields.io/badge/Auth-JWT%20%2B%20Firebase-blue?style=for-the-badge)
-![Privacy](https://img.shields.io/badge/Data%20Privacy-Protected-orange?style=for-the-badge)
-
-</div>
-
-<br/>
-
-<div align="center">
 
 ---
 
