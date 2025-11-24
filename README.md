@@ -411,8 +411,6 @@ Hosting:          Firebase Hosting
 
 ## User Manual (Babysitter User)
 
-###  Home Page
-
 <details>
 <summary><h3>Home Page</h3></summary>
 (Note: The homepage will not show any data until a parent account has shared access with your account (The babysitter account) and you have verified the shared account)
