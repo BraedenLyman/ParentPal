@@ -19,11 +19,10 @@
 
 ## Table of Contents
 
-- [Overview](#-overview)
-- [Tech Stack](#️-tech-stack)
-- [User Manual (Parent)](#-user-manual-parent-user)
-- [User Manual (Babysitter)](#-user-manual-babysitter-user)
-- [Security](#-security)
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [User Manual (Parent)](#user-manual-parent-user)
+- [User Manual (Babysitter)](#user-manual-babysitter-user)
 
 ---
 
@@ -608,8 +607,6 @@ Hosting:          Firebase Hosting
 <br/>
 
 ---
-
-## Security
 
 <div align="center">
 
