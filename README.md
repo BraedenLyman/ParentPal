@@ -140,7 +140,7 @@ The main dashboard provides quick access to all major features:
 3. A list of all selected Health records types for that child will then appear
 
 **Adding Health Records**
-(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are adding)
+</br>(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are adding)
 
 1. Click the **"Add"** button (bottom right)
 2. Enter the corresponding health record details
@@ -148,14 +148,14 @@ The main dashboard provides quick access to all major features:
 4. The new record will be saved to the selected type of Health Records list for that child
 
 **Filtering Health Records**
-(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are filtering)
+</br>(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are filtering)
 
 1. Click the **Filter** icon (top right)
 2. Select a filter option
 3. The list of the selected Health Record type will be filtered accordingly
 
 **Editing Health Records**
-(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are editing)
+</br> (Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are editing)
 
 1. Click the **Edit** icon (The pencial icon on the health record card)
 2. A modal will appear with the current health record details
@@ -163,7 +163,7 @@ The main dashboard provides quick access to all major features:
 4. Click **"Save"** to save changes or **"Cancel"** to cancel
 
 **Deleting Health Records**
-(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are deleting)
+</br>(Note: The selected Health Record type (From the navigation bar) will be the type of Health Record that you are deleting)
 
 1. Click the **Delete** icon (The trash icon on the health record card)
 2. A modal will appear with a delete health record confirmation
