@@ -35,7 +35,7 @@ async function sendEmail({ to, subject, html }) {
             };
 
             const response = await sgMail.send(msg);
-            console.log('✓ SendGrid email sent successfully:', {
+            console.log('SendGrid email sent successfully:', {
                 to,
                 statusCode: response[0].statusCode,
                 messageId: response[0].headers['x-message-id']
@@ -47,7 +47,7 @@ async function sendEmail({ to, subject, html }) {
                 provider: 'SendGrid'
             };
         } catch (error) {
-            console.error('✗ SendGrid email failed:', {
+            console.error('SendGrid email failed:', {
                 error: error.message,
                 code: error.code,
                 to,
@@ -66,7 +66,7 @@ async function sendEmail({ to, subject, html }) {
                 html,
             });
 
-            console.log('✓ Gmail SMTP email sent successfully:', {
+            console.log('Gmail SMTP email sent successfully:', {
                 to,
                 messageId: info.messageId,
                 response: info.response
@@ -78,7 +78,7 @@ async function sendEmail({ to, subject, html }) {
                 provider: 'Gmail SMTP'
             };
         } catch (error) {
-            console.error('✗ Gmail SMTP email failed:', {
+            console.error('Gmail SMTP email failed:', {
                 error: error.message,
                 code: error.code,
                 to
@@ -87,7 +87,7 @@ async function sendEmail({ to, subject, html }) {
         }
     } else {
         const errorMsg = 'No email service configured. Set SENDGRID_API_KEY or EMAIL_USER/EMAIL_PASSWORD';
-        console.error('✗', errorMsg);
+        console.error(errorMsg);
         throw new Error(errorMsg);
     }
 }
