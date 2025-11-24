@@ -609,7 +609,7 @@ Hosting:          Firebase Hosting
 
 ---
 
-## 🔐 Security
+## Security
 
 <div align="center">
 
