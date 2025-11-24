@@ -215,7 +215,7 @@ export default function AssignedTasks() {
                                                     </span>
                                                     {task.baby_first_name && (
                                                         <span className="task-baby">
-                                                            👶 {task.baby_first_name}
+                                                            {task.baby_first_name}
                                                         </span>
                                                     )}
                                                 </div>
@@ -329,7 +329,7 @@ export default function AssignedTasks() {
                                                     </span>
                                                     {task.baby_first_name && (
                                                         <span className="task-baby">
-                                                            👶 {task.baby_first_name}
+                                                            {task.baby_first_name}
                                                         </span>
                                                     )}
                                                 </div>
