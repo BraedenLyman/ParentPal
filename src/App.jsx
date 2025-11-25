@@ -25,7 +25,7 @@ import PhotoGallery from "./components/pages/photo-gallery/photo-gallery";
 import Reports from "./components/pages/reports/Reports";
 import ParentMessages from "./components/pages/messages/parent-messages";
 import BabysitterMessages from "./components/pages/messages/babysitter-messages";
-import Calendar from "./components/pages/calendar/calendar";
+import Calendar from "./components/pages/calendar/Calendar";
 
 function App() {
   return (
