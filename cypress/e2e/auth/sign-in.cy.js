@@ -33,7 +33,6 @@ describe('Sign In', () => {
   });
 
   it('should show error for invalid credentials', () => {
-    // Mock failed auth response
     cy.intercept('POST', '**/identitytoolkit.googleapis.com/**', {
       statusCode: 400,
       body: {
@@ -60,9 +59,12 @@ describe('Sign In', () => {
     cy.get('input[type="email"]').type('wrong@example.com');
     cy.get('input[type="password"]').type('wrongpassword');
     cy.get('button[type="submit"]').click();
-
-    // Check for error message (adjust selector based on your UI)
-    cy.get('body').should('contain', 'Invalid').or('contain', 'incorrect').or('contain', 'error');
+    cy.get('body').should((body) => {
+      const text = body.text().toLowerCase();
+      expect(text).to.satisfy((t) =>
+        t.includes('invalid') || t.includes('incorrect') || t.includes('error')
+      );
+    });
   });
 
   it('should be responsive on mobile', () => {
