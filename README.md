@@ -216,7 +216,7 @@ Hosting:          Firebase Hosting
 
 **Adding Observation Records**
 1. Click the **"Add"** button (bottom right)
-2. Enterr the corresponding observation record details
+2. Enter the corresponding observation record details
 3. Click **"Add"** to save or **"Cancel"** to cancel
 4. The new record will be saved to the list of observation records for that child
 
@@ -286,6 +286,32 @@ Hosting:          Firebase Hosting
 3. The message will be sent to the babysitter and will appear in the conversation with the babysitter
 
 </details>
+
+<summary><h3>Calendar</h3></summary>
+
+**Calendar Viewing Of Events**
+1. By default, all events will be displayed as a calendar view showing each item on the corrisponding date
+
+**List Viewing of Events**
+2. To change the view from Calendar to List, simply click on the "List" button in the top left corner
+
+**Adding Events**
+1. Either in Month or List view, click on the **"+ New Event"** button to add a new event.
+2. Enter the corresponding event details
+3. Click **"Save Event"** to save or  **"Cancel"** to cancel
+4. The new event will be saved
+
+**Editing Events**
+1. Either in Month or List view, click on the event item
+2. Enter in the new detals
+3. Click **"Save Event"** to save, **"Cancel"** to cancel or **"Delete"** to delete the event
+
+**Deleting Events**
+1.  Either in Month or List view, click on the event item
+2. Click **"Delete"** to delete the event
+3. A modal will appear with a delete event confirmation
+3. Click **"Delete"** to delete the event or **"Cancel"** to cancel
+<details>
 
 <details>
 <summary><h3>Reports</h3></summary>

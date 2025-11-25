@@ -30,6 +30,17 @@ export default {
   testEnvironmentOptions: {
     customExportConditions: ['']
   },
+  reporters: [
+    'default',
+    ['jest-html-reporters', {
+      publicPath: './test-reports',
+      filename: 'frontend-test-report.html',
+      pageTitle: 'Frontend Unit Tests Report',
+      expand: true,
+      openReport: false
+    }]
+  ],
+  coverageReporters: ['html', 'text', 'lcov', 'json'],
   // Coverage thresholds
   // coverageThreshold: {
   //   global: {

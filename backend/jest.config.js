@@ -19,5 +19,16 @@ module.exports = {
     }
   },
   setupFilesAfterEnv: [],
-  testTimeout: 10000
+  testTimeout: 10000,
+  reporters: [
+    'default',
+    ['jest-html-reporters', {
+      publicPath: './test-reports',
+      filename: 'backend-test-report.html',
+      pageTitle: 'Backend Unit & Integration Tests Report',
+      expand: true,
+      openReport: false
+    }]
+  ],
+  coverageReporters: ['html', 'text', 'lcov', 'json']
 };
