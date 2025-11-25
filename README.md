@@ -287,6 +287,7 @@ Hosting:          Firebase Hosting
 
 </details>
 
+<details>
 <summary><h3>Calendar</h3></summary>
 
 **Calendar Viewing Of Events**
@@ -311,7 +312,8 @@ Hosting:          Firebase Hosting
 2. Click **"Delete"** to delete the event
 3. A modal will appear with a delete event confirmation
 3. Click **"Delete"** to delete the event or **"Cancel"** to cancel
-<details>
+
+</details>
 
 <details>
 <summary><h3>Reports</h3></summary>
