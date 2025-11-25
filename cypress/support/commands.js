@@ -1,156 +1,114 @@
-Cypress.Commands.add('setupAuthMocks', (userType = 'parent') => {
-  const mockUser = {
-    uid: `test-${userType}-uid-123`,
-    email: `test-${userType}@example.com`,
-    emailVerified: true,
-    displayName: `Test ${userType}`,
-  };
+// Custom commands for ParentPal application
 
-  cy.window().then((win) => {
-    win.localStorage.setItem('firebase:authUser', JSON.stringify(mockUser));
-    win.localStorage.setItem('userType', userType);
-    win.localStorage.setItem('userId', mockUser.uid);
-    win.localStorage.setItem('userEmail', mockUser.email);
-  });
-
-  cy.intercept('POST', '**/identitytoolkit.googleapis.com/**', {
-    statusCode: 200,
-    body: {
-      kind: 'identitytoolkit#VerifyPasswordResponse',
-      localId: mockUser.uid,
-      email: mockUser.email,
-      displayName: mockUser.displayName,
-      idToken: 'mock-id-token-' + userType,
-      registered: true,
-      refreshToken: 'mock-refresh-token',
-      expiresIn: '3600',
-    },
-  }).as('firebaseAuth');
-});
-
-Cypress.Commands.add('login', (email, password, userType = 'parent') => {
-  cy.setupAuthMocks(userType);
-
-  cy.intercept('POST', '**/api/sign-in', {
-    statusCode: 200,
-    body: {
-      success: true,
-      user: {
-        uid: `test-${userType}-uid-123`,
-        email: email,
-        user_type: userType,
-        account_id: 1,
-      },
-      token: 'mock-jwt-token',
-    },
-  }).as('backendSignIn');
-
+/**
+ * Login command for testing authenticated routes
+ * @param {string} email - User email
+ * @param {string} password - User password
+ */
+Cypress.Commands.add('login', (email, password) => {
   cy.visit('/sign-in');
   cy.get('input[type="email"]').type(email);
   cy.get('input[type="password"]').type(password);
   cy.get('button[type="submit"]').click();
-  cy.url().should('not.include', '/sign-in', { timeout: 10000 });
+
+  // Wait for redirect after successful login
+  cy.url().should('not.include', '/sign-in');
 });
 
+/**
+ * Login as parent user with session caching
+ */
 Cypress.Commands.add('loginAsParent', () => {
-  cy.setupAuthMocks('parent');
+  const parentEmail = Cypress.env('PARENT_EMAIL') || 'parent@test.com';
+  const parentPassword = Cypress.env('PARENT_PASSWORD') || 'TestPassword123!';
 
-  cy.intercept('GET', '**/api/accounts/**', {
-    statusCode: 200,
-    body: {
-      account_id: 1,
-      first_name: 'Test',
-      last_name: 'Parent',
-      email: 'test-parent@example.com',
-      user_type: 'parent',
-    },
-  }).as('getAccount');
-
-  cy.intercept('GET', '**/api/babies/**', {
-    statusCode: 200,
-    body: [{
-      baby_id: 1,
-      first_name: 'Baby',
-      last_name: 'Doe',
-      date_of_birth: '2024-01-01',
-      gender: 'Male',
-    }],
-  }).as('getBabies');
-
-  cy.window().then((win) => {
-    win.localStorage.setItem('isAuthenticated', 'true');
-    win.localStorage.setItem('userType', 'parent');
+  cy.session([parentEmail, 'parent'], () => {
+    cy.login(parentEmail, parentPassword);
+    cy.url().should('include', '/parent-dashboard');
   });
 });
 
+/**
+ * Login as babysitter user with session caching
+ */
 Cypress.Commands.add('loginAsBabysitter', () => {
-  cy.setupAuthMocks('babysitter');
+  const babysitterEmail = Cypress.env('BABYSITTER_EMAIL') || 'babysitter@test.com';
+  const babysitterPassword = Cypress.env('BABYSITTER_PASSWORD') || 'TestPassword123!';
 
-  cy.intercept('GET', '**/api/accounts/**', {
-    statusCode: 200,
-    body: {
-      account_id: 2,
-      first_name: 'Test',
-      last_name: 'Babysitter',
-      email: 'test-babysitter@example.com',
-      user_type: 'babysitter',
-    },
-  }).as('getAccount');
-
-  cy.intercept('GET', '**/api/babysitter/assignments/**', {
-    statusCode: 200,
-    body: [{
-      assignment_id: 1,
-      parent_name: 'Test Parent',
-      baby_name: 'Baby Doe',
-      status: 'active',
-    }],
-  }).as('getAssignments');
-
-  cy.window().then((win) => {
-    win.localStorage.setItem('isAuthenticated', 'true');
-    win.localStorage.setItem('userType', 'babysitter');
+  cy.session([babysitterEmail, 'babysitter'], () => {
+    cy.login(babysitterEmail, babysitterPassword);
+    cy.url().should('include', '/babysitter-dashboard');
   });
 });
 
+/**
+ * Logout command
+ */
 Cypress.Commands.add('logout', () => {
   cy.get('[data-testid="logout-button"]').click({ force: true });
   cy.url().should('include', '/sign-in');
 });
 
+/**
+ * Navigate to a specific page
+ */
 Cypress.Commands.add('navigateTo', (path) => {
   cy.visit(path);
   cy.url().should('include', path);
 });
 
+/**
+ * Wait for API response
+ */
 Cypress.Commands.add('waitForApi', (alias) => {
   cy.wait(alias).its('response.statusCode').should('eq', 200);
 });
 
+/**
+ * Check if element is visible and contains text
+ */
 Cypress.Commands.add('shouldContainText', { prevSubject: true }, (subject, text) => {
   cy.wrap(subject).should('be.visible').and('contain', text);
 });
 
+/**
+ * Fill form field by label
+ */
 Cypress.Commands.add('fillFieldByLabel', (label, value) => {
   cy.contains('label', label).parent().find('input, textarea, select').type(value);
 });
 
+/**
+ * Submit form
+ */
 Cypress.Commands.add('submitForm', () => {
   cy.get('form').submit();
 });
 
+/**
+ * Check for success message
+ */
 Cypress.Commands.add('checkSuccessMessage', (message) => {
   cy.get('[role="alert"], .success-message, .toast').should('contain', message);
 });
 
+/**
+ * Check for error message
+ */
 Cypress.Commands.add('checkErrorMessage', (message) => {
   cy.get('[role="alert"], .error-message, .toast').should('contain', message);
 });
 
+/**
+ * Click button by text
+ */
 Cypress.Commands.add('clickButton', (text) => {
   cy.contains('button', text).click();
 });
 
+/**
+ * Mock Firebase Auth
+ */
 Cypress.Commands.add('mockFirebaseAuth', () => {
   cy.window().then((win) => {
     win.localStorage.setItem('firebase:authUser', JSON.stringify({
@@ -161,6 +119,9 @@ Cypress.Commands.add('mockFirebaseAuth', () => {
   });
 });
 
+/**
+ * Clear Firebase Auth
+ */
 Cypress.Commands.add('clearFirebaseAuth', () => {
   cy.window().then((win) => {
     win.localStorage.clear();
@@ -168,22 +129,37 @@ Cypress.Commands.add('clearFirebaseAuth', () => {
   });
 });
 
+/**
+ * Test mobile viewport
+ */
 Cypress.Commands.add('testMobile', () => {
   cy.viewport('iphone-x');
 });
 
+/**
+ * Test tablet viewport
+ */
 Cypress.Commands.add('testTablet', () => {
   cy.viewport('ipad-2');
 });
 
+/**
+ * Test desktop viewport
+ */
 Cypress.Commands.add('testDesktop', () => {
   cy.viewport(1280, 720);
 });
 
+/**
+ * Intercept API calls
+ */
 Cypress.Commands.add('interceptApi', (method, url, alias, response = {}) => {
   cy.intercept(method, url, response).as(alias);
 });
 
+/**
+ * Take screenshot with specific name
+ */
 Cypress.Commands.add('takeScreenshot', (name) => {
   cy.screenshot(name, { capture: 'fullPage' });
 });
