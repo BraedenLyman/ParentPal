@@ -27,8 +27,8 @@ jobs:
           npm install
         fi
 
-    - name: Install jest-html-reporters
-      run: npm install --save-dev jest-html-reporters
+    - name: Install jest-html-reporter
+      run: npm install --save-dev jest-html-reporter
 
     - name: Run frontend tests
       run: npm test -- --coverage --watchAll=false
@@ -71,10 +71,10 @@ jobs:
           npm install
         fi
 
-    - name: Install jest-html-reporters
+    - name: Install jest-html-reporter
       run: |
         cd backend
-        npm install --save-dev jest-html-reporters
+        npm install --save-dev jest-html-reporter
 
     - name: Run backend tests (Unit & Integration)
       run: |
@@ -370,32 +370,46 @@ jobs:
     - name: OWASP ZAP Baseline Scan
       run: |
         docker run --rm \
-          --network="host" \
+          --add-host=host.docker.internal:host-gateway \
           -v ${{ github.workspace }}:/zap/wrk:rw \
           ghcr.io/zaproxy/zaproxy:stable \
           zap-baseline.py \
-          -t http://127.0.0.1:3000 \
+          -t http://host.docker.internal:3000 \
           -c /zap/wrk/.zap/rules.tsv \
-          -r /zap/wrk/zap-reports/zap-baseline-report.html \
-          -J /zap/wrk/zap-reports/zap-baseline-report.json \
-          -w /zap/wrk/zap-reports/zap-baseline-report.md \
+          -r zap-baseline-report.html \
+          -J zap-baseline-report.json \
+          -w zap-baseline-report.md \
           -I || true
       continue-on-error: true
+
+    - name: Move ZAP Baseline Reports
+      if: always()
+      run: |
+        mv zap-baseline-report.html zap-reports/ 2>/dev/null || echo "No HTML baseline report"
+        mv zap-baseline-report.json zap-reports/ 2>/dev/null || echo "No JSON baseline report"
+        mv zap-baseline-report.md zap-reports/ 2>/dev/null || echo "No MD baseline report"
 
     - name: OWASP ZAP Full Scan
       run: |
         docker run --rm \
-          --network="host" \
+          --add-host=host.docker.internal:host-gateway \
           -v ${{ github.workspace }}:/zap/wrk:rw \
           ghcr.io/zaproxy/zaproxy:stable \
           zap-full-scan.py \
-          -t http://127.0.0.1:3000 \
+          -t http://host.docker.internal:3000 \
           -c /zap/wrk/.zap/rules.tsv \
-          -r /zap/wrk/zap-reports/zap-full-report.html \
-          -J /zap/wrk/zap-reports/zap-full-report.json \
-          -w /zap/wrk/zap-reports/zap-full-report.md \
+          -r zap-full-report.html \
+          -J zap-full-report.json \
+          -w zap-full-report.md \
           -I || true
       continue-on-error: true
+
+    - name: Move ZAP Full Scan Reports
+      if: always()
+      run: |
+        mv zap-full-report.html zap-reports/ 2>/dev/null || echo "No HTML full report"
+        mv zap-full-report.json zap-reports/ 2>/dev/null || echo "No JSON full report"
+        mv zap-full-report.md zap-reports/ 2>/dev/null || echo "No MD full report"
 
     - name: Display ZAP Scan Summary
       if: always()
@@ -433,12 +447,9 @@ jobs:
       with:
         name: security-scan-report
         path: |
-          zap-reports/zap-baseline-report.html
-          zap-reports/zap-baseline-report.json
-          zap-reports/zap-baseline-report.md
-          zap-reports/zap-full-report.html
-          zap-reports/zap-full-report.json
-          zap-reports/zap-full-report.md
+          zap-reports/*.html
+          zap-reports/*.json
+          zap-reports/*.md
           backend/server.log
         if-no-files-found: warn
 

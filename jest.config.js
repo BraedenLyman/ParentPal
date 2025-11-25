@@ -32,12 +32,14 @@ export default {
   },
   reporters: [
     'default',
-    ['jest-html-reporters', {
-      publicPath: './test-reports',
-      filename: 'frontend-test-report.html',
+    ['jest-html-reporter', {
       pageTitle: 'Frontend Unit Tests Report',
-      expand: true,
-      openReport: false
+      outputPath: './test-reports/frontend-test-report.html',
+      includeFailureMsg: true,
+      includeConsoleLog: true,
+      theme: 'defaultTheme',
+      logo: '',
+      executionTimeWarningThreshold: 5
     }]
   ],
   coverageReporters: ['html', 'text', 'lcov', 'json'],

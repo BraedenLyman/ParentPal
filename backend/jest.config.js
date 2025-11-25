@@ -22,12 +22,14 @@ module.exports = {
   testTimeout: 10000,
   reporters: [
     'default',
-    ['jest-html-reporters', {
-      publicPath: './test-reports',
-      filename: 'backend-test-report.html',
+    ['jest-html-reporter', {
       pageTitle: 'Backend Unit & Integration Tests Report',
-      expand: true,
-      openReport: false
+      outputPath: './test-reports/backend-test-report.html',
+      includeFailureMsg: true,
+      includeConsoleLog: true,
+      theme: 'defaultTheme',
+      logo: '',
+      executionTimeWarningThreshold: 5
     }]
   ],
   coverageReporters: ['html', 'text', 'lcov', 'json']
