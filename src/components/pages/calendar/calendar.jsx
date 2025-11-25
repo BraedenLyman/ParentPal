@@ -437,12 +437,19 @@ export default function Calendar() {
                                 </div>
                                 <div className="event-info">
                                     <span className="event-date">
-                                        {new Date(event.event_date).toLocaleDateString('en-US', {
-                                            weekday: 'short',
-                                            month: 'short',
-                                            day: 'numeric',
-                                            year: 'numeric'
-                                        })}
+                                        {(() => {
+                                            const dateStr = typeof event.event_date === 'string'
+                                                ? event.event_date.split('T')[0]
+                                                : new Date(event.event_date).toISOString().split('T')[0];
+                                            const [year, month, day] = dateStr.split('-');
+                                            const date = new Date(year, month - 1, day);
+                                            return date.toLocaleDateString('en-US', {
+                                                weekday: 'short',
+                                                month: 'short',
+                                                day: 'numeric',
+                                                year: 'numeric'
+                                            });
+                                        })()}
                                     </span>
                                     {event.start_time && (
                                         <span className="event-time">
