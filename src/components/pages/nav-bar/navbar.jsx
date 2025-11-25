@@ -5,12 +5,14 @@ import { Cog6ToothIcon as Cog6ToothIconOutline } from "@heroicons/react/24/outli
 import { DocumentTextIcon as DocumentTextIconOutline } from "@heroicons/react/24/outline";
 import { ClipboardDocumentListIcon as ClipboardDocumentListIconOutline } from "@heroicons/react/24/outline";
 import { ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconOutline } from "@heroicons/react/24/outline";
+import { CalendarIcon as CalendarIconOutline } from "@heroicons/react/24/outline";
 import { HomeIcon as HomeIconSolid } from "@heroicons/react/24/solid";
 import { ChartBarIcon as ChartBarIconSolid } from "@heroicons/react/24/solid";
 import { Cog6ToothIcon as Cog6ToothIconSolid } from "@heroicons/react/24/solid";
 import { DocumentTextIcon as DocumentTextIconSolid } from "@heroicons/react/24/solid";
 import { ClipboardDocumentListIcon as ClipboardDocumentListIconSolid } from "@heroicons/react/24/solid";
 import { ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid } from "@heroicons/react/24/solid";
+import { CalendarIcon as CalendarIconSolid } from "@heroicons/react/24/solid";
 import "./nav-bar.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -146,6 +148,10 @@ export default function Navbar() {
     return location.pathname === "/parent-messages";
   };
 
+  const isCalendarActive = () => {
+    return location.pathname === "/calendar";
+  };
+
   return (
    <div className="navBarContainer">
         <div
@@ -200,6 +206,20 @@ export default function Navbar() {
           </div>
           <span className="nav-label">Messages</span>
         </div>
+
+        {userType !== 'babysitter' && (
+          <div
+            className={`navSection ${isCalendarActive() ? 'active' : ''}`}
+            onClick={() => navigate("/calendar")}
+          >
+            {isCalendarActive() ? (
+              <CalendarIconSolid className="nav-icon" />
+            ) : (
+              <CalendarIconOutline className="nav-icon" />
+            )}
+            <span className="nav-label">Calendar</span>
+          </div>
+        )}
 
         {userType !== 'babysitter' && (
           <div

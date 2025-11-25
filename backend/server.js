@@ -20,6 +20,7 @@ const babysitterSharingRouter = require("./routes/babysitter-sharing");
 const photoGalleryRouter = require("./routes/photo-gallery");
 const sharedTasksRouter = require("./routes/shared-tasks");
 const messagingRouter = require("./routes/messaging");
+const calendarRouter = require("./routes/calendar");
 const path = require('path');
 
 const app = express();
@@ -126,6 +127,7 @@ app.use("/api/babysitter-sharing", babysitterSharingRouter);
 app.use("/api/photo-gallery", photoGalleryRouter);
 app.use("/api/shared-tasks", sharedTasksRouter);
 app.use("/api/messaging", messagingRouter);
+app.use("/api/calendar", calendarRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

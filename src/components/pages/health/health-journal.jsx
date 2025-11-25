@@ -33,7 +33,6 @@ export default function HealthJournal() {
 
     const formatDate = (dateString) => {
         if (!dateString) return "";
-        // Handle ISO timestamp format (e.g., "2024-01-15T00:00:00.000Z")
         const dateOnly = dateString.split("T")[0];
         const [year, month, day] = dateOnly.split("-");
         return new Date(year, month - 1, day).toLocaleDateString();

@@ -8,6 +8,7 @@ import { auth } from "../../../firebase/firebaseAuth";
 import API_URL from "../../../config/api";
 import "./dashboard-styles.css";
 import { FiBell } from "react-icons/fi";
+import UpcomingEventsWidget from "../calendar/UpcomingEventsWidget";
 
 export default function ParentDashboard() {
   const navigate = useNavigate();
@@ -183,6 +184,10 @@ export default function ParentDashboard() {
               </div>
             </Card>
           </div>
+        </Card>
+
+        <Card className="reportSections">
+          <UpcomingEventsWidget />
         </Card>
       </div>
 

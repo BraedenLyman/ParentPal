@@ -336,6 +336,75 @@ const validateTaskData = (req, res, next) => {
   next();
 };
 
+const validateEventData = (req, res, next) => {
+  const errors = [];
+  const validEventTypes = ['doctor_appointment', 'vaccination', 'reminder', 'medication_reminder', 'general_appointment', 'childcare', 'other'];
+
+  if (req.body.title) {
+    const titleValidation = validateAlphanumericText(req.body.title, 'Event Title', 200, true);
+    if (!titleValidation.valid) {
+      errors.push(titleValidation.message);
+    } else {
+      req.body.title = titleValidation.value;
+    }
+  }
+
+  if (req.body.eventType && !validEventTypes.includes(req.body.eventType)) {
+    errors.push(`Event type must be one of: ${validEventTypes.join(', ')}`);
+  }
+
+  if (req.body.description) {
+    const descValidation = validateNotes(req.body.description, 'Event Description', 2000, false);
+    if (!descValidation.valid) {
+      errors.push(descValidation.message);
+    } else {
+      req.body.description = descValidation.value;
+    }
+  }
+
+  if (req.body.location) {
+    const locationValidation = validateAlphanumericText(req.body.location, 'Location', 255, false);
+    if (!locationValidation.valid) {
+      errors.push(locationValidation.message);
+    } else {
+      req.body.location = locationValidation.value;
+    }
+  }
+
+  if (req.body.doctorName) {
+    const doctorValidation = validateMedicalName(req.body.doctorName, 'Doctor Name', 100, false);
+    if (!doctorValidation.valid) {
+      errors.push(doctorValidation.message);
+    } else {
+      req.body.doctorName = doctorValidation.value;
+    }
+  }
+
+  if (req.body.notes) {
+    const notesValidation = validateNotes(req.body.notes, 'Notes', 2000, false);
+    if (!notesValidation.valid) {
+      errors.push(notesValidation.message);
+    } else {
+      req.body.notes = notesValidation.value;
+    }
+  }
+
+  if (req.body.reminderTime !== undefined && req.body.reminderTime !== '') {
+    const reminderValidation = validateNumeric(req.body.reminderTime, 'Reminder Time', 0, 168);
+    if (!reminderValidation.valid) {
+      errors.push(reminderValidation.message);
+    } else {
+      req.body.reminderTime = reminderValidation.value;
+    }
+  }
+
+  if (errors.length > 0) {
+    return res.status(400).json({ error: 'Validation failed', details: errors });
+  }
+
+  next();
+};
+
 module.exports = {
   validateGrowthData,
   validateSleepData,
@@ -346,6 +415,7 @@ module.exports = {
   validateSickDayData,
   validateObservationData,
   validateTaskData,
+  validateEventData,
   validateNumeric,
   validateAlphanumericText,
   validateMedicalName,
