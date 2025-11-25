@@ -269,6 +269,10 @@
     flex-shrink: 0;
 }
 
+.calendar-event .event-time::before {
+    content: none;
+}
+
 .event-title {
     flex: 1 1 auto;
     white-space: nowrap;
@@ -483,6 +487,11 @@
     .calendar-event {
         font-size: 0.625rem;
         padding: 0.125rem 0.25rem;
+        max-width: 100%;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .calendar-navigation h2 {
@@ -497,5 +506,13 @@
     .calendar-event-modal .form-row,
     .calendar-event-modal .form-row-3 {
         grid-template-columns: 1fr;
+    }
+
+    .calendar-cell {
+        overflow: hidden;
+    }
+
+    .event-title {
+        max-width: 10ch;
     }
 }
