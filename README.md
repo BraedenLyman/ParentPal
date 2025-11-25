@@ -294,7 +294,7 @@ Hosting:          Firebase Hosting
 1. By default, all events will be displayed as a calendar view showing each item on the corrisponding date
 
 **List Viewing of Events**
-2. To change the view from Calendar to List, simply click on the "List" button in the top left corner
+1. To change the view from Calendar to List, simply click on the "List" button in the top left corner
 
 **Adding Events**
 1. Either in Month or List view, click on the **"+ New Event"** button to add a new event.
