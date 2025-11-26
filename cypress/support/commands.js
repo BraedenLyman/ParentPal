@@ -12,6 +12,8 @@ Cypress.Commands.add('loginAsParent', () => {
 
   cy.session([parentEmail, 'parent'], () => {
     cy.login(parentEmail, parentPassword);
+  }, {
+    cacheAcrossSpecs: true 
   });
   
   cy.visit('/parent-dashboard');
@@ -24,6 +26,8 @@ Cypress.Commands.add('loginAsBabysitter', () => {
 
   cy.session([babysitterEmail, 'babysitter'], () => {
     cy.login(babysitterEmail, babysitterPassword);
+  }, {
+    cacheAcrossSpecs: true 
   });
 
   cy.visit('/babysitter-dashboard');
