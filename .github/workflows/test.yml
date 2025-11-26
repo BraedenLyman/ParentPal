@@ -299,6 +299,10 @@ jobs:
       continue-on-error: true
       env:
         CYPRESS_baseUrl: http://localhost:5173
+        CYPRESS_PARENT_EMAIL: ${{ secrets.PARENT_EMAIL }}
+        CYPRESS_PARENT_PASSWORD: ${{ secrets.PARENT_PASSWORD }}
+        CYPRESS_BABYSITTER_EMAIL: ${{ secrets.BABYSITTER_EMAIL }}
+        CYPRESS_BABYSITTER_PASSWORD: ${{ secrets.BABYSITTER_PASSWORD }}
 
     - name: Merge Cypress Reports
       if: always()
