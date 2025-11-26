@@ -738,6 +738,29 @@ jobs:
         echo "Artillery version:"
         npx artillery --version || echo "Artillery not found, installing..."
 
+    - name: Test Artillery Cloud Connectivity
+      run: |
+        cd backend
+        echo "🔍 Testing Artillery Cloud connectivity..."
+        echo ""
+
+        # Verify API key is set
+        if [ -n "$ARTILLERY_CLOUD_API_KEY" ]; then
+          KEY_LEN=${#ARTILLERY_CLOUD_API_KEY}
+          echo "✓ ARTILLERY_CLOUD_API_KEY is set (length: $KEY_LEN chars)"
+
+          # Check if Artillery can connect to cloud
+          echo ""
+          echo "Testing Artillery Cloud authentication..."
+          npx artillery --version
+        else
+          echo "❌ ARTILLERY_CLOUD_API_KEY is NOT set!"
+          echo "   Please ensure the 'ARTILLERY_CLOUD_KEY' secret is configured in GitHub"
+          exit 1
+        fi
+      env:
+        ARTILLERY_CLOUD_API_KEY: ${{ secrets.ARTILLERY_CLOUD_KEY }}
+
     - name: Run Performance Tests - Read Operations
       run: |
         cd backend
@@ -745,15 +768,26 @@ jobs:
         echo "Configuration: performance/artillery-config.yml"
         echo ""
 
+        # Verify API key is set (show first/last 4 chars only for security)
+        if [ -n "$ARTILLERY_CLOUD_API_KEY" ]; then
+          KEY_LEN=${#ARTILLERY_CLOUD_API_KEY}
+          echo "✓ Artillery Cloud API Key is set (length: $KEY_LEN chars)"
+        else
+          echo "❌ WARNING: ARTILLERY_CLOUD_API_KEY is not set!"
+        fi
+        echo ""
+
+        # Run Artillery with explicit error handling
+        set -e  # Exit on error
         npx artillery run performance/artillery-config.yml \
           --output performance/results.json \
           --record \
           --name "ParentPal API - Read Operations (CI)" \
-          --tags "env:ci,type:read,branch:${{ github.ref_name }}" || echo "⚠️ Read performance tests encountered issues"
+          --tags "env:ci,type:read,branch:${{ github.ref_name }}"
 
+        echo ""
         if [ -f performance/results.json ]; then
           echo "✅ Read performance test completed - results saved"
-          echo "📊 Check logs above for Artillery Cloud dashboard URL"
         else
           echo "❌ No results file generated for read operations"
         fi
@@ -768,15 +802,26 @@ jobs:
         echo "Configuration: performance/artillery-write-ops.yml"
         echo ""
 
+        # Verify API key is set (show first/last 4 chars only for security)
+        if [ -n "$ARTILLERY_CLOUD_API_KEY" ]; then
+          KEY_LEN=${#ARTILLERY_CLOUD_API_KEY}
+          echo "✓ Artillery Cloud API Key is set (length: $KEY_LEN chars)"
+        else
+          echo "❌ WARNING: ARTILLERY_CLOUD_API_KEY is not set!"
+        fi
+        echo ""
+
+        # Run Artillery with explicit error handling
+        set -e  # Exit on error
         npx artillery run performance/artillery-write-ops.yml \
           --output performance/write-results.json \
           --record \
           --name "ParentPal API - Write Operations (CI)" \
-          --tags "env:ci,type:write,branch:${{ github.ref_name }}" || echo "⚠️ Write performance tests encountered issues"
+          --tags "env:ci,type:write,branch:${{ github.ref_name }}"
 
+        echo ""
         if [ -f performance/write-results.json ]; then
           echo "✅ Write performance test completed - results saved"
-          echo "📊 Check logs above for Artillery Cloud dashboard URL"
         else
           echo "❌ No results file generated for write operations"
         fi
