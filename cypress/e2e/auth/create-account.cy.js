@@ -67,8 +67,8 @@ describe('Create Account', () => {
     }).as('createAccount');
 
     cy.get('input[placeholder*="first name"]').type('Test');
-    cy.get('input[placeholder*="last name"]').type('main2');
-    cy.get('input[type="email"]').type('test.main2@test.com');
+    cy.get('input[placeholder*="last name"]').type('test');
+    cy.get('input[type="email"]').type('test.main3@test.com');
     cy.get('input[type="password"]').type('TestPass123!');
     cy.get('.form-field').contains('Account Type').parent().find('.react-select__control').click();
     cy.get('.react-select__menu').find('.react-select__option').first().click();

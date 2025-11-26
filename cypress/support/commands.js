@@ -3,7 +3,6 @@ Cypress.Commands.add('login', (email, password) => {
   cy.get('input[type="email"]').type(email);
   cy.get('input[type="password"]').type(password);
   cy.get('button[type="submit"]').click();
-
   cy.url().should('not.include', '/sign-in');
 });
 
@@ -12,33 +11,8 @@ Cypress.Commands.add('loginAsParent', () => {
   const parentPassword = Cypress.env('PARENT_PASSWORD') || 'TestPassword123!';
 
   cy.session([parentEmail, 'parent'], () => {
-    cy.window().then((win) => {
-      win.localStorage.setItem('firebase:authUser', JSON.stringify({
-        uid: 'test-parent-uid',
-        email: parentEmail,
-        emailVerified: true,
-      }));
-    });
-
-    cy.intercept('POST', '**/auth/sign-in', {
-      statusCode: 200,
-      body: { user: { uid: 'test-parent-uid', email: parentEmail } }
-    }).as('signIn');
-
-    cy.intercept('GET', '**/api/account/*', {
-      statusCode: 200,
-      body: {
-        account_id: 1,
-        firebase_uid: 'test-parent-uid',
-        first_name: 'Test',
-        last_name: 'Parent',
-        email_address: parentEmail,
-        account_type: 'parent'
-      }
-    }).as('getAccount');
-
-    cy.visit('/parent-dashboard');
-    cy.url().should('include', '/parent-dashboard', { timeout: 10000 });
+    cy.login(parentEmail, parentPassword);
+    cy.url().should('include', '/parent-dashboard');
   });
 });
 
@@ -47,33 +21,8 @@ Cypress.Commands.add('loginAsBabysitter', () => {
   const babysitterPassword = Cypress.env('BABYSITTER_PASSWORD') || 'TestPassword123!';
 
   cy.session([babysitterEmail, 'babysitter'], () => {
-    cy.window().then((win) => {
-      win.localStorage.setItem('firebase:authUser', JSON.stringify({
-        uid: 'test-babysitter-uid',
-        email: babysitterEmail,
-        emailVerified: true,
-      }));
-    });
-
-    cy.intercept('POST', '**/auth/sign-in', {
-      statusCode: 200,
-      body: { user: { uid: 'test-babysitter-uid', email: babysitterEmail } }
-    }).as('signIn');
-
-    cy.intercept('GET', '**/api/account/*', {
-      statusCode: 200,
-      body: {
-        account_id: 2,
-        firebase_uid: 'test-babysitter-uid',
-        first_name: 'Test',
-        last_name: 'Babysitter',
-        email_address: babysitterEmail,
-        account_type: 'babysitter'
-      }
-    }).as('getAccount');
-
-    cy.visit('/babysitter-dashboard');
-    cy.url().should('include', '/babysitter-dashboard', { timeout: 10000 });
+    cy.login(babysitterEmail, babysitterPassword);
+    cy.url().should('include', '/babysitter-dashboard');
   });
 });
 
