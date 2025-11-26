@@ -11,9 +11,11 @@
     "test:report": "jest --coverage --json --outputFile=test-reports/test-results.json",
     "perf:read": "artillery run performance/artillery-config.yml --output performance/results.json",
     "perf:write": "artillery run performance/artillery-write-ops.yml --output performance/write-results.json",
+    "perf:read:cloud": "artillery run performance/artillery-config.yml --output performance/results.json --record --key a9_yneopyp3csym9hl0sd00dl2ozbbllix4",
+    "perf:write:cloud": "artillery run performance/artillery-write-ops.yml --output performance/write-results.json --record --key a9_yneopyp3csym9hl0sd00dl2ozbbllix4",
     "perf:quick": "artillery quick --count 100 --num 10 http://localhost:3000/api/test",
-    "perf:report": "artillery report performance/results.json --output performance/report.html",
-    "perf:report:write": "artillery report performance/write-results.json --output performance/write-report.html"
+    "perf:view": "cat performance/results.json | npx json -a",
+    "perf:view:write": "cat performance/write-results.json | npx json -a"
   },
   "keywords": [],
   "author": "",

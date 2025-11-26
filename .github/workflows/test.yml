@@ -156,9 +156,9 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: test
-          POSTGRES_DB: parentpal_test
+          POSTGRES_USER: parentpal_user
+          POSTGRES_PASSWORD: Password123!
+          POSTGRES_DB: parentpal_db
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -196,22 +196,64 @@ jobs:
           npm install
         fi
 
-    - name: Create test environment file
+    - name: Create backend environment file
       run: |
         cd backend
         cat > .env << EOF
         PORT=3000
-        DATABASE_URL=postgresql://test:test@localhost:5432/parentpal_test
+        DB_HOST=localhost
+        DB_USER=parentpal_user
+        DB_PASSWORD=Password123!
+        DB_NAME=parentpal_db
+        DB_PORT=5432
         NODE_ENV=test
         EOF
+
+    - name: Setup Firebase credentials
+      run: |
+        cd backend
+        # Create a dummy service account key for testing
+        cat > serviceAccountKey.json << EOF
+        {
+          "type": "service_account",
+          "project_id": "${{ secrets.FIREBASE_PROJECT_ID || 'test-project' }}",
+          "private_key_id": "test-key-id",
+          "private_key": "${{ secrets.FIREBASE_PRIVATE_KEY || '-----BEGIN PRIVATE KEY-----\ntest\n-----END PRIVATE KEY-----\n' }}",
+          "client_email": "${{ secrets.FIREBASE_CLIENT_EMAIL || 'test@test-project.iam.gserviceaccount.com' }}",
+          "client_id": "test-client-id",
+          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+          "token_uri": "https://oauth2.googleapis.com/token",
+          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs"
+        }
+        EOF
+
+    - name: Initialize Database
+      run: |
+        # Wait for PostgreSQL to be fully ready
+        for i in {1..10}; do
+          if PGPASSWORD=Password123! psql -h localhost -U parentpal_user -d parentpal_db -c "SELECT 1" > /dev/null 2>&1; then
+            echo "Database is ready!"
+            break
+          fi
+          echo "Waiting for database... attempt $i/10"
+          sleep 2
+        done
+
+        # Create database schema if init script exists
+        if [ -f backend/init.sql ]; then
+          echo "Running database initialization script..."
+          PGPASSWORD=Password123! psql -h localhost -U parentpal_user -d parentpal_db -f backend/init.sql || echo "No init script or init failed"
+        else
+          echo "No database init script found at backend/init.sql"
+        fi
 
     - name: Start backend server
       run: |
         cd backend
-        npm start > server.log 2>&1 &
+        npm start > ../backend-server.log 2>&1 &
         SERVER_PID=$!
-        echo "Server PID: $SERVER_PID"
-        echo $SERVER_PID > server.pid
+        echo "Backend Server PID: $SERVER_PID"
+        echo $SERVER_PID > ../backend-server.pid
 
         # Wait for server to start
         for i in {1..30}; do
@@ -223,11 +265,40 @@ jobs:
           sleep 2
         done
 
-        curl -f http://localhost:3000/api/test || (cat server.log && exit 1)
+        if ! curl -f http://localhost:3000/api/test; then
+          echo "Backend server failed to start"
+          cat ../backend-server.log
+          exit 1
+        fi
+
+    - name: Start frontend dev server
+      run: |
+        npm run dev > frontend-server.log 2>&1 &
+        FRONTEND_PID=$!
+        echo "Frontend Server PID: $FRONTEND_PID"
+        echo $FRONTEND_PID > frontend-server.pid
+
+        # Wait for frontend server to start
+        for i in {1..30}; do
+          if curl -f http://localhost:5173 2>/dev/null; then
+            echo "Frontend server is ready!"
+            break
+          fi
+          echo "Waiting for frontend server... attempt $i/30"
+          sleep 2
+        done
+
+        if ! curl -f http://localhost:5173; then
+          echo "Frontend server failed to start"
+          cat frontend-server.log
+          exit 1
+        fi
 
     - name: Run Cypress E2E Tests
-      run: npm run cypress:test
+      run: npm run cypress:run
       continue-on-error: true
+      env:
+        CYPRESS_baseUrl: http://localhost:5173
 
     - name: Merge Cypress Reports
       if: always()
@@ -276,15 +347,36 @@ jobs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "📊 **Full Cypress report with screenshots available in artifacts**" >> $GITHUB_STEP_SUMMARY
 
-    - name: Cleanup Backend Server
+    - name: Cleanup Servers
       if: always()
       run: |
-        if [ -f backend/server.pid ]; then
-          SERVER_PID=$(cat backend/server.pid)
-          echo "Stopping server with PID: $SERVER_PID"
-          kill $SERVER_PID 2>/dev/null || true
+        # Stop frontend server
+        if [ -f frontend-server.pid ]; then
+          FRONTEND_PID=$(cat frontend-server.pid)
+          echo "Stopping frontend server with PID: $FRONTEND_PID"
+          kill $FRONTEND_PID 2>/dev/null || true
         fi
+
+        # Stop backend server
+        if [ -f backend-server.pid ]; then
+          BACKEND_PID=$(cat backend-server.pid)
+          echo "Stopping backend server with PID: $BACKEND_PID"
+          kill $BACKEND_PID 2>/dev/null || true
+        fi
+
+        # Ensure all node processes are stopped
+        pkill -f "vite" || true
         pkill -f "node.*server.js" || true
+
+    - name: Upload Server Logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: server-logs
+        path: |
+          backend-server.log
+          frontend-server.log
+        if-no-files-found: warn
 
   security-scan:
     runs-on: ubuntu-latest
@@ -519,12 +611,12 @@ jobs:
             body: comment
           });
 
-    - name: Cleanup
+    - name: Cleanup Security Scan
       if: always()
       run: |
         if [ -f backend/server.pid ]; then
           SERVER_PID=$(cat backend/server.pid)
-          echo "Stopping server with PID: $SERVER_PID"
+          echo "Stopping security scan server with PID: $SERVER_PID"
           kill $SERVER_PID 2>/dev/null || true
         fi
         pkill -f "node.*server.js" || true
@@ -537,9 +629,9 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: test
-          POSTGRES_DB: parentpal_test
+          POSTGRES_USER: parentpal_user
+          POSTGRES_PASSWORD: Password123!
+          POSTGRES_DB: parentpal_db
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -566,61 +658,167 @@ jobs:
           npm install
         fi
 
-    - name: Create test environment file
+    - name: Create backend environment file
       run: |
         cd backend
         cat > .env << EOF
         PORT=3000
-        DATABASE_URL=postgresql://test:test@localhost:5432/parentpal_test
+        DB_HOST=localhost
+        DB_USER=parentpal_user
+        DB_PASSWORD=Password123!
+        DB_NAME=parentpal_db
+        DB_PORT=5432
         NODE_ENV=test
         EOF
+
+    - name: Setup Firebase credentials
+      run: |
+        cd backend
+        cat > serviceAccountKey.json << EOF
+        {
+          "type": "service_account",
+          "project_id": "${{ secrets.FIREBASE_PROJECT_ID || 'test-project' }}",
+          "private_key_id": "test-key-id",
+          "private_key": "${{ secrets.FIREBASE_PRIVATE_KEY || '-----BEGIN PRIVATE KEY-----\ntest\n-----END PRIVATE KEY-----\n' }}",
+          "client_email": "${{ secrets.FIREBASE_CLIENT_EMAIL || 'test@test-project.iam.gserviceaccount.com' }}",
+          "client_id": "test-client-id",
+          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+          "token_uri": "https://oauth2.googleapis.com/token",
+          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs"
+        }
+        EOF
+
+    - name: Initialize Database
+      run: |
+        # Wait for PostgreSQL to be fully ready
+        for i in {1..10}; do
+          if PGPASSWORD=Password123! psql -h localhost -U parentpal_user -d parentpal_db -c "SELECT 1" > /dev/null 2>&1; then
+            echo "Database is ready!"
+            break
+          fi
+          echo "Waiting for database... attempt $i/10"
+          sleep 2
+        done
+
+        # Create database schema if init script exists
+        if [ -f backend/init.sql ]; then
+          echo "Running database initialization script..."
+          PGPASSWORD=Password123! psql -h localhost -U parentpal_user -d parentpal_db -f backend/init.sql || echo "No init script or init failed"
+        else
+          echo "No database init script found at backend/init.sql"
+        fi
 
     - name: Start backend server
       run: |
         cd backend
-        npm start > server.log 2>&1 &
+        npm start > ../performance-server.log 2>&1 &
         SERVER_PID=$!
         echo "Server PID: $SERVER_PID"
-        echo $SERVER_PID > server.pid
+        echo $SERVER_PID > ../performance-server.pid
 
         # Wait for server to start
         for i in {1..30}; do
           if curl -f http://localhost:3000/api/test 2>/dev/null; then
-            echo "Server is ready!"
+            echo "Backend server is ready!"
             break
           fi
-          echo "Waiting for server... attempt $i/30"
+          echo "Waiting for backend server... attempt $i/30"
           sleep 2
         done
 
-        curl -f http://localhost:3000/api/test || (cat server.log && exit 1)
+        if ! curl -f http://localhost:3000/api/test; then
+          echo "Backend server failed to start"
+          cat ../performance-server.log
+          exit 1
+        fi
+
+    - name: Verify Artillery Installation
+      run: |
+        cd backend
+        echo "Artillery version:"
+        npx artillery --version || echo "Artillery not found, installing..."
 
     - name: Run Performance Tests - Read Operations
       run: |
         cd backend
-        npm run perf:read || true
+        echo "🚀 Starting Artillery load test for READ operations..."
+        echo "Configuration: performance/artillery-config.yml"
+        echo ""
+
+        npx artillery run performance/artillery-config.yml \
+          --output performance/results.json \
+          --record \
+          --key ${{ secrets.ARTILLERY_CLOUD_KEY }} \
+          --quiet || echo "⚠️ Read performance tests encountered issues"
+
+        if [ -f performance/results.json ]; then
+          echo "✅ Read performance test completed - results saved"
+          echo "📊 View full HTML report at Artillery Cloud dashboard"
+        else
+          echo "❌ No results file generated for read operations"
+        fi
       continue-on-error: true
+      env:
+        ARTILLERY_CLOUD_KEY: ${{ secrets.ARTILLERY_CLOUD_KEY }}
 
     - name: Run Performance Tests - Write Operations
       run: |
         cd backend
-        npm run perf:write || true
-      continue-on-error: true
+        echo "🚀 Starting Artillery load test for WRITE operations..."
+        echo "Configuration: performance/artillery-write-ops.yml"
+        echo ""
 
-    - name: Generate Performance Reports
+        npx artillery run performance/artillery-write-ops.yml \
+          --output performance/write-results.json \
+          --record \
+          --key ${{ secrets.ARTILLERY_CLOUD_KEY }} \
+          --quiet || echo "⚠️ Write performance tests encountered issues"
+
+        if [ -f performance/write-results.json ]; then
+          echo "✅ Write performance test completed - results saved"
+          echo "📊 View full HTML report at Artillery Cloud dashboard"
+        else
+          echo "❌ No results file generated for write operations"
+        fi
+      continue-on-error: true
+      env:
+        ARTILLERY_CLOUD_KEY: ${{ secrets.ARTILLERY_CLOUD_KEY }}
+
+    - name: Artillery Cloud Summary
       if: always()
       run: |
         cd backend
 
-        # Generate read operations report
+        echo "📊 Artillery Performance Test Results"
+        echo "======================================"
+        echo ""
+        echo "🌐 Interactive HTML reports available at:"
+        echo "   https://app.artillery.io/"
+        echo ""
+        echo "📈 Reports include:"
+        echo "   • Response time graphs (min, max, median, p95, p99)"
+        echo "   • Request rate over time"
+        echo "   • Error rate visualization"
+        echo "   • Scenario breakdown"
+        echo "   • Real-time metrics dashboard"
+        echo ""
+
         if [ -f performance/results.json ]; then
-          npm run perf:report || echo "Failed to generate read report"
+          echo "✅ Read operations: Recorded to Artillery Cloud"
+          echo "   JSON backup: performance/results.json"
+        else
+          echo "⚠️ No results.json found for read operations"
         fi
 
-        # Generate write operations report
         if [ -f performance/write-results.json ]; then
-          npm run perf:report:write || echo "Failed to generate write report"
+          echo "✅ Write operations: Recorded to Artillery Cloud"
+          echo "   JSON backup: performance/write-results.json"
+        else
+          echo "⚠️ No write-results.json found for write operations"
         fi
+
+        echo ""
+        echo "💡 View metrics summary below in GitHub Summary"
 
     - name: Parse Performance Results
       if: always()
@@ -628,6 +826,8 @@ jobs:
         cd backend
 
         echo "## ⚡ Performance Test Results - Load Testing" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "🌐 **[View Interactive HTML Reports on Artillery Cloud](https://app.artillery.io/)**" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
 
         # Read operations metrics
@@ -699,7 +899,11 @@ jobs:
         fi
 
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "📊 **Full performance HTML reports available in artifacts**" >> $GITHUB_STEP_SUMMARY
+        echo "---" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "📊 **Detailed Reports:**" >> $GITHUB_STEP_SUMMARY
+        echo "- 🌐 [Artillery Cloud Dashboard](https://app.artillery.io/) - Interactive HTML reports with graphs" >> $GITHUB_STEP_SUMMARY
+        echo "- 📦 JSON artifacts available for download below" >> $GITHUB_STEP_SUMMARY
 
     - name: Check Performance Thresholds
       if: always()
@@ -748,9 +952,7 @@ jobs:
         path: |
           backend/performance/results.json
           backend/performance/write-results.json
-          backend/performance/report.html
-          backend/performance/write-report.html
-          backend/server.log
+          performance-server.log
         if-no-files-found: warn
 
     - name: Comment PR with Performance Results
@@ -838,12 +1040,12 @@ jobs:
             body: comment
           });
 
-    - name: Cleanup
+    - name: Cleanup Performance Test
       if: always()
       run: |
-        if [ -f backend/server.pid ]; then
-          SERVER_PID=$(cat backend/server.pid)
-          echo "Stopping server with PID: $SERVER_PID"
+        if [ -f performance-server.pid ]; then
+          SERVER_PID=$(cat performance-server.pid)
+          echo "Stopping performance test server with PID: $SERVER_PID"
           kill $SERVER_PID 2>/dev/null || true
         fi
         pkill -f "node.*server.js" || true
