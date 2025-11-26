@@ -7,23 +7,27 @@ Cypress.Commands.add('login', (email, password) => {
 });
 
 Cypress.Commands.add('loginAsParent', () => {
-  const parentEmail = Cypress.env('PARENT_EMAIL') || 'parent@test.com';
-  const parentPassword = Cypress.env('PARENT_PASSWORD') || 'TestPassword123!';
+  const parentEmail = Cypress.env('PARENT_EMAIL');
+  const parentPassword = Cypress.env('PARENT_PASSWORD');
 
   cy.session([parentEmail, 'parent'], () => {
     cy.login(parentEmail, parentPassword);
-    cy.url().should('include', '/parent-dashboard');
   });
+  
+  cy.visit('/parent-dashboard');
+  cy.url().should('include', '/parent-dashboard');
 });
 
 Cypress.Commands.add('loginAsBabysitter', () => {
-  const babysitterEmail = Cypress.env('BABYSITTER_EMAIL') || 'babysitter@test.com';
-  const babysitterPassword = Cypress.env('BABYSITTER_PASSWORD') || 'TestPassword123!';
+  const babysitterEmail = Cypress.env('BABYSITTER_EMAIL');
+  const babysitterPassword = Cypress.env('BABYSITTER_PASSWORD');
 
   cy.session([babysitterEmail, 'babysitter'], () => {
     cy.login(babysitterEmail, babysitterPassword);
-    cy.url().should('include', '/babysitter-dashboard');
   });
+
+  cy.visit('/babysitter-dashboard');
+  cy.url().should('include', '/babysitter-dashboard');
 });
 
 Cypress.Commands.add('logout', () => {
