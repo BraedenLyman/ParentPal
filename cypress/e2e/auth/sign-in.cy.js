@@ -33,6 +33,22 @@ describe('Sign In', () => {
   });
 
   it('should show error for invalid credentials', () => {
+
+    cy.intercept('POST', '**/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword*', {
+      statusCode: 400,
+      body: {
+        error: {
+          code: 400,
+          message: 'INVALID_PASSWORD',
+          errors: [{
+            message: 'INVALID_PASSWORD',
+            domain: 'global',
+            reason: 'invalid'
+          }]
+        }
+      }
+    }).as('firebaseSignInError');
+
     cy.get('input[type="email"]').type('wrong@example.com');
     cy.get('input[type="password"]').type('wrongpassword');
     cy.get('button[type="submit"]').click();

@@ -1,0 +1,7 @@
+URL: https://parentpals.ca/
+
+Parent Email: parent@parentpals.ca
+Parent Password: Parent123!
+
+Babysitter Email: babysitter@parentpals.ca
+Babysitter Password: Babysitter123!

@@ -10,6 +10,99 @@ if (!app.document.head.querySelector('[data-hide-command-log-request]')) {
 }
 
 beforeEach(() => {
+  cy.intercept('POST', '**/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword*', {
+    statusCode: 200,
+    body: {
+      kind: 'identitytoolkit#VerifyPasswordResponse',
+      localId: 'test-uid-123',
+      email: 'test@example.com',
+      displayName: '',
+      idToken: 'mock-id-token',
+      registered: true,
+      refreshToken: 'mock-refresh-token',
+      expiresIn: '3600'
+    }
+  }).as('firebaseSignIn');
+
+  cy.intercept('POST', '**/identitytoolkit.googleapis.com/v1/accounts:signUp*', (req) => {
+    req.reply({
+      statusCode: 200,
+      body: {
+        kind: 'identitytoolkit#SignupNewUserResponse',
+        idToken: 'mock-id-token',
+        email: req.body.email || 'test@example.com',
+        refreshToken: 'mock-refresh-token',
+        expiresIn: '3600',
+        localId: 'test-uid-123'
+      }
+    });
+  }).as('firebaseSignUp');
+
+  cy.intercept('POST', '**/identitytoolkit.googleapis.com/v1/accounts:sendOobCode*', {
+    statusCode: 200,
+    body: {
+      kind: 'identitytoolkit#GetOobConfirmationCodeResponse',
+      email: 'test@example.com'
+    }
+  }).as('firebaseSendPasswordReset');
+
+  cy.intercept('POST', '**/securetoken.googleapis.com/v1/token*', {
+    statusCode: 200,
+    body: {
+      access_token: 'mock-access-token',
+      expires_in: '3600',
+      token_type: 'Bearer',
+      refresh_token: 'mock-refresh-token',
+      id_token: 'mock-id-token',
+      user_id: 'test-uid-123',
+      project_id: 'parent-pal-86b9a'
+    }
+  }).as('firebaseTokenRefresh');
+
+  cy.intercept('POST', '**/identitytoolkit.googleapis.com/v1/accounts:lookup*', {
+    statusCode: 200,
+    body: {
+      kind: 'identitytoolkit#GetAccountInfoResponse',
+      users: [{
+        localId: 'test-uid-123',
+        email: 'test@example.com',
+        emailVerified: false,
+        displayName: '',
+        providerUserInfo: [],
+        photoUrl: '',
+        passwordHash: 'mock-hash',
+        passwordUpdatedAt: Date.now(),
+        validSince: '1234567890',
+        disabled: false,
+        lastLoginAt: Date.now().toString(),
+        createdAt: Date.now().toString(),
+        customAuth: false
+      }]
+    }
+  }).as('firebaseGetAccountInfo');
+
+  cy.intercept('POST', '**/api/sign-in', {
+    statusCode: 200,
+    body: {
+      user: {
+        account_id: 1,
+        firebase_uid: 'test-uid-123',
+        first_name: 'Test',
+        last_name: 'User',
+        email_address: 'test@example.com',
+        account_type: 'parent',
+      },
+      babyData: [{
+        baby_id: 1,
+        parent_id: 1,
+        first_name: 'Test',
+        last_name: 'Baby',
+        birth_date: '2024-01-01',
+        gender: 'Other',
+      }]
+    }
+  }).as('signIn');
+
   cy.intercept('GET', '**/api/babies*', {
     statusCode: 200,
     body: [{

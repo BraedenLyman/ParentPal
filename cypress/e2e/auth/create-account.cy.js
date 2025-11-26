@@ -1,6 +1,5 @@
 describe('Create Account', () => {
   beforeEach(() => {
-    cy.mockFirebaseAuth();
     cy.visit('/create-account');
   });
 
@@ -51,11 +50,6 @@ describe('Create Account', () => {
   });
 
   it('should successfully create parent account', () => {
-    cy.intercept('POST', '**/auth/sign-up', {
-      statusCode: 200,
-      body: { user: { uid: 'test-uid' } }
-    }).as('signUp');
-
     cy.intercept('POST', '**/api/accounts', {
       statusCode: 200,
       body: {
@@ -68,7 +62,7 @@ describe('Create Account', () => {
 
     cy.get('input[placeholder*="first name"]').type('Test');
     cy.get('input[placeholder*="last name"]').type('test');
-    cy.get('input[type="email"]').type('test.main4@test.com');
+    cy.get('input[type="email"]').type('test.main5@test.com');
     cy.get('input[type="password"]').type('TestPass123!');
     cy.get('.form-field').contains('Account Type').parent().find('.react-select__control').click();
     cy.get('.react-select__menu').find('.react-select__option').first().click();
@@ -83,6 +77,8 @@ describe('Create Account', () => {
     cy.get('.form-field').contains('Baby Gender').parent().find('.react-select__control').click();
     cy.get('.react-select__menu').find('.react-select__option').first().click();
     cy.contains('button', 'Create an account').click();
+    cy.wait('@firebaseSignUp');
+    cy.wait('@createAccount');
     cy.url().should('include', '/account-complete', { timeout: 15000 });
     cy.contains('Welcome to ParentPal!').should('be.visible');
     cy.contains('Your account has been successfully created').should('be.visible');

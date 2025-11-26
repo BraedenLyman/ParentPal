@@ -82,6 +82,26 @@ Cypress.Commands.add('mockFirebaseAuth', () => {
   });
 });
 
+Cypress.Commands.add('stubFirebaseAuth', () => {
+  cy.window().then((win) => {
+    const mockUser = {
+      uid: 'test-uid-123',
+      email: 'test@example.com',
+      emailVerified: true
+    };
+
+    win.createUserWithEmailAndPassword = cy.stub().resolves({
+      user: mockUser
+    });
+
+    win.signInWithEmailAndPassword = cy.stub().resolves({
+      user: mockUser
+    });
+
+    win.signOut = cy.stub().resolves();
+  });
+});
+
 Cypress.Commands.add('clearFirebaseAuth', () => {
   cy.window().then((win) => {
     win.localStorage.clear();
