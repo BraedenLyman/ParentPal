@@ -10,6 +10,35 @@ if (!app.document.head.querySelector('[data-hide-command-log-request]')) {
 }
 
 beforeEach(() => {
+  cy.intercept('GET', '**/api/babies*', {
+    statusCode: 200,
+    body: [{
+      baby_id: 1,
+      parent_id: 1,
+      first_name: 'Test',
+      last_name: 'Baby',
+      birth_date: '2024-01-01',
+      gender: 'Other',
+    }],
+  }).as('getBabies');
+
+  cy.intercept('POST', '**/api/babies', {
+    statusCode: 201,
+    body: { baby_id: 1, message: 'Baby created' },
+  }).as('createBaby');
+
+  cy.intercept('GET', '**/api/account*', {
+    statusCode: 200,
+    body: {
+      account_id: 1,
+      firebase_uid: 'test-uid',
+      first_name: 'Test',
+      last_name: 'User',
+      email_address: 'test@example.com',
+      account_type: 'parent',
+    },
+  }).as('getAccount');
+
   cy.intercept('GET', '**/api/test', {
     statusCode: 200,
     body: { status: 'ok', message: 'Test endpoint' },
@@ -181,6 +210,70 @@ beforeEach(() => {
     statusCode: 201,
     body: { health_id: 1, message: 'Health record created' },
   }).as('createHealth');
+
+  cy.intercept('GET', '**/api/allergies*', {
+    statusCode: 200,
+    body: [{
+      allergy_id: 1,
+      baby_id: 1,
+      allergy_name: 'Peanuts',
+      severity: 'Severe',
+      date_identified: '2024-01-15',
+    }],
+  }).as('getAllergies');
+
+  cy.intercept('POST', '**/api/allergies', {
+    statusCode: 201,
+    body: { allergy_id: 1, message: 'Allergy record created' },
+  }).as('createAllergy');
+
+  cy.intercept('GET', '**/api/meds*', {
+    statusCode: 200,
+    body: [{
+      medication_id: 1,
+      baby_id: 1,
+      medication_name: 'Test Medicine',
+      dosage: '5ml',
+      frequency: 'Daily',
+    }],
+  }).as('getMedications');
+
+  cy.intercept('POST', '**/api/meds', {
+    statusCode: 201,
+    body: { medication_id: 1, message: 'Medication record created' },
+  }).as('createMedication');
+
+  cy.intercept('GET', '**/api/calendar*', {
+    statusCode: 200,
+    body: [{
+      event_id: 1,
+      title: 'Doctor Appointment',
+      date: '2024-01-20',
+      time: '10:00',
+      notes: 'Regular checkup',
+    }],
+  }).as('getCalendar');
+
+  cy.intercept('POST', '**/api/calendar', {
+    statusCode: 201,
+    body: { event_id: 1, message: 'Event created' },
+  }).as('createEvent');
+
+  cy.intercept('GET', '**/api/babysitter-sharing*', {
+    statusCode: 200,
+    body: [{
+      sharing_id: 1,
+      parent_id: 1,
+      babysitter_id: 2,
+      baby_id: 1,
+      status: 'active',
+    }],
+  }).as('getSharingRelationships');
+
+  cy.intercept('POST', '**/api/babysitter-sharing', {
+    statusCode: 201,
+    body: { sharing_id: 1, message: 'Sharing relationship created' },
+  }).as('createSharing');
 });
 
 Cypress.on('uncaught:exception', (err, runnable) => {
