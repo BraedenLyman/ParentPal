@@ -9,15 +9,20 @@ const pool = new Pool({
   database: process.env.DB_NAME || 'parentpal_db',
   port: process.env.DB_PORT || 5432,
   ssl: process.env.DB_HOST && process.env.DB_HOST !== 'localhost' ? { rejectUnauthorized: false } : false,
-  max: 20,
+  max: 100,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
   keepAlive: true,
   keepAliveInitialDelayMillis: 10000,
 });
 
-pool.on('error', (err, client) => {
+pool.on('error', (err) => {
   console.error('Unexpected error on idle client', err);
+  console.error('Error details:', {
+    message: err.message,
+    code: err.code,
+    stack: err.stack
+  });
 });
 
 pool.query('SELECT NOW()', (err, res) => {

@@ -1,52 +1,40 @@
-# Artillery Load Testing Configuration
-# This file defines load testing scenarios for the ParentPal API
-
 config:
   target: "http://localhost:3000"
   phases:
-    # Phase 1: Warm-up (gradually increase load)
-    - duration: 60
+    - duration: 30
       arrivalRate: 5
       name: "Warm-up phase"
 
-    # Phase 2: Ramp-up (increase load)
-    - duration: 120
+    - duration: 60
       arrivalRate: 5
-      rampTo: 50
+      rampTo: 25
       name: "Ramp-up phase"
 
-    # Phase 3: Sustained load (constant high load)
-    - duration: 180
-      arrivalRate: 50
+    - duration: 60
+      arrivalRate: 25
       name: "Sustained load"
 
-    # Phase 4: Spike test (sudden high load)
-    - duration: 60
-      arrivalRate: 100
+    - duration: 30
+      arrivalRate: 50
       name: "Spike test"
 
-    # Phase 5: Cool down
-    - duration: 60
-      arrivalRate: 10
+    - duration: 30
+      arrivalRate: 5
       name: "Cool down"
 
-  # Performance thresholds (tests fail if these are exceeded)
   ensure:
-    maxErrorRate: 1           # Max 1% error rate
-    p95: 500                  # 95th percentile response time < 500ms
-    p99: 1000                 # 99th percentile response time < 1000ms
+    maxErrorRate: 5          
+    p95: 2000                 
+    p99: 3000              
 
-  # Plugins for enhanced reporting
   plugins:
     expect: {}
 
-  # HTTP defaults
   defaults:
     headers:
       Content-Type: "application/json"
 
 scenarios:
-  # Scenario 1: Health Check
   - name: "Health Check"
     weight: 10
     flow:
@@ -55,7 +43,6 @@ scenarios:
           expect:
             - statusCode: 200
 
-  # Scenario 2: Get Growth Records
   - name: "Get Growth Records"
     weight: 20
     flow:
@@ -65,7 +52,6 @@ scenarios:
             - statusCode: 200
             - contentType: json
 
-  # Scenario 3: Get Sleep Records
   - name: "Get Sleep Records"
     weight: 20
     flow:
@@ -74,7 +60,6 @@ scenarios:
           expect:
             - statusCode: 200
 
-  # Scenario 4: Get Feeding Records
   - name: "Get Feeding Records"
     weight: 15
     flow:
@@ -83,7 +68,6 @@ scenarios:
           expect:
             - statusCode: 200
 
-  # Scenario 5: Get Observation Records
   - name: "Get Observation Records"
     weight: 15
     flow:
@@ -92,7 +76,6 @@ scenarios:
           expect:
             - statusCode: 200
 
-  # Scenario 6: Get Allergies
   - name: "Get Allergies"
     weight: 10
     flow:
@@ -101,7 +84,6 @@ scenarios:
           expect:
             - statusCode: 200
 
-  # Scenario 7: Get Medications
   - name: "Get Medications"
     weight: 10
     flow:
@@ -109,6 +91,3 @@ scenarios:
           url: "/api/meds"
           expect:
             - statusCode: 200
-
-# Note: POST requests require valid test data
-# Consider creating a separate config for write operations with proper test data

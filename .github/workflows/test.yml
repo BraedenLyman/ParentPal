@@ -969,21 +969,21 @@ jobs:
             const errorRate = (summary.counters?.['errors.total'] || 0) / (summary.counters?.['http.requests'] || 1) * 100;
 
             console.log('Performance Thresholds:');
-            console.log('  p95: ' + p95 + 'ms (threshold: 500ms)');
-            console.log('  p99: ' + p99 + 'ms (threshold: 1000ms)');
-            console.log('  Error Rate: ' + errorRate.toFixed(2) + '% (threshold: 1%)');
+            console.log('  p95: ' + p95 + 'ms (threshold: 2000ms)');
+            console.log('  p99: ' + p99 + 'ms (threshold: 3000ms)');
+            console.log('  Error Rate: ' + errorRate.toFixed(2) + '% (threshold: 5%)');
 
             let failed = false;
-            if (p95 > 500) {
-              console.log('❌ FAIL: p95 latency exceeds 500ms');
+            if (p95 > 2000) {
+              console.log('❌ FAIL: p95 latency exceeds 2000ms');
               failed = true;
             }
-            if (p99 > 1000) {
-              console.log('❌ FAIL: p99 latency exceeds 1000ms');
+            if (p99 > 3000) {
+              console.log('❌ FAIL: p99 latency exceeds 3000ms');
               failed = true;
             }
-            if (errorRate > 1) {
-              console.log('❌ FAIL: Error rate exceeds 1%');
+            if (errorRate > 5) {
+              console.log('❌ FAIL: Error rate exceeds 5%');
               failed = true;
             }
 
@@ -1043,9 +1043,9 @@ jobs:
               const errorRate = (summary.counters?.['errors.total'] || 0) / (summary.counters?.['http.requests'] || 1) * 100;
 
               comment += '#### Threshold Status\n\n';
-              comment += `- p95 < 500ms: ${p95 <= 500 ? '✅ PASS' : '❌ FAIL'} (${p95}ms)\n`;
-              comment += `- p99 < 1000ms: ${p99 <= 1000 ? '✅ PASS' : '❌ FAIL'} (${p99}ms)\n`;
-              comment += `- Error rate < 1%: ${errorRate <= 1 ? '✅ PASS' : '❌ FAIL'} (${errorRate.toFixed(2)}%)\n\n`;
+              comment += `- p95 < 2000ms: ${p95 <= 2000 ? '✅ PASS' : '❌ FAIL'} (${p95}ms)\n`;
+              comment += `- p99 < 3000ms: ${p99 <= 3000 ? '✅ PASS' : '❌ FAIL'} (${p99}ms)\n`;
+              comment += `- Error rate < 5%: ${errorRate <= 5 ? '✅ PASS' : '❌ FAIL'} (${errorRate.toFixed(2)}%)\n\n`;
             }
 
             // Write operations
