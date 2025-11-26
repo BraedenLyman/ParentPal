@@ -748,18 +748,18 @@ jobs:
         npx artillery run performance/artillery-config.yml \
           --output performance/results.json \
           --record \
-          --key ${{ secrets.ARTILLERY_CLOUD_KEY }} \
-          --quiet || echo "⚠️ Read performance tests encountered issues"
+          --name "ParentPal API - Read Operations (CI)" \
+          --tags "env:ci,type:read,branch:${{ github.ref_name }}" || echo "⚠️ Read performance tests encountered issues"
 
         if [ -f performance/results.json ]; then
           echo "✅ Read performance test completed - results saved"
-          echo "📊 View full HTML report at Artillery Cloud dashboard"
+          echo "📊 Check logs above for Artillery Cloud dashboard URL"
         else
           echo "❌ No results file generated for read operations"
         fi
       continue-on-error: true
       env:
-        ARTILLERY_CLOUD_KEY: ${{ secrets.ARTILLERY_CLOUD_KEY }}
+        ARTILLERY_CLOUD_API_KEY: ${{ secrets.ARTILLERY_CLOUD_KEY }}
 
     - name: Run Performance Tests - Write Operations
       run: |
@@ -771,18 +771,18 @@ jobs:
         npx artillery run performance/artillery-write-ops.yml \
           --output performance/write-results.json \
           --record \
-          --key ${{ secrets.ARTILLERY_CLOUD_KEY }} \
-          --quiet || echo "⚠️ Write performance tests encountered issues"
+          --name "ParentPal API - Write Operations (CI)" \
+          --tags "env:ci,type:write,branch:${{ github.ref_name }}" || echo "⚠️ Write performance tests encountered issues"
 
         if [ -f performance/write-results.json ]; then
           echo "✅ Write performance test completed - results saved"
-          echo "📊 View full HTML report at Artillery Cloud dashboard"
+          echo "📊 Check logs above for Artillery Cloud dashboard URL"
         else
           echo "❌ No results file generated for write operations"
         fi
       continue-on-error: true
       env:
-        ARTILLERY_CLOUD_KEY: ${{ secrets.ARTILLERY_CLOUD_KEY }}
+        ARTILLERY_CLOUD_API_KEY: ${{ secrets.ARTILLERY_CLOUD_KEY }}
 
     - name: Artillery Cloud Summary
       if: always()
