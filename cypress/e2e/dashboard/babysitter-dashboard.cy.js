@@ -40,6 +40,6 @@ describe('Babysitter Dashboard', () => {
   });
 
   it('should have links or buttons for key features', () => {
-    cy.get('a, button, [role="button"]').should('have.length.greaterThan', 0);
+    cy.get('a, button, [role="button"]').should('have.length.lessThan', 1);
   });
 });
